@@ -698,7 +698,9 @@ static const u8 sTextColors_861CD2C[][3] =
     {0, 1, 2},
     {0, 3, 4},
     {0, 5, 6},
-    {0, 7, 8}
+    {0, 7, 8},
+	{0, 3, 10},
+	{0, 3, 12}
 };
 
 static const u8 gUnknown_0861CD53[] = INCBIN_U8("graphics/interface/summary_a_button.4bpp");
