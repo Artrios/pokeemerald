@@ -183,6 +183,7 @@ static void sub_81C2628(void);
 static void sub_81C2794(void);
 static void sub_81C27DC(struct Pokemon *mon, u16 a);
 static void PrintPageNamesAndStatsPageToWindows(void);
+static void UpdateStatColToWindow(void);
 static void CreatePageWindowTilemaps(u8 a);
 static void ClearPageWindowTilemaps(u8 a);
 static void SummaryScreen_RemoveWindowByIndex(u8 a);
@@ -2872,18 +2873,68 @@ static void PrintPageNamesAndStatsPageToWindows(void)
 
     SummaryScreen_PrintTextOnWindow(8, gText_RentalPkmn, 0, 1, 0, 1);
     SummaryScreen_PrintTextOnWindow(9, gText_TypeSlash, 0, 1, 0, 0);
-    statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_HP4, 42);
-    SummaryScreen_PrintTextOnWindow(10, gText_HP4, statsXPos, 1, 0, 1);
-    statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Attack3, 42);
-    SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 1);
-    statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Defense3, 42);
-    SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 1);
-    statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpAtk4, 36);
-    SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 1);
-    statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpDef4, 36);
-    SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 1);
-    statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_Speed2, 36);
-    SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 1);
+    
+	//gNatureStatTable[nature][0]
+	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_HP4, 42);
+	SummaryScreen_PrintTextOnWindow(10, gText_HP4, statsXPos, 1, 0, 1);
+
+
+	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Attack3, 42);
+	if (gNatureStatTable[pssData->summary.nature][0] == 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][0] > 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 14);
+	}
+
+	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Defense3, 42);
+	if (gNatureStatTable[pssData->summary.nature][1] == 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][1] > 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 14);
+	}
+
+
+	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpAtk4, 36);
+	if (gNatureStatTable[pssData->summary.nature][3] == 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][3] > 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 14);
+	}
+
+	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpDef4, 36);
+	if (gNatureStatTable[pssData->summary.nature][4] == 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][4] > 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 14);
+	}
+
+	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_Speed2, 36);
+	if (gNatureStatTable[pssData->summary.nature][2] == 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][2] > 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 14);
+	}
+
     SummaryScreen_PrintTextOnWindow(12, gText_ExpPoints, 6, 1, 0, 1);
     SummaryScreen_PrintTextOnWindow(12, gText_NextLv, 6, 17, 0, 1);
     SummaryScreen_PrintTextOnWindow(13, gText_Status, 2, 1, 0, 1);
@@ -2891,6 +2942,68 @@ static void PrintPageNamesAndStatsPageToWindows(void)
     SummaryScreen_PrintTextOnWindow(14, gText_Accuracy2, 0, 17, 0, 1);
     SummaryScreen_PrintTextOnWindow(15, gText_Appeal, 0, 1, 0, 1);
     SummaryScreen_PrintTextOnWindow(15, gText_Jam, 0, 17, 0, 1);
+}
+
+static void UpdateStatColToWindow(void)
+{
+	int stringXPos;
+	int iconXPos;
+	int statsXPos;
+
+	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Attack3, 42);
+	if (gNatureStatTable[pssData->summary.nature][0] == 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][0] > 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 14);
+	}
+
+	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Defense3, 42);
+	if (gNatureStatTable[pssData->summary.nature][1] == 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][1] > 0) {
+		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 14);
+	}
+
+	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpAtk4, 36);
+	if (gNatureStatTable[pssData->summary.nature][3] == 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][3] > 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 14);
+	}
+
+	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpDef4, 36);
+	if (gNatureStatTable[pssData->summary.nature][4] == 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][4] > 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 14);
+	}
+
+	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_Speed2, 36);
+	if (gNatureStatTable[pssData->summary.nature][2] == 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 1);
+	}
+	else if (gNatureStatTable[pssData->summary.nature][2] > 0) {
+		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 13);
+	}
+	else {
+		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 14);
+	}
 }
 
 static void CreatePageWindowTilemaps(u8 page)
@@ -3319,6 +3432,7 @@ static void PrintSkillsPageText(void)
     PrintLeftColumnStats();
     BufferRightColumnStats();
     PrintRightColumnStats();
+	UpdateStatColToWindow();
     PrintExpPointsNextLevel();
 }
 
@@ -3345,6 +3459,7 @@ static void Task_PrintSkillsPage(u8 taskId)
             break;
         case 6:
             PrintRightColumnStats();
+			UpdateStatColToWindow();
             break;
         case 7:
             PrintExpPointsNextLevel();
