@@ -1,6 +1,7 @@
 #include "global.h"
 #include "pokemon.h"
 #include "battle.h"
+#include "constants/battle_config.h"
 #include "daycare.h"
 #include "string_util.h"
 #include "constants/species.h"
@@ -860,11 +861,42 @@ static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *
     u16 ball;
     u8 metLevel;
     u8 language;
-
+	
     personality = daycare->offspringPersonality;
     CreateMon(mon, species, EGG_HATCH_LEVEL, 0x20, TRUE, personality, FALSE, 0);
     metLevel = 0;
-    ball = ITEM_POKE_BALL;
+	ball = ITEM_POKE_BALL;
+
+	//Gen 6
+	if (INHERIT_BALL == GEN_6) {
+		if (GetBoxMonGender(&daycare->mons[0].mon) == MON_FEMALE && GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+			ball = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL);
+		}
+	}
+
+	//Gen 7
+	if (INHERIT_BALL == GEN_7) {
+		if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES) == SPECIES_DITTO) {
+			if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+				ball = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL);
+			}
+		}
+		else if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES) == SPECIES_DITTO) {
+			if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+				ball = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL);
+			}
+		}
+		else if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES) == GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES)) {
+			u16 rand = Random() % 2;
+			if (GetBoxMonData(&daycare->mons[rand].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+				ball = GetBoxMonData(&daycare->mons[rand].mon, MON_DATA_POKEBALL);
+			}
+		}
+		else if (GetBoxMonGender(&daycare->mons[0].mon) == MON_FEMALE && GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+			ball = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL);
+		}
+	}
+    
     language = LANGUAGE_JAPANESE;
     SetMonData(mon, MON_DATA_POKEBALL, &ball);
     SetMonData(mon, MON_DATA_NICKNAME, sJapaneseEggNickname);
