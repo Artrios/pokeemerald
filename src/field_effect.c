@@ -246,6 +246,7 @@ extern void sub_80E1558(u8);
 extern void sub_80E1570(void);
 extern bool8 sub_80E1584(void);
 extern void WarpFadeScreen(void);
+extern u8 CountPartyNonEggMons(void);
 
 // .rodata
 const u32 gNewGameBirchPic[] = INCBIN_U32("graphics/birch_speech/birch.4bpp");
@@ -965,8 +966,8 @@ bool8 FldEff_PokecenterHeal(void)
 {
     u8 nPokemon;
     struct Task *task;
-
-    nPokemon = CalculatePlayerPartyCount();
+	
+    nPokemon = CountPartyNonEggMons();
     task = &gTasks[CreateTask(Task_PokecenterHeal, 0xff)];
     task->data[1] = nPokemon;
     task->data[2] = 0x5d;
