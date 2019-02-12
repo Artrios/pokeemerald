@@ -871,18 +871,20 @@ static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *
 	if (INHERIT_BALL == GEN_6) {
 		if (GetBoxMonGender(&daycare->mons[0].mon) == MON_FEMALE && GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
 			ball = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL);
+		} else if (GetBoxMonGender(&daycare->mons[1].mon) == MON_FEMALE && GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+			ball = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL);
 		}
 	}
 
 	//Gen 7
 	if (INHERIT_BALL == GEN_7) {
 		if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES) == SPECIES_DITTO) {
-			if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+			if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
 				ball = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL);
 			}
 		}
 		else if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES) == SPECIES_DITTO) {
-			if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
+			if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL) != ITEM_MASTER_BALL) {
 				ball = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_POKEBALL);
 			}
 		}
