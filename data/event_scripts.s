@@ -4659,9 +4659,100 @@ gMauvilleManText_SecretBasesAreSoWonderful:: @ 82944D5
 
 	.include "data/text/trainers.inc"
 
-EventScript_RepelWoreOff:: @ 82A4B2A
-	msgbox Text_RepelWoreOff, MSGBOX_SIGN
+EventScript_RepelWoreOff:: 
+	lock
+	compare VAR_REPEL_TYPE, 1
+	goto_if_eq WasRepel
+	compare VAR_REPEL_TYPE, 2
+	goto_if_eq WasSuperRepel
+	compare VAR_REPEL_TYPE, 3
+	goto_if_eq WasMaxRepel
 	end
+
+WasRepel::	
+	checkitem ITEM_REPEL, 1
+	compare VAR_RESULT, 1
+	goto_if_eq MoreRepels
+	setvar VAR_REPEL_TYPE, 0
+	msgbox Text_RepelWoreOff, MSGBOX_SIGN
+	release
+	end
+
+MoreRepels::
+	msgbox Text_UseAnotherRepel, MSGBOX_YESNO
+	compare VAR_RESULT, 1
+	goto_if_eq UseRepel
+	release
+	end
+	
+UseRepel::
+	takeitem ITEM_REPEL, 1
+	setvar VAR_REPEL_STEP_COUNT, 0x64
+	playse SE_TU_SAA
+	msgbox Text_UsedARepel, MSGBOX_SIGN
+	release
+	end
+
+WasSuperRepel::	
+	checkitem ITEM_SUPER_REPEL, 1
+	compare VAR_RESULT, 1
+	goto_if_eq MoreSuperRepels
+	setvar VAR_REPEL_TYPE, 0
+	msgbox Text_RepelWoreOff, MSGBOX_SIGN
+	release
+	end
+
+MoreSuperRepels::
+	msgbox Text_UseAnotherRepel, MSGBOX_YESNO
+	compare VAR_RESULT, 1
+	goto_if_eq UseSuperRepel
+	release
+	end
+	
+UseSuperRepel::
+	takeitem ITEM_SUPER_REPEL, 1
+	setvar VAR_REPEL_STEP_COUNT, 0xC8
+	playse SE_TU_SAA
+	msgbox Text_UsedASuperRepel, MSGBOX_SIGN
+	release
+	end	
+	
+WasMaxRepel::	
+	checkitem ITEM_MAX_REPEL, 1
+	compare VAR_RESULT, 1
+	goto_if_eq MoreMaxRepels
+	setvar VAR_REPEL_TYPE, 0
+	msgbox Text_RepelWoreOff, MSGBOX_SIGN
+	release
+	end
+
+MoreMaxRepels::
+	msgbox Text_UseAnotherRepel, MSGBOX_YESNO
+	compare VAR_RESULT, 1
+	goto_if_eq UseMaxRepel
+	release
+	end
+	
+UseMaxRepel::
+	takeitem ITEM_MAX_REPEL, 1
+	setvar VAR_REPEL_STEP_COUNT, 0xFA
+	playse SE_TU_SAA
+	msgbox Text_UsedAMaxRepel, MSGBOX_SIGN
+	release
+	end	
+
+Text_UsedARepel:
+	.string "{PLAYER} used a Repel.$"	
+
+Text_UsedASuperRepel:
+	.string "{PLAYER} used a Super Repel.$"	
+
+Text_UsedAMaxRepel:
+	.string "{PLAYER} used a Max Repel.$"	
+	
+Text_UseAnotherRepel:
+	.string "Repel's effect wore off…\n"
+	.string "Use another?$"
 
 Text_RepelWoreOff: @ 82A4B33
 	.string "REPEL's effect wore off…$"

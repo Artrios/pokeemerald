@@ -824,8 +824,15 @@ void sub_80FE058(void)
 
 void ItemUseOutOfBattle_Repel(u8 taskId)
 {
-    if (VarGet(VAR_REPEL_STEP_COUNT) == 0)
-        gTasks[taskId].func = sub_80FE124;
+	if (VarGet(VAR_REPEL_STEP_COUNT) == 0) {
+		if (gSpecialVar_ItemId == ITEM_REPEL)
+			VarSet(VAR_REPEL_TYPE, 1);
+		if (gSpecialVar_ItemId == ITEM_SUPER_REPEL)
+			VarSet(VAR_REPEL_TYPE, 2);
+		if (gSpecialVar_ItemId == ITEM_MAX_REPEL)
+			VarSet(VAR_REPEL_TYPE, 3);
+		gTasks[taskId].func = sub_80FE124;
+	}
     else if (!InBattlePyramid())
         DisplayItemMessage(taskId, 1, gText_RepelEffectsLingered, bag_menu_inits_lists_menu);
     else
