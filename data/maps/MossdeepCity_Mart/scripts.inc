@@ -6,23 +6,14 @@ MossdeepCity_Mart_EventScript_2223C8:: @ 82223C8
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	pokemart MossdeepCity_Mart_Pokemart_2223E0
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-MossdeepCity_Mart_Pokemart_2223E0: @ 82223E0
-	.2byte ITEM_ULTRA_BALL
-	.2byte ITEM_NET_BALL
-	.2byte ITEM_DIVE_BALL
-	.2byte ITEM_HYPER_POTION
-	.2byte ITEM_FULL_HEAL
-	.2byte ITEM_REVIVE
-	.2byte ITEM_MAX_REPEL
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFEND
-	.2byte ITEM_NONE
 	release
 	end
 

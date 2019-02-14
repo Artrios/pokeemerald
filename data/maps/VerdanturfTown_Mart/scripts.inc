@@ -1,29 +1,40 @@
 VerdanturfTown_Mart_MapScripts:: @ 8202586
 	.byte 0
 
-VerdanturfTown_Mart_EventScript_202587:: @ 8202587
+VerdanturfTown_Mart_EventScript_202587::
 	lock
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	pokemart VerdanturfTown_Mart_Pokemart_2025A0
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
 	release
 	end
 
-	.align 2
-VerdanturfTown_Mart_Pokemart_2025A0: @ 82025A0
-	.2byte ITEM_GREAT_BALL
-	.2byte ITEM_NEST_BALL
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_AWAKENING
-	.2byte ITEM_BURN_HEAL
-	.2byte ITEM_ICE_HEAL
-	.2byte ITEM_REPEL
+VerdanturfTown_Mart_EventScript_2::
+	lock
+	faceplayer
+	message gUnknown_08272A21
+	waitmessage
+	pokemart VerdanturfTown_Mart_Pokemart_2
+	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_Mart_Pokemart_2:
+	.2byte ITEM_X_SPEED
+	.2byte ITEM_X_ATTACK
+	.2byte ITEM_X_DEFENSE
+	.2byte ITEM_GUARD_SPEC
+	.2byte ITEM_DIRE_HIT
+	.2byte ITEM_X_ACCURACY
 	.2byte ITEM_X_SPECIAL
-	.2byte ITEM_FLUFFY_TAIL
 	.2byte ITEM_NONE
 	release
 	end

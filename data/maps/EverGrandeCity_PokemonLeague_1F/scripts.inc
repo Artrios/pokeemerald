@@ -27,21 +27,14 @@ EverGrandeCity_PokemonLeague_1F_EventScript_22960A:: @ 822960A
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	pokemart EverGrandeCity_PokemonLeague_1F_Pokemart_229624
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-EverGrandeCity_PokemonLeague_1F_Pokemart_229624: @ 8229624
-	.2byte ITEM_ULTRA_BALL
-	.2byte ITEM_HYPER_POTION
-	.2byte ITEM_MAX_POTION
-	.2byte ITEM_FULL_RESTORE
-	.2byte ITEM_FULL_HEAL
-	.2byte ITEM_REVIVE
-	.2byte ITEM_MAX_REPEL
-	.2byte ITEM_NONE
 	release
 	end
 

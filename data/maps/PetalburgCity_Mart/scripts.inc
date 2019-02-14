@@ -6,51 +6,14 @@ PetalburgCity_Mart_EventScript_207D69:: @ 8207D69
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	goto_if_set FLAG_PETALBURG_MART_EXPANDED_ITEMS, PetalburgCity_Mart_EventScript_207DA6
-	pokemart PetalburgCity_Mart_Pokemart_207D8C
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-PetalburgCity_Mart_Pokemart_207D8C: @ 8207D8C
-	.2byte ITEM_POKE_BALL
-	.2byte ITEM_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_AWAKENING
-	.2byte ITEM_ESCAPE_ROPE
-	.2byte ITEM_REPEL
-	.2byte ITEM_X_SPEED
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFEND
-	.2byte ITEM_ORANGE_MAIL
-	.2byte ITEM_NONE
-	release
-	end
-
-PetalburgCity_Mart_EventScript_207DA6:: @ 8207DA6
-	pokemart PetalburgCity_Mart_Pokemart_207DB8
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-PetalburgCity_Mart_Pokemart_207DB8: @ 8207DB8
-	.2byte ITEM_POKE_BALL
-	.2byte ITEM_GREAT_BALL
-	.2byte ITEM_POTION
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_AWAKENING
-	.2byte ITEM_ESCAPE_ROPE
-	.2byte ITEM_REPEL
-	.2byte ITEM_X_SPEED
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFEND
-	.2byte ITEM_ORANGE_MAIL
-	.2byte ITEM_NONE
 	release
 	end
 

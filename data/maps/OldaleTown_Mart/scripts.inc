@@ -6,35 +6,14 @@ OldaleTown_Mart_EventScript_1FC240:: @ 81FC240
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	goto_if_set FLAG_ADVENTURE_STARTED, OldaleTown_Mart_EventScript_1FC26C
-	pokemart OldaleTown_Mart_Pokemart_1FC260
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-OldaleTown_Mart_Pokemart_1FC260: @ 81FC260
-	.2byte ITEM_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_AWAKENING
-	.2byte ITEM_NONE
-	release
-	end
-
-OldaleTown_Mart_EventScript_1FC26C:: @ 81FC26C
-	pokemart OldaleTown_Mart_Pokemart_1FC27C
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-OldaleTown_Mart_Pokemart_1FC27C: @ 81FC27C
-	.2byte ITEM_POKE_BALL
-	.2byte ITEM_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_AWAKENING
-	.2byte ITEM_NONE
 	release
 	end
 

@@ -1,7 +1,23 @@
 SlateportCity_Mart_MapScripts:: @ 820DC48
 	.byte 0
 
-SlateportCity_Mart_EventScript_20DC49:: @ 820DC49
+SlateportCity_Mart_EventScript_20DC49::
+	lock
+	faceplayer
+	message gUnknown_08272A21
+	waitmessage
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
+	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	release
+	end
+
+SlateportCity_Mart_EventScript_2::
 	lock
 	faceplayer
 	message gUnknown_08272A21
@@ -11,16 +27,14 @@ SlateportCity_Mart_EventScript_20DC49:: @ 820DC49
 	release
 	end
 
-SlateportCity_Mart_Pokemart_20DC60: @ 820DC60
-	.2byte ITEM_POKE_BALL
-	.2byte ITEM_GREAT_BALL
-	.2byte ITEM_POTION
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_ESCAPE_ROPE
-	.2byte ITEM_REPEL
-	.2byte ITEM_HARBOR_MAIL
+SlateportCity_Mart_Pokemart_20DC60:
+	.2byte ITEM_X_SPEED
+	.2byte ITEM_X_ATTACK
+	.2byte ITEM_X_DEFENSE
+	.2byte ITEM_GUARD_SPEC
+	.2byte ITEM_DIRE_HIT
+	.2byte ITEM_X_ACCURACY
+	.2byte ITEM_X_SPECIAL
 	.2byte ITEM_NONE
 	release
 	end

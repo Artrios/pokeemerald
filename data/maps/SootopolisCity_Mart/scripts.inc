@@ -1,27 +1,19 @@
 SootopolisCity_Mart_MapScripts:: @ 8226794
 	.byte 0
 
-SootopolisCity_Mart_EventScript_226795:: @ 8226795
+SootopolisCity_Mart_EventScript_226795::
 	lock
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	pokemart SootopolisCity_Mart_Pokemart_2267AC
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-SootopolisCity_Mart_Pokemart_2267AC: @ 82267AC
-	.2byte ITEM_ULTRA_BALL
-	.2byte ITEM_HYPER_POTION
-	.2byte ITEM_MAX_POTION
-	.2byte ITEM_FULL_HEAL
-	.2byte ITEM_REVIVE
-	.2byte ITEM_MAX_REPEL
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFEND
-	.2byte ITEM_SHADOW_MAIL
-	.2byte ITEM_NONE
 	release
 	end
 

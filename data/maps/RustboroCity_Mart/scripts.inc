@@ -1,56 +1,36 @@
 RustboroCity_Mart_MapScripts:: @ 8214F05
 	.byte 0
 
-RustboroCity_Mart_EventScript_214F06:: @ 8214F06
+RustboroCity_Mart_EventScript_214F06::
 	lock
 	faceplayer
 	message gUnknown_08272A21
 	waitmessage
-	goto_if_unset FLAG_MET_DEVON_EMPLOYEE, RustboroCity_Mart_EventScript_214F21
-	goto_if_set FLAG_MET_DEVON_EMPLOYEE, RustboroCity_Mart_EventScript_214F48
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
+	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	release
 	end
 
-RustboroCity_Mart_EventScript_214F21:: @ 8214F21
+RustboroCity_Mart_EventScript_214F21::
+	lock
+	faceplayer
+	message gUnknown_08272A21
+	waitmessage
 	pokemart RustboroCity_Mart_Pokemart_214F30
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
 	release
 	end
 
-RustboroCity_Mart_Pokemart_214F30: @ 8214F30
-	.2byte ITEM_POKE_BALL
-	.2byte ITEM_POTION
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_ESCAPE_ROPE
-	.2byte ITEM_REPEL
-	.2byte ITEM_X_SPEED
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFEND
-	.2byte ITEM_NONE
-	release
-	end
-
-RustboroCity_Mart_EventScript_214F48:: @ 8214F48
-	pokemart RustboroCity_Mart_Pokemart_214F58
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-RustboroCity_Mart_Pokemart_214F58: @ 8214F58
-	.2byte ITEM_POKE_BALL
-	.2byte ITEM_TIMER_BALL
+RustboroCity_Mart_Pokemart_214F30:
 	.2byte ITEM_REPEAT_BALL
-	.2byte ITEM_POTION
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_ESCAPE_ROPE
-	.2byte ITEM_REPEL
-	.2byte ITEM_X_SPEED
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFEND
+	.2byte ITEM_TIMER_BALL
+	.2byte ITEM_NET_BALL
 	.2byte ITEM_NONE
 	release
 	end
