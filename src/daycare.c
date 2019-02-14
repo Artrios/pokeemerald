@@ -533,7 +533,10 @@ static void RemoveIVIndexFromList(u8 *ivs, u8 selectedIv)
 static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
 {
     u8 i;
+	u8 j;
+	u8 selectedIvs[5];
     u8 availableIVs[NUM_STATS];
+	u8 whichParent[ARRAY_COUNT(selectedIvs)];
     u8 iv;
 
     // Initialize a list of IV indices.
@@ -544,17 +547,14 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
 	
 	//If either parent has the destiny knot inherit 5 IVs
 	if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT || GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT) {
-		i = 5;
+		j = 5;
 	}
 	else {
-		i = 3;
+		j = 3;
 	}
 	
-	u8 selectedIvs[i];
-	u8 whichParent[ARRAY_COUNT(selectedIvs)];
-
     // Select the IVs that will be inherited.
-    for (i = 0; i < ARRAY_COUNT(selectedIvs); i++)
+    for (i = 0; i < j; i++)
     {
         // Randomly pick an IV from the available list.
         selectedIvs[i] = availableIVs[Random() % (NUM_STATS - i)];
@@ -564,13 +564,13 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
     }
 
     // Determine which parent each of the selected IVs should inherit from.
-    for (i = 0; i < ARRAY_COUNT(selectedIvs); i++)
+    for (i = 0; i < j; i++)
     {
         whichParent[i] = Random() % 2;
     }
 
     // Set each of inherited IVs on the egg mon.
-    for (i = 0; i < ARRAY_COUNT(selectedIvs); i++)
+    for (i = 0; i < j; i++)
     {
         switch (selectedIvs[i])
         {
