@@ -16,6 +16,7 @@
 #define B_ABILITY_POP_UP            GEN_6 // Starting from gen5, the pokemon abilities are displayed in a pop-up, when they activate in battle.
 #define INHERIT_BALL				GEN_6 // Starting from gen6, pokemon could inherit pokeballs from their parents
 
+#define DOUBLE_WILD_CHANCE			5     // The chance of having a double wild battle on land (in percentage)
 #define B_FAST_INTRO                TRUE // If set to TRUE, battle intro texts print at the same time as animation of a pokemon, as opposing to waiting for the animation to end.
 
 #endif // GUARD_CONSTANTS_BATTLE_CONFIG_H
