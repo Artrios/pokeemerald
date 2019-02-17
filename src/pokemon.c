@@ -38,6 +38,7 @@
 #include "constants/hold_effects.h"
 #include "constants/items.h"
 #include "constants/layouts.h"
+#include "constants/maps.h" 
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/species.h"
@@ -5446,6 +5447,7 @@ u8 GetNatureFromPersonality(u32 personality)
 u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 {
     int i;
+	int j;
     u16 targetSpecies = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
@@ -5455,6 +5457,9 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
     u16 upperPersonality = personality >> 16;
     u8 holdEffect;
+	u8 gender = GetMonGender(mon);
+	u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
+	u8 mapNum = gSaveBlock1Ptr->location.mapNum;
 
     if (heldItem == ITEM_ENIGMA_BERRY)
         holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
@@ -5523,6 +5528,48 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 if (gEvolutionTable[species][i].param <= beauty)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
+			case EVO_LEVEL_MALE:
+				if (gEvolutionTable[species][i].param <= level && (gender) == 0)
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				break;
+			case EVO_LEVEL_FEMALE:
+				if (gEvolutionTable[species][i].param <= level && (gender) == 254)
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				break;
+			case EVO_MOVE:
+				if (MonKnowsMove(&gPlayerParty[i], gEvolutionTable[species][i].param) == TRUE)
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				break;
+			case EVO_MAP:
+				if (EVO_MAP_GROUP(gEvolutionTable[species][i].param) == mapGroup && EVO_MAP_NUM(gEvolutionTable[species][i].param) == mapNum)
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				break;
+			case EVO_HELD_ITEM_DAY:
+				RtcCalcLocalTime();
+				if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && gEvolutionTable[species][i].param == heldItem)
+				{
+					heldItem = 0;
+					SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				}
+				break;
+			case EVO_HELD_ITEM_NIGHT:
+				RtcCalcLocalTime();
+				if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && gEvolutionTable[species][i].param == heldItem)
+				{
+					heldItem = 0;
+					SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				}
+				break;
+			case EVO_SPECIES:
+				for (j = 0; j < PARTY_SIZE; j++)
+				{
+					u16 checkSpecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+					if (checkSpecies == gEvolutionTable[species][i].param)
+						targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				}
+				break;
             }
         }
         break;
@@ -5547,16 +5594,20 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         break;
     case 2:
     case 3:
-        for (i = 0; i < EVOS_PER_MON; i++)
-        {
-            if (gEvolutionTable[species][i].method == EVO_ITEM
-             && gEvolutionTable[species][i].param == evolutionItem)
-            {
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                break;
-            }
-        }
-        break;
+		for (i = 0; i < EVOS_PER_MON; i++)
+		{
+			if ((gEvolutionTable[species][i].method == EVO_ITEM
+				&& gEvolutionTable[species][i].param == evolutionItem)
+				|| (gEvolutionTable[species][i].method == EVO_ITEM_MALE
+					&& gEvolutionTable[species][i].param == evolutionItem && (gender) == MON_MALE)
+				|| (gEvolutionTable[species][i].method == EVO_ITEM_FEMALE
+					&& gEvolutionTable[species][i].param == evolutionItem && (gender) == MON_FEMALE))
+			{
+				targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				break;
+			}
+		}
+		break;
     }
 
     return targetSpecies;
