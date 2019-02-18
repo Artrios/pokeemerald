@@ -415,6 +415,9 @@ enum
 #define EVO_SPECIES          0x0016 // Pokémon levels up while a specific Pokémon is in the party.
 #define EVO_ITEM_MALE        0x0017 // Specified item is used on male Pokémon
 #define EVO_ITEM_FEMALE      0x0018 // Specified item is used on female Pokémon
+#define EVO_MOVE_TYPE        0x0019 // Pokémon levels up while knowing the specified move type
+#define EVO_SPECIES_TYPE     0x001A // Pokémon levels up while a Pokémon of a specific type is in the party.
+#define EVO_WEATHER          0x001B // Pokémon levels up with a specific weather.
 
 #define EVO_MEGA_EVOLUTION   0xffff // Not an actual evolution, used to temporarily mega evolve in battle.
 

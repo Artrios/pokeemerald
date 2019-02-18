@@ -5570,6 +5570,26 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 						targetSpecies = gEvolutionTable[species][i].targetSpecies;
 				}
 				break;
+			case EVO_MOVE_TYPE:
+				for (j = 0; j < MAX_MON_MOVES; j++) {
+					u8 moveType;
+					GET_MOVE_TYPE(GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j, NULL), moveType);
+					if (moveType == gEvolutionTable[species][i].param)
+						targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				}
+				break;
+			case EVO_SPECIES_TYPE:
+				for (j = 0; j < PARTY_SIZE; j++)
+				{
+					u16 checkSpecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+					if (gBaseStats[checkSpecies].type1 == gEvolutionTable[species][i].param || gBaseStats[checkSpecies].type2 == gEvolutionTable[species][i].param)
+						targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				}
+				break;
+			case EVO_WEATHER:
+				if (GetCurrentWeather() == gEvolutionTable[species][i].param)
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				break;
             }
         }
         break;
