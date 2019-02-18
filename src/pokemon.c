@@ -5572,9 +5572,8 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 				break;
 			case EVO_MOVE_TYPE:
 				for (j = 0; j < MAX_MON_MOVES; j++) {
-					u8 moveType;
-					GET_MOVE_TYPE(GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j, NULL), moveType);
-					if (moveType == gEvolutionTable[species][i].param)
+					u16 checkmove = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
+					if (gBattleMoves[checkmove].type == gEvolutionTable[species][i].param)
 						targetSpecies = gEvolutionTable[species][i].targetSpecies;
 				}
 				break;
