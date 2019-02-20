@@ -72,6 +72,7 @@ extern const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1];
 extern const struct CompressedSpritePalette gMonPaletteTable[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTable[];
 extern const u8 gTrainerClassNames[][13];
+extern EWRAM_DATA u8 gUnknown_02032298[2];
 
 extern u16 get_unknown_box_id(void);
 extern void set_unknown_box_id(u8);
@@ -5608,6 +5609,12 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 }
                 break;
+			case EVO_TRADE_POKEMON:
+				if (gEvolutionTable[species][i].param == GetMonData(&gEnemyParty[gUnknown_02032298[1] % 6], MON_DATA_SPECIES, NULL))
+				{
+					targetSpecies = gEvolutionTable[species][i].targetSpecies;
+				}
+				break;
             }
         }
         break;

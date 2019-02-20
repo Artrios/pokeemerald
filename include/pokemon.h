@@ -418,6 +418,7 @@ enum
 #define EVO_MOVE_TYPE        0x0019 // Pokémon levels up while knowing the specified move type
 #define EVO_SPECIES_TYPE     0x001A // Pokémon levels up while a Pokémon of a specific type is in the party.
 #define EVO_WEATHER          0x001B // Pokémon levels up with a specific weather.
+#define EVO_TRADE_POKEMON    0x001C // Pokémon is traded for a specific pokemon
 
 #define EVO_MEGA_EVOLUTION   0xffff // Not an actual evolution, used to temporarily mega evolve in battle.
 
