@@ -546,7 +546,7 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
     }
 	
 	//If either parent has the destiny knot inherit 5 IVs
-	if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT || GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT) {
+	if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM) == ITEM_MASTER_BALL || GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM) == ITEM_MASTER_BALL) {
 		j = 5;
 	}
 	else {

@@ -240,6 +240,7 @@ extern const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[];
 extern const struct CompressedSpriteSheet gTrainerFrontPicTable[];
 extern u8 *gFieldEffectScriptPointers[];
 extern const struct SpriteTemplate *const gFieldEffectObjectTemplatePointers[];
+extern u8 CountPartyNonEggMons(void);
 
 // .rodata
 const u32 gNewGameBirchPic[] = INCBIN_U32("graphics/birch_speech/birch.4bpp");

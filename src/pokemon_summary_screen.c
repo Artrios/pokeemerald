@@ -2936,10 +2936,10 @@ static void PrintPageNamesAndStatsPageToWindows(void)
 
 
 	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Attack3, 42);
-	if (gNatureStatTable[pssData->summary.nature][0] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][0] == 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Attack3, statsXPos, 17, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][0] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][0] > 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Attack3, statsXPos, 17, 0, 13);
 	}
 	else {
@@ -2947,10 +2947,10 @@ static void PrintPageNamesAndStatsPageToWindows(void)
 	}
 
 	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Defense3, 42);
-	if (gNatureStatTable[pssData->summary.nature][1] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][1] == 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Defense3, statsXPos, 33, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][1] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][1] > 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Defense3, statsXPos, 33, 0, 13);
 	}
 	else {
@@ -2959,10 +2959,10 @@ static void PrintPageNamesAndStatsPageToWindows(void)
 
 
 	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpAtk4, 36);
-	if (gNatureStatTable[pssData->summary.nature][3] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][3] == 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpAtk4, statsXPos, 1, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][3] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][3] > 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpAtk4, statsXPos, 1, 0, 13);
 	}
 	else {
@@ -2970,10 +2970,10 @@ static void PrintPageNamesAndStatsPageToWindows(void)
 	}
 
 	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpDef4, 36);
-	if (gNatureStatTable[pssData->summary.nature][4] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][4] == 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpDef4, statsXPos, 17, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][4] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][4] > 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpDef4, statsXPos, 17, 0, 13);
 	}
 	else {
@@ -2981,10 +2981,10 @@ static void PrintPageNamesAndStatsPageToWindows(void)
 	}
 
 	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_Speed2, 36);
-	if (gNatureStatTable[pssData->summary.nature][2] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][2] == 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_Speed2, statsXPos, 33, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][2] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][2] > 0) {
 		SummaryScreen_PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_Speed2, statsXPos, 33, 0, 13);
 	}
 	else {
@@ -3007,10 +3007,10 @@ static void UpdateStatColToWindow(void)
 	int statsXPos;
 
 	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Attack3, 42);
-	if (gNatureStatTable[pssData->summary.nature][0] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][0] == 0) {
 		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][0] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][0] > 0) {
 		SummaryScreen_PrintTextOnWindow(10, gText_Attack3, statsXPos, 17, 0, 13);
 	}
 	else {
@@ -3018,10 +3018,10 @@ static void UpdateStatColToWindow(void)
 	}
 
 	statsXPos = 6 + GetStringCenterAlignXOffset(1, gText_Defense3, 42);
-	if (gNatureStatTable[pssData->summary.nature][1] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][1] == 0) {
 		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][1] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][1] > 0) {
 		SummaryScreen_PrintTextOnWindow(10, gText_Defense3, statsXPos, 33, 0, 13);
 	}
 	else {
@@ -3029,10 +3029,10 @@ static void UpdateStatColToWindow(void)
 	}
 
 	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpAtk4, 36);
-	if (gNatureStatTable[pssData->summary.nature][3] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][3] == 0) {
 		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][3] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][3] > 0) {
 		SummaryScreen_PrintTextOnWindow(11, gText_SpAtk4, statsXPos, 1, 0, 13);
 	}
 	else {
@@ -3040,10 +3040,10 @@ static void UpdateStatColToWindow(void)
 	}
 
 	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_SpDef4, 36);
-	if (gNatureStatTable[pssData->summary.nature][4] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][4] == 0) {
 		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][4] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][4] > 0) {
 		SummaryScreen_PrintTextOnWindow(11, gText_SpDef4, statsXPos, 17, 0, 13);
 	}
 	else {
@@ -3051,10 +3051,10 @@ static void UpdateStatColToWindow(void)
 	}
 
 	statsXPos = 2 + GetStringCenterAlignXOffset(1, gText_Speed2, 36);
-	if (gNatureStatTable[pssData->summary.nature][2] == 0) {
+	if (gNatureStatTable[sMonSummaryScreen->summary.nature][2] == 0) {
 		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 1);
 	}
-	else if (gNatureStatTable[pssData->summary.nature][2] > 0) {
+	else if (gNatureStatTable[sMonSummaryScreen->summary.nature][2] > 0) {
 		SummaryScreen_PrintTextOnWindow(11, gText_Speed2, statsXPos, 33, 0, 13);
 	}
 	else {
