@@ -13,6 +13,7 @@
 #include "event_data.h"
 #include "evolution_scene.h"
 #include "field_specials.h"
+#include "field_weather.h"
 #include "item.h"
 #include "link.h"
 #include "main.h"
@@ -70,6 +71,7 @@ EWRAM_DATA struct Pokemon gPlayerParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct Pokemon gEnemyParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct SpriteTemplate gMultiuseSpriteTemplate = {0};
 EWRAM_DATA struct Unknown_806F160_Struct *gUnknown_020249B4[2] = {NULL};
+extern EWRAM_DATA u8 gUnknown_02032298[2];
 
 // const rom data
 #include "data/battle_moves.h"
