@@ -47,7 +47,6 @@
 #define TASK_ID                 0x1 // task Id and cursor position share the same field
 #define SPRITES_INIT_STATE1     0x1 // shares the Id as well
 #define SPRITES_INIT_STATE2     0x2
-#define MOVE_EFFECT_BYTE        0x3
 #define ACTIONS_CONFIRMED_COUNT 0x4
 #define MULTISTRING_CHOOSER     0x5
 #define MSG_DISPLAY             0x7
@@ -65,65 +64,7 @@
 
 #define BATTLE_BUFFER_LINK_SIZE 0x1000
 
-struct TrainerMonNoItemDefaultMoves
-{
-    u16 iv;
-    u8 lvl;
-    u16 species;
-};
-
-struct TrainerMonItemDefaultMoves
-{
-    u16 iv;
-    u8 lvl;
-    u16 species;
-    u16 heldItem;
-};
-
-struct TrainerMonNoItemCustomMoves
-{
-    u16 iv;
-    u8 lvl;
-    u16 species;
-    u16 moves[4];
-};
-
-struct TrainerMonItemCustomMoves
-{
-    u16 iv;
-    u8 lvl;
-    u16 species;
-    u16 heldItem;
-    u16 moves[4];
-};
-
-union TrainerMonPtr
-{
-    const struct TrainerMonNoItemDefaultMoves *NoItemDefaultMoves;
-    const struct TrainerMonNoItemCustomMoves *NoItemCustomMoves;
-    const struct TrainerMonItemDefaultMoves *ItemDefaultMoves;
-    const struct TrainerMonItemCustomMoves *ItemCustomMoves;
-};
-
-struct Trainer
-{
-    /*0x00*/ u8 partyFlags;
-    /*0x01*/ u8 trainerClass;
-    /*0x02*/ u8 encounterMusic_gender; // last bit is gender
-    /*0x03*/ u8 trainerPic;
-    /*0x04*/ u8 trainerName[12];
-    /*0x10*/ u16 items[4];
-    /*0x18*/ bool8 doubleBattle;
-    /*0x1C*/ u32 aiFlags;
-    /*0x20*/ u8 partySize;
-    /*0x24*/ union TrainerMonPtr party;
-};
-
-extern const struct Trainer gTrainers[];
-
-#define TRAINER_ENCOUNTER_MUSIC(trainer)((gTrainers[trainer].encounterMusic_gender & 0x7F))
-
-struct UnknownFlags
+struct ResourceFlags
 {
     u32 flags[4];
 };
@@ -131,6 +72,8 @@ struct UnknownFlags
 #define RESOURCE_FLAG_FLASH_FIRE    0x1
 #define RESOURCE_FLAG_ROOST         0x2
 #define RESOURCE_FLAG_UNBURDEN      0x4
+#define RESOURCE_FLAG_INTIMIDATED   0x8
+#define RESOURCE_FLAG_TRACED        0x10
 
 struct DisableStruct
 {
@@ -168,6 +111,7 @@ struct DisableStruct
     u8 telekinesisTimer;
     u8 healBlockTimer;
     u8 laserFocusTimer;
+    u8 throatChopTimer;
     u8 usedMoves:4;
     u8 wrapTurns;
 };
@@ -188,7 +132,7 @@ struct ProtectStruct
     u32 targetNotAffected:1;
     u32 chargingTurn:1;
     u32 fleeFlag:2; // For RunAway and Smoke Ball.
-    u32 usedImprisionedMove:1;
+    u32 usedImprisonedMove:1;
     u32 loveImmobility:1;
     u32 usedDisabledMove:1;
     u32 usedTauntedMove:1;
@@ -200,6 +144,7 @@ struct ProtectStruct
     u32 usedHealBlockedMove:1;
     u32 usedGravityPreventedMove:1;
     u32 powderSelfDmg:1;
+    u32 usedThroatChopPreventedMove:1;
     u32 physicalDmg;
     u32 specialDmg;
     u8 physicalBattlerId;
@@ -220,11 +165,18 @@ struct SpecialStatus
     u8 sturdied:1;
     u8 stormDrainRedirected:1;
     u8 switchInAbilityDone:1;
+    u8 switchInItemDone:1;
+    u8 instructedChosenTarget:3;
+    u8 berryReduced:1;
+    u8 gemBoost:1;
+    u8 gemParam;
+    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     s32 dmg;
     s32 physicalDmg;
     s32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
+    u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
 };
 
 struct SideTimer
@@ -328,21 +280,16 @@ struct BattleCallbacksStack
 
 struct StatsArray
 {
-    u16 hp;
-    u16 atk;
-    u16 def;
-    u16 spd;
-    u16 spAtk;
-    u16 spDef;
+    u16 stats[NUM_STATS];
 };
 
 struct BattleResources
 {
-    struct SecretBaseRecord* secretBase;
-    struct UnknownFlags *flags;
+    struct SecretBase* secretBase;
+    struct ResourceFlags *flags;
     struct BattleScriptsStack* battleScriptsStack;
     struct BattleCallbacksStack* battleCallbackStack;
-    struct StatsArray* statsBeforeLvlUp;
+    struct StatsArray* beforeLvlUp;
     struct AI_ThinkingStruct *ai;
     struct BattleHistory *battleHistory;
     struct BattleScriptsStack *AI_ScriptsStack;
@@ -573,6 +520,10 @@ struct BattleStruct
     bool8 trainerSlideLowHpMsgDone;
     u8 introState;
     u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
+    u8 stolenStats[NUM_BATTLE_STATS]; // hp byte is used for which stats to raise, other inform about by how many stages
+    u8 lastMoveFailed; // as bits for each battler, for the sake of Stomping Tantrum
+    u8 lastMoveTarget[MAX_BATTLERS_COUNT]; // The last target on which each mon used a move, for the sake of Instruct
+    u8 debugHoldEffects[MAX_BATTLERS_COUNT]; // These override actual items' hold effects.
 };
 
 #define GET_MOVE_TYPE(move, typeArg)                        \
@@ -597,14 +548,14 @@ struct BattleStruct
     gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
 }
 
-#define GET_STAT_BUFF_ID(n)((n & 0xF))              // first four bits 0x1, 0x2, 0x4, 0x8
-#define GET_STAT_BUFF_VALUE2(n)((n & 0xF0))
-#define GET_STAT_BUFF_VALUE(n)(((n >> 4) & 7))      // 0x10, 0x20, 0x40
+#define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
+#define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))
+#define GET_STAT_BUFF_VALUE(n)(((n >> 3) & 0xF))      // 0x8, 0x10, 0x20, 0x40
 #define STAT_BUFF_NEGATIVE 0x80                     // 0x80, the sign bit
 
-#define SET_STAT_BUFF_VALUE(n)((((n) << 4) & 0xF0))
+#define SET_STAT_BUFF_VALUE(n)((((n) << 3) & 0xF8))
 
-#define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + (stage << 4) + (goesDown << 7))
+#define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + ((stage) << 3) + (goesDown << 7))
 
 struct BattleScripting
 {
@@ -617,8 +568,8 @@ struct BattleScripting
     u8 animArg2;
     u16 tripleKickPower;
     u8 atk49_state;
-    u8 battlerWithAbility;
-    u8 multihitMoveEffect;
+    u8 unused_15;
+    u8 unused_16;
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
@@ -637,13 +588,13 @@ struct BattleScripting
     u8 specialTrainerBattleType;
     bool8 monCaught;
     s32 savedDmg;
-    u8 savedMoveEffect; // For moves hitting multiple targets.
+    u16 savedMoveEffect; // For moves hitting multiple targets.
+    u16 moveEffect;
+    u16 multihitMoveEffect;
 };
 
 // rom_80A5C6C
-u8 GetBattlerSide(u8 battler);
-u8 GetBattlerPosition(u8 battler);
-u8 GetBattlerAtPosition(u8 position);
+
 
 struct BattleSpriteInfo
 {

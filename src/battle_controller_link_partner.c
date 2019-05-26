@@ -9,13 +9,14 @@
 #include "battle_tower.h"
 #include "battle_tv.h"
 #include "bg.h"
-#include "data2.h"
+#include "data.h"
 #include "link.h"
 #include "main.h"
 #include "m4a.h"
 #include "palette.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "recorded_battle.h"
 #include "reshow_battle_screen.h"
 #include "sound.h"
 #include "string_util.h"
@@ -26,12 +27,7 @@
 #include "constants/battle_anim.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
-
-extern const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[];
-extern const struct CompressedSpritePalette gTrainerBackPicPaletteTable[];
-
-extern void sub_8172EF0(u8 battlerId, struct Pokemon *mon);
-extern void sub_81851A8(u8 *);
+#include "recorded_battle.h"
 
 // this file's functions
 static void LinkPartnerHandleGetMonData(void);
@@ -91,7 +87,7 @@ static void LinkPartnerHandleLinkStandbyMsg(void);
 static void LinkPartnerHandleResetActionMoveSelection(void);
 static void LinkPartnerHandleCmd55(void);
 static void LinkPartnerHandleBattleDebug(void);
-static void nullsub_113(void);
+static void LinkPartnerCmdEnd(void);
 
 static void LinkPartnerBufferRunCommand(void);
 static void LinkPartnerBufferExecCompleted(void);
@@ -163,10 +159,10 @@ static void (*const sLinkPartnerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     LinkPartnerHandleResetActionMoveSelection,
     LinkPartnerHandleCmd55,
     LinkPartnerHandleBattleDebug,
-    nullsub_113
+    LinkPartnerCmdEnd
 };
 
-static void nullsub_112(void)
+static void SpriteCB_Null2(void)
 {
 }
 
@@ -493,7 +489,7 @@ static u32 CopyLinkPartnerMonData(u8 monId, u8 *dst)
         battleMon.spAttack = GetMonData(&gPlayerParty[monId], MON_DATA_SPATK);
         battleMon.spDefense = GetMonData(&gPlayerParty[monId], MON_DATA_SPDEF);
         battleMon.isEgg = GetMonData(&gPlayerParty[monId], MON_DATA_IS_EGG);
-        battleMon.altAbility = GetMonData(&gPlayerParty[monId], MON_DATA_ALT_ABILITY);
+        battleMon.abilityNum = GetMonData(&gPlayerParty[monId], MON_DATA_ABILITY_NUM);
         battleMon.otId = GetMonData(&gPlayerParty[monId], MON_DATA_OT_ID);
         GetMonData(&gPlayerParty[monId], MON_DATA_NICKNAME, nickname);
         StringCopy10(battleMon.nickname, nickname);
@@ -1566,7 +1562,7 @@ static void LinkPartnerHandleIntroTrainerBallThrow(void)
         gTasks[gBattlerStatusSummaryTaskId[gActiveBattler]].func = Task_HidePartyStatusSummary;
 
     gBattleSpritesDataPtr->animationData->field_9_x1 = 1;
-    gBattlerControllerFuncs[gActiveBattler] = nullsub_112;
+    gBattlerControllerFuncs[gActiveBattler] = SpriteCB_Null2;
 }
 
 static void sub_814DCCC(u8 taskId)
@@ -1694,6 +1690,6 @@ static void LinkPartnerHandleBattleDebug(void)
     LinkPartnerBufferExecCompleted();
 }
 
-static void nullsub_113(void)
+static void LinkPartnerCmdEnd(void)
 {
 }

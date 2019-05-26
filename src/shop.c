@@ -1,6 +1,6 @@
 #include "global.h"
 #include "bg.h"
-#include "data2.h"
+#include "data.h"
 #include "decompress.h"
 #include "decoration.h"
 #include "decoration_inventory.h"
@@ -33,6 +33,7 @@
 #include "strings.h"
 #include "text_window.h"
 #include "tv.h"
+#include "constants/decorations.h"
 #include "constants/items.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/rgb.h"
@@ -276,7 +277,7 @@ static u8 CreateShopMenu(u8 martType)
     ScriptContext2_Enable();
     gMartInfo.martType = martType;
 
-    if (martType == MART_TYPE_0)
+    if (martType == MART_TYPE_NORMAL)
     {
         struct WindowTemplate winTemplate;
         winTemplate = sShopMenuWindowTemplates[0];
@@ -366,7 +367,7 @@ void CB2_ExitSellMenu(void)
 
 static void Task_HandleShopMenuQuit(u8 taskId)
 {
-    sub_8198070(gMartInfo.windowId, 2);
+    ClearStdWindowAndFrameToTransparent(gMartInfo.windowId, 2);
     RemoveWindow(gMartInfo.windowId);
     SaveRecordedItemPurchasesForTVShow();
     ScriptContext2_Disable();
@@ -396,7 +397,7 @@ static void Task_ReturnToShopMenu(u8 taskId)
 {
     if (IsWeatherNotFadingIn() == TRUE)
     {
-        if (gMartInfo.martType == MART_TYPE_2)
+        if (gMartInfo.martType == MART_TYPE_DECOR2)
             DisplayItemMessageOnField(taskId, gText_CanIHelpWithAnythingElse, ShowShopMenuAfterExitingBuyOrSellMenu);
         else
             DisplayItemMessageOnField(taskId, gText_AnythingElseICanHelp, ShowShopMenuAfterExitingBuyOrSellMenu);
@@ -511,7 +512,7 @@ static void BuyMenuBuildListMenuTemplate(void)
 
 static void BuyMenuSetListEntry(struct ListMenuItem *menuItem, u16 item, u8 *name)
 {
-    if (gMartInfo.martType == MART_TYPE_0)
+    if (gMartInfo.martType == MART_TYPE_NORMAL)
         CopyItemName(item, name);
     else
         StringCopy(name, gDecorations[item].name);
@@ -535,7 +536,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(int item, bool8 onInit, s
     gShopDataPtr->iconSlot ^= 1;
     if (item != -2)
     {
-        if (gMartInfo.martType == MART_TYPE_0)
+        if (gMartInfo.martType == MART_TYPE_NORMAL)
             description = ItemId_GetDescription(item);
         else
             description = gDecorations[item].description;
@@ -545,7 +546,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(int item, bool8 onInit, s
         description = gText_QuitShopping;
     }
 
-    FillWindowPixelBuffer(2, 0);
+    FillWindowPixelBuffer(2, PIXEL_FILL(0));
     BuyMenuPrint(2, description, 3, 1, 0, 0);
 }
 
@@ -555,7 +556,7 @@ static void BuyMenuPrintPriceInList(u8 windowId, int item, u8 y)
 
     if (item != -2)
     {
-        if (gMartInfo.martType == MART_TYPE_0)
+        if (gMartInfo.martType == MART_TYPE_NORMAL)
         {
             ConvertIntToDecimalStringN(
                 gStringVar1,
@@ -616,7 +617,7 @@ static void BuyMenuAddItemIcon(u16 item, u8 iconSlot)
     if (*spriteIdPtr != 0xFF)
         return;
 
-    if (gMartInfo.martType == MART_TYPE_0 || item == 0xFFFF)
+    if (gMartInfo.martType == MART_TYPE_NORMAL || item == 0xFFFF)
     {
         spriteId = AddItemIconSprite(iconSlot + 2110, iconSlot + 2110, item);
         if (spriteId != MAX_SPRITES)
@@ -918,7 +919,7 @@ static void Task_BuyMenu(u8 taskId)
         {
         case LIST_NOTHING_CHOSEN:
             break;
-        case LIST_B_PRESSED:
+        case LIST_CANCEL:
             PlaySE(SE_SELECT);
             ExitBuyMenu(taskId);
             break;
@@ -929,7 +930,7 @@ static void Task_BuyMenu(u8 taskId)
             BuyMenuRemoveScrollIndicatorArrows();
             BuyMenuPrintCursor(tListTaskId, 2);
 
-            if (gMartInfo.martType == MART_TYPE_0)
+            if (gMartInfo.martType == MART_TYPE_NORMAL)
             {
                 gShopDataPtr->totalCost = (ItemId_GetPrice(itemId) >> GetPriceReduction(1));
             }
@@ -944,7 +945,7 @@ static void Task_BuyMenu(u8 taskId)
             }
             else
             {
-                if (gMartInfo.martType == MART_TYPE_0)
+                if (gMartInfo.martType == MART_TYPE_NORMAL)
                 {
                     CopyItemName(itemId, gStringVar1);
                     if (ItemId_GetPocket(itemId) == POCKET_TM_HM)
@@ -962,7 +963,7 @@ static void Task_BuyMenu(u8 taskId)
                     StringCopy(gStringVar1, gDecorations[itemId].name);
                     ConvertIntToDecimalStringN(gStringVar2, gShopDataPtr->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
 
-                    if (gMartInfo.martType == MART_TYPE_1)
+                    if (gMartInfo.martType == MART_TYPE_DECOR)
                         StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2);
                     else
                         StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
@@ -981,12 +982,12 @@ static void Task_BuyHowManyDialogueInit(u8 taskId)
     u16 quantityInBag = CountTotalItemQuantityInBag(tItemId);
     u16 maxQuantity;
 
-    SetWindowBorderStyle(3, FALSE, 1, 13);
+    DrawStdFrameWithCustomTileAndPalette(3, FALSE, 1, 13);
     ConvertIntToDecimalStringN(gStringVar1, quantityInBag, STR_CONV_MODE_RIGHT_ALIGN, 4);
     StringExpandPlaceholders(gStringVar4, gText_InBagVar1);
     BuyMenuPrint(3, gStringVar4, 0, 1, 0, 0);
     tItemCount = 1;
-    SetWindowBorderStyle(4, FALSE, 1, 13);
+    DrawStdFrameWithCustomTileAndPalette(4, FALSE, 1, 13);
     BuyMenuPrintItemQuantityAndPrice(taskId);
     schedule_bg_copy_tilemap_to_vram(0);
 
@@ -1018,8 +1019,8 @@ static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
         if (gMain.newKeys & A_BUTTON)
         {
             PlaySE(SE_SELECT);
-            sub_8198070(4, 0);
-            sub_8198070(3, 0);
+            ClearStdWindowAndFrameToTransparent(4, 0);
+            ClearStdWindowAndFrameToTransparent(3, 0);
             ClearWindowTilemap(4);
             ClearWindowTilemap(3);
             PutWindowTilemap(1);
@@ -1031,8 +1032,8 @@ static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
         else if (gMain.newKeys & B_BUTTON)
         {
             PlaySE(SE_SELECT);
-            sub_8198070(4, 0);
-            sub_8198070(3, 0);
+            ClearStdWindowAndFrameToTransparent(4, 0);
+            ClearStdWindowAndFrameToTransparent(3, 0);
             ClearWindowTilemap(4);
             ClearWindowTilemap(3);
             BuyMenuReturnToItemList(taskId);
@@ -1051,7 +1052,7 @@ static void BuyMenuTryMakePurchase(u8 taskId)
 
     PutWindowTilemap(1);
 
-    if (gMartInfo.martType == MART_TYPE_0)
+    if (gMartInfo.martType == MART_TYPE_NORMAL)
     {
         if (AddBagItem(tItemId, tItemCount) == TRUE)
         {
@@ -1067,7 +1068,7 @@ static void BuyMenuTryMakePurchase(u8 taskId)
     {
         if (DecorationAdd(tItemId))
         {
-            if (gMartInfo.martType == MART_TYPE_1)
+            if (gMartInfo.martType == MART_TYPE_DECOR)
             {
                 BuyMenuDisplayMessage(taskId, gText_ThankYouIllSendItHome, BuyMenuSubtractMoney);
             }
@@ -1090,7 +1091,7 @@ static void BuyMenuSubtractMoney(u8 taskId)
     PlaySE(SE_REGI);
     PrintMoneyAmountInMoneyBox(0, GetMoney(&gSaveBlock1Ptr->money), 0);
 
-    if (gMartInfo.martType == MART_TYPE_0)
+    if (gMartInfo.martType == MART_TYPE_NORMAL)
     {
         gTasks[taskId].func = Task_ReturnToItemListAfterItemPurchase;
     }
@@ -1131,7 +1132,7 @@ static void BuyMenuReturnToItemList(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
-    sub_8197DF8(5, 0);
+    ClearDialogWindowAndFrameToTransparent(5, 0);
     BuyMenuPrintCursor(tListTaskId, 1);
     PutWindowTilemap(1);
     PutWindowTilemap(2);
@@ -1144,7 +1145,7 @@ static void BuyMenuPrintItemQuantityAndPrice(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
-    FillWindowPixelBuffer(4, 0x11);
+    FillWindowPixelBuffer(4, PIXEL_FILL(1));
     PrintMoneyAmount(4, 38, 1, gShopDataPtr->totalCost, TEXT_SPEED_FF);
     ConvertIntToDecimalStringN(gStringVar1, tItemCount, 2, 2);
     StringExpandPlaceholders(gStringVar4, gText_xVar1);
@@ -1154,7 +1155,7 @@ static void BuyMenuPrintItemQuantityAndPrice(u8 taskId)
 static void ExitBuyMenu(u8 taskId)
 {
     gFieldCallback = MapPostLoadHook_ReturnToShopMenu;
-    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
+    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_ExitBuyMenu;
 }
 
@@ -1211,7 +1212,7 @@ static void RecordItemPurchase(u8 taskId)
 
 void CreatePokemartMenu(const u16 *itemsForSale)
 {
-    CreateShopMenu(MART_TYPE_0);
+    CreateShopMenu(MART_TYPE_NORMAL);
     SetShopItemsForSale(itemsForSale);
     ClearItemPurchases();
     SetShopMenuCallback(EnableBothScriptContexts);
@@ -1219,14 +1220,14 @@ void CreatePokemartMenu(const u16 *itemsForSale)
 
 void CreateDecorationShop1Menu(const u16 *itemsForSale)
 {
-    CreateShopMenu(MART_TYPE_1);
+    CreateShopMenu(MART_TYPE_DECOR);
     SetShopItemsForSale(itemsForSale);
     SetShopMenuCallback(EnableBothScriptContexts);
 }
 
 void CreateDecorationShop2Menu(const u16 *itemsForSale)
 {
-    CreateShopMenu(MART_TYPE_2);
+    CreateShopMenu(MART_TYPE_DECOR2);
     SetShopItemsForSale(itemsForSale);
     SetShopMenuCallback(EnableBothScriptContexts);
 }

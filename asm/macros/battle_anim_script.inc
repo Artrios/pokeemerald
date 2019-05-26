@@ -144,7 +144,7 @@
 	.byte \pan
 	.endm
 
-	.macro panse_1B se:req, param1:req, param2:req, param3:req, param4
+	.macro panse_1B se:req, param1:req, param2:req, param3:req, param4:req
 	.byte 0x1b
 	.2byte \se
 	.byte \param1
@@ -153,19 +153,19 @@
 	.byte \param4
 	.endm
 
-	.macro loopsewithpan se:req, param1:req, param2:req, param3:req
+	.macro loopsewithpan se:req, pan:req, wait:req, times:req
 	.byte 0x1c
 	.2byte \se
-	.byte \param1
-	.byte \param2
-	.byte \param3
+	.byte \pan
+	.byte \wait
+	.byte \times
 	.endm
 
-	.macro waitplaysewithpan se:req, param1:req, param2:req
+	.macro waitplaysewithpan se:req, pan:req, wait:req
 	.byte 0x1d
 	.2byte \se
-	.byte \param1
-	.byte \param2
+	.byte \pan
+	.byte \wait
 	.endm
 
 	.macro setbldcnt param0:req
@@ -215,7 +215,7 @@
 	.byte \param2
 	.endm
 
-	.macro panse_26 se:req, param1:req, param2:req, param3:req, param4
+	.macro panse_26 se:req, param1:req, param2:req, param3:req, param4:req
 	.byte 0x26
 	.2byte \se
 	.byte \param1
@@ -224,7 +224,7 @@
 	.byte \param4
 	.endm
 
-	.macro panse_27 se:req, param1:req, param2:req, param3:req, param4
+	.macro panse_27 se:req, param1:req, param2:req, param3:req, param4:req
 	.byte 0x27
 	.2byte \se
 	.byte \param1
@@ -282,4 +282,9 @@
 	
 	.macro jumpretfalse ptr:req
 	jumpreteq FALSE, \ptr
+	.endm
+	
+	.macro jumpifdoublebattle ptr:req
+	createvisualtask AnimTask_IsDoubleBattle, 0
+	jumprettrue \ptr
 	.endm

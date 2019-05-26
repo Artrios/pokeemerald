@@ -3,11 +3,12 @@
 #include "battle.h"
 #include "battle_setup.h"
 #include "bg.h"
-#include "data2.h"
+#include "data.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
 #include "main.h"
+#include "match_call.h"
 #include "menu.h"
 #include "new_game.h"
 #include "overworld.h"
@@ -74,7 +75,6 @@ struct BattleFrontierStreakInfo
 EWRAM_DATA struct MatchCallState gMatchCallState = {0};
 EWRAM_DATA struct BattleFrontierStreakInfo gBattleFrontierStreakInfo = {0};
 
-bool32 SelectMatchCallMessage(int, u8 *);
 static u32 GetCurrentTotalMinutes(struct Time *);
 static u32 GetNumRegisteredNPCs(void);
 static u32 GetActiveMatchCallTrainerId(u32);
@@ -110,8 +110,6 @@ static void PopulateSpeciesFromTrainerLocation(int, u8 *);
 static void PopulateSpeciesFromTrainerParty(int, u8 *);
 static void PopulateBattleFrontierFacilityName(int, u8 *);
 static void PopulateBattleFrontierStreak(int, u8 *);
-
-extern void sub_81973A4(void);
 
 #define TEXT_ID(topic, id) (((topic) << 8) | ((id) & 0xFF))
 
@@ -1016,7 +1014,7 @@ static bool32 MapAllowsMatchCall(void)
     
     if (gMapHeader.regionMapSectionId == MAPSEC_SOOTOPOLIS_CITY
      && FlagGet(FLAG_HIDE_SOOTOPOLIS_CITY_RAYQUAZA) == TRUE
-     && FlagGet(FLAG_UNUSED_0x0DC) == FALSE)
+     && FlagGet(FLAG_NEVER_SET_0x0DC) == FALSE)
         return FALSE;
 
     if (gMapHeader.regionMapSectionId == MAPSEC_MT_CHIMNEY
@@ -1100,13 +1098,13 @@ bool32 TryStartMatchCall(void)
     return FALSE;
 }
 
-void StartMatchCallFromScript(void)
+void StartMatchCallFromScript(u8 *message)
 {
     gMatchCallState.triggeredFromScript = 1;
     StartMatchCall();
 }
 
-bool8 IsMatchCallTaskActive(void)
+bool32 IsMatchCallTaskActive(void)
 {
     return FuncIsActiveTask(ExecuteMatchCall);
 }
@@ -1191,7 +1189,7 @@ static bool32 LoadMatchCallWindowGfx(u8 taskId)
         return FALSE;
     }
 
-    FillWindowPixelBuffer(taskData[2], 0x88);
+    FillWindowPixelBuffer(taskData[2], PIXEL_FILL(8));
     LoadPalette(sUnknown_0860EA4C, 0xE0, 0x20);
     LoadPalette(sPokeNavIconPalette, 0xF0, 0x20);
     ChangeBgY(0, -0x2000, 0);
@@ -1241,7 +1239,7 @@ static bool32 sub_81962D8(u8 taskId)
     s16 *taskData = gTasks[taskId].data;
     if (!ExecuteMatchCallTextPrinter(taskData[2]))
     {
-        FillWindowPixelBuffer(taskData[2], 0x88);
+        FillWindowPixelBuffer(taskData[2], PIXEL_FILL(8));
         if (!gMatchCallState.triggeredFromScript)
             SelectMatchCallMessage(gMatchCallState.trainerId, gStringVar4);
 
@@ -1257,7 +1255,7 @@ static bool32 sub_8196330(u8 taskId)
     s16 *taskData = gTasks[taskId].data;
     if (!ExecuteMatchCallTextPrinter(taskData[2]) && !IsSEPlaying() && gMain.newKeys & (A_BUTTON | B_BUTTON))
     {
-        FillWindowPixelBuffer(taskData[2], 0x88);
+        FillWindowPixelBuffer(taskData[2], PIXEL_FILL(8));
         CopyWindowToVram(taskData[2], 2);
         PlaySE(SE_TOREOFF);
         return TRUE;
@@ -2004,7 +2002,7 @@ void sub_8197080(u8 *destStr)
     Free(buffer);
 }
 
-void sub_8197184(u8 windowId, u32 destOffset, u32 paletteId)
+void sub_8197184(u32 windowId, u32 destOffset, u32 paletteId)
 {
     u8 bg = GetWindowAttribute(windowId, WINDOW_BG);
     LoadBgTiles(bg, sUnknown_0860EA6C, 0x100, destOffset);

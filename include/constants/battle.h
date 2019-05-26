@@ -150,8 +150,7 @@
 #define STATUS3_GASTRO_ACID             0x10000
 #define STATUS3_EMBARGO                 0x20000
 #define STATUS3_UNDERWATER              0x40000
-#define STATUS3_INTIMIDATE_POKES        0x80000
-#define STATUS3_TRACE                   0x100000
+
 #define STATUS3_SMACKED_DOWN            0x200000
 #define STATUS3_ME_FIRST                0x400000
 #define STATUS3_TELEKINESIS             0x800000
@@ -213,6 +212,7 @@
 #define SIDE_STATUS_QUICK_GUARD             (1 << 18)
 #define SIDE_STATUS_WIDE_GUARD              (1 << 19)
 #define SIDE_STATUS_CRAFTY_SHIELD           (1 << 20)
+#define SIDE_STATUS_MAT_BLOCK               (1 << 21)
 
 // Field affecting statuses.
 #define STATUS_FIELD_MAGIC_ROOM         0x1
@@ -325,9 +325,15 @@
 #define MOVE_EFFECT_SMACK_DOWN          0x3C
 #define MOVE_EFFECT_FLAME_BURST         0x3D
 #define MOVE_EFFECT_FEINT               0x3E
-#define MOVE_EFFECT_NOTHING_3F          0x3F
-#define MOVE_EFFECT_AFFECTS_USER        0x40
-#define MOVE_EFFECT_CERTAIN             0x80
+#define MOVE_EFFECT_SPECTRAL_THIEF      0x3F
+#define MOVE_EFFECT_V_CREATE            0x40
+#define MOVE_EFFECT_HAPPY_HOUR          0x41
+#define MOVE_EFFECT_CORE_ENFORCER       0x42
+#define MOVE_EFFECT_THROAT_CHOP         0x43
+#define MOVE_EFFECT_INCINERATE          0x44
+#define MOVE_EFFECT_BUG_BITE            0x45
+#define MOVE_EFFECT_AFFECTS_USER        0x4000
+#define MOVE_EFFECT_CERTAIN             0x8000
 
 // Battle terrain defines for gBattleTerrain.
 #define BATTLE_TERRAIN_GRASS        0

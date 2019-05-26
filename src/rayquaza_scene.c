@@ -105,10 +105,10 @@ static const struct OamData sOamData_862A6BC =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 0,
+    .shape = SPRITE_SHAPE(64x64),
     .x = 0,
     .matrixNum = 0,
-    .size = 3,
+    .size = SPRITE_SIZE(64x64),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -122,10 +122,10 @@ static const struct OamData sOamData_862A6C4 =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 0,
+    .shape = SPRITE_SHAPE(32x32),
     .x = 0,
     .matrixNum = 0,
-    .size = 2,
+    .size = SPRITE_SIZE(32x32),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -139,10 +139,10 @@ static const struct OamData sOamData_862A6CC =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 1,
+    .shape = SPRITE_SHAPE(64x32),
     .x = 0,
     .matrixNum = 0,
-    .size = 3,
+    .size = SPRITE_SIZE(64x32),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -156,10 +156,10 @@ static const struct OamData sOamData_862A6D4 =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 1,
+    .shape = SPRITE_SHAPE(32x16),
     .x = 0,
     .matrixNum = 0,
-    .size = 2,
+    .size = SPRITE_SIZE(32x16),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -173,10 +173,10 @@ static const struct OamData sOamData_862A6DC =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 1,
+    .shape = SPRITE_SHAPE(16x8),
     .x = 0,
     .matrixNum = 0,
-    .size = 0,
+    .size = SPRITE_SIZE(16x8),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -190,10 +190,10 @@ static const struct OamData sOamData_862A6E4 =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 2,
+    .shape = SPRITE_SHAPE(16x32),
     .x = 0,
     .matrixNum = 0,
-    .size = 2,
+    .size = SPRITE_SIZE(16x32),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -207,10 +207,10 @@ static const struct OamData sOamData_862A6EC =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 0,
+    .shape = SPRITE_SHAPE(16x16),
     .x = 0,
     .matrixNum = 0,
-    .size = 1,
+    .size = SPRITE_SIZE(16x16),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -224,10 +224,10 @@ static const struct OamData sOamData_862A6F4 =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 1,
+    .shape = SPRITE_SHAPE(32x8),
     .x = 0,
     .matrixNum = 0,
-    .size = 1,
+    .size = SPRITE_SIZE(32x8),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -1563,7 +1563,7 @@ static void Task_DuoFightAnim(u8 taskId)
     }
 
     BlendPalettes(-1, 0x10, 0);
-    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, 0);
+    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
     SetVBlankCallback(VBlankCB_DuoFight);
     PlaySE(SE_T_OOAME);
 }
@@ -1715,7 +1715,7 @@ static void sub_81D752C(u8 taskId)
 static void DuoFightEnd(u8 taskId, s8 palDelay)
 {
     PlaySE(SE_T_OOAME_E);
-    BeginNormalPaletteFade(0xFFFFFFFF, palDelay, 0, 0x10, 0);
+    BeginNormalPaletteFade(0xFFFFFFFF, palDelay, 0, 0x10, RGB_BLACK);
     gTasks[taskId].func = Task_DuoFightEnd;
 }
 
@@ -1971,7 +1971,7 @@ static void Task_HandleRayTakesFlight(u8 taskId)
     case 0:
         if (data[1] == 8)
         {
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
             data[2] = 0;
             data[3] = 30;
             data[4] = 0;
@@ -2012,7 +2012,7 @@ static void Task_HandleRayTakesFlight(u8 taskId)
             if (data[1] > 295)
             {
                 data[0]++;
-                BeginNormalPaletteFade(0xFFFFFFFF, 6, 0, 0x10, 0);
+                BeginNormalPaletteFade(0xFFFFFFFF, 6, 0, 0x10, RGB_BLACK);
             }
         }
         break;
@@ -2174,7 +2174,7 @@ static void Task_HandleRayDescends(u8 taskId)
     case 0:
         if (data[1] == 8)
         {
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
             data[1] = 0;
             data[0]++;
         }
@@ -2219,7 +2219,7 @@ static void Task_HandleRayDescends(u8 taskId)
         }
         break;
     case 4:
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_RayDescendsEnd;
         break;
     }
@@ -2366,7 +2366,7 @@ static void Task_HandleRayCharges(u8 taskId)
     case 0:
         if (data[1] == 8)
         {
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
             data[1] = 0;
             data[0]++;
         }
@@ -2399,7 +2399,7 @@ static void Task_HandleRayCharges(u8 taskId)
         }
         break;
     case 3:
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_RayChargesEnd;
         break;
     }
@@ -2532,7 +2532,7 @@ static void Task_HandleRayChasesAway(u8 taskId)
         if (data[1] == 8)
         {
             sub_81D90A8(taskId);
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
             data[1] = 0;
             data[0]++;
         }
@@ -2574,7 +2574,7 @@ static void Task_HandleRayChasesAway(u8 taskId)
         }
         break;
     case 3:
-        BeginNormalPaletteFade(0xFFFFFFFF, 4, 0, 0x10, 0);
+        BeginNormalPaletteFade(0xFFFFFFFF, 4, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_RayChasesAwayEnd;
         break;
     }

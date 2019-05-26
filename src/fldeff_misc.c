@@ -23,7 +23,7 @@
 #include "constants/songs.h"
 #include "constants/vars.h"
 
-extern struct MapPosition gPlayerFacingPosition;
+EWRAM_DATA struct MapPosition gPlayerFacingPosition = {0};
 
 static void sub_80F9C90(u8);
 static void sub_80F9DFC(u8);
@@ -93,8 +93,8 @@ static const struct OamData gOamData_858E4D8 =
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
     .bpp = ST_OAM_4BPP,
-    .shape = ST_OAM_SQUARE,
-    .size = 1,
+    .shape = SPRITE_SHAPE(16x16),
+    .size = SPRITE_SIZE(16x16),
     .priority = 2,
 };
 
@@ -246,8 +246,8 @@ static const struct OamData gOamData_858E658 =
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
     .bpp = ST_OAM_4BPP,
-    .shape = ST_OAM_V_RECTANGLE,
-    .size = 2,
+    .shape = SPRITE_SHAPE(16x32),
+    .size = SPRITE_SIZE(16x32),
     .priority = 2,
 };
 
@@ -488,8 +488,8 @@ static void sub_80F9DFC(u8 taskId)
 
 static void SetCurrentSecretBase(void)
 {
-    sub_80E9608(&gPlayerFacingPosition, gMapHeader.events);
-    sub_80E8B6C();
+    SetCurSecretBaseIdFromPosition(&gPlayerFacingPosition, gMapHeader.events);
+    TrySetCurSecretBaseIndex();
 }
 
 static void AdjustSecretPowerSpritePixelOffsets(void)
@@ -544,7 +544,7 @@ bool8 SetUpFieldMove_SecretPower(void)
 {
     u8 mb;
 
-    sub_80E8BC8();
+    CheckPlayerHasSecretBase();
 
     if (gSpecialVar_Result == 1 || GetPlayerFacingDirection() != DIR_NORTH)
         return FALSE;
@@ -623,10 +623,8 @@ static void CaveEntranceSpriteCallback2(struct Sprite *sprite)
 {
     if (sprite->data[0] < 40)
     {
-        sprite->data[0]++;
-
-        if (sprite->data[0] == 20)
-            sub_80E8D4C();
+        if (++sprite->data[0] == 20)
+            ToggleSecretBaseEntranceMetatile();
     }
     else
     {
@@ -681,7 +679,7 @@ bool8 FldEff_SecretPowerTree(void)
                  148);
 
     if (gFieldEffectArguments[7] == 1 || gFieldEffectArguments[7] == 3)
-        sub_80E8D4C();
+        ToggleSecretBaseEntranceMetatile();
 
     return FALSE;
 }
@@ -702,7 +700,7 @@ static void TreeEntranceSpriteCallback2(struct Sprite *sprite)
     if (sprite->data[0] >= 40)
     {
         if (gFieldEffectArguments[7] == 0 || gFieldEffectArguments[7] == 2)
-            sub_80E8D4C();
+            ToggleSecretBaseEntranceMetatile();
 
         sprite->data[0] = 0;
         sprite->callback = TreeEntranceSpriteCallbackEnd;
@@ -764,7 +762,7 @@ static void ShrubEntranceSpriteCallback2(struct Sprite *sprite)
         sprite->data[0]++;
 
         if (sprite->data[0] == 20)
-            sub_80E8D4C();
+            ToggleSecretBaseEntranceMetatile();
     }
     else
     {
@@ -1126,7 +1124,7 @@ void GetShieldToyTVDecorationInfo(void)
         if (!VarGet(VAR_CURRENT_SECRET_BASE))
             return;
 
-        VarSet(VAR_0x40EE, VarGet(VAR_0x40EE) | 0x10);
+        VarSet(VAR_SECRET_BASE_LOW_TV_FLAGS, VarGet(VAR_SECRET_BASE_LOW_TV_FLAGS) | 0x10);
         break;
     case 734:
         ConvertIntToDecimalStringN(gStringVar1, 50, STR_CONV_MODE_LEFT_ALIGN, 2);
@@ -1137,7 +1135,7 @@ void GetShieldToyTVDecorationInfo(void)
         if (!VarGet(VAR_CURRENT_SECRET_BASE))
             return;
 
-        VarSet(VAR_0x40EE, VarGet(VAR_0x40EE) | 0x20);
+        VarSet(VAR_SECRET_BASE_LOW_TV_FLAGS, VarGet(VAR_SECRET_BASE_LOW_TV_FLAGS) | 0x20);
         break;
     case 756:
         gSpecialVar_Result = 1;
@@ -1145,7 +1143,7 @@ void GetShieldToyTVDecorationInfo(void)
         if (!VarGet(VAR_CURRENT_SECRET_BASE))
             return;
 
-        VarSet(VAR_0x40EE, VarGet(VAR_0x40EE) | 0x80);
+        VarSet(VAR_SECRET_BASE_LOW_TV_FLAGS, VarGet(VAR_SECRET_BASE_LOW_TV_FLAGS) | 0x80);
         break;
     case 757:
         gSpecialVar_Result = 2;
@@ -1153,7 +1151,7 @@ void GetShieldToyTVDecorationInfo(void)
         if (!VarGet(VAR_CURRENT_SECRET_BASE))
             return;
 
-        VarSet(VAR_0x40EE, VarGet(VAR_0x40EE) | 0x80);
+        VarSet(VAR_SECRET_BASE_LOW_TV_FLAGS, VarGet(VAR_SECRET_BASE_LOW_TV_FLAGS) | 0x80);
         break;
     case 758:
         gSpecialVar_Result = 3;
@@ -1161,14 +1159,14 @@ void GetShieldToyTVDecorationInfo(void)
         if (!VarGet(VAR_CURRENT_SECRET_BASE))
             return;
 
-        VarSet(VAR_0x40EE, VarGet(VAR_0x40EE) | 0x80);
+        VarSet(VAR_SECRET_BASE_LOW_TV_FLAGS, VarGet(VAR_SECRET_BASE_LOW_TV_FLAGS) | 0x80);
         break;
     }
 }
 
 bool8 sub_80FADE4(u16 metatileId, u8 arg1)
 {
-    if (!CurrentMapIsSecretBase())
+    if (!CurMapIsSecretBase())
         return FALSE;
 
     if (!arg1)

@@ -310,8 +310,8 @@ SecretBase_RedCave1_Text_275944: @ 8275944
 	.string "Are you speechless?$"
 
 EventScript_2759F1:: @ 82759F1
-	special sub_80E8C98
-	special sub_80E8BC8
+	special GetSecretBaseTypeInFrontOfPlayer
+	special CheckPlayerHasSecretBase
 	compare VAR_RESULT, 1
 	goto_if_eq EventScript_275BE8
 	checkpartymove MOVE_SECRET_POWER
@@ -339,7 +339,7 @@ EventScript_275A50:: @ 8275A50
 	msgbox gText_23B704, MSGBOX_YESNO
 	compare VAR_RESULT, 0
 	goto_if_eq EventScript_275CDE
-	msgbox Route103_Text_290771, MSGBOX_DEFAULT
+	msgbox Text_MonUsedHM, MSGBOX_DEFAULT
 	closemessage
 	dofieldeffect FLDEFF_USE_SECRET_POWER_CAVE
 	waitstate
@@ -371,7 +371,7 @@ EventScript_275AA9:: @ 8275AA9
 	msgbox Text_274779, MSGBOX_YESNO
 	compare VAR_RESULT, 0
 	goto_if_eq EventScript_275CDE
-	msgbox Route103_Text_290771, MSGBOX_DEFAULT
+	msgbox Text_MonUsedHM, MSGBOX_DEFAULT
 	closemessage
 	dofieldeffect FLDEFF_USE_SECRET_POWER_TREE
 	waitstate
@@ -403,7 +403,7 @@ EventScript_275B02:: @ 8275B02
 	msgbox Text_274825, MSGBOX_YESNO
 	compare VAR_RESULT, 0
 	goto_if_eq EventScript_275CDE
-	msgbox Route103_Text_290771, MSGBOX_DEFAULT
+	msgbox Text_MonUsedHM, MSGBOX_DEFAULT
 	closemessage
 	dofieldeffect FLDEFF_USE_SECRET_POWER_SHRUB
 	waitstate
@@ -430,33 +430,33 @@ EventScript_275B4D:: @ 8275B4D
 EventScript_275B5B:: @ 8275B5B
 	closemessage
 	playse SE_KAIDAN
-	setvar VAR_0x4097, 0
+	setvar VAR_INIT_SECRET_BASE, 0
 	setflag FLAG_DECORATION_0
-	special sub_80E8E18
-	special sub_80E9068
+	special SetPlayerSecretBase
+	special EnterSecretBase
 	setvar VAR_0x8004, 0
 	setvar VAR_0x8005, 0
-	special sub_80E933C
-	setvar VAR_0x4089, 1
+	special InitSecretBaseDecorationSprites
+	setvar VAR_SECRET_BASE_INITIALIZED, 1
 	waitstate
 	end
 
 SecretBase_RedCave1_EventScript_275B81:: @ 8275B81
 	applymovement EVENT_OBJ_ID_PLAYER, SecretBase_RedCave1_Movement_275BB4
 	waitmovement 0
-	setvar VAR_0x4097, 1
+	setvar VAR_INIT_SECRET_BASE, 1
 	msgbox SecretBase_RedCave1_Text_23B759, MSGBOX_YESNO
 	compare VAR_RESULT, 1
 	goto_if_eq SecretBase_RedCave1_EventScript_275BAB
 	closemessage
 	playse SE_KAIDAN
-	special sub_80E9A90
+	special ClearAndLeaveSecretBase
 	end
 
 SecretBase_RedCave1_EventScript_275BAB:: @ 8275BAB
 	closemessage
 	setflag FLAG_RECEIVED_SECRET_POWER
-	special sub_80E91F8
+	special EnterNewlyCreatedSecretBase
 	waitstate
 	end
 
@@ -467,21 +467,21 @@ SecretBase_RedCave1_Movement_275BB4: @ 8275BB4
 
 EventScript_275BB7:: @ 8275BB7
 	lockall
-	setvar VAR_0x4097, 1
+	setvar VAR_INIT_SECRET_BASE, 1
 	playse SE_KAIDAN
-	special sub_80E9744
+	special IsCurSecretBaseOwnedByAnotherPlayer
 	compare VAR_RESULT, 0
 	goto_if_eq EventScript_275BDB
 	clearflag FLAG_DECORATION_0
-	special sub_80E9068
-	setvar VAR_0x4089, 0
+	special EnterSecretBase
+	setvar VAR_SECRET_BASE_INITIALIZED, 0
 	waitstate
 	end
 
 EventScript_275BDB:: @ 8275BDB
 	setflag FLAG_DECORATION_0
-	special sub_80E9068
-	setvar VAR_0x4089, 0
+	special EnterSecretBase
+	setvar VAR_SECRET_BASE_INITIALIZED, 0
 	waitstate
 	end
 
@@ -500,7 +500,7 @@ EventScript_275BE8:: @ 8275BE8
 	compare VAR_RESULT, 0
 	goto_if_eq EventScript_275CDE
 	fadescreenswapbuffers 1
-	special sub_80E9B70
+	special MoveOutOfSecretBaseFromOutside
 	closemessage
 	fadescreenswapbuffers 0
 	msgbox Text_276A95, MSGBOX_YESNO
@@ -508,7 +508,7 @@ EventScript_275BE8:: @ 8275BE8
 	goto_if_eq EventScript_275CDE
 	bufferpartymonnick 0, VAR_0x8004
 	buffermovename 1, MOVE_SECRET_POWER
-	msgbox Route103_Text_290771, MSGBOX_DEFAULT
+	msgbox Text_MonUsedHM, MSGBOX_DEFAULT
 	closemessage
 	closemessage
 	compare VAR_0x8007, 1
@@ -569,8 +569,8 @@ SecretBase_RedCave1_EventScript_275CE1:: @ 8275CE1
 EventScript_275D0C:: @ 8275D0C
 	setvar VAR_0x8004, 0
 	setvar VAR_0x8005, 0
-	special sub_80E933C
-	setvar VAR_0x4089, 1
+	special InitSecretBaseDecorationSprites
+	setvar VAR_SECRET_BASE_INITIALIZED, 1
 	end
 
 EventScript_275D1F:: @ 8275D1F
@@ -626,7 +626,7 @@ SecretBase_YellowCave1_EventScript_275D64:: @ 8275D64
 SecretBase_YellowCave2_EventScript_275D64:: @ 8275D64
 SecretBase_YellowCave3_EventScript_275D64:: @ 8275D64
 SecretBase_YellowCave4_EventScript_275D64:: @ 8275D64
-	special sub_80EA354
+	special GetSecretBaseOwnerInteractionState
 	compare VAR_0x8004, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_275DD6
 	compare VAR_0x8004, 1
@@ -660,7 +660,7 @@ SecretBase_RedCave1_EventScript_275DD6:: @ 8275DD6
 	goto_if_eq SecretBase_RedCave1_EventScript_275E2F
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_275E2F
 	msgbox SecretBase_RedCave1_Text_274939, MSGBOX_DEFAULT
@@ -696,7 +696,7 @@ SecretBase_RedCave1_EventScript_275E4E:: @ 8275E4E
 	goto_if_eq SecretBase_RedCave1_EventScript_275EA7
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_275EA7
 	msgbox SecretBase_RedCave1_Text_274CB0, MSGBOX_DEFAULT
@@ -732,7 +732,7 @@ SecretBase_RedCave1_EventScript_275EC6:: @ 8275EC6
 	goto_if_eq SecretBase_RedCave1_EventScript_275F1F
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_275F1F
 	msgbox SecretBase_RedCave1_Text_274FCA, MSGBOX_DEFAULT
@@ -768,7 +768,7 @@ SecretBase_RedCave1_EventScript_275F3E:: @ 8275F3E
 	goto_if_eq SecretBase_RedCave1_EventScript_275F97
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_275F97
 	msgbox SecretBase_RedCave1_Text_275315, MSGBOX_DEFAULT
@@ -804,7 +804,7 @@ SecretBase_RedCave1_EventScript_275FB6:: @ 8275FB6
 	goto_if_eq SecretBase_RedCave1_EventScript_27600F
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_27600F
 	msgbox SecretBase_RedCave1_Text_275679, MSGBOX_DEFAULT
@@ -840,7 +840,7 @@ SecretBase_RedCave1_EventScript_27602E:: @ 827602E
 	goto_if_eq SecretBase_RedCave1_EventScript_276087
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_276087
 	msgbox SecretBase_RedCave1_Text_274AFA, MSGBOX_DEFAULT
@@ -876,7 +876,7 @@ SecretBase_RedCave1_EventScript_2760A6:: @ 82760A6
 	goto_if_eq SecretBase_RedCave1_EventScript_2760FF
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_2760FF
 	msgbox SecretBase_RedCave1_Text_274E41, MSGBOX_DEFAULT
@@ -912,7 +912,7 @@ SecretBase_RedCave1_EventScript_27611E:: @ 827611E
 	goto_if_eq SecretBase_RedCave1_EventScript_276177
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_276177
 	msgbox SecretBase_RedCave1_Text_2751AF, MSGBOX_DEFAULT
@@ -948,7 +948,7 @@ SecretBase_RedCave1_EventScript_276196:: @ 8276196
 	goto_if_eq SecretBase_RedCave1_EventScript_2761EF
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_2761EF
 	msgbox SecretBase_RedCave1_Text_2754B2, MSGBOX_DEFAULT
@@ -984,7 +984,7 @@ SecretBase_RedCave1_EventScript_27620E:: @ 827620E
 	goto_if_eq SecretBase_RedCave1_EventScript_276267
 	setvar VAR_RESULT, 1
 	special sub_80EA30C
-	call SecretBase_RedCave1_EventScript_27134F
+	call Common_EventScript_SaveGame
 	compare VAR_RESULT, 0
 	goto_if_eq SecretBase_RedCave1_EventScript_276267
 	msgbox SecretBase_RedCave1_Text_275884, MSGBOX_DEFAULT
@@ -1010,7 +1010,7 @@ SecretBase_RedCave1_EventScript_27627C:: @ 827627C
 	end
 
 SecretBase_RedCave1_EventScript_276286:: @ 8276286
-	special sub_80EA2E4
+	special PrepSecretBaseBattleFlags
 	setvar VAR_0x8004, SPECIAL_BATTLE_SECRET_BASE
 	setvar VAR_0x8005, 0
 	special DoSpecialTrainerBattle
@@ -1039,12 +1039,20 @@ SecretBase_RedCave1_EventScript_2762C5:: @ 82762C5
 
 	.include "data/scripts/secret_power_tm.inc"
 
+SecretBase_EventScript_DollInteract:: @ 82766A2
+	special sub_80EB290
+	end
+
+SecretBase_EventScript_CushionInteract:: @ 82766A6
+	special sub_80EB2C8
+	end
+
 Text_2766AA: @ 82766AA
 	.string "All decorations and furniture in your\n"
 	.string "SECRET BASE will be returned to your PC.\p"
 	.string "Is that okay?$"
 
-Text_276707: @ 8276707
+Text_WantToRegisterSecretBase: @ 8276707
 	.string "Do you want to register\n"
 	.string "{STR_VAR_1}'s SECRET BASE?$"
 
@@ -1052,7 +1060,7 @@ Text_276731: @ 8276731
 	.string "This data is already registered.\n"
 	.string "Would you like to delete it?$"
 
-Text_27676F: @ 827676F
+Text_TooManyBasesDeleteSome: @ 827676F
 	.string "Up to 10 locations can be registered.\p"
 	.string "Delete a location if you want to\n"
 	.string "register another location.$"
@@ -1063,10 +1071,10 @@ Text_2767D1: @ 82767D1
 Text_2767E9: @ 82767E9
 	.string "Data has been unregistered.$"
 
-Text_276805: @ 8276805
+Text_SecretBaseBootUpPC: @ 8276805
 	.string "{PLAYER} booted up the PC.$"
 
-Text_27681A: @ 827681A
+Text_SecretBasePCStartMenu: @ 827681A
 	.string "What would you like to do?$"
 
 Text_276835: @ 8276835

@@ -62,7 +62,7 @@ int sub_81DB3D8(const struct MenuAction *str, const u8* arg1, int arg2)
     return convert_pixel_width_to_tile_width(var);
 }
 
-int sub_81DB41C(const struct ListMenuTemplate *listMenu)
+int Intl_GetListMenuWidth(const struct ListMenuTemplate *listMenu)
 {
     int i, maxWidth, finalWidth;
     const struct ListMenuItem *items = listMenu->items;
@@ -93,7 +93,7 @@ void CopyMonCategoryText(int dexNum, u8 *dest)
     StringCopy(str + 1, gText_Pokemon);
 }
 
-u8 *sub_81DB494(u8 *str, int fontId, u8 *str2, int totalStringWidth)
+u8 *sub_81DB494(u8 *str, int fontId, const u8 *str2, int totalStringWidth)
 {
     u8 *buffer;
     int width;

@@ -2,7 +2,7 @@
   "id": "MAP_INSIDE_OF_TRUCK",
   "name": "InsideOfTruck",
   "layout": "LAYOUT_INSIDE_OF_TRUCK",
-  "music": "65535",
+  "music": "MUS_NONE",
   "region_map_section": "MAPSEC_INSIDE_OF_TRUCK",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -22,8 +22,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "InsideOfTruck_EventScript_23BF6C",
       "flag": "0"
     },
@@ -35,8 +35,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "InsideOfTruck_EventScript_23BF6C",
       "flag": "0"
     },
@@ -48,8 +48,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "InsideOfTruck_EventScript_23BF6C",
       "flag": "0"
     }
@@ -83,8 +83,8 @@
       "x": 3,
       "y": 1,
       "elevation": 3,
-      "var": "VAR_0x4092",
-      "var_value": 0,
+      "var": "VAR_LITTLEROOT_INTRO_STATE",
+      "var_value": "0",
       "script": "InsideOfTruck_EventScript_23BF04"
     },
     {
@@ -92,8 +92,8 @@
       "x": 3,
       "y": 2,
       "elevation": 3,
-      "var": "VAR_0x4092",
-      "var_value": 0,
+      "var": "VAR_LITTLEROOT_INTRO_STATE",
+      "var_value": "0",
       "script": "InsideOfTruck_EventScript_23BF04"
     },
     {
@@ -101,8 +101,8 @@
       "x": 3,
       "y": 3,
       "elevation": 3,
-      "var": "VAR_0x4092",
-      "var_value": 0,
+      "var": "VAR_LITTLEROOT_INTRO_STATE",
+      "var_value": "0",
       "script": "InsideOfTruck_EventScript_23BF04"
     }
   ],

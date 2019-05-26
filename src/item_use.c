@@ -1,19 +1,24 @@
 #include "global.h"
 #include "item_use.h"
 #include "battle.h"
+#include "battle_anim.h"
+#include "battle_pyramid.h"
 #include "battle_pyramid_bag.h"
 #include "berry.h"
+#include "berry_powder.h"
 #include "bike.h"
 #include "coins.h"
-#include "data2.h"
+#include "data.h"
 #include "event_data.h"
-#include "fieldmap.h"
 #include "event_object_movement.h"
+#include "fieldmap.h"
+#include "field_effect.h"
 #include "field_player_avatar.h"
 #include "field_screen_effect.h"
 #include "field_weather.h"
 #include "item.h"
 #include "item_menu.h"
+#include "item_use.h"
 #include "mail.h"
 #include "main.h"
 #include "menu.h"
@@ -24,7 +29,6 @@
 #include "party_menu.h"
 #include "pokeblock.h"
 #include "pokemon.h"
-#include "rom_818CFC8.h"
 #include "script.h"
 #include "sound.h"
 #include "strings.h"
@@ -34,34 +38,17 @@
 #include "constants/bg_event_constants.h"
 #include "constants/event_objects.h"
 #include "constants/flags.h"
+#include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/vars.h"
+#include "event_obj_lock.h"
 
-extern void unknown_ItemMenu_Confirm(u8 taskId);
-extern void sub_81C5B14(u8 taskId);
-extern void ScriptUnfreezeEventObjects(void);
-extern void ItemUseOutOfBattle_TMHM(u8 a);
-extern void ItemUseOutOfBattle_EvolutionStone(u8 b);
-extern bool8 IsPlayerFacingSurfableFishableWater(void);
-extern bool8 sub_81221AC(void);
-extern u8 Route102_EventScript_274482[];
-extern u8 Route102_EventScript_2744C0[];
+extern u8 BerryTree_EventScript_274482[];
+extern u8 BerryTree_EventScript_2744C0[];
 extern u8 BattleFrontier_OutsideEast_EventScript_242CFC[];
-extern int sub_80247BC(void);
-extern struct MapHeader* mapconnection_get_mapheader(struct MapConnection *connection);
-extern void SetUpItemUseCallback(u8 taskId);
-extern void ItemUseCB_Medicine(u8, TaskFunc);
-extern void bag_menu_yes_no(u8, u8, const struct YesNoFuncTable*);
-extern void sub_81C5924(void);
-extern void sub_81C59BC(void);
-extern void sub_81AB9A8(u8);
-extern void StartEscapeRopeFieldEffect(void);
-extern u8* sub_806CF78(u16);
-extern void sub_81B89F0(void);
-extern u8 GetItemEffectType(u16);
-extern struct MapConnection *sub_8088A8C(s16, s16);
 
+void SetUpItemUseCallback(u8 taskId);
 void MapPostLoadHook_UseItem(void);
 void sub_80AF6D4(void);
 void Task_CallItemUseOnFieldCallback(u8 taskId);
@@ -188,7 +175,7 @@ void DisplayCannotDismountBikeMessage(u8 taskId, bool8 isUsingRegisteredKeyItemO
 
 void CleanUpAfterFailingToUseRegisteredKeyItemOnField(u8 taskId)
 {
-    sub_8197434(0, 1);
+    ClearDialogWindowAndFrame(0, 1);
     DestroyTask(taskId);
     ScriptUnfreezeEventObjects();
     ScriptContext2_Disable();
@@ -350,7 +337,7 @@ void sub_80FD504(u8 taskId)
 
 void sub_80FD5CC(u8 taskId)
 {
-    sub_8197434(0, 1);
+    ClearDialogWindowAndFrame(0, 1);
     ScriptUnfreezeEventObjects();
     ScriptContext2_Disable();
     DestroyTask(taskId);
@@ -404,12 +391,12 @@ bool8 sub_80FD6D4(const struct MapEvents *events, s16 x, s16 y)
 
 bool8 sub_80FD730(struct MapConnection *connection, int x, int y)
 {
-    struct MapHeader *mapHeader;
+
     u16 localX, localY;
     u32 localOffset;
     s32 localLength;
 
-    mapHeader = mapconnection_get_mapheader(connection);
+    struct MapHeader const *const mapHeader = mapconnection_get_mapheader(connection);
 
     switch (connection->direction)
     {
@@ -652,7 +639,7 @@ void ItemUseOutOfBattle_CoinCase(u8 taskId)
 
 void ItemUseOutOfBattle_PowderJar(u8 taskId)
 {
-    ConvertIntToDecimalStringN(gStringVar1, sub_80247BC(), 0, 5);
+    ConvertIntToDecimalStringN(gStringVar1, GetBerryPowder(), 0, 5);
     StringExpandPlaceholders(gStringVar4, gText_PowderQty);
 
     if (!gTasks[taskId].data[3])
@@ -684,7 +671,7 @@ void sub_80FDD74(u8 taskId)
 {
     RemoveBagItem(gSpecialVar_ItemId, 1);
     ScriptContext2_Enable();
-    ScriptContext1_SetupScript(Route102_EventScript_274482);
+    ScriptContext1_SetupScript(BerryTree_EventScript_274482);
     DestroyTask(taskId);
 }
 
@@ -709,7 +696,7 @@ void ItemUseOutOfBattle_WailmerPail(u8 taskId)
 void sub_80FDE08(u8 taskId)
 {
     ScriptContext2_Enable();
-    ScriptContext1_SetupScript(Route102_EventScript_2744C0);
+    ScriptContext1_SetupScript(BerryTree_EventScript_2744C0);
     DestroyTask(taskId);
 }
 
@@ -1069,44 +1056,45 @@ void ItemUseInBattle_Escape(u8 taskId)
 
 void ItemUseOutOfBattle_EnigmaBerry(u8 taskId)
 {
-    switch (GetItemEffectType(gSpecialVar_ItemId) - 1)
+    switch (GetItemEffectType(gSpecialVar_ItemId))
     {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
+    case ITEM_EFFECT_HEAL_HP:
+    case ITEM_EFFECT_CURE_POISON:
+    case ITEM_EFFECT_CURE_SLEEP:
+    case ITEM_EFFECT_CURE_BURN:
+    case ITEM_EFFECT_CURE_FREEZE:
+    case ITEM_EFFECT_CURE_PARALYSIS:
+    case ITEM_EFFECT_CURE_ALL_STATUS:
+    case ITEM_EFFECT_ATK_EV:
+    case ITEM_EFFECT_HP_EV:
+    case ITEM_EFFECT_SPATK_EV:
+    case ITEM_EFFECT_SPDEF_EV:
+    case ITEM_EFFECT_SPEED_EV:
+    case ITEM_EFFECT_DEF_EV:
         gTasks[taskId].data[4] = 1;
         ItemUseOutOfBattle_Medicine(taskId);
         break;
-    case 9:
+    case ITEM_EFFECT_SACRED_ASH:
         gTasks[taskId].data[4] = 1;
         ItemUseOutOfBattle_SacredAsh(taskId);
         break;
-    case 0:
+    case ITEM_EFFECT_RAISE_LEVEL:
         gTasks[taskId].data[4] = 1;
         ItemUseOutOfBattle_RareCandy(taskId);
         break;
-    case 18:
-    case 19:
+    case ITEM_EFFECT_PP_UP:
+    case ITEM_EFFECT_PP_MAX:
         gTasks[taskId].data[4] = 1;
         ItemUseOutOfBattle_PPUp(taskId);
         break;
-    case 20:
+    case ITEM_EFFECT_HEAL_PP:
         gTasks[taskId].data[4] = 1;
         ItemUseOutOfBattle_PPRecovery(taskId);
         break;
     default:
         gTasks[taskId].data[4] = 4;
         ItemUseOutOfBattle_CannotUse(taskId);
+        break;
     }
 }
 
@@ -1114,25 +1102,26 @@ void ItemUseInBattle_EnigmaBerry(u8 taskId)
 {
     switch (GetItemEffectType(gSpecialVar_ItemId))
     {
-    case 0:
+    case ITEM_EFFECT_X_ITEM:
         ItemUseInBattle_StatIncrease(taskId);
         break;
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 11:
+    case ITEM_EFFECT_HEAL_HP:
+    case ITEM_EFFECT_CURE_POISON:
+    case ITEM_EFFECT_CURE_SLEEP:
+    case ITEM_EFFECT_CURE_BURN:
+    case ITEM_EFFECT_CURE_FREEZE:
+    case ITEM_EFFECT_CURE_PARALYSIS:
+    case ITEM_EFFECT_CURE_ALL_STATUS:
+    case ITEM_EFFECT_CURE_CONFUSION:
+    case ITEM_EFFECT_CURE_INFATUATION:
         ItemUseInBattle_Medicine(taskId);
         break;
-    case 21:
+    case ITEM_EFFECT_HEAL_PP:
         ItemUseInBattle_PPRecovery(taskId);
         break;
     default:
         ItemUseOutOfBattle_CannotUse(taskId);
+        break;
     }
 }
 
@@ -1140,3 +1129,4 @@ void ItemUseOutOfBattle_CannotUse(u8 taskId)
 {
     DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].data[3]);
 }
+

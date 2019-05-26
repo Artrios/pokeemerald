@@ -18,7 +18,7 @@
 #include "trainer_see.h"
 #include "new_game.h"
 #include "string_util.h"
-#include "data2.h"
+#include "data.h"
 #include "link.h"
 #include "field_message_box.h"
 #include "tv.h"
@@ -51,7 +51,7 @@ static void AwardBattleTowerRibbons(void);
 static void SaveBattleTowerProgress(void);
 static void sub_8163914(void);
 static void nullsub_61(void);
-static void nullsub_116(void);
+static void SpriteCB_Null6(void);
 static void sub_81642A0(void);
 static void sub_8164828(void);
 static void sub_8164B74(void);
@@ -1061,7 +1061,7 @@ static void (* const gUnknown_085DF96C[])(void) =
     SaveBattleTowerProgress,
     sub_8163914,
     nullsub_61,
-    nullsub_116,
+    SpriteCB_Null6,
     sub_81642A0,
     sub_8164828,
     sub_8164B74,
@@ -2397,6 +2397,9 @@ void DoSpecialTrainerBattle(void)
             BattleTransition_StartOnField(GetWildBattleTransition());
         else
             BattleTransition_StartOnField(GetTrainerBattleTransition());
+
+        if (gSpecialVar_0x8005 & 0x80) // Skip mons restoring(done in the script)
+            gBattleScripting.specialTrainerBattleType = 0xFF;
         break;
     }
 }
@@ -2442,9 +2445,9 @@ static void sub_8163EE4(void)
 
     for (i = 0; i < 6; i++)
     {
-        playerRecord->greeting[i] = gSaveBlock1Ptr->unk2BBC[i];
-        playerRecord->speechWon[i] = gSaveBlock1Ptr->unk2BC8[i];
-        playerRecord->speechLost[i] = gSaveBlock1Ptr->unk2BD4[i];
+        playerRecord->greeting[i] = gSaveBlock1Ptr->easyChatBattleStart[i];
+        playerRecord->speechWon[i] = gSaveBlock1Ptr->easyChatBattleWon[i];
+        playerRecord->speechLost[i] = gSaveBlock1Ptr->easyChatBattleLost[i];
     }
 
     for (i = 0; i < 4; i++)
@@ -2478,7 +2481,7 @@ static void nullsub_61(void)
 
 }
 
-static void nullsub_116(void)
+static void SpriteCB_Null6(void)
 {
 
 }
@@ -3100,7 +3103,7 @@ static void FillEReaderTrainerWithPlayerData(void)
     j = 7;
     for (i = 0; i < 6; i++)
     {
-        ereaderTrainer->greeting[i] = gSaveBlock1Ptr->unk2BBC[i];
+        ereaderTrainer->greeting[i] = gSaveBlock1Ptr->easyChatBattleStart[i];
         ereaderTrainer->farewellPlayerLost[i] = j;
         ereaderTrainer->farewellPlayerWon[i] = j + 6;
         j++;

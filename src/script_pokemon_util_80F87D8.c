@@ -5,6 +5,7 @@
 #include "contest.h"
 #include "contest_link_80F57C4.h"
 #include "contest_painting.h"
+#include "data.h"
 #include "daycare.h"
 #include "decompress.h"
 #include "event_data.h"
@@ -29,18 +30,18 @@
 #include "constants/items.h"
 #include "constants/species.h"
 #include "constants/vars.h"
+#include "constants/battle_frontier.h"
 
 extern const u16 gEventObjectPalette8[];
 extern const u16 gEventObjectPalette17[];
 extern const u16 gEventObjectPalette33[];
 extern const u16 gEventObjectPalette34[];
-extern const struct CompressedSpriteSheet gMonFrontPicTable[];
 
 static const u8 gUnknown_0858D8EC[] = { 3, 4, 5, 14 };
 
 static void sub_80F8EE8(u8 taskId);
 static void sub_80F9088(u8 taskId);
-static void sub_80F9460(void);
+static void CB2_ReturnFromChooseHalfParty(void);
 static void sub_80F94B8(void);
 
 void SetContestTrainerGfxIds(void)
@@ -226,7 +227,7 @@ void sub_80F8AFC(void)
 {
     int i;
 
-    if (gIsLinkContest & 1)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
     {
         for (i = 0; i < gNumLinkContestPlayers; i++)
         {
@@ -255,7 +256,7 @@ void sub_80F8B94(void)
     struct Sprite *sprite;
 
     gReservedSpritePaletteCount = 12;
-    if (gIsLinkContest & 1)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
     {
         for (i = 0; i < gNumLinkContestPlayers; i++)
         {
@@ -338,9 +339,9 @@ void ShowContestEntryMonPic(void)
         gMultiuseSpriteTemplate.paletteTag = palette->tag;
         spriteId = CreateSprite(&gMultiuseSpriteTemplate, (left + 1) * 8 + 32, (top * 8) + 40, 0);
 
-        if (gIsLinkContest & 1)
+        if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
         {
-            if (!(gIsLinkContest & 4))
+            if (!(gLinkContestFlags & LINK_CONTEST_FLAG_HAS_RS_PLAYER))
                 DoMonFrontSpriteAnimation(&gSprites[spriteId], species, FALSE, 0);
         }
         else
@@ -394,7 +395,7 @@ static void sub_80F8EE8(u8 taskId)
         task->data[0]++;
         break;
     case 4:
-        sub_80E2A78(gTasks[taskId].data[5]);
+        ClearToTransparentAndRemoveWindow(gTasks[taskId].data[5]);
         DestroyTask(taskId);
         break;
     }
@@ -402,7 +403,7 @@ static void sub_80F8EE8(u8 taskId)
 
 void ScriptGetMultiplayerId(void)
 {
-    if ((gIsLinkContest & 1) && gNumLinkContestPlayers == 4 && !(gIsLinkContest & 2))
+    if ((gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK) && gNumLinkContestPlayers == 4 && !(gLinkContestFlags & LINK_CONTEST_FLAG_IS_WIRELESS))
         gSpecialVar_Result = GetMultiplayerId();
     else
         gSpecialVar_Result = 4;
@@ -413,7 +414,7 @@ void ScriptRandom(void)
     u16 random;
     u16 *scriptPtr;
 
-    if (gIsLinkContest & 1)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
     {
         gContestRngValue = 1103515245 * gContestRngValue + 24691;
         random = gContestRngValue >> 16;
@@ -435,7 +436,7 @@ u16 sub_80F903C(void)
 
 u8 sub_80F905C(void)
 {
-    if (gIsLinkContest & 2)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_WIRELESS)
     {
         CreateTask(sub_80F9088, 5);
         return 1;
@@ -472,11 +473,11 @@ static void sub_80F9088(u8 taskId)
 
 void sub_80F90DC(void)
 {
-    if (gIsLinkContest & 2)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_WIRELESS)
     {
         if (gReceivedRemoteLinkPlayers)
         {
-            sub_800E0E8();
+            LoadWirelessStatusIndicatorSpriteGfx();
             CreateWirelessStatusIndicatorSprite(8, 8);
         }
     }
@@ -484,16 +485,16 @@ void sub_80F90DC(void)
 
 void sub_80F910C(void)
 {
-    if (gIsLinkContest & 2)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_WIRELESS)
     {
         if (gReceivedRemoteLinkPlayers)
-            sub_800E084();
+            DestroyWirelessStatusIndicatorSprite();
     }
 }
 
 u8 sub_80F9134(void)
 {
-    if (gIsLinkContest & 4)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_HAS_RS_PLAYER)
         return 1;
     else
         return 0;
@@ -501,12 +502,12 @@ u8 sub_80F9134(void)
 
 void sub_80F9154(void)
 {
-    gIsLinkContest = 0;
+    gLinkContestFlags = 0;
 }
 
 u8 sub_80F9160(void)
 {
-    if (gIsLinkContest & 2)
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_WIRELESS)
         return 1;
     else
         return 0;
@@ -640,22 +641,24 @@ void ScriptSetMonMoveSlot(u8 monIndex, u16 move, u8 slot)
     SetMonMoveSlot(&gPlayerParty[monIndex], move, slot);
 }
 
-void sub_80F9438(void)
+// Note: When control returns to the event script, gSpecialVar_Result will be
+// TRUE if the party selection was successful.
+void ChooseHalfPartyForBattle(void)
 {
-    gMain.savedCallback = sub_80F9460;
-    VarSet(VAR_FRONTIER_FACILITY, 9); // this isn't a valid frontier facility id (??)
-    sub_81B8518(0);
+    gMain.savedCallback = CB2_ReturnFromChooseHalfParty;
+    VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_DOUBLE_COLOSSEUM);
+    InitChooseHalfPartyForBattle(0);
 }
 
-static void sub_80F9460(void)
+static void CB2_ReturnFromChooseHalfParty(void)
 {
     switch (gSelectedOrderFromParty[0])
     {
     case 0:
-        gSpecialVar_Result = 0;
+        gSpecialVar_Result = FALSE;
         break;
     default:
-        gSpecialVar_Result = 1;
+        gSpecialVar_Result = TRUE;
         break;
     }
 
@@ -665,7 +668,7 @@ static void sub_80F9460(void)
 void sub_80F9490(void)
 {
     gMain.savedCallback = sub_80F94B8;
-    sub_81B8518(gSpecialVar_0x8004 + 1);
+    InitChooseHalfPartyForBattle(gSpecialVar_0x8004 + 1);
 }
 
 static void sub_80F94B8(void)

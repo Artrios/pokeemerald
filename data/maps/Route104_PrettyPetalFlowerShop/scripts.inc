@@ -1,8 +1,8 @@
 Route104_PrettyPetalFlowerShop_MapScripts:: @ 822A34C
-	map_script 3, Route104_PrettyPetalFlowerShop_MapScript1_22A352
+	map_script MAP_SCRIPT_ON_TRANSITION, Route104_PrettyPetalFlowerShop_OnTransition
 	.byte 0
 
-Route104_PrettyPetalFlowerShop_MapScript1_22A352: @ 822A352
+Route104_PrettyPetalFlowerShop_OnTransition: @ 822A352
 	setflag FLAG_LANDMARK_FLOWER_SHOP
 	goto_if_unset FLAG_MET_PRETTY_PETAL_SHOP_OWNER, Route104_PrettyPetalFlowerShop_EventScript_22A36B
 	goto_if_unset FLAG_BADGE03_GET, Route104_PrettyPetalFlowerShop_EventScript_22A36B
@@ -48,20 +48,20 @@ Route104_PrettyPetalFlowerShop_EventScript_22A3DB:: @ 822A3DB
 Route104_PrettyPetalFlowerShop_EventScript_22A3E4:: @ 822A3E4
 	message gUnknown_08272A52
 	waitmessage
-	pokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_22A3FC
+	pokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_Plants
 	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
 	release
 	end
 
 	.align 2
-Route104_PrettyPetalFlowerShop_Pokemart_22A3FC: @ 822A3FC
-	.2byte ITEM_FULL_RESTORE
-	.2byte ITEM_MAX_POTION
-	.2byte ITEM_HYPER_POTION
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_FULL_HEAL
-	.2byte ITEM_REVIVE
-	.2byte ITEM_NONE
+Route104_PrettyPetalFlowerShop_Pokemart_Plants: @ 822A3FC
+	.2byte DECOR_RED_PLANT
+	.2byte DECOR_TROPICAL_PLANT
+	.2byte DECOR_PRETTY_FLOWERS
+	.2byte DECOR_COLORFUL_PLANT
+	.2byte DECOR_BIG_PLANT
+	.2byte DECOR_GORGEOUS_PLANT
+	.2byte DECOR_NONE
 	release
 	end
 
@@ -84,14 +84,14 @@ Route104_PrettyPetalFlowerShop_EventScript_22A421:: @ 822A421
 Route104_PrettyPetalFlowerShop_EventScript_22A442:: @ 822A442
 	lock
 	faceplayer
-	dodailyevents
+	dotimebasedevents
 	goto_if_set FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY, Route104_PrettyPetalFlowerShop_EventScript_22A482
 	msgbox Route104_PrettyPetalFlowerShop_Text_2A7A98, MSGBOX_DEFAULT
 	random 8
 	addvar VAR_RESULT, 133
 	giveitem_std VAR_RESULT
 	compare VAR_RESULT, 0
-	goto_if_eq Route104_PrettyPetalFlowerShop_EventScript_272054
+	goto_if_eq Common_EventScript_ShowBagIsFull
 	setflag FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY
 	msgbox Route104_PrettyPetalFlowerShop_Text_2A7AF3, MSGBOX_DEFAULT
 	release
@@ -101,4 +101,3 @@ Route104_PrettyPetalFlowerShop_EventScript_22A482:: @ 822A482
 	msgbox Route104_PrettyPetalFlowerShop_Text_2A7AF3, MSGBOX_DEFAULT
 	release
 	end
-

@@ -1,8 +1,8 @@
 SouthernIsland_Exterior_MapScripts:: @ 82429C8
-	map_script 3, SouthernIsland_Exterior_MapScript1_2429CE
+	map_script MAP_SCRIPT_ON_TRANSITION, SouthernIsland_Exterior_OnTransition
 	.byte 0
 
-SouthernIsland_Exterior_MapScript1_2429CE: @ 82429CE
+SouthernIsland_Exterior_OnTransition: @ 82429CE
 	setflag FLAG_LANDMARK_SOUTHERN_ISLAND
 	end
 
@@ -14,7 +14,7 @@ SouthernIsland_Exterior_EventScript_2429D2:: @ 82429D2
 	goto_if_eq SouthernIsland_Exterior_EventScript_242A17
 	msgbox SouthernIsland_Exterior_Text_2A6A5D, MSGBOX_DEFAULT
 	closemessage
-	applymovement VAR_LAST_TALKED, SouthernIsland_Exterior_Movement_2725AA
+	applymovement VAR_LAST_TALKED, Common_Movement_WalkInPlaceDown
 	waitmovement 0
 	delay 30
 	hideobjectat 1, MAP_SOUTHERN_ISLAND_EXTERIOR

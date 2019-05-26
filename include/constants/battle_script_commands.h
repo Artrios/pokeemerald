@@ -11,8 +11,8 @@
 #define sB_ANIM_ARG2 gBattleScripting + 0x11
 #define sTRIPLE_KICK_POWER gBattleScripting + 0x12
 #define sMOVEEND_STATE gBattleScripting + 0x14
-#define sBATTLER_WITH_ABILITY gBattleScripting + 0x15
-#define sMULTIHIT_EFFECT gBattleScripting + 0x16
+#define sUNUSED_15 gBattleScripting + 0x15
+#define sUNUSED_16 gBattleScripting + 0x16
 #define sBATTLER gBattleScripting + 0x17
 #define sB_ANIM_TURN gBattleScripting + 0x18
 #define sB_ANIM_TARGETS_HIT gBattleScripting + 0x19
@@ -32,8 +32,9 @@
 #define sMON_CAUGHT gBattleScripting + 0x27
 #define sSAVED_DMG gBattleScripting + 0x28
 #define sSAVED_MOVE_EFFECT gBattleScripting + 0x2C
+#define sMOVE_EFFECT gBattleScripting + 0x2E
+#define sMULTIHIT_EFFECT gBattleScripting + 0x30
 
-#define cEFFECT_CHOOSER gBattleCommunication + 3
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
 
 // Battle Script defines for getting the wanted battler
@@ -44,13 +45,13 @@
 #define BS_BATTLER_0                7
 #define BS_ATTACKER_WITH_PARTNER    4 // for atk98_status_icon_update
 #define BS_ATTACKER_SIDE            8 // for atk1E_jumpifability
-#define BS_NOT_ATTACKER_SIDE        9 // for atk1E_jumpifability
+#define BS_TARGET_SIDE              9 // for atk1E_jumpifability
 #define BS_SCRIPTING                10
 #define BS_PLAYER1                  11
 #define BS_OPPONENT1                12
 #define BS_PLAYER2                  13
 #define BS_OPPONENT2                14
-#define BS_ABILITY_BATTLER			15
+#define BS_ABILITY_BATTLER          15
 
 // atk 01, accuracy calc
 #define NO_ACC_CALC_CHECK_LOCK_ON 0xFFFF
@@ -110,30 +111,36 @@
 #define VARIOUS_TRY_ELECTRIFY                   48
 #define VARIOUS_TRY_REFLECT_TYPE                49
 #define VARIOUS_TRY_SOAK                        50
-#define VARIOUS_HANDLE_MEGA_EVO					51
-#define VARIOUS_TRY_LAST_RESORT					52
-#define VARIOUS_ARGUMENT_STATUS_EFFECT			53
-#define VARIOUS_TRY_HIT_SWITCH_TARGET			54
-#define VARIOUS_TRY_AUTONOMIZE					55
-#define VARIOUS_TRY_COPYCAT						56
-#define VARIOUS_ABILITY_POPUP					57
-#define VARIOUS_DEFOG							58
-#define VARIOUS_JUMP_IF_TARGET_ALLY				59
-#define VARIOUS_TRY_SYNCHRONOISE				60
-#define VARIOUS_PSYCHO_SHIFT					61
-#define VARIOUS_CURE_STATUS						62
-#define VARIOUS_POWER_TRICK						63
-#define VARIOUS_AFTER_YOU						64
-#define VARIOUS_BESTOW							65
-#define VARIOUS_ARGUMENT_TO_MOVE_EFFECT			66
-#define VARIOUS_JUMP_IF_NOT_GROUNDED			67
-#define VARIOUS_HANDLE_TRAINER_SLIDE_MSG		68
+#define VARIOUS_HANDLE_MEGA_EVO                 51
+#define VARIOUS_TRY_LAST_RESORT                 52
+#define VARIOUS_ARGUMENT_STATUS_EFFECT          53
+#define VARIOUS_TRY_HIT_SWITCH_TARGET           54
+#define VARIOUS_TRY_AUTONOMIZE                  55
+#define VARIOUS_TRY_COPYCAT                     56
+#define VARIOUS_ABILITY_POPUP                   57
+#define VARIOUS_DEFOG                           58
+#define VARIOUS_JUMP_IF_TARGET_ALLY             59
+#define VARIOUS_TRY_SYNCHRONOISE                60
+#define VARIOUS_PSYCHO_SHIFT                    61
+#define VARIOUS_CURE_STATUS                     62
+#define VARIOUS_POWER_TRICK                     63
+#define VARIOUS_AFTER_YOU                       64
+#define VARIOUS_BESTOW                          65
+#define VARIOUS_ARGUMENT_TO_MOVE_EFFECT         66
+#define VARIOUS_JUMP_IF_NOT_GROUNDED            67
+#define VARIOUS_HANDLE_TRAINER_SLIDE_MSG        68
 #define VARIOUS_TRY_TRAINER_SLIDE_MSG_FIRST_OFF 69
-#define VARIOUS_TRY_TRAINER_SLIDE_MSG_LAST_ON 	70
-#define VARIOUS_SET_AURORA_VEIL 				71
-#define VARIOUS_TRY_THIRD_TYPE 					72
-#define VARIOUS_ACUPRESSURE						73
-#define VARIOUS_SET_POWDER						74
+#define VARIOUS_TRY_TRAINER_SLIDE_MSG_LAST_ON   70
+#define VARIOUS_SET_AURORA_VEIL                 71
+#define VARIOUS_TRY_THIRD_TYPE                  72
+#define VARIOUS_ACUPRESSURE                     73
+#define VARIOUS_SET_POWDER                      74
+#define VARIOUS_SPECTRAL_THIEF                  75
+#define VARIOUS_GRAVITY_ON_AIRBORNE_MONS        76
+#define VARIOUS_CHECK_IF_GRASSY_TERRAIN_HEALS   77
+#define VARIOUS_JUMP_IF_ROAR_FAILS              78
+#define VARIOUS_TRY_INSTRUCT                    79
+#define VARIOUS_JUMP_IF_NOT_BERRY               80
 
 // atk80, dmg manipulation
 #define ATK80_DMG_CHANGE_SIGN                               0
@@ -149,14 +156,36 @@
 // statchange defines
 #define STAT_CHANGE_BS_PTR                  0x1
 #define STAT_CHANGE_NOT_PROTECT_AFFECTED    0x20
-#define STAT_CHANGE_WORKED      0
-#define STAT_CHANGE_DIDNT_WORK  1
 
 // atk48
 #define ATK48_STAT_NEGATIVE         0x1
 #define ATK48_STAT_BY_TWO           0x2
 #define ATK48_ONLY_MULTIPLE         0x4
 #define ATK48_DONT_CHECK_LOWER      0x8
+
+// atk49, moveend cases
+#define ATK49_PROTECT_LIKE_EFFECT 0
+#define ATK49_RAGE 1
+#define ATK49_DEFROST 2
+#define ATK49_SYNCHRONIZE_TARGET 3
+#define ATK49_MOVE_END_ABILITIES 4
+#define ATK49_STATUS_IMMUNITY_ABILITIES 5
+#define ATK49_SYNCHRONIZE_ATTACKER 6
+#define ATK49_CHOICE_MOVE 7
+#define ATK49_CHANGED_ITEMS 8
+#define ATK49_ATTACKER_INVISIBLE 9
+#define ATK49_ATTACKER_VISIBLE 10
+#define ATK49_TARGET_VISIBLE 11
+#define ATK49_ITEM_EFFECTS_TARGET 12
+#define ATK49_ITEM_EFFECTS_ALL 13
+#define ATK49_KINGSROCK_SHELLBELL 14
+#define ATK49_SUBSTITUTE 15
+#define ATK49_UPDATE_LAST_MOVES 16
+#define ATK49_MIRROR_MOVE 17
+#define ATK49_NEXT_TARGET 18
+#define ATK49_LIFE_ORB 19
+#define ATK49_CLEAR_BITS 20
+#define ATK49_COUNT 21
 
 #define BIT_HP                      0x1
 #define BIT_ATK                     0x2

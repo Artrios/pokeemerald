@@ -76,7 +76,7 @@ struct PyramidWildMon
 {
     u16 species;
     u8 lvl;
-    u8 abilityBit;
+    u8 abilityNum;
     u16 moves[4];
 };
 
@@ -97,7 +97,7 @@ struct PyramidTrainerEncounterMusic
 };
 
 // This file's functions.
-static void InitPyramidBag(void);
+static void InitPyramidChallenge(void);
 static void GetBattlePyramidData(void);
 static void SetBattlePyramidData(void);
 static void sub_81A9134(void);
@@ -129,6 +129,8 @@ static bool8 TrySetPyramidEventObjectPositionInSquare(u8 arg0, u8 *floorLayoutOf
 static bool8 TrySetPyramidEventObjectPositionAtCoords(bool8 objType, u8 x, u8 y, u8 *floorLayoutOffsets, u8 squareId, u8 eventObjectId);
 
 // Const rom data.
+#define ABILITY_RANDOM 2 // For wild mons data.
+
 #include "data/battle_frontier/battle_pyramid_level_50_wild_mons.h"
 #include "data/battle_frontier/battle_pyramid_open_level_wild_mons.h"
 
@@ -814,7 +816,7 @@ static const u8 sHintTextTypes[] =
 
 static void (* const sBattlePyramidFunctions[])(void) =
 {
-    InitPyramidBag,
+    InitPyramidChallenge,
     GetBattlePyramidData,
     SetBattlePyramidData,
     sub_81A9134,
@@ -865,7 +867,7 @@ void CallBattlePyramidFunction(void)
     sBattlePyramidFunctions[gSpecialVar_0x8004]();
 }
 
-static void InitPyramidBag(void)
+static void InitPyramidChallenge(void)
 {
     bool32 isCurrent;
     u32 lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
@@ -1267,7 +1269,7 @@ static u8 GetPostBattleDirectionHintTextIndex(int *hintType, u8 minDistanceForEx
     {
         for (x = 0; x < 32; x++)
         {
-            if ((map[x] & 0x3FF) == FLOOR_EXIT_METATILE)
+            if ((map[x] & METATILE_ID_MASK) == FLOOR_EXIT_METATILE)
             {
                 x += 7 - gEventObjects[gSelectedEventObject].initialCoords.x;
                 y += 7 - gEventObjects[gSelectedEventObject].initialCoords.y;
@@ -1401,23 +1403,23 @@ void GenerateBattlePyramidWildMon(void)
                MON_DATA_EXP,
                &gExperienceTables[gBaseStats[wildMons[id].species].growthRate][lvl]);
 
-    switch (wildMons[id].abilityBit)
+    switch (wildMons[id].abilityNum)
     {
     case 0:
     case 1:
-        SetMonData(&gEnemyParty[0], MON_DATA_ALT_ABILITY, &wildMons[id].abilityBit);
+        SetMonData(&gEnemyParty[0], MON_DATA_ABILITY_NUM, &wildMons[id].abilityNum);
         break;
-    case 2:
+    case ABILITY_RANDOM:
     default:
-        if (gBaseStats[wildMons[id].species].ability2)
+        if (gBaseStats[wildMons[id].species].abilities[1])
         {
             i = GetMonData(&gEnemyParty[0], MON_DATA_PERSONALITY, NULL) % 2;
-            SetMonData(&gEnemyParty[0], MON_DATA_ALT_ABILITY, &i);
+            SetMonData(&gEnemyParty[0], MON_DATA_ABILITY_NUM, &i);
         }
         else
         {
             i = 0;
-            SetMonData(&gEnemyParty[0], MON_DATA_ALT_ABILITY, &i);
+            SetMonData(&gEnemyParty[0], MON_DATA_ABILITY_NUM, &i);
         }
         break;
     }
@@ -1568,7 +1570,7 @@ void GenerateBattlePyramidFloorLayout(u16 *backupMapData, bool8 setPlayerPositio
         {
             for (x = 0; x < mapLayout->width; x++)
             {
-                if ((layoutMap[x] & 0x3FF) != FLOOR_EXIT_METATILE)
+                if ((layoutMap[x] & METATILE_ID_MASK) != FLOOR_EXIT_METATILE)
                 {
                     map[x] = layoutMap[x];
                 }
@@ -1590,7 +1592,7 @@ void GenerateBattlePyramidFloorLayout(u16 *backupMapData, bool8 setPlayerPositio
             layoutMap += mapLayout->width;
         }
     }
-    mapheader_run_script_with_tag_x1();
+    RunOnLoadMapScript();
     free(floorLayoutOffsets);
 }
 

@@ -10,7 +10,7 @@
 #include "battle_tower.h"
 #include "battle_tv.h"
 #include "bg.h"
-#include "data2.h"
+#include "data.h"
 #include "frontier_util.h"
 #include "item.h"
 #include "link.h"
@@ -32,13 +32,9 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
+#include "trainer_hill.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
-
-extern const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[];
-
-extern void sub_8172EF0(u8 battlerId, struct Pokemon *mon);
-extern u8 GetTrainerHillTrainerFrontSpriteId(u16 trainerId);
 
 // this file's functions
 static void OpponentHandleGetMonData(void);
@@ -98,7 +94,7 @@ static void OpponentHandleLinkStandbyMsg(void);
 static void OpponentHandleResetActionMoveSelection(void);
 static void OpponentHandleCmd55(void);
 static void OpponentHandleDebugMenu(void);
-static void nullsub_91(void);
+static void OpponentCmdEnd(void);
 
 static void OpponentBufferRunCommand(void);
 static void OpponentBufferExecCompleted(void);
@@ -171,7 +167,7 @@ static void (*const sOpponentBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     OpponentHandleResetActionMoveSelection,
     OpponentHandleCmd55,
     OpponentHandleDebugMenu,
-    nullsub_91
+    OpponentCmdEnd
 };
 
 // unknown unused data
@@ -591,7 +587,7 @@ static u32 GetOpponentMonData(u8 monId, u8 *dst)
         battleMon.spAttack = GetMonData(&gEnemyParty[monId], MON_DATA_SPATK);
         battleMon.spDefense = GetMonData(&gEnemyParty[monId], MON_DATA_SPDEF);
         battleMon.isEgg = GetMonData(&gEnemyParty[monId], MON_DATA_IS_EGG);
-        battleMon.altAbility = GetMonData(&gEnemyParty[monId], MON_DATA_ALT_ABILITY);
+        battleMon.abilityNum = GetMonData(&gEnemyParty[monId], MON_DATA_ABILITY_NUM);
         battleMon.otId = GetMonData(&gEnemyParty[monId], MON_DATA_OT_ID);
         GetMonData(&gEnemyParty[monId], MON_DATA_NICKNAME, nickname);
         StringCopy10(battleMon.nickname, nickname);
@@ -2002,6 +1998,6 @@ static void OpponentHandleDebugMenu(void)
     OpponentBufferExecCompleted();
 }
 
-static void nullsub_91(void)
+static void OpponentCmdEnd(void)
 {
 }

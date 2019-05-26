@@ -227,15 +227,15 @@
 	.byte \battler
 	.endm
 
-	.macro if_equal_ param0:req, param1:req
+	.macro if_equal_u32 param0:req, param1:req
 	.byte 0x26
-	.byte \param0
+	.4byte \param0
 	.4byte \param1
 	.endm
 
-	.macro if_not_equal_ param0:req, param1:req
+	.macro if_not_equal_u32 param0:req, param1:req
 	.byte 0x27
-	.byte \param0
+	.4byte \param0
 	.4byte \param1
 	.endm
 
@@ -245,10 +245,10 @@
 	.4byte \param1
 	.endm
 
-	.macro if_user_doesnt_go param0:req, param1:req
+	.macro if_cant_use_belch battler:req, ptr:req
 	.byte 0x29
-	.byte \param0
-	.4byte \param1
+	.byte \battler
+	.4byte \ptr
 	.endm
 
 	.macro nullsub_2A
@@ -594,7 +594,69 @@
 	.4byte \ptr
 	.endm
 	
+	.macro if_has_move_with_split battler:req, split:req, ptr:req
+	.byte 0x69
+	.byte \battler
+	.byte \split
+	.4byte \ptr
+	.endm
+	
+	.macro if_has_no_move_with_split battler:req, split:req, ptr:req
+	.byte 0x6A
+	.byte \battler
+	.byte \split
+	.4byte \ptr
+	.endm
+	
+	.macro if_physical_moves_unusable attacker:req, target:req, ptr:req
+	.byte 0x6B
+	.byte \attacker
+	.byte \target
+	.4byte \ptr
+	.endm
+	
+	.macro if_ai_can_go_down ptr:req
+	.byte 0x6C
+	.4byte \ptr
+	.endm
+	
+	.macro if_has_move_with_type battler:req, type:req, ptr:req
+	.byte 0x6D
+	.byte \battler
+	.byte \type
+	.4byte \ptr
+	.endm
+	
+	.macro if_no_move_used battler:req, ptr:req
+	.byte 0x6E
+	.byte \battler
+	.4byte \ptr
+	.endm
+	
+	.macro if_has_move_with_flag battler:req, flag:req, ptr:req
+	.byte 0x6E
+	.byte \battler
+	.4byte \flag
+	.4byte \ptr
+	.endm
+	
 @ useful script macros
+	.macro if_has_physical_move battler:req, ptr:req
+	if_has_move_with_split \battler, SPLIT_PHYSICAL, \ptr
+	.endm
+	
+	.macro if_has_no_physical_move battler:req, ptr:req
+	if_has_no_move_with_split \battler, SPLIT_PHYSICAL, \ptr
+	.endm
+	
+	.macro if_has_special_move battler:req, ptr:req
+	if_has_move_with_split \battler, SPLIT_SPECIAL, \ptr
+	.endm
+	
+	.macro if_has_no_special_move battler:req, ptr:req
+	if_has_no_move_with_split \battler, SPLIT_SPECIAL, \ptr
+	.endm
+
 	.macro if_holds_no_item battler, ptr:req
 	if_holds_item \battler, 0, \ptr
 	.endm

@@ -33,7 +33,9 @@
 #include "naming_screen.h"
 #include "pokemon_storage_system.h"
 #include "field_screen_effect.h"
+#include "data.h"
 #include "battle.h" // to get rid of later
+#include "constants/rgb.h"
 
 struct EggHatchData
 {
@@ -52,7 +54,6 @@ struct EggHatchData
     u8 textColor[3];
 };
 
-extern const struct CompressedSpriteSheet gMonFrontPicTable[];
 extern const u32 gUnknown_08331F60[]; // tilemap gameboy circle
 extern const u8 gText_HatchedFromEgg[];
 extern const u8 gText_NickHatchPrompt[];
@@ -75,7 +76,7 @@ static void CreateEggShardSprite(u8 x, u8 y, s16 data1, s16 data2, s16 data3, u8
 static IWRAM_DATA struct EggHatchData *sEggHatchData;
 
 // rom data
-static const u16 sEggPalette[] = INCBIN_U16("graphics/pokemon/palettes/egg_palette.gbapal");
+static const u16 sEggPalette[] = INCBIN_U16("graphics/pokemon/egg/normal.gbapal");
 static const u8 sEggHatchTiles[] = INCBIN_U8("graphics/misc/egg_hatch.4bpp");
 static const u8 sEggShardTiles[] = INCBIN_U8("graphics/misc/egg_shard.4bpp");
 
@@ -86,10 +87,10 @@ static const struct OamData sOamData_EggHatch =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 0,
+    .shape = SPRITE_SHAPE(32x32),
     .x = 0,
     .matrixNum = 0,
-    .size = 2,
+    .size = SPRITE_SIZE(32x32),
     .tileNum = 0,
     .priority = 1,
     .paletteNum = 0,
@@ -166,10 +167,10 @@ static const struct OamData sOamData_EggShard =
     .objMode = 0,
     .mosaic = 0,
     .bpp = 0,
-    .shape = 0,
+    .shape = SPRITE_SHAPE(8x8),
     .x = 0,
     .matrixNum = 0,
-    .size = 0,
+    .size = SPRITE_SIZE(8x8),
     .tileNum = 0,
     .priority = 2,
     .paletteNum = 0,
@@ -469,7 +470,7 @@ static void Task_EggHatch(u8 taskID)
     {
         CleanupOverworldWindowsAndTilemaps();
         SetMainCallback2(CB2_EggHatch_0);
-        gFieldCallback = sub_80AF168;
+        gFieldCallback = FieldCallback_ReturnToEventScript2;
         DestroyTask(taskID);
     }
 }
@@ -574,7 +575,7 @@ static void Task_EggHatchPlayBGM(u8 taskID)
     if (gTasks[taskID].data[0] == 0)
     {
         StopMapMusic();
-        PlayRainSoundEffect();
+        PlayRainStoppingSoundEffect();
     }
     if (gTasks[taskID].data[0] == 1)
         PlayBGM(MUS_ME_SHINKA);
@@ -596,7 +597,7 @@ static void CB2_EggHatch_1(void)
     switch (sEggHatchData->CB2_state)
     {
     case 0:
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, 0);
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
         sEggHatchData->eggSpriteID = CreateSprite(&sSpriteTemplate_EggHatch, 120, 75, 5);
         ShowBg(0);
         ShowBg(1);
@@ -606,7 +607,7 @@ static void CB2_EggHatch_1(void)
     case 1:
         if (!gPaletteFade.active)
         {
-            FillWindowPixelBuffer(sEggHatchData->windowId, 0);
+            FillWindowPixelBuffer(sEggHatchData->windowId, PIXEL_FILL(0));
             sEggHatchData->CB2_PalCounter = 0;
             sEggHatchData->CB2_state++;
         }
@@ -679,7 +680,7 @@ static void CB2_EggHatch_1(void)
         }
         break;
     case 11:
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
         sEggHatchData->CB2_state++;
         break;
     case 12:
@@ -789,7 +790,7 @@ static void SpriteCB_Egg_4(struct Sprite* sprite)
 {
     s16 i;
     if (sprite->data[0] == 0)
-        BeginNormalPaletteFade(0xFFFFFFFF, -1, 0, 0x10, 0xFFFF);
+        BeginNormalPaletteFade(0xFFFFFFFF, -1, 0, 0x10, RGB_WHITEALPHA);
     if (sprite->data[0] < 4u)
     {
         for (i = 0; i <= 3; i++)
@@ -813,7 +814,7 @@ static void SpriteCB_Egg_5(struct Sprite* sprite)
         StartSpriteAffineAnim(&gSprites[sEggHatchData->pokeSpriteID], 1);
     }
     if (sprite->data[0] == 8)
-        BeginNormalPaletteFade(0xFFFFFFFF, -1, 0x10, 0, 0xFFFF);
+        BeginNormalPaletteFade(0xFFFFFFFF, -1, 0x10, 0, RGB_WHITEALPHA);
     if (sprite->data[0] <= 9)
         gSprites[sEggHatchData->pokeSpriteID].pos1.y -= 1;
     if (sprite->data[0] > 40)
@@ -857,7 +858,7 @@ static void CreateEggShardSprite(u8 x, u8 y, s16 data1, s16 data2, s16 data3, u8
 
 static void EggHatchPrintMessage(u8 windowId, u8* string, u8 x, u8 y, u8 speed)
 {
-    FillWindowPixelBuffer(windowId, 0xFF);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(15));
     sEggHatchData->textColor[0] = 0;
     sEggHatchData->textColor[1] = 5;
     sEggHatchData->textColor[2] = 6;

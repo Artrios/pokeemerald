@@ -1,8 +1,8 @@
 Route111_OldLadysRestStop_MapScripts:: @ 822A916
-	map_script 3, Route111_OldLadysRestStop_MapScript1_22A91C
+	map_script MAP_SCRIPT_ON_TRANSITION, Route111_OldLadysRestStop_OnTransition
 	.byte 0
 
-Route111_OldLadysRestStop_MapScript1_22A91C: @ 822A91C
+Route111_OldLadysRestStop_OnTransition: @ 822A91C
 	setflag FLAG_LANDMARK_OLD_LADY_REST_SHOP
 	end
 
@@ -19,7 +19,7 @@ Route111_OldLadysRestStop_EventScript_22A920:: @ 822A920
 Route111_OldLadysRestStop_EventScript_22A941:: @ 822A941
 	msgbox Route111_OldLadysRestStop_Text_22A9EC, MSGBOX_DEFAULT
 	closemessage
-	call Route111_OldLadysRestStop_EventScript_272083
+	call Common_EventScript_OutOfCenterPartyHeal
 	msgbox Route111_OldLadysRestStop_Text_22AA16, MSGBOX_YESNO
 	compare VAR_RESULT, 1
 	goto_if_eq Route111_OldLadysRestStop_EventScript_22A941

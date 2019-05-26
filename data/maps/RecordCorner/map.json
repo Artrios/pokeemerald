@@ -22,8 +22,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "RecordCorner_EventScript_2774C6",
       "flag": "0"
     }
@@ -65,8 +65,8 @@
       "y": 4,
       "elevation": 3,
       "var": "VAR_TEMP_0",
-      "var_value": 0,
-      "script": "gUnknown_0827741D"
+      "var_value": "0",
+      "script": "EventScript_RecordCenter_Spot0"
     },
     {
       "type": "trigger",
@@ -74,8 +74,8 @@
       "y": 6,
       "elevation": 3,
       "var": "VAR_TEMP_0",
-      "var_value": 0,
-      "script": "gUnknown_08277447"
+      "var_value": "0",
+      "script": "EventScript_RecordCenter_Spot2"
     },
     {
       "type": "trigger",
@@ -83,8 +83,8 @@
       "y": 4,
       "elevation": 3,
       "var": "VAR_TEMP_0",
-      "var_value": 0,
-      "script": "gUnknown_08277432"
+      "var_value": "0",
+      "script": "EventScript_RecordCenter_Spot1"
     },
     {
       "type": "trigger",
@@ -92,8 +92,8 @@
       "y": 6,
       "elevation": 3,
       "var": "VAR_TEMP_0",
-      "var_value": 0,
-      "script": "gUnknown_0827745C"
+      "var_value": "0",
+      "script": "EventScript_RecordCenter_Spot3"
     }
   ],
   "bg_events": []

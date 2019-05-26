@@ -1,13 +1,13 @@
 SkyPillar_3F_MapScripts:: @ 823965B
-	map_script 3, SkyPillar_3F_MapScript1_239661
+	map_script MAP_SCRIPT_ON_TRANSITION, SkyPillar_3F_OnTransition
 	.byte 0
 
-SkyPillar_3F_MapScript1_239661: @ 8239661
-	compare VAR_0x40CA, 2
-	call_if_lt SkyPillar_3F_EventScript_23966D
+SkyPillar_3F_OnTransition: @ 8239661
+	compare VAR_SKY_PILLAR_STATE, 2
+	call_if_lt SkyPillar_3F_EventScript_CleanFloor
 	end
 
-SkyPillar_3F_EventScript_23966D:: @ 823966D
-	setmaplayoutindex LAYOUT_UNKNOWN_MAP_084812A4
+SkyPillar_3F_EventScript_CleanFloor:: @ 823966D
+	setmaplayoutindex LAYOUT_SKY_PILLAR_3F_CLEAN
 	return
 

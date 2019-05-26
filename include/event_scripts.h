@@ -15,9 +15,10 @@ extern const u8 EventScript_TryDoDoubleTrainerBattle[];
 extern const u8 EventScript_TryDoNormalTrainerBattle[];
 extern const u8 EventScript_TryDoDoubleRematchBattle[];
 extern const u8 EventScript_TryDoRematchBattle[];
-extern const u8 EventScript_SecretPower1[];
-extern const u8 EventScript_SecretPower2[];
+extern const u8 SecretBase_EventScript_DollInteract[];
+extern const u8 SecretBase_EventScript_CushionInteract[];
 
+extern const u8 BerryTreeScript[];
 
 extern const u8 gTVBravoTrainerText00[];
 extern const u8 gTVBravoTrainerText01[];
@@ -381,10 +382,10 @@ extern const u8 SecretBase_RedCave1_Text_2758CC[];
 extern const u8 BattleFrontier_BattlePyramidEmptySquare_EventScript_252C88[];
 
 //field effects
-extern const u8 FieryPath_EventScript_2908FD[];
-extern const u8 EventScript_290CAE[];
+extern const u8 EventScript_FldEffStrength[];
+extern const u8 EventScript_FailSweetScent[];
 extern const u8 EventScript_2926F8[];
-extern const u8 Route111_EventScript_2907F0[];
+extern const u8 EventScript_FldEffRockSmash[];
 
 //player pc
 extern const u8 LittlerootTown_BrendansHouse_2F_EventScript_1F863F[];
@@ -528,8 +529,6 @@ extern const u8 EventScript_PlayerPCMale[];
 extern const u8 EventScript_PlayerPCFemale[];
 extern const u8 EventScript_SecretBasePC[];
 extern const u8 EventScript_RecordMixingSecretBasePC[];
-extern const u8 EventScript_SecretPower1[];
-extern const u8 EventScript_SecretPower2[];
 extern const u8 EventScript_PC[];
 extern const u8 EventScript_TestSignpostMsg[];
 extern const u8 EventScript_HiddenItemScript[];
@@ -544,9 +543,9 @@ extern const u8 EventScript_RegionMap[];
 extern const u8 EventScript_RunningShoesManual[];
 extern const u8 EventScript_PictureBookShelf[];
 extern const u8 EventScript_BookShelf[];
-extern const u8 EventScript_PokemonCenterBookshelf[];
+extern const u8 EventScript_PokemonCenterBookShelf[];
 extern const u8 EventScript_Vase[];
-extern const u8 EventScript_TrashCan[];
+extern const u8 EventScript_EmptyTrashCan[];
 extern const u8 EventScript_ShopShelf[];
 extern const u8 EventScript_Blueprint[];
 extern const u8 EventScript_WirelessBoxResults[];
@@ -564,7 +563,7 @@ extern const u8 EventScript_FallDownHole[];
 extern const u8 BattleFrontier_BattlePyramidEmptySquare_EventScript_252BE8[];
 extern const u8 EventScript_Poison[];
 extern const u8 EventScript_EggHatch[];
-extern const u8 gUnknown_08273D1F[];
+extern const u8 UnusualWeather_EventScript_EndEventAndCleanup_1[];
 extern const u8 IslandCave_EventScript_238EAF[];
 extern const u8 MauvilleCity_EventScript_1DF7BA[];
 extern const u8 Route119_EventScript_1F49EC[];

@@ -12,37 +12,37 @@ gSpecials:: @ 81DBA64
 	def_special SetCableClubWarp
 	def_special sub_80AF948
 	def_special sub_80AF9F8
-	def_special sub_80B36EC
-	def_special sub_80B371C
-	def_special sub_80E8E18
-	def_special sub_80E8BC8
-	def_special sub_80E9068
-	def_special sub_80E9A90
-	def_special sub_80E9AC0
-	def_special sub_80E9744
-	def_special sub_80E9BDC
-	def_special sub_80E9C2C
-	def_special sub_80E9C74
-	def_special sub_80E9C88
-	def_special sub_80EA2E4
-	def_special sub_80EA354
-	def_special sub_80E933C
+	def_special CleanupLinkRoomState
+	def_special ExitLinkRoom
+	def_special SetPlayerSecretBase
+	def_special CheckPlayerHasSecretBase
+	def_special EnterSecretBase
+	def_special ClearAndLeaveSecretBase
+	def_special MoveOutOfSecretBase
+	def_special IsCurSecretBaseOwnedByAnotherPlayer
+	def_special GetCurSecretBaseRegistrationValidity
+	def_special ToggleCurSecretBaseRegistry
+	def_special ShowSecretBaseDecorationMenu
+	def_special ShowSecretBaseRegistryMenu
+	def_special PrepSecretBaseBattleFlags
+	def_special GetSecretBaseOwnerInteractionState
+	def_special InitSecretBaseDecorationSprites
 	def_special sub_8127E18
 	def_special sub_81297AC
-	def_special sub_80E8C98
-	def_special sub_80E95D4
+	def_special GetSecretBaseTypeInFrontOfPlayer
+	def_special SetSecretBaseOwnerGfxId
 	def_special sub_8129708
-	def_special sub_80E91F8
+	def_special EnterNewlyCreatedSecretBase
 	def_special sub_80EA30C
 	def_special DoSecretBasePCTurnOffEffect
-	def_special sub_80E6BE8
+	def_special RecordMixingPlayerSpotTriggered
 	def_special sub_80B2DA4
 	def_special sub_80B2E4C
 	def_special sub_80B2E74
 	def_special sub_80B2EA8
 	def_special CloseLink
-	def_special sub_80B3968
-	def_special sub_80B3924
+	def_special ColosseumPlayerSpotTriggered
+	def_special PlayerEnteredTradeSeat
 	def_special nullsub_37
 	def_special sub_80B3254
 	def_special sub_80B2FD8
@@ -50,7 +50,7 @@ gSpecials:: @ 81DBA64
 	def_special SpawnLinkPartnerEventObject
 	def_special SavePlayerParty
 	def_special LoadPlayerParty
-	def_special sub_80F9438
+	def_special ChooseHalfPartyForBattle
 	def_special sp02A_crash_sound
 	def_special EventObjectInteractionGetBerryTreeData
 	def_special EventObjectInteractionGetBerryName
@@ -106,7 +106,7 @@ gSpecials:: @ 81DBA64
 	def_special sub_80B3000
 	def_special SaveGame
 	def_special DoWateringBerryTreeAnim
-	def_special easy_chat_input_maybe
+	def_special ShowEasyChatScreen
 	def_special sub_811EECC
 	def_special ScrSpecial_GetCurrentMauvilleMan
 	def_special ScrSpecial_HasBardSongBeenChanged
@@ -134,7 +134,7 @@ gSpecials:: @ 81DBA64
 	def_special CompareSeedotSize
 	def_special GetLotadSizeRecordInfo
 	def_special CompareLotadSize
-	def_special TV_PutNameRaterShowOnTheAirIfNicnkameChanged
+	def_special TV_PutNameRaterShowOnTheAirIfNicknameChanged
 	def_special TV_CopyNicknameToStringVar1AndEnsureTerminated
 	def_special TV_CheckMonOTIDEqualsPlayerID
 	def_special BufferTrendyPhraseString
@@ -235,7 +235,7 @@ gSpecials:: @ 81DBA64
 	def_special sub_81B9770
 	def_special sub_81B9718
 	def_special sub_81B96D0
-	def_special TeachMoveTutorMove
+	def_special TeachMoveRelearnerMove
 	def_special GetRecordedCyclingRoadResults
 	def_special Special_BeginCyclingRoadChallenge
 	def_special GetPlayerAvatarBike
@@ -291,7 +291,7 @@ gSpecials:: @ 81DBA64
 	def_special GetPokeblockNameByMonNature
 	def_special GetSecretBaseNearbyMapName
 	def_special CheckRelicanthWailord
-	def_special ShouldDoBrailleStrengthEffectOld
+	def_special ShouldDoBrailleRegirockEffectOld
 	def_special sub_80B0534
 	def_special sub_80B058C
 	def_special WaitWeather
@@ -313,7 +313,7 @@ gSpecials:: @ 81DBA64
 	def_special sub_80AFC60
 	def_special PutZigzagoonInPlayerParty
 	def_special IsStarterInParty
-	def_special sub_80E980C
+	def_special CopyCurSecretBaseOwnerName_StrVar1
 	def_special ScriptCheckFreePokemonStorageSpace
 	def_special DoSealedChamberShakingEffect1
 	def_special sub_8139B60
@@ -327,7 +327,7 @@ gSpecials:: @ 81DBA64
 	def_special SetUpTrainerMovement
 	def_special DoSealedChamberShakingEffect2
 	def_special FoundBlackGlasses
-	def_special sub_80AC81C
+	def_special StartDroughtWeatherBlend
 	def_special DoDiveWarp
 	def_special DoFallWarp
 	def_special ShowContestEntryMonPic
@@ -340,7 +340,7 @@ gSpecials:: @ 81DBA64
 	def_special ScriptGetPartyMonSpecies
 	def_special sub_81B98DC
 	def_special nullsub_54
-	def_special sub_80E9B70
+	def_special MoveOutOfSecretBaseFromOutside
 	def_special LoadPlayerBag
 	def_special sub_80B05B4
 	def_special SetPacifidlogTMReceivedDay
@@ -361,17 +361,17 @@ gSpecials:: @ 81DBA64
 	def_special sub_80EED10
 	def_special sub_80EED34
 	def_special sub_80EB1AC
-	def_special sub_80EBE7C
+	def_special SetSecretBaseSecretsTvFlags_SandOrnament
 	def_special sub_80EB300
 	def_special sub_80EB438
 	def_special sub_80EB368
 	def_special sub_80EB3D0
 	def_special sub_80EB290
 	def_special sub_80EB2C8
-	def_special sub_80EB56C
-	def_special sub_80EB9E0
-	def_special sub_80EBB28
-	def_special sub_80EB498
+	def_special SetSecretBaseSecretsTvFlags_MiscFurnature
+	def_special SetSecretBaseSecretsTvFlags_LargeDecorationSpot
+	def_special SetSecretBaseSecretsTvFlags_SmallDecorationSpot
+	def_special SetSecretBaseSecretsTvFlags_Poster
 	def_special sub_818D9C0
 	def_special sub_818DAEC
 	def_special sub_818DBE8
@@ -434,7 +434,7 @@ gSpecials:: @ 81DBA64
 	def_special sub_81B8958
 	def_special sub_8018090
 	def_special sub_813990C
-	def_special sub_801B27C
+	def_special ValidateReceivedWonderCard
 	def_special HasAtLeastOneBerry
 	def_special sub_802C920
 	def_special sub_802E3C4
@@ -471,11 +471,11 @@ gSpecials:: @ 81DBA64
 	def_special sub_813AA04
 	def_special sub_813AA18
 	def_special sub_813AA44
-	def_special sub_80248B0
-	def_special sub_8024918
-	def_special sub_80246D4
-	def_special sub_802477C
-	def_special sub_802488C
+	def_special DisplayBerryPowderVendorMenu
+	def_special RemoveBerryPowderVendorMenu
+	def_special HasEnoughBerryPowder
+	def_special TakeBerryPowder
+	def_special PrintPlayerBerryPowderAmount
 	def_special sub_813A820
 	def_special sub_813A854
 	def_special sub_813B7D8
@@ -499,11 +499,11 @@ gSpecials:: @ 81DBA64
 	def_special sub_813B21C
 	def_special SetMatchCallRegisteredFlag
 	def_special sub_8175280
-	def_special sub_813B2E4
-	def_special sub_813B374
+	def_special CreateUnusualWeatherEvent
+	def_special GetUnusualWeatherMapNameAndType
 	def_special sub_813B490
 	def_special sub_80A08CC
-	def_special sub_813B484
+	def_special Unused_SetWeatherSunny
 	def_special sub_81AFDA0
 	def_special sub_813B4E0
 	def_special ShouldDoBrailleRegicePuzzle

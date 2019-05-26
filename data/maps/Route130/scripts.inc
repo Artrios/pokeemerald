@@ -1,9 +1,9 @@
 Route130_MapScripts:: @ 81F735F
-	map_script 3, Route130_MapScript1_1F7365
+	map_script MAP_SCRIPT_ON_TRANSITION, Route130_OnTransition
 	.byte 0
 
-Route130_MapScript1_1F7365: @ 81F7365
-	compare VAR_0x405E, 4
+Route130_OnTransition: @ 81F7365
+	compare VAR_RAYQUAZA_STATE, 4
 	call_if_ge Route130_EventScript_1F73B5
 	specialvar VAR_RESULT, IsMirageIslandPresent
 	compare VAR_RESULT, 1
@@ -27,11 +27,11 @@ Route130_MapScript1_1F7365: @ 81F7365
 	end
 
 Route130_EventScript_1F73B1:: @ 81F73B1
-	setmaplayoutindex LAYOUT_UNKNOWN_MAP_08417FC4
+	setmaplayoutindex LAYOUT_ROUTE130_MIRAGE_ISLAND
 	end
 
 Route130_EventScript_1F73B5:: @ 81F73B5
-	call_if_set FLAG_SYS_WEATHER_CTRL, Route130_EventScript_27207A
+	call_if_set FLAG_SYS_WEATHER_CTRL, Common_EventScript_SetWeather15
 	return
 
 Route130_EventScript_1F73BF:: @ 81F73BF

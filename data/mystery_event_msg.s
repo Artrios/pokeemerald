@@ -1,5 +1,6 @@
 #include "constants/flags.h"
 #include "constants/items.h"
+#include "constants/map_scripts.h"
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/species.h"
@@ -35,7 +36,7 @@ MysteryEventScript_SurfPichu:: @ 8674D3D
 	setvaddress MysteryEventScript_SurfPichu
 	checkflag FLAG_MYSTERY_EVENT_DONE
 	vgoto_if 0, SurfPichu_GiveIfPossible
-	gotoram
+	returnram
 
 SurfPichu_GiveIfPossible: @ 8674D4C
 	specialvar VAR_EVENT_PICHU_SLOT, CalculatePlayerPartyCount

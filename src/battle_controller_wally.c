@@ -7,7 +7,7 @@
 #include "battle_setup.h"
 #include "battle_tv.h"
 #include "bg.h"
-#include "data2.h"
+#include "data.h"
 #include "item.h"
 #include "item_menu.h"
 #include "link.h"
@@ -30,10 +30,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
-
-extern const struct CompressedSpritePalette gTrainerBackPicPaletteTable[];
-
-extern void sub_8172EF0(u8 battlerId, struct Pokemon *mon);
+#include "constants/rgb.h"
 
 // this file's functions
 static void WallyHandleGetMonData(void);
@@ -93,7 +90,7 @@ static void WallyHandleLinkStandbyMsg(void);
 static void WallyHandleResetActionMoveSelection(void);
 static void WallyHandleCmd55(void);
 static void WallyHandleBattleDebug(void);
-static void nullsub_118(void);
+static void WallyCmdEnd(void);
 
 static void WallyBufferRunCommand(void);
 static void WallyBufferExecCompleted(void);
@@ -163,10 +160,10 @@ static void (*const sWallyBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     WallyHandleResetActionMoveSelection,
     WallyHandleCmd55,
     WallyHandleBattleDebug,
-    nullsub_118
+    WallyCmdEnd
 };
 
-static void nullsub_117(void)
+static void SpriteCB_Null7(void)
 {
 }
 
@@ -490,7 +487,7 @@ static u32 CopyWallyMonData(u8 monId, u8 *dst)
         battleMon.spAttack = GetMonData(&gPlayerParty[monId], MON_DATA_SPATK);
         battleMon.spDefense = GetMonData(&gPlayerParty[monId], MON_DATA_SPDEF);
         battleMon.isEgg = GetMonData(&gPlayerParty[monId], MON_DATA_IS_EGG);
-        battleMon.altAbility = GetMonData(&gPlayerParty[monId], MON_DATA_ALT_ABILITY);
+        battleMon.abilityNum = GetMonData(&gPlayerParty[monId], MON_DATA_ABILITY_NUM);
         battleMon.otId = GetMonData(&gPlayerParty[monId], MON_DATA_OT_ID);
         GetMonData(&gPlayerParty[monId], MON_DATA_NICKNAME, nickname);
         StringCopy10(battleMon.nickname, nickname);
@@ -1248,7 +1245,7 @@ static void WallyHandleChooseMove(void)
 
 static void WallyHandleChooseItem(void)
 {
-    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
+    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
     gBattlerControllerFuncs[gActiveBattler] = OpenBagAfterPaletteFade;
     gBattlerInMenuId = gActiveBattler;
 }
@@ -1566,6 +1563,6 @@ static void WallyHandleBattleDebug(void)
     WallyBufferExecCompleted();
 }
 
-static void nullsub_118(void)
+static void WallyCmdEnd(void)
 {
 }

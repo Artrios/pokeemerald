@@ -33,8 +33,8 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "SafariZone_Northeast_EventScript_23D3C6",
       "flag": "0"
     },
@@ -46,8 +46,8 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "SafariZone_Northeast_EventScript_23D3D8",
       "flag": "0"
     },
@@ -59,9 +59,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "SafariZone_Northeast_EventScript_2907A6",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_RockSmash",
       "flag": "FLAG_TEMP_15"
     },
     {
@@ -72,8 +72,8 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "SafariZone_Northeast_EventScript_23D3CF",
       "flag": "0"
     },
@@ -85,9 +85,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "SafariZone_Northeast_EventScript_2907A6",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_RockSmash",
       "flag": "FLAG_TEMP_13"
     },
     {
@@ -98,9 +98,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "SafariZone_Northeast_EventScript_2907A6",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_RockSmash",
       "flag": "FLAG_TEMP_11"
     },
     {
@@ -111,9 +111,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "SafariZone_Northeast_EventScript_2907A6",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_RockSmash",
       "flag": "FLAG_TEMP_14"
     },
     {
@@ -124,9 +124,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "SafariZone_Northeast_EventScript_2907A6",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_RockSmash",
       "flag": "FLAG_TEMP_12"
     },
     {
@@ -137,9 +137,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 1,
       "movement_range_y": 1,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "SafariZone_Northeast_EventScript_2912E3",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "SafariZone_Northeast_EventScript_ItemNugget",
       "flag": "FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET"
     }
   ],

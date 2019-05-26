@@ -1,8 +1,8 @@
 FarawayIsland_Entrance_MapScripts:: @ 8267C8E
-	map_script 3, FarawayIsland_Entrance_MapScript1_267C94
+	map_script MAP_SCRIPT_ON_TRANSITION, FarawayIsland_Entrance_OnTransition
 	.byte 0
 
-FarawayIsland_Entrance_MapScript1_267C94: @ 8267C94
+FarawayIsland_Entrance_OnTransition: @ 8267C94
 	setflag FLAG_ARRIVED_ON_FARAWAY_ISLAND
 	end
 
@@ -24,7 +24,7 @@ FarawayIsland_Entrance_EventScript_267CA2:: @ 8267CA2
 	goto_if_eq FarawayIsland_Entrance_EventScript_267CE7
 	msgbox FarawayIsland_Entrance_Text_2A6A5D, MSGBOX_DEFAULT
 	closemessage
-	applymovement VAR_LAST_TALKED, FarawayIsland_Entrance_Movement_2725AA
+	applymovement VAR_LAST_TALKED, Common_Movement_WalkInPlaceDown
 	waitmovement 0
 	delay 30
 	hideobjectat 1, MAP_FARAWAY_ISLAND_ENTRANCE

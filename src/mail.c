@@ -19,6 +19,7 @@
 #include "constants/species.h"
 #include "alloc.h"
 #include "easy_chat.h"
+#include "constants/rgb.h"
 
 extern const u16 gMailPalette_Orange[];
 extern const u16 gMailPalette_Harbor[];
@@ -102,7 +103,7 @@ struct MailRead
     /*0x021d*/ u8 language;
     /*0x021e*/ bool8 playerIsSender;
     /*0x0220*/ u8 * (*parserSingle)(u8 *dest, u16 word);
-    /*0x0224*/ void (*parserMultiple)(u8 *dest, const u16 *src, u16 length1, u16 length2);
+    /*0x0224*/ u8 * (*parserMultiple)(u8 *dest, const u16 *src, u16 length1, u16 length2);
     /*0x0228*/ const struct MailLayout *layout;
     /*0x022c*/ u8 bg1TilemapBuffer[0x1000];
     /*0x122c*/ u8 bg2TilemapBuffer[0x1000];
@@ -417,7 +418,7 @@ static bool8 MailReadBuildGraphics(void)
             ShowBg(0);
             ShowBg(1);
             ShowBg(2);
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 16, 0, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 16, 0, RGB_BLACK);
             gPaletteFade.bufferTransferDisabled = FALSE;
             sMailRead->callback2 = CB2_WaitForPaletteExitOnKeyPress;
             return TRUE;
@@ -477,8 +478,8 @@ static void sub_8121B1C(void)
     y = 0;
     PutWindowTilemap(0);
     PutWindowTilemap(1);
-    FillWindowPixelBuffer(0, 0);
-    FillWindowPixelBuffer(1, 0);
+    FillWindowPixelBuffer(0, PIXEL_FILL(0));
+    FillWindowPixelBuffer(1, PIXEL_FILL(0));
     for (i = 0; i < sMailRead->layout->numSubStructs; i ++)
     {
         if (sMailRead->strbuf[i][0] == EOS || sMailRead->strbuf[i][0] == CHAR_SPACE)
@@ -526,7 +527,7 @@ static void CB2_ExitOnKeyPress(void)
 {
     if (gMain.newKeys & (A_BUTTON | B_BUTTON))
     {
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
         sMailRead->callback2 = CB2_ExitMailReadFreeVars;
     }
 }

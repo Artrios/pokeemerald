@@ -463,11 +463,11 @@
 #define MUS_RG_SOUSA 535        // Starting Tutorial
 #define MUS_RG_SEKAIKAN 536     // Starting Tutorial 2
 #define MUS_RG_SEIBETU 537      // Starting Tutorial 3
-#define MUS_RG_JUMP 538         // Jumping Minigame
+#define MUS_RG_JUMP 538         // Pokemon Jump Minigame
 #define MUS_RG_UNION 539        // Union Room
 #define MUS_RG_NETWORK 540      // Network Center
 #define MUS_RG_OKURIMONO 541    // Mystery Gift
-#define MUS_RG_KINOMIKUI 542
+#define MUS_RG_KINOMIKUI 542    // Dodrio Berry Picking
 #define MUS_RG_NANADUNGEON 543  // Sevii Caves/Altering Cave (Mt. Moon)
 #define MUS_RG_OSHIE_TV 544     // Follow Me!
 #define MUS_RG_NANASHIMA 545    // Sevii Islands Routes (Lake of Rage)
@@ -537,5 +537,7 @@
 #define PH_NURSE_SOLO 609
 
 #define MUS_ROUTE_118 0x7FFF  // map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
+
+#define MUS_NONE 0xFFFF
 
 #endif  // GUARD_CONSTANTS_SONGS_H

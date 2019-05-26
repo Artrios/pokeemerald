@@ -27,9 +27,6 @@ static void sub_813561C(u8 taskId);
 static void sub_81356C4(void);
 static void sub_8135714(void);
 
-// extern RAM loc
-extern struct MapPosition gPlayerFacingPosition;
-
 // text
 bool8 CheckObjectGraphicsInFrontOfPlayer(u8 graphicsId)
 {
@@ -119,11 +116,13 @@ static void sub_813561C(u8 taskId)
 
 bool8 SetUpFieldMove_RockSmash(void)
 {
-    if (ShouldDoBrailleStrengthEffect())
+    // In Ruby and Sapphire, Regirock's tomb is opened by using Strength. In Emerald,
+    // it is opened by using Rock Smash.
+    if (ShouldDoBrailleRegirockEffect())
     {
         gSpecialVar_Result = GetCursorSelectionMonId();
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
-        gPostMenuFieldCallback = sub_8179834;
+        gPostMenuFieldCallback = SetUpPuzzleEffectRegirock;
         return TRUE;
     }
     else if (CheckObjectGraphicsInFrontOfPlayer(EVENT_OBJ_GFX_BREAKABLE_ROCK) == TRUE)
@@ -141,7 +140,7 @@ bool8 SetUpFieldMove_RockSmash(void)
 static void sub_81356C4(void)
 {
     gFieldEffectArguments[0] = GetCursorSelectionMonId();
-    ScriptContext1_SetupScript(Route111_EventScript_2907F0);
+    ScriptContext1_SetupScript(EventScript_FldEffRockSmash);
 }
 
 bool8 FldEff_UseRockSmash(void)

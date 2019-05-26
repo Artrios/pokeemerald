@@ -5,7 +5,7 @@
 #include "battle_interface.h"
 #include "battle_message.h"
 #include "bg.h"
-#include "data2.h"
+#include "data.h"
 #include "item_menu.h"
 #include "link.h"
 #include "main.h"
@@ -22,10 +22,7 @@
 #include "window.h"
 #include "constants/battle_anim.h"
 #include "constants/songs.h"
-
-extern const struct CompressedSpritePalette gTrainerBackPicPaletteTable[];
-
-extern void sub_81358F4(void);
+#include "constants/rgb.h"
 
 // this file's functions
 static void SafariHandleGetMonData(void);
@@ -85,7 +82,7 @@ static void SafariHandleLinkStandbyMsg(void);
 static void SafariHandleResetActionMoveSelection(void);
 static void SafariHandleCmd55(void);
 static void SafariHandleBattleDebug(void);
-static void nullsub_115(void);
+static void SafariCmdEnd(void);
 
 static void SafariBufferRunCommand(void);
 static void SafariBufferExecCompleted(void);
@@ -150,10 +147,10 @@ static void (*const sSafariBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     SafariHandleResetActionMoveSelection,
     SafariHandleCmd55,
     SafariHandleBattleDebug,
-    nullsub_115
+    SafariCmdEnd
 };
 
-static void nullsub_114(void)
+static void SpriteCB_Null4(void)
 {
 }
 
@@ -477,7 +474,7 @@ static void SafariHandleChooseItem(void)
 {
     s32 i;
 
-    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
+    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
     gBattlerControllerFuncs[gActiveBattler] = SafariOpenPokeblockCase;
     gBattlerInMenuId = gActiveBattler;
 }
@@ -695,6 +692,6 @@ static void SafariHandleBattleDebug(void)
     SafariBufferExecCompleted();
 }
 
-static void nullsub_115(void)
+static void SafariCmdEnd(void)
 {
 }

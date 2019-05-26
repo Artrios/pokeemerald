@@ -11,6 +11,7 @@
 #include "text.h"
 #include "text_window.h"
 #include "window.h"
+#include "constants/rgb.h"
 
 // Static type declarations
 
@@ -139,13 +140,13 @@ static void FieldUpdateRegionMap(void)
             sFieldRegionMapHandler->state++;
             break;
         case 1:
-            SetWindowBorderStyle(1, 0, 0x27, 0xd);
+            DrawStdFrameWithCustomTileAndPalette(1, 0, 0x27, 0xd);
             offset = GetStringCenterAlignXOffset(1, gText_Hoenn, 0x38);
             AddTextPrinterParameterized(1, 1, gText_Hoenn, offset, 1, 0, NULL);
             schedule_bg_copy_tilemap_to_vram(0);
-            SetWindowBorderStyle(0, 0, 0x27, 0xd);
+            DrawStdFrameWithCustomTileAndPalette(0, 0, 0x27, 0xd);
             PrintRegionMapSecName();
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 16, 0, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 16, 0, RGB_BLACK);
             sFieldRegionMapHandler->state++;
             break;
         case 2:
@@ -173,7 +174,7 @@ static void FieldUpdateRegionMap(void)
             }
             break;
         case 5:
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
             sFieldRegionMapHandler->state++;
             break;
         case 6:
@@ -196,13 +197,13 @@ static void PrintRegionMapSecName(void)
 {
     if (sFieldRegionMapHandler->regionMap.iconDrawType != MAPSECTYPE_NONE)
     {
-        FillWindowPixelBuffer(0, 0x11);
+        FillWindowPixelBuffer(0, PIXEL_FILL(1));
         AddTextPrinterParameterized(0, 1, sFieldRegionMapHandler->regionMap.mapSecName, 0, 1, 0, NULL);
         schedule_bg_copy_tilemap_to_vram(0);
     }
     else
     {
-        FillWindowPixelBuffer(0, 0x11);
+        FillWindowPixelBuffer(0, PIXEL_FILL(1));
         CopyWindowToVram(0, 3);
     }
 }

@@ -3,284 +3,7 @@
 
 	.section .rodata
 
-gUnknown_0861F3EC:: @ 861F3EC
-	.4byte sub_81C9298
-	.4byte sub_81C941C
-	.4byte sub_81C9924
-	.4byte sub_81C9990
-	.4byte sub_81C99C0
-	.4byte sub_81C9430
-	.4byte sub_81C99D4
-	.4byte sub_81C9298
-	.4byte sub_81C941C
-	.4byte sub_81C9940
-	.4byte sub_81C9990
-	.4byte sub_81C99C0
-	.4byte sub_81C9430
-	.4byte sub_81C99D4
-	.4byte sub_81C9338
-	.4byte sub_81C941C
-	.4byte sub_81C9940
-	.4byte sub_81C9990
-	.4byte sub_81C99C0
-	.4byte sub_81C9430
-	.4byte sub_81C99D4
-	.4byte sub_81C9368
-	.4byte sub_81C941C
-	.4byte sub_81C9940
-	.4byte sub_81C9990
-	.4byte sub_81C99C0
-	.4byte sub_81C9430
-	.4byte sub_81C99D4
-	.4byte sub_81C92CC
-	.4byte sub_81C941C
-	.4byte sub_81C9940
-	.4byte sub_81C9990
-	.4byte sub_81C99C0
-	.4byte sub_81C9430
-	.4byte sub_81C99D4
-	.4byte sub_81C9304
-	.4byte sub_81C941C
-	.4byte sub_81C9940
-	.4byte sub_81C9990
-	.4byte sub_81C99C0
-	.4byte sub_81C9430
-	.4byte sub_81C99D4
-	.4byte sub_81CC4D4
-	.4byte sub_81CC554
-	.4byte sub_81CC5F4
-	.4byte sub_81CC62C
-	.4byte sub_81CC65C
-	.4byte sub_81CC524
-	.4byte sub_81CC670
-	.4byte sub_81CCFD8
-	.4byte sub_81CD070
-	.4byte sub_81CDDD4
-	.4byte sub_81CDE2C
-	.4byte sub_81CDE64
-	.4byte sub_81CD1C0
-	.4byte sub_81CECA0
-	.4byte sub_81CEF3C
-	.4byte sub_81CEFDC
-	.4byte sub_81CF330
-	.4byte sub_81CF3A0
-	.4byte sub_81CF3D0
-	.4byte sub_81CEFF0
-	.4byte sub_81CF3F8
-	.4byte sub_81CD024
-	.4byte sub_81CD070
-	.4byte sub_81CDDD4
-	.4byte sub_81CDE2C
-	.4byte sub_81CDE64
-	.4byte sub_81CD1C0
-	.4byte sub_81CECA0
-	.4byte sub_81CEF98
-	.4byte sub_81CEFDC
-	.4byte sub_81CF368
-	.4byte sub_81CF3A0
-	.4byte sub_81CF3D0
-	.4byte sub_81CEFF0
-	.4byte sub_81CF3F8
-	.4byte sub_81CAAE8
-	.4byte sub_81CAB24
-	.4byte sub_81CB260
-	.4byte sub_81CB29C
-	.4byte sub_81CB2CC
-	.4byte sub_81CAB38
-	.4byte sub_81CB2E0
-	.4byte sub_81CF9BC
-	.4byte sub_81CFA34
-	.4byte sub_81CFDD0
-	.4byte sub_81CFE40
-	.4byte sub_81CFE70
-	.4byte sub_81CFA48
-	.4byte sub_81CFE98
-	.4byte sub_81D0450
-	.4byte sub_81D04A0
-	.4byte sub_81D0978
-	.4byte sub_81D09B0
-	.4byte sub_81D09E0
-	.4byte sub_81D04B8
-	.4byte sub_81D09F4
-	.4byte sub_81CFA04
-	.4byte sub_81CFA34
-	.4byte sub_81CFE08
-	.4byte sub_81CFE40
-	.4byte sub_81CFE70
-	.4byte sub_81CFA48
-	.4byte sub_81CFE98
-
-gUnknown_0861F590:: @ 861F590
-	.incbin "graphics/pokenav/icon2.gbapal"
-
-gUnknown_0861F5B0:: @ 861F5B0
-	.incbin "graphics/pokenav/icon2.4bpp.lz"
-
-gUnknown_0861F994:: @ 861F994
-	.incbin "graphics/pokenav/icon2_unused.4bpp.lz"
-
-gUnknown_0861FA04:: @ 861FA04
-	.byte 0x50
-	.byte 0x0
-	.byte 0x0
-	.byte 0x0
-
-gUnknown_0861FA08:: @ 861FA08
-	window_template 0, 1, 0x16, 0x10, 0x2, 0x0, 0x36
-	null_window_template
-
-gUnknown_0861FA18:: @ 861FA18
-	.4byte gUnknown_085EBED5
-	.4byte gUnknown_085EBED9
-	.4byte gUnknown_085EBEE9
-	.4byte gUnknown_085EBEF9
-	.4byte gUnknown_085EBF0E
-	.4byte gUnknown_085EBF22
-	.4byte gUnknown_085EBF39
-	.4byte gUnknown_085EBF49
-	.4byte gUnknown_085EBF57
-	.4byte gUnknown_085EBF60
-	.4byte gUnknown_085EBF73
-	.4byte gUnknown_085EBF84
-
-gUnknown_0861FA48:: @ 861FA48
-	.byte 0x4
-	.byte 0x1
-	.byte 0x2
-	.byte 0x0
-
-gUnknown_0861FA4C:: @ 861FA4C
-	obj_tiles gUnknown_0861F5B0, 0x1000, 0
-
-gUnknown_0861FA54:: @ 861FA54
-	obj_pal gUnknown_0861F590, 0
-	null_obj_pal
-
-gUnknown_0861FA64:: @ 861FA64
-	obj_tiles gPokenavLeftHeaderHoennMap_Gfx, 0xC00, 2
-
-gUnknown_0861FA6C:: @ 861FA6C
-	obj_tiles gPokenavLeftHeaderMainMenu_Gfx, 0x20, 3
-	obj_tiles gPokenavLeftHeaderCondition_Gfx, 0x20, 1
-	obj_tiles gPokenavLeftHeaderRibbons_Gfx, 0x20, 2
-	obj_tiles gPokenavLeftHeaderMatchCall_Gfx, 0x20, 4
-	obj_tiles gPokenavLeftHeaderHoennMap_Gfx, 0x20, 0
-	obj_tiles gPokenavLeftHeaderHoennMap_Gfx, 0x40, 0
-
-gUnknown_0861FA9C:: @ 861FA9C
-	.4byte gPokenavLeftHeaderParty_Gfx, 1
-	.4byte gPokenavLeftHeaderSearch_Gfx, 1
-	.4byte gPokenavLeftHeaderCool_Gfx, 4
-	.4byte gPokenavLeftHeaderBeauty_Gfx, 1
-	.4byte gPokenavLeftHeaderCute_Gfx, 2
-	.4byte gPokenavLeftHeaderSmart_Gfx, 0
-	.4byte gPokenavLeftHeaderTough_Gfx, 0
-
-gUnknown_0861FAD4:: @ 861FAD4
-	.2byte 0x0
-	.2byte 0x8000
-	.2byte 0x0
-	.2byte 0x0
-
-gUnknown_0861FADC::
-	obj_image_anim_frame 0, 8
-	obj_image_anim_frame 16, 8
-	obj_image_anim_frame 32, 8
-	obj_image_anim_frame 48, 8
-	obj_image_anim_frame 64, 8
-	obj_image_anim_frame 80, 8
-	obj_image_anim_frame 96, 8
-	obj_image_anim_frame 112, 8
-	obj_image_anim_jump 0
-
-gUnknown_0861FB00::
-	.4byte gUnknown_0861FADC
-
-gUnknown_0861FB04:: @ 861FB04
-	spr_template 0, 0, gUnknown_0861FAD4, gUnknown_0861FB00, NULL, gDummySpriteAffineAnimTable, sub_81C7CB4 
-
-gUnknown_0861FB1C::
-	.2byte 0x4000
-	.2byte 0xC000
-	.2byte 0x400
-	.2byte 0x0
-
-gUnknown_0861FB24::
-	.2byte 0x4000
-	.2byte 0x8000
-	.2byte 0x400
-	.2byte 0x0
-
-gUnknown_0861FB2C:: @ 861FB2C
-	spr_template 2, 1, gUnknown_0861FB1C, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
-
-gUnknown_0861FB44:: @ 861FB44
-	spr_template 2, 2, gUnknown_0861FB24, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
-	
-gUnknown_0861FB5C:: @ 861FB5C
-	.incbin "graphics/pokenav/arrows_matchcall.gbapal"
-	
-gUnknown_0861FB7C:: @ 861FB7C
-	.incbin "graphics/pokenav/arrows_matchcall.4bpp.lz"
-
-gUnknown_0861FBE4:: @ 861FBE4
-	.byte 0x0
-	.byte 0x2
-	.byte 0x5
-	.byte 0x0
-
-gUnknown_0861FBE8:: @ 861FBE8
-	.4byte gUnknown_085EBEA8
-	.4byte gUnknown_085EBEB1
-	.4byte gUnknown_085EBEC3
-
-gUnknown_0861FBF4:: @ 861FBF4
-	.byte 0x1
-	.byte 0x4
-	.byte 0x5
-
-gUnknown_0861FBF7:: @ 861FBF7
-	.byte 0x2
-	.byte 0x4
-	.byte 0x6
-	.byte 0x7
-	.byte 0x0
-
-gUnknown_0861FBFC:: @ 861FBFC
-	.4byte gUnknown_0861FB7C
-	.2byte 0xC0
-	.2byte 0xA
-
-gUnknown_0861FC04:: @ 861FC04
-	.4byte gUnknown_0861FB5C
-	.4byte 0x14
-	.4byte 0x0
-	.4byte 0x0
-	
-gUnknown_0861FC14:: @ 861FC14
-	.4byte 0x8000
-	.4byte 0x800
-
-gUnknown_0861FC1C:: @ 861FC1C
-	spr_template 10, 20, gUnknown_0861FC14, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, sub_81C9080
-	
-gUnknown_0861FC34:: @ 861FC34
-	.4byte 0x4000
-	.4byte 0x800
-
-gUnknown_0861FC3C:: @ 861FC3C
-	spr_template 10, 20, gUnknown_0861FC34, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
-
-gUnknown_0861FC54:: @ 861FC54
-	.byte 2
-	.byte 3
-	.byte 4
-	.byte 2
-	.byte 5
-
-gUnknown_0861FC59:: @ 861FC59
-	.byte 0, 1, 4, 4, 4, 4, 0, 1, 2, 4, 4, 4, 0, 1, 2, 3, 4, 4, 5, 6, 7, 4, 4, 4, 8, 9, 10, 11, 12, 13, 0
-
+// pokenav_unk_2.s
 gUnknown_0861FC78:: @ 861FC78
 	.incbin "graphics/pokenav/bg.gbapal"
 
@@ -469,7 +192,8 @@ gUnknown_08620384:: @ 8620384
 	 .4byte 0x4000040
 	 .4byte 0xa2600001
 	 .byte 1, 0, 0, 0
-	 
+
+// pokenav_unk_3.s	 
 gUnknown_08620390:: @ 8620390
 	.string "Becalm fighting emotions.$"
 
@@ -1495,6 +1219,7 @@ gUnknown_08622508:: @ 8622508
 gUnknown_0862250A:: @ 862250A
 	.byte 0, 1, 2, 0, 0, 0
 
+// pokenav_unk_4.s
 gUnknown_08622510:: @ 8622510
 	.incbin "graphics/pokenav/ui_matchcall.gbapal"
 
@@ -1527,7 +1252,7 @@ gUnknown_0862278C:: @ 862278C
 	.4byte 0x20206A
 
 gUnknown_08622794:: @ 8622794
-	.4byte 0x3077
+	.4byte 0x00003077
 
 gUnknown_08622798:: @ 8622798
 	.4byte NULL
@@ -1591,6 +1316,7 @@ gUnknown_08622848:: @ 8622848
 gUnknown_08622850:: @ 8622850
 	spr_template 8, 13, gUnknown_08622848, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
 
+// pokenav_unk_5.s
 gUnknown_08622868:: @ 8622868
 	.incbin "graphics/pokenav/8622868.gbapal"
 
@@ -1724,6 +1450,10 @@ gUnknown_086231C8:: @ 86231C8
 gUnknown_086231D0:: @ 86231D0
 	spr_template 6, 11, gUnknown_086231C8, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, sub_81CCEF4
 
+// pokenav_unk_6.s
+// <none>
+
+// pokenav_unk_7.s
 gUnknown_086231E8:: @ 86231E8
 	.incbin "graphics/pokenav/86231E8.gbapal"
 
@@ -1756,6 +1486,7 @@ gUnknown_08623374:: @ 8623374
 gUnknown_0862337C:: @ 862337C
 	window_template 1, 13, 0x1C, 3, 2, 15, 0x44
 
+// pokenav_unk_8.s
 gUnknown_08623384:: @ 8623384
 	.4byte NULL
 	.4byte sub_81CE37C
@@ -1816,6 +1547,7 @@ gUnknown_086235D4:: @ 86235D4
 	.string "{UNK_SPACER}$"
 	.align 2
 
+// pokenav_unk_9.s
 gUnknown_086235D8:: @ 86235D8
 	.4byte sub_81CFB8C
 	.4byte sub_81CFC2C
@@ -1863,6 +1595,7 @@ gUnknown_086237F4:: @ 86237F4
 	.string "{UNK_SPACER}$"
 	.align 2
 
+// pokenav_unk_10.s
 gUnknown_086237F8:: @ 86237F8
 	.byte 1, 1, 0, 0
 	.byte 3, 4, 1, 0

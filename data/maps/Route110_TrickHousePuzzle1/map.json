@@ -22,8 +22,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 1,
-      "trainer_sight_or_berry_tree_id": 6,
+      "trainer_type": "1",
+      "trainer_sight_or_berry_tree_id": "6",
       "script": "Route110_TrickHousePuzzle1_EventScript_26B948",
       "flag": "0"
     },
@@ -35,8 +35,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 1,
-      "trainer_sight_or_berry_tree_id": 2,
+      "trainer_type": "1",
+      "trainer_sight_or_berry_tree_id": "2",
       "script": "Route110_TrickHousePuzzle1_EventScript_26B95F",
       "flag": "0"
     },
@@ -48,8 +48,8 @@
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 1,
-      "trainer_sight_or_berry_tree_id": 2,
+      "trainer_type": "1",
+      "trainer_sight_or_berry_tree_id": "2",
       "script": "Route110_TrickHousePuzzle1_EventScript_26B976",
       "flag": "0"
     },
@@ -61,9 +61,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_13"
     },
     {
@@ -74,9 +74,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_12"
     },
     {
@@ -87,9 +87,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_14"
     },
     {
@@ -100,9 +100,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_17"
     },
     {
@@ -113,9 +113,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_16"
     },
     {
@@ -126,9 +126,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_15"
     },
     {
@@ -139,9 +139,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_19"
     },
     {
@@ -152,9 +152,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_18"
     },
     {
@@ -165,9 +165,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_1B"
     },
     {
@@ -178,9 +178,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_29140E",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Route110_TrickHousePuzzle1_EventScript_ItemOrangeMail",
       "flag": "FLAG_ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL"
     },
     {
@@ -191,9 +191,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_1C"
     },
     {
@@ -204,9 +204,9 @@
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": 0,
-      "trainer_sight_or_berry_tree_id": 0,
-      "script": "Route110_TrickHousePuzzle1_EventScript_2906BB",
+      "trainer_type": "0",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_1E"
     }
   ],
