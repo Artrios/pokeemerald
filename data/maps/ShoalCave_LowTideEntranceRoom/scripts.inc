@@ -3,6 +3,7 @@ ShoalCave_LowTideEntranceRoom_MapScripts:: @ 8236DBA
 	.byte 0
 
 ShoalCave_LowTideEntranceRoom_OnTransition: @ 8236DC0
+	setflag FLAG_VISITED_ROUTE125
 	special UpdateShoalTideFlag
 	goto_if_set FLAG_SYS_SHOAL_TIDE, ShoalCave_LowTideEntranceRoom_EventScript_SetHighTide
 	goto ShoalCave_LowTideEntranceRoom_EventScript_SetLowTide

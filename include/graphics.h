@@ -3774,6 +3774,8 @@ extern const u32 gItemIconPalette_HoennFossil[];
 extern const u32 gItemIcon_ClawFossil[];
 extern const u32 gItemIcon_DevonScope[];
 extern const u32 gItemIconPalette_DevonScope[];
+extern const u32 gItemIcon_EonFlute[];
+extern const u32 gItemIconPalette_EonFlute[];
 // TMs/HMs
 extern const u32 gItemIcon_TM[];
 extern const u32 gItemIconPalette_FightingTMHM[];

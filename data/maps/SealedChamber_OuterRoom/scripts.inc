@@ -11,6 +11,9 @@ SealedChamber_OuterRoom_OnResume: @ 8239116
 
 SealedChamber_OuterRoom_OnTransition: @ 8239127
 	setflag FLAG_LANDMARK_SEALED_CHAMBER
+	setflag FLAG_VISITED_ROUTE132
+	setflag FLAG_VISITED_ROUTE133
+	setflag FLAG_VISITED_ROUTE124
 	end
 
 SealedChamber_OuterRoom_OnLoad: @ 823912B

@@ -30,6 +30,7 @@ IslandCave_EventScript_HideRegiEntrance:: @ 8238E62
 
 IslandCave_OnTransition: @ 8238E99
 	setflag FLAG_LANDMARK_ISLAND_CAVE
+	setflag FLAG_VISITED_ROUTE105
 	call IslandCave_EventScript_ClearSteps
 	call_if_unset FLAG_DEFEATED_REGICE, IslandCave_EventScript_ShowRegice
 	end

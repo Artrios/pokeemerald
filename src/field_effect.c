@@ -65,6 +65,7 @@ static u8 PokecenterHealEffectHelper(s16, s16);
 static void HallOfFameRecordEffectHelper(s16, s16, s16, u8);
 
 static void FieldCallback_Fly(void);
+static void FieldCallback_Fly_2(void);
 static void task00_8084310(u8);
 static void mapldr_08084390(void);
 static void c3_080843F8(u8);
@@ -269,6 +270,12 @@ const u8 gUnknown_0855C170[] = INCBIN_U8("graphics/unknown/unknown_55C170.4bpp")
 const u8 gUnknown_0855C190[] = INCBIN_U8("graphics/unknown/unknown_55C190.4bpp");
 const u8 gUnknown_0855C1B0[] = INCBIN_U8("graphics/unknown/unknown_55C1B0.4bpp");
 const u8 gUnknown_0855C1D0[] = INCBIN_U8("graphics/unknown/unknown_55C1D0.4bpp");
+
+void Fldeff_FlyLand(void)
+{
+	SetMainCallback2(CB2_ReturnToField);
+	gFieldCallback = FieldCallback_Fly_2;
+}
 
 bool8 (*const gFieldEffectScriptFuncs[])(u8 **, u32 *) =
 {
@@ -1303,6 +1310,17 @@ static void FieldCallback_Fly(void)
     ScriptContext2_Enable();
     FreezeObjectEvents();
     gFieldCallback = NULL;
+}
+
+static void FieldCallback_Fly_2(void)
+{
+	u8 taskId;
+    FadeInFromBlack();
+	taskId = CreateTask(task00_8084310, 0);
+	gTasks[taskId].data[0] = 1; //do landing anim only
+	ScriptContext2_Enable();
+    FreezeObjectEvents();
+	gFieldCallback = NULL;
 }
 
 static void task00_8084310(u8 taskId)

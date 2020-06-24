@@ -5,6 +5,9 @@ FortreeCity_MapScripts:: @ 81E25A4
 
 FortreeCity_OnTransition: @ 81E25AF
 	setflag FLAG_VISITED_FORTREE_CITY
+	setflag FLAG_VISITED_ROUTE118
+	setflag FLAG_VISITED_ROUTE119
+	setflag FLAG_VISITED_ROUTE123
 	end
 
 FortreeCity_OnResume: @ 81E25B3

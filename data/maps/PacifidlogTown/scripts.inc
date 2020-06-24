@@ -5,6 +5,8 @@ PacifidlogTown_MapScripts:: @ 81EBAB1
 
 PacifidlogTown_OnTransition: @ 81EBABC
 	setflag FLAG_VISITED_PACIFIDLOG_TOWN
+	setflag FLAG_VISITED_ROUTE127
+	setflag FLAG_VISITED_ROUTE128
 	end
 
 PacifidlogTown_OnResume: @ 81EBAC0
