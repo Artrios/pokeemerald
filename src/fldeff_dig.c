@@ -16,7 +16,7 @@ static void sub_8135780(void);
 // text
 bool8 SetUpFieldMove_Dig(void)
 {
-    if (CanUseEscapeRopeOnCurrMap() == TRUE)
+    if (CanUseDigOrEscapeRopeOnCurMap() == TRUE)
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = hm2_dig;
@@ -57,7 +57,7 @@ static void sub_8135780(void)
     }
     else
     {
-        taskId = CreateTask(task08_080A1C44, 8);
+        taskId = CreateTask(Task_UseDigEscapeRopeOnField, 8);
         gTasks[taskId].data[0] = 0;
     }
 }

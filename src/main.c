@@ -1,6 +1,6 @@
 #include "global.h"
 #include "crt0.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "link.h"
 #include "link_rfu.h"
 #include "librfu.h"
@@ -75,7 +75,7 @@ static EWRAM_DATA u16 gTrainerId = 0;
 static void UpdateLinkAndCallCallbacks(void);
 static void InitMainCallbacks(void);
 static void CallCallbacks(void);
-static void SeedRngWithRtc(void);
+//static void SeedRngWithRtc(void);
 static void ReadKeys(void);
 void InitIntrHandlers(void);
 static void WaitForVBlank(void);
@@ -85,7 +85,27 @@ void EnableVCountIntrAtLine150(void);
 
 void AgbMain()
 {
+#if MODERN
+    // Modern compilers are liberal with the stack on entry to this function,
+    // so RegisterRamReset may crash if it resets IWRAM.
+    RegisterRamReset(RESET_ALL & ~RESET_IWRAM);
+    asm("mov\tr1, #0xC0\n"
+        "\tlsl\tr1, r1, #0x12\n"
+        "\tmov r2, #0xFC\n"
+        "\tlsl r2, r2, #0x7\n"
+        "\tadd\tr2, r1, r2\n"
+        "\tmov\tr0, #0\n"
+        "\tmov\tr3, r0\n"
+        "\tmov\tr4, r0\n"
+        "\tmov\tr5, r0\n"
+        ".LCU0:\n"
+        "\tstmia r1!, {r0, r3, r4, r5}\n"
+        "\tcmp\tr1, r2\n"
+        "\tbcc\t.LCU0\n"
+    );
+#else
     RegisterRamReset(RESET_ALL);
+#endif //MODERN
     *(vu16 *)BG_PLTT = 0x7FFF;
     InitGpuRegManager();
     REG_WAITCNT = WAITCNT_PREFETCH_ENABLE | WAITCNT_WS0_S_1 | WAITCNT_WS0_N_3;
@@ -98,6 +118,7 @@ void AgbMain()
     CheckForFlashMemory();
     InitMainCallbacks();
     InitMapMusic();
+    //SeedRngWithRtc(); see comment at SeedRngWithRtc declaration below
     ClearDma3Requests();
     ResetBgs();
     SetDefaultFontsPointer();
@@ -207,6 +228,14 @@ void EnableVCountIntrAtLine150(void)
     SetGpuReg(REG_OFFSET_DISPSTAT, gpuReg | DISPSTAT_VCOUNT_INTR);
     EnableInterrupts(INTR_FLAG_VCOUNT);
 }
+
+// oops! FRLG commented this out to remove RTC, however Emerald didnt undo this!
+//static void SeedRngWithRtc(void)
+//{
+//    u32 seed = RtcGetMinuteCount();
+//    seed = (seed >> 16) ^ (seed & 0xFFFF);
+//    SeedRng(seed);
+//}
 
 void InitKeys(void)
 {

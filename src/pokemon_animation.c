@@ -177,9 +177,9 @@ static void SpriteCB_SetDummyOnAnimEnd(struct Sprite *sprite);
 #define STRUCT_COUNT 4
 
 // IWRAM bss
-static IWRAM_DATA struct UnkAnimStruct sUnknown_03001240[STRUCT_COUNT];
-static IWRAM_DATA u8 sUnknown_03001270;
-static IWRAM_DATA bool32 sUnknown_03001274;
+static struct UnkAnimStruct sUnknown_03001240[STRUCT_COUNT];
+static u8 sUnknown_03001270;
+static bool32 sUnknown_03001274;
 
 // const rom data
 static const u8 sSpeciesToBackAnimSet[] =
@@ -861,16 +861,27 @@ u8 GetSpeciesBackAnimSet(u16 species)
 }
 
 #define tState  data[0]
-#define tPtrLO  data[1]
-#define tPtrHI  data[2]
+#define tPtrHi  data[1]
+#define tPtrLo  data[2]
 #define tAnimId data[3]
 #define tSaved0 data[4]
 #define tSaved2 data[5]
 
+// BUG: In vanilla, tPtrLo is read as an s16, so if bit 15 of the
+// address were to be set it would cause the pointer to be read
+// as 0xFFFFXXXX instead of the desired 0x02YYXXXX.
+// By dumb luck, this is not an issue in vanilla. However,
+// changing the link order revealed this bug.
+#if MODERN
+#define ANIM_SPRITE(taskId)   ((struct Sprite *)((gTasks[taskId].tPtrHi << 16) | ((u16)gTasks[taskId].tPtrLo)))
+#else
+#define ANIM_SPRITE(taskId)   ((struct Sprite *)((gTasks[taskId].tPtrHi << 16) | (gTasks[taskId].tPtrLo)))
+#endif //MODERN
+
 static void Task_HandleMonAnimation(u8 taskId)
 {
     u32 i;
-    struct Sprite *sprite = (struct Sprite*)(u32)((gTasks[taskId].tPtrLO << 0x10) | (gTasks[taskId].tPtrHI));
+    struct Sprite *sprite = ANIM_SPRITE(taskId);
 
     if (gTasks[taskId].tState == 0)
     {
@@ -900,8 +911,8 @@ static void Task_HandleMonAnimation(u8 taskId)
 void LaunchAnimationTaskForFrontSprite(struct Sprite *sprite, u8 frontAnimId)
 {
     u8 taskId = CreateTask(Task_HandleMonAnimation, 128);
-    gTasks[taskId].tPtrLO = (u32)(sprite) >> 0x10;
-    gTasks[taskId].tPtrHI = (u32)(sprite);
+    gTasks[taskId].tPtrHi = (u32)(sprite) >> 0x10;
+    gTasks[taskId].tPtrLo = (u32)(sprite);
     gTasks[taskId].tAnimId = frontAnimId;
 }
 
@@ -916,8 +927,8 @@ void LaunchAnimationTaskForBackSprite(struct Sprite *sprite, u8 backAnimSet)
     u8 nature, taskId, animId, battlerId;
 
     taskId = CreateTask(Task_HandleMonAnimation, 128);
-    gTasks[taskId].tPtrLO = (u32)(sprite) >> 0x10;
-    gTasks[taskId].tPtrHI = (u32)(sprite);
+    gTasks[taskId].tPtrHi = (u32)(sprite) >> 0x10;
+    gTasks[taskId].tPtrLo = (u32)(sprite);
 
     battlerId = sprite->data[0];
     nature = GetNature(&gPlayerParty[gBattlerPartyIndexes[battlerId]]);
@@ -927,8 +938,8 @@ void LaunchAnimationTaskForBackSprite(struct Sprite *sprite, u8 backAnimSet)
 }
 
 #undef tState
-#undef tPtrLO
-#undef tPtrHI
+#undef tPtrHi
+#undef tPtrLo
 #undef tAnimId
 #undef tSaved0
 #undef tSaved2
@@ -959,7 +970,7 @@ static void SetAffineData(struct Sprite *sprite, s16 xScale, s16 yScale, u16 rot
 
 static void HandleStartAffineAnim(struct Sprite *sprite)
 {
-    sprite->oam.affineMode = 3;
+    sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
     sprite->affineAnims = sSpriteAffineAnimTable_860AD68;
 
     if (sUnknown_03001274 == TRUE)
@@ -1017,7 +1028,7 @@ static u8 sub_817F758(void)
 
 static void sub_817F77C(struct Sprite *sprite)
 {
-    sprite->oam.affineMode = 1;
+    sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
     CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
 
     if (sUnknown_03001274 == TRUE)
@@ -1029,7 +1040,7 @@ static void sub_817F77C(struct Sprite *sprite)
 
         FreeOamMatrix(sprite->oam.matrixNum);
         sprite->oam.matrixNum |= (sprite->hFlip << 3);
-        sprite->oam.affineMode = 0;
+        sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
     }
 }
 
@@ -1127,11 +1138,9 @@ static void pokemonanimfunc_04(struct Sprite *sprite)
     sprite->callback = sub_817F978;
 }
 
-#ifdef NONMATCHING
 static void sub_817F9F4(struct Sprite *sprite)
 {
     s32 counter = sprite->data[2];
-
     if (counter > 384)
     {
         sprite->callback = SpriteCB_SetDummyOnAnimEnd;
@@ -1140,8 +1149,7 @@ static void sub_817F9F4(struct Sprite *sprite)
     }
     else
     {
-        s32 divCounter = counter / 128;
-
+        s16 divCounter = counter / 128;
         switch (divCounter)
         {
         case 0:
@@ -1150,84 +1158,14 @@ static void sub_817F9F4(struct Sprite *sprite)
             break;
         case 2:
         case 3:
-            sprite->pos2.y = -(Sin(counter - 256, sprite->data[0] * 3));
+            counter -= 256;
+            sprite->pos2.y = -(Sin(counter, sprite->data[0] * 3));
             break;
         }
     }
 
     sprite->data[2] += 12;
 }
-
-#else
-NAKED
-static void sub_817F9F4(struct Sprite *sprite)
-{
-    asm(".syntax unified\n\
-            push {r4,lr}\n\
-    adds r4, r0, 0\n\
-    movs r0, 0x32\n\
-    ldrsh r1, [r4, r0]\n\
-    movs r0, 0xC0\n\
-    lsls r0, 1\n\
-    cmp r1, r0\n\
-    ble _0817FA14\n\
-    ldr r0, =SpriteCB_SetDummyOnAnimEnd\n\
-    str r0, [r4, 0x1C]\n\
-    movs r0, 0\n\
-    strh r0, [r4, 0x24]\n\
-    b _0817FA5E\n\
-    .pool\n\
-_0817FA14:\n\
-    adds r0, r1, 0\n\
-    cmp r1, 0\n\
-    bge _0817FA1C\n\
-    adds r0, 0x7F\n\
-_0817FA1C:\n\
-    asrs r2, r0, 7\n\
-    lsls r0, r2, 16\n\
-    asrs r0, 16\n\
-    cmp r0, 0\n\
-    blt _0817FA60\n\
-    cmp r0, 0x1\n\
-    ble _0817FA48\n\
-    cmp r0, 0x3\n\
-    bgt _0817FA60\n\
-    ldr r2, =0xffffff00\n\
-    adds r1, r2\n\
-    lsls r0, r1, 16\n\
-    asrs r0, 16\n\
-    movs r1, 0x2E\n\
-    ldrsh r2, [r4, r1]\n\
-    lsls r1, r2, 1\n\
-    adds r1, r2\n\
-    lsls r1, 16\n\
-    b _0817FA56\n\
-    .pool\n\
-_0817FA48:\n\
-    lsls r0, r2, 7\n\
-    subs r0, r1, r0\n\
-    lsls r0, 16\n\
-    asrs r0, 16\n\
-    movs r2, 0x2E\n\
-    ldrsh r1, [r4, r2]\n\
-    lsls r1, 17\n\
-_0817FA56:\n\
-    asrs r1, 16\n\
-    bl Sin\n\
-    negs r0, r0\n\
-_0817FA5E:\n\
-    strh r0, [r4, 0x26]\n\
-_0817FA60:\n\
-    ldrh r0, [r4, 0x32]\n\
-    adds r0, 0xC\n\
-    strh r0, [r4, 0x32]\n\
-    pop {r4}\n\
-    pop {r0}\n\
-    bx r0\n\
-        .syntax divided");
-}
-
-#endif // NONMATCHING
 
 static void pokemonanimfunc_1E(struct Sprite *sprite)
 {

@@ -9,6 +9,7 @@
 #include "string_util.h"
 #include "new_game.h"
 #include "mevent.h"
+#include "constants/mevent.h"
 #include "constants/species.h"
 
 static EWRAM_DATA bool32 gUnknown_02022C70 = FALSE;
@@ -131,8 +132,8 @@ void DestroyWonderCard(void)
     sub_801B368();
     sub_801B9F8();
     ClearRamScript();
-    sub_809D4D8();
-    sub_809D570();
+    ClearMysteryEventFlags();
+    ClearMysteryEventVars();
     ClearEReaderTrainer(&gSaveBlock2Ptr->frontier.ereaderTrainer);
 }
 
@@ -483,9 +484,13 @@ static void sub_801B7D8(u32 command)
         }
 
         if (dest == NULL)
+        {
             AGB_ASSERT(0);
+        }
         else if (++(*dest) > 999)
+        {
             *dest = 999;
+        }
     }
 }
 
@@ -493,7 +498,7 @@ u16 mevent_081445C0(u32 command)
 {
     switch (command)
     {
-        case 0:
+        case GET_CARD_BATTLES_WON_INTERNAL:
         {
             struct WonderCard *data = &gSaveBlock1Ptr->unk_322C.wonderCard.data;
             if (data->unk_08_0 == 2)
@@ -503,7 +508,7 @@ u16 mevent_081445C0(u32 command)
             }
             break;
         }
-        case 1:
+        case 1: // Never occurs
         {
             struct WonderCard *data = &gSaveBlock1Ptr->unk_322C.wonderCard.data;
             if (data->unk_08_0 == 2)
@@ -513,7 +518,7 @@ u16 mevent_081445C0(u32 command)
             }
             break;
         }
-        case 2:
+        case 2: // Never occurs
         {
             struct WonderCard *data = &gSaveBlock1Ptr->unk_322C.wonderCard.data;
             if (data->unk_08_0 == 2)
@@ -523,14 +528,14 @@ u16 mevent_081445C0(u32 command)
             }
             break;
         }
-        case 3:
+        case GET_NUM_STAMPS_INTERNAL:
         {
             struct WonderCard *data = &gSaveBlock1Ptr->unk_322C.wonderCard.data;
             if (data->unk_08_0 == 1)
                 return sub_801B4CC();
             break;
         }
-        case 4:
+        case GET_MAX_STAMPS_INTERNAL:
         {
             struct WonderCard *data = &gSaveBlock1Ptr->unk_322C.wonderCard.data;
             if (data->unk_08_0 == 1)

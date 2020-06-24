@@ -1,38 +1,47 @@
 LavaridgeTown_Mart_MapScripts:: @ 81FF9CD
 	.byte 0
 
-LavaridgeTown_Mart_EventScript_1FF9CE:: @ 81FF9CE
+LavaridgeTown_Mart_EventScript_Clerk:: @ 81FF9CE
 	lock
 	faceplayer
-	message gUnknown_08272A21
+	message gText_HowMayIServeYou
 	waitmessage
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
-	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
-	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
-	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
-	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
-	pokemart Pokemart_No_Pokedex
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	pokemart LavaridgeTown_Mart_Pokemart
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
-LavaridgeTown_Mart_EventScript_1FF9FE:: @ 81FF9FE
-	msgbox LavaridgeTown_Mart_Text_1FFA10, MSGBOX_NPC
+	.align 2
+LavaridgeTown_Mart_Pokemart: @ 81FF9E8
+	.2byte ITEM_GREAT_BALL
+	.2byte ITEM_SUPER_POTION
+	.2byte ITEM_ANTIDOTE
+	.2byte ITEM_PARALYZE_HEAL
+	.2byte ITEM_AWAKENING
+	.2byte ITEM_BURN_HEAL
+	.2byte ITEM_REVIVE
+	.2byte ITEM_SUPER_REPEL
+	.2byte ITEM_X_SPEED
+	.2byte ITEM_NONE
+	release
 	end
 
-LavaridgeTown_Mart_EventScript_1FFA07:: @ 81FFA07
-	msgbox LavaridgeTown_Mart_Text_1FFA83, MSGBOX_NPC
+LavaridgeTown_Mart_EventScript_ExpertM:: @ 81FF9FE
+	msgbox LavaridgeTown_Mart_Text_XSpeedFirstStrike, MSGBOX_NPC
 	end
 
-LavaridgeTown_Mart_Text_1FFA10: @ 81FFA10
-	.string "Use X Speed to add to a Pokémon's\n"
-	.string "Speed in battle.\p"
+LavaridgeTown_Mart_EventScript_OldWoman:: @ 81FFA07
+	msgbox LavaridgeTown_Mart_Text_LocalSpecialtyOnMtChimney, MSGBOX_NPC
+	end
+
+LavaridgeTown_Mart_Text_XSpeedFirstStrike: @ 81FFA10
+	.string "Use X SPEED to add to a POKéMON's\n"
+	.string "SPEED in battle.\p"
 	.string "That will help it get in the first\n"
 	.string "strike--a decided advantage!$"
 
-LavaridgeTown_Mart_Text_1FFA83: @ 81FFA83
-	.string "On Mt. Chimney's peak, there's a local\n"
+LavaridgeTown_Mart_Text_LocalSpecialtyOnMtChimney: @ 81FFA83
+	.string "On MT. CHIMNEY's peak, there's a local\n"
 	.string "specialty that you can buy only there.\p"
-	.string "Give it to a Pokémon--it will be elated.$"
+	.string "Give it to a POKéMON--it will be elated.$"
 

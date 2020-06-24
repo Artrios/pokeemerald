@@ -12,14 +12,17 @@
 #define ABILITYEFFECT_ENDTURN                    0x1
 #define ABILITYEFFECT_MOVES_BLOCK                0x2
 #define ABILITYEFFECT_ABSORBING                  0x3
-#define ABILITYEFFECT_MOVE_END                   0x4
-#define ABILITYEFFECT_IMMUNITY                   0x5
-#define ABILITYEFFECT_FORECAST                   0x6
-#define ABILITYEFFECT_SYNCHRONIZE                0x7
-#define ABILITYEFFECT_ATK_SYNCHRONIZE            0x8
-#define ABILITYEFFECT_INTIMIDATE1                0x9
-#define ABILITYEFFECT_INTIMIDATE2                0xA
-#define ABILITYEFFECT_TRACE                      0xB
+#define ABILITYEFFECT_MOVE_END_ATTACKER          0x4
+#define ABILITYEFFECT_MOVE_END                   0x5
+#define ABILITYEFFECT_IMMUNITY                   0x6
+#define ABILITYEFFECT_FORECAST                   0x7
+#define ABILITYEFFECT_SYNCHRONIZE                0x8
+#define ABILITYEFFECT_ATK_SYNCHRONIZE            0x9
+#define ABILITYEFFECT_INTIMIDATE1                0xA
+#define ABILITYEFFECT_INTIMIDATE2                0xB
+#define ABILITYEFFECT_TRACE1                     0xC
+#define ABILITYEFFECT_TRACE2                     0xD
+#define ABILITYEFFECT_MOVE_END_OTHER             0xE
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
 
 #define ITEMEFFECT_ON_SWITCH_IN                 0x0
@@ -64,6 +67,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check);
 bool8 AreAllMovesUnusable(void);
 u8 GetImprisonedMovesCount(u8 battlerId, u16 move);
 u8 DoFieldEndTurnEffects(void);
+s32 GetDrainedBigRootHp(u32 battler, s32 hp);
 u8 DoBattlerEndTurnEffects(void);
 bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
@@ -71,7 +75,7 @@ void TryClearRageAndFuryCutter(void);
 u8 AtkCanceller_UnableToUseMove(void);
 u8 AtkCanceller_UnableToUseMove2(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
-u8 CastformDataTypeChange(u8 battlerId);
+u8 TryWeatherFormChange(u8 battlerId);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u8 ability, u8 special, u16 moveArg);
 u32 GetBattlerAbility(u8 battlerId);
@@ -79,11 +83,14 @@ u32 IsAbilityOnSide(u32 battlerId, u32 ability);
 u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
 u32 IsAbilityOnField(u32 ability);
 u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
+u32 IsAbilityPreventingEscape(u32 battlerId);
+bool32 CanBattlerEscape(u32 battlerId); // no ability check
 void BattleScriptExecute(const u8* BS_ptr);
 void BattleScriptPushCursorAndCallback(const u8* BS_ptr);
 u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
 void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
+u32 SetRandomTarget(u32 battlerId);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 u8 IsMonDisobedient(void);
 u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
@@ -100,8 +107,12 @@ u16 GetTypeModifier(u8 atkType, u8 defType);
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
 bool32 CanMegaEvolve(u8 battlerId);
-void UndoMegaEvolution(u8 monId);
+void UndoMegaEvolution(u32 monId);
+void UndoFormChange(u32 monId, u32 side);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
+struct Pokemon *GetIllusionMonPtr(u32 battlerId);
+void ClearIllusionMon(u32 battlerId);
+bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
 
 #endif // GUARD_BATTLE_UTIL_H
