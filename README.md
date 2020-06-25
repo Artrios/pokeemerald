@@ -1,38 +1,32 @@
-# Pokémon Emerald
+# About this branch
+This is a decapitalized (all-caps text replaced with proper capitalization) version of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly, originally made by [**Wyrserth**](https://github.com/Wyrserth) and adapted to the current structure of the project.
 
-[![Build Status][travis-badge]][travis]
+As the disassembly continues to develop, I'll try to keep up this branch as updated as possible.
 
-This is a decapitalized (all-caps text replaced with proper capitalization) disassembly of Pokémon Emerald.
+It builds the following ROM:
 
-It builds the following rom:
-
-* pokeemerald.gba `sha1: d90e55a563b7a65a88bc0a34fee22bfcff678cb0`
+* pokeemerald.gba `sha1: 8C19F2555E10DFF32A9914CEAC360B018AF42E6C`
 
 To set up the repository, see [INSTALL.md](INSTALL.md).
 
 
 ## See also
 
-* Disassembly of [**Pokémon Red/Blue**][pokered]
-* Disassembly of [**Pokémon Yellow**][pokeyellow]
-* Disassembly of [**Pokémon Gold**][pokegold]
-* Disassembly of [**Pokémon Crystal**][pokecrystal]
-* Disassembly of [**Pokémon Pinball**][pokepinball]
-* Disassembly of [**Pokémon TCG**][poketcg]
-* Disassembly of [**Pokémon Ruby**][pokeruby]
-* Disassembly of [**Pokémon Fire Red**][pokefirered]
-* Discord: [**pret**][Discord]
-* irc: **irc.freenode.net** [**#pret**][irc]
+Other disassembly and/or decompilation projects:
+* [**Pokémon Red and Blue**](https://github.com/pret/pokered)
+* [**Pokémon Gold and Silver (Space World '97 demo)**](https://github.com/pret/pokegold-spaceworld)
+* [**Pokémon Yellow**](https://github.com/pret/pokeyellow)
+* [**Pokémon Trading Card Game**](https://github.com/pret/poketcg)
+* [**Pokémon Pinball**](https://github.com/pret/pokepinball)
+* [**Pokémon Stadium**](https://github.com/pret/pokestadium)
+* [**Pokémon Gold and Silver**](https://github.com/pret/pokegold)
+* [**Pokémon Crystal**](https://github.com/pret/pokecrystal)
+* [**Pokémon Ruby and Sapphire**](https://github.com/pret/pokeruby)
+* [**Pokémon Pinball: Ruby & Sapphire**](https://github.com/pret/pokepinballrs)
+* [**Pokémon FireRed and LeafGreen**](https://github.com/pret/pokefirered)
+* [**Pokémon Mystery Dungeon: Red Rescue Team**](https://github.com/pret/pmd-red)
 
-[pokered]: https://github.com/pret/pokered
-[pokeyellow]: https://github.com/pret/pokeyellow
-[pokegold]: https://github.com/pret/pokegold
-[pokecrystal]: https://github.com/pret/pokecrystal
-[pokepinball]: https://github.com/pret/pokepinball
-[poketcg]: https://github.com/pret/poketcg
-[pokeruby]: https://github.com/pret/pokeruby
-[pokefirered]: https://github.com/pret/pokefirered
-[Discord]: https://discord.gg/6EuWgX9
-[irc]: https://kiwiirc.com/client/irc.freenode.net/?#pret
-[travis]: https://travis-ci.org/pret/pokeemerald
-[travis-badge]: https://travis-ci.org/pret/pokeemerald.svg?branch=master
+
+## Contacts
+
+You can find us on [Discord](https://discord.gg/d5dubZ3) and [IRC](https://kiwiirc.com/client/irc.freenode.net/?#pret).

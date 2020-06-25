@@ -105,10 +105,10 @@ static const struct ResetRtcStruct sUnknown_08510428[5] =
 static const struct OamData sOamData_08510464 =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(8x8),
     .x = 0,
     .matrixNum = 0,
@@ -142,7 +142,7 @@ static const union AnimCmd sSpriteAnim_85104CC[] =
 
 static const union AnimCmd sSpriteAnim_85104D4[] =
 {
-    ANIMCMD_FRAME(0, 158, .vFlip = TRUE),
+    ANIMCMD_FRAME(0, 30, .vFlip = TRUE),
     ANIMCMD_JUMP(0),
 };
 
@@ -293,26 +293,26 @@ static void HideChooseTimeWindow(u8 windowId)
 {
     ClearStdWindowAndFrameToTransparent(windowId, FALSE);
     RemoveWindow(windowId);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
 }
 
 static void PrintTime(u8 windowId, u8 x, u8 y, u16 days, u8 hours, u8 minutes, u8 seconds)
 {
     u8 *dest = gStringVar4;
 
-    ConvertIntToDecimalStringN(gStringVar1, days, 1, 4);
+    ConvertIntToDecimalStringN(gStringVar1, days, STR_CONV_MODE_RIGHT_ALIGN, 4);
     dest = StringCopy(dest, gStringVar1);
     dest = StringCopy(dest, gText_Day);
 
-    ConvertIntToDecimalStringN(gStringVar1, hours, 1, 3);
+    ConvertIntToDecimalStringN(gStringVar1, hours, STR_CONV_MODE_RIGHT_ALIGN, 3);
     dest = StringCopy(dest, gStringVar1);
     dest = StringCopy(dest, gText_Colon3);
 
-    ConvertIntToDecimalStringN(gStringVar1, minutes, 2, 2);
+    ConvertIntToDecimalStringN(gStringVar1, minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
     dest = StringCopy(dest, gStringVar1);
     dest = StringCopy(dest, gText_Colon3);
 
-    ConvertIntToDecimalStringN(gStringVar1, seconds, 2, 2);
+    ConvertIntToDecimalStringN(gStringVar1, seconds, STR_CONV_MODE_LEADING_ZEROS, 2);
     dest = StringCopy(dest, gStringVar1);
 
     AddTextPrinterParameterized(windowId, 1, gStringVar4, x, y, TEXT_SPEED_FF, NULL);
@@ -323,7 +323,7 @@ static void ShowChooseTimeWindow(u8 windowId, u16 days, u8 hours, u8 minutes, u8
     DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, 0x214, 0xE);
     PrintTime(windowId, 0, 1, days, hours, minutes, seconds);
     AddTextPrinterParameterized(windowId, 1, gText_Confirm2, 126, 1, 0, NULL);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
 }
 
 static bool32 MoveTimeUpDown(s16 *val, int minVal, int maxVal, u16 keys)
@@ -470,12 +470,12 @@ static void sub_809F048(void)
     clear_scheduled_bg_copies_to_vram();
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBackgroundTemplates, ARRAY_COUNT(sBackgroundTemplates));
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     ShowBg(0);
     InitWindows(sUnknown_08510408);
     DeactivateAllTextPrinters();
-    sub_81973A4();
+    LoadMessageBoxAndBorderGfx();
 }
 
 static void CB2_ResetRtcScreen(void)
@@ -498,7 +498,7 @@ static void ShowMessage(const u8 *str)
 {
     DrawDialogFrameWithCustomTileAndPalette(1, FALSE, 0x200, 0xF);
     AddTextPrinterParameterized(1, 1, str, 0, 1, 0, NULL);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
 }
 
 static void Task_ShowResetRtcPrompt(u8 taskId)
@@ -529,7 +529,7 @@ static void Task_ShowResetRtcPrompt(u8 taskId)
             gSaveBlock2Ptr->lastBerryTreeUpdate.seconds);
         ShowMessage(gText_ResetRTCConfirmCancel);
         CopyWindowToVram(0, 2);
-        schedule_bg_copy_tilemap_to_vram(0);
+        ScheduleBgCopyTilemapToVram(0);
         data[0]++;
     case 1:
         if (gMain.newKeys & B_BUTTON)
@@ -559,7 +559,7 @@ static void Task_ResetRtcScreen(u8 taskId)
     case 1:
         if (!gPaletteFade.active)
         {
-            if (gSaveFileStatus == 0 || gSaveFileStatus == 2)
+            if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
             {
                 ShowMessage(gText_NoSaveFileCantSetTime);
                 data[0] = 5;
@@ -608,7 +608,7 @@ static void Task_ResetRtcScreen(u8 taskId)
         }
         break;
     case 4:
-        if (TrySavingData(0) == 1)
+        if (TrySavingData(SAVE_NORMAL) == SAVE_STATUS_OK)
         {
             ShowMessage(gText_SaveCompleted);
             PlaySE(SE_PINPON);

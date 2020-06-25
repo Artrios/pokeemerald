@@ -47,10 +47,10 @@ static const u8 sFiller[0x1C0] = {0};
 static const struct OamData sOamData_862B71C =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(64x64),
     .x = 0,
     .matrixNum = 0,
@@ -187,7 +187,7 @@ static void sub_81DA700(void)
 {
     u16 *dst1, *dst2;
 
-    sub_8149F58(&dst1, &dst2);
+    GetBg0TilesDst(&dst1, &dst2);
     LZ77UnCompVram(gUnknown_0862AD54, dst2);
     LZ77UnCompVram(gUnknown_0862AF30, dst1);
     LoadPalette(gUnknown_0862B53C, 0xF0, 0x20);

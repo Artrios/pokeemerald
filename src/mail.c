@@ -17,7 +17,7 @@
 #include "bg.h"
 #include "pokemon_icon.h"
 #include "constants/species.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "easy_chat.h"
 #include "constants/rgb.h"
 
@@ -158,10 +158,10 @@ static const struct WindowTemplate sUnknown_0859F29C[] = {
     DUMMY_WIN_TEMPLATE
 };
 
-static const u8 sUnknown_0859F2AC[] = {
-     0,
-    10,
-    11
+static const u8 sTextColors[] = {
+    TEXT_COLOR_TRANSPARENT,
+    TEXT_DYNAMIC_COLOR_1,
+    TEXT_DYNAMIC_COLOR_2
 };
 
 static const u16 sUnknown_0859F2B0[][2] = {
@@ -323,7 +323,7 @@ static bool8 MailReadBuildGraphics(void)
             break;
         case 5:
             FreeAllSpritePalettes();
-            reset_temp_tile_data_buffers();
+            ResetTempTileDataBuffers();
             SetGpuReg(REG_OFFSET_BG0HOFS, 0);
             SetGpuReg(REG_OFFSET_BG0VOFS, 0);
             SetGpuReg(REG_OFFSET_BG1HOFS, 0);
@@ -346,10 +346,10 @@ static bool8 MailReadBuildGraphics(void)
             DeactivateAllTextPrinters();
             break;
         case 8:
-            decompress_and_copy_tile_data_to_vram(1, sUnknown_0859F2B8[sMailRead->mailType].tiles, 0, 0, 0);
+            DecompressAndCopyTileDataToVram(1, sUnknown_0859F2B8[sMailRead->mailType].tiles, 0, 0, 0);
             break;
         case 9:
-            if (free_temp_tile_data_buffers_if_possible())
+            if (FreeTempTileDataBuffersIfPossible())
             {
                 return FALSE;
             }
@@ -438,7 +438,7 @@ static void CB2_InitMailRead(void)
             SetMainCallback2(CB2_MailRead);
             break;
         }
-    } while (sub_81221AC() != TRUE);
+    } while (MenuHelpers_LinkSomething() != TRUE);
 }
 
 static void sub_8121A1C(void)
@@ -486,14 +486,14 @@ static void sub_8121B1C(void)
         {
             continue;
         }
-        AddTextPrinterParameterized3(0, 1, sMailRead->layout->var8[i].xOffset + sMailRead->layout->wordsYPos, y + sMailRead->layout->wordsXPos, sUnknown_0859F2AC, 0, sMailRead->strbuf[i]);
+        AddTextPrinterParameterized3(0, 1, sMailRead->layout->var8[i].xOffset + sMailRead->layout->wordsYPos, y + sMailRead->layout->wordsXPos, sTextColors, 0, sMailRead->strbuf[i]);
         y += sMailRead->layout->var8[i].lineHeight;
     }
     bufptr = StringCopy(strbuf, gText_FromSpace);
     StringCopy(bufptr, sMailRead->playerName);
     box_x = GetStringCenterAlignXOffset(1, strbuf, sMailRead->signatureWidth) + 0x68;
     box_y = sMailRead->layout->signatureYPos + 0x58;
-    AddTextPrinterParameterized3(0, 1, box_x, box_y, sUnknown_0859F2AC, 0, strbuf);
+    AddTextPrinterParameterized3(0, 1, box_x, box_y, sTextColors, 0, strbuf);
     CopyWindowToVram(0, 3);
     CopyWindowToVram(1, 3);
 }
@@ -542,7 +542,7 @@ static void CB2_ExitMailReadFreeVars(void)
             case 1:
             case 2:
                 FreeMonIconPalette(sub_80D2E84(sMailRead->mail->species));
-                sub_80D2EF8(&gSprites[sMailRead->monIconSprite]);
+                FreeAndDestroyMonIconSprite(&gSprites[sMailRead->monIconSprite]);
         }
         memset(sMailRead, 0, sizeof(*sMailRead));
         ResetPaletteFade();

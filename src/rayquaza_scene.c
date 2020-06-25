@@ -5,7 +5,7 @@
 #include "graphics.h"
 #include "bg.h"
 #include "main.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "palette.h"
 #include "scanline_effect.h"
 #include "menu.h"
@@ -101,10 +101,10 @@ static const TaskFunc sTasksForAnimations[] =
 static const struct OamData sOamData_862A6BC =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(64x64),
     .x = 0,
     .matrixNum = 0,
@@ -118,10 +118,10 @@ static const struct OamData sOamData_862A6BC =
 static const struct OamData sOamData_862A6C4 =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(32x32),
     .x = 0,
     .matrixNum = 0,
@@ -135,10 +135,10 @@ static const struct OamData sOamData_862A6C4 =
 static const struct OamData sOamData_862A6CC =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(64x32),
     .x = 0,
     .matrixNum = 0,
@@ -152,10 +152,10 @@ static const struct OamData sOamData_862A6CC =
 static const struct OamData sOamData_862A6D4 =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(32x16),
     .x = 0,
     .matrixNum = 0,
@@ -169,10 +169,10 @@ static const struct OamData sOamData_862A6D4 =
 static const struct OamData sOamData_862A6DC =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(16x8),
     .x = 0,
     .matrixNum = 0,
@@ -186,10 +186,10 @@ static const struct OamData sOamData_862A6DC =
 static const struct OamData sOamData_862A6E4 =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(16x32),
     .x = 0,
     .matrixNum = 0,
@@ -203,10 +203,10 @@ static const struct OamData sOamData_862A6E4 =
 static const struct OamData sOamData_862A6EC =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(16x16),
     .x = 0,
     .matrixNum = 0,
@@ -220,10 +220,10 @@ static const struct OamData sOamData_862A6EC =
 static const struct OamData sOamData_862A6F4 =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(32x8),
     .x = 0,
     .matrixNum = 0,
@@ -1508,9 +1508,9 @@ static void sub_81D6FE0(void)
     SetBgTilemapBuffer(1, sRayScene->tilemapBuffers[1]);
     SetBgTilemapBuffer(2, sRayScene->tilemapBuffers[2]);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
-    schedule_bg_copy_tilemap_to_vram(2);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
+    ScheduleBgCopyTilemapToVram(2);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     ShowBg(0);
     ShowBg(1);
@@ -1520,9 +1520,9 @@ static void sub_81D6FE0(void)
 
 static void sub_81D706C(void)
 {
-    reset_temp_tile_data_buffers();
-    decompress_and_copy_tile_data_to_vram(0, gRaySceneClouds_Gfx, 0, 0, 0);
-    while (free_temp_tile_data_buffers_if_possible());
+    ResetTempTileDataBuffers();
+    DecompressAndCopyTileDataToVram(0, gRaySceneClouds_Gfx, 0, 0, 0);
+    while (FreeTempTileDataBuffersIfPossible());
 
     LZDecompressWram(gRaySceneClouds2_Tilemap, sRayScene->tilemapBuffers[0]);
     LZDecompressWram(gRaySceneClouds1_Tilemap, sRayScene->tilemapBuffers[1]);
@@ -1921,9 +1921,9 @@ static void sub_81D7E10(void)
     SetBgTilemapBuffer(1, sRayScene->tilemapBuffers[1]);
     SetBgTilemapBuffer(2, sRayScene->tilemapBuffers[2]);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
-    schedule_bg_copy_tilemap_to_vram(2);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
+    ScheduleBgCopyTilemapToVram(2);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     ShowBg(0);
     ShowBg(1);
@@ -1933,11 +1933,11 @@ static void sub_81D7E10(void)
 
 static void sub_81D7E9C(void)
 {
-    reset_temp_tile_data_buffers();
-    decompress_and_copy_tile_data_to_vram(0, gRaySceneClouds_Gfx, 0, 0, 0);
-    decompress_and_copy_tile_data_to_vram(1, gRaySceneOvercast_Gfx, 0, 0, 0);
-    decompress_and_copy_tile_data_to_vram(2, gRaySceneRayquaza_Gfx, 0, 0, 0);
-    while (free_temp_tile_data_buffers_if_possible());
+    ResetTempTileDataBuffers();
+    DecompressAndCopyTileDataToVram(0, gRaySceneClouds_Gfx, 0, 0, 0);
+    DecompressAndCopyTileDataToVram(1, gRaySceneOvercast_Gfx, 0, 0, 0);
+    DecompressAndCopyTileDataToVram(2, gRaySceneRayquaza_Gfx, 0, 0, 0);
+    while (FreeTempTileDataBuffersIfPossible());
 
     LZDecompressWram(gRaySceneClouds2_Tilemap, sRayScene->tilemapBuffers[0]);
     LZDecompressWram(gRaySceneOvercast_Tilemap, sRayScene->tilemapBuffers[1]);
@@ -2045,8 +2045,8 @@ static void sub_81D81A4(u8 taskId)
                                    (sUnknown_0862AAB8[data[0]][1] * 4) + 80,
                                    0);
         gSprites[spriteId].data[0] = (s8)(data[0]);
-        gSprites[spriteId].oam.objMode = 1;
-        gSprites[spriteId].oam.affineMode = 3;
+        gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+        gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_DOUBLE;
         gSprites[spriteId].oam.priority = 2;
         InitSpriteAffineAnim(&gSprites[spriteId]);
         if (data[0] == 9)
@@ -2090,10 +2090,10 @@ static void sub_81D82B0(void)
     SetBgTilemapBuffer(2, sRayScene->tilemapBuffers[2]);
     SetBgTilemapBuffer(3, sRayScene->tilemapBuffers[3]);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
-    schedule_bg_copy_tilemap_to_vram(2);
-    schedule_bg_copy_tilemap_to_vram(3);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
+    ScheduleBgCopyTilemapToVram(2);
+    ScheduleBgCopyTilemapToVram(3);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     ShowBg(0);
     ShowBg(1);
@@ -2104,10 +2104,10 @@ static void sub_81D82B0(void)
 
 static void sub_81D8358(void)
 {
-    reset_temp_tile_data_buffers();
-    decompress_and_copy_tile_data_to_vram(0, gRaySceneRayquazaLight_Gfx, 0, 0, 0);
-    decompress_and_copy_tile_data_to_vram(1, gRaySceneOvercast2_Gfx, 0, 0, 0);
-    while (free_temp_tile_data_buffers_if_possible());
+    ResetTempTileDataBuffers();
+    DecompressAndCopyTileDataToVram(0, gRaySceneRayquazaLight_Gfx, 0, 0, 0);
+    DecompressAndCopyTileDataToVram(1, gRaySceneOvercast2_Gfx, 0, 0, 0);
+    while (FreeTempTileDataBuffersIfPossible());
 
     LZDecompressWram(gRaySceneRayquazaLight_Tilemap, sRayScene->tilemapBuffers[0]);
     LZDecompressWram(gRaySceneOvercast2_Tilemap, sRayScene->tilemapBuffers[3]);
@@ -2312,10 +2312,10 @@ static void sub_81D8828(void)
     SetBgTilemapBuffer(2, sRayScene->tilemapBuffers[2]);
     SetBgTilemapBuffer(3, sRayScene->tilemapBuffers[3]);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
-    schedule_bg_copy_tilemap_to_vram(2);
-    schedule_bg_copy_tilemap_to_vram(3);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
+    ScheduleBgCopyTilemapToVram(2);
+    ScheduleBgCopyTilemapToVram(3);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP | DISPCNT_WIN0_ON);
     ShowBg(0);
     ShowBg(1);
@@ -2326,11 +2326,11 @@ static void sub_81D8828(void)
 
 static void sub_81D88D0(void)
 {
-    reset_temp_tile_data_buffers();
-    decompress_and_copy_tile_data_to_vram(1, gRaySceneRayquazaChase_Gfx, 0, 0, 0);
-    decompress_and_copy_tile_data_to_vram(2, gRaySceneChaseStreaks_Gfx, 0, 0, 0);
-    decompress_and_copy_tile_data_to_vram(3, gRaySceneChaseBg_Gfx, 0, 0, 0);
-    while (free_temp_tile_data_buffers_if_possible());
+    ResetTempTileDataBuffers();
+    DecompressAndCopyTileDataToVram(1, gRaySceneRayquazaChase_Gfx, 0, 0, 0);
+    DecompressAndCopyTileDataToVram(2, gRaySceneChaseStreaks_Gfx, 0, 0, 0);
+    DecompressAndCopyTileDataToVram(3, gRaySceneChaseBg_Gfx, 0, 0, 0);
+    while (FreeTempTileDataBuffersIfPossible());
 
     LZDecompressWram(gRayChaseRayquazaChase2_Tilemap, sRayScene->tilemapBuffers[0]);
     LZDecompressWram(gRayChaseRayquazaChase_Tilemap, sRayScene->tilemapBuffers[1]);
@@ -2468,9 +2468,9 @@ static void sub_81D8C38(void)
     SetBgTilemapBuffer(1, sRayScene->tilemapBuffers[1]);
     SetBgTilemapBuffer(2, sRayScene->tilemapBuffers[2]);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
-    schedule_bg_copy_tilemap_to_vram(2);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
+    ScheduleBgCopyTilemapToVram(2);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP | DISPCNT_WIN0_ON);
     ShowBg(0);
     ShowBg(1);
@@ -2480,10 +2480,10 @@ static void sub_81D8C38(void)
 
 static void sub_81D8CC4(void)
 {
-    reset_temp_tile_data_buffers();
-    decompress_and_copy_tile_data_to_vram(2, gRaySceneHushRing_Gfx, 0, 0, 0);
-    decompress_and_copy_tile_data_to_vram(0, gRaySceneHushBg_Gfx, 0, 0, 0);
-    while (free_temp_tile_data_buffers_if_possible());
+    ResetTempTileDataBuffers();
+    DecompressAndCopyTileDataToVram(2, gRaySceneHushRing_Gfx, 0, 0, 0);
+    DecompressAndCopyTileDataToVram(0, gRaySceneHushBg_Gfx, 0, 0, 0);
+    while (FreeTempTileDataBuffersIfPossible());
 
     LZDecompressWram(gRaySceneHushRing_Tilemap, sRayScene->tilemapBuffers[1]);
     LZDecompressWram(gRaySceneHushBg_Tilemap, sRayScene->tilemapBuffers[0]);

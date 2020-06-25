@@ -13,7 +13,7 @@ enum
 // shop view window NPC info enum
 enum
 {
-    EVENT_OBJ_ID,
+    OBJ_EVENT_ID,
     X_COORD,
     Y_COORD,
     ANIM_NUM,
@@ -41,7 +41,7 @@ struct ShopData
     /*0x200B*/ u8 scrollIndicatorsTaskId;
     /*0x200C*/ u8 iconSlot;
     /*0x200D*/ u8 itemSpriteIds[2];
-    /*0x2010*/ s16 viewportObjects[16][5];
+    /*0x2010*/ s16 viewportObjects[OBJECT_EVENTS_COUNT][5];
 };
 
 void CreatePokemartMenu(const u16 *);

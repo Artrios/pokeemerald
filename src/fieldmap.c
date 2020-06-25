@@ -75,7 +75,7 @@ void InitBattlePyramidMap(bool8 setPlayerPosition)
 void InitTrainerHillMap(void)
 {
     CpuFastFill(0x03ff03ff, gBackupMapData, sizeof(gBackupMapData));
-    sub_81D5FB4(gBackupMapData);
+    GenerateTrainerHillFloorLayout(gBackupMapData);
 }
 
 static void InitMapLayoutData(struct MapHeader *mapHeader)
@@ -859,7 +859,7 @@ int sub_8088A4C(struct MapConnection *connection, int x, int y)
     return FALSE;
 }
 
-struct MapConnection *sub_8088A8C(s16 x, s16 y)
+struct MapConnection *GetConnectionAtCoords(s16 x, s16 y)
 {
     int count;
     struct MapConnection *connection;
@@ -950,7 +950,7 @@ void copy_tileset_patterns_to_vram(struct Tileset const *tileset, u16 numTiles, 
         if (!tileset->isCompressed)
             LoadBgTiles(2, tileset->tiles, numTiles * 32, offset);
         else
-            decompress_and_copy_tile_data_to_vram(2, tileset->tiles, numTiles * 32, offset, 0);
+            DecompressAndCopyTileDataToVram(2, tileset->tiles, numTiles * 32, offset, 0);
     }
 }
 

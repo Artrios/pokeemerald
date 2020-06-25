@@ -4,6 +4,9 @@
 #include "task.h"
 #include "window.h"
 
+#define MENU_L_PRESSED 1
+#define MENU_R_PRESSED 2
+
 // Exported type declarations
 
 struct YesNoFuncTable
@@ -23,12 +26,12 @@ bool16 RunTextPrintersRetIsActive(u8 textPrinterId);
 void DoYesNoFuncWithChoice(u8 taskId, const struct YesNoFuncTable *data);
 void CreateYesNoMenuWithCallbacks(u8 taskId, const struct WindowTemplate *template, u8 arg2, u8 arg3, u8 arg4, u16 tileStart, u8 palette, const struct YesNoFuncTable *yesNo);
 bool8 AdjustQuantityAccordingToDPadInput(s16 *arg0, u16 arg1);
-u8 GetLRKeysState(void);
-u8 sub_812210C(void);
+u8 GetLRKeysPressed(void);
+u8 GetLRKeysPressedAndHeld(void);
 bool8 sub_8122148(u16 itemId);
 bool8 itemid_80BF6D8_mail_related(u16 itemId);
-bool8 sub_81221AC(void);
-bool8 sub_81221EC(void);
+bool8 MenuHelpers_LinkSomething(void);
+bool8 MenuHelpers_CallLinkSomething(void);
 void sub_812220C(struct ItemSlot *slots, u8 count, u8 *arg2, u8 *usedSlotsCount, u8 maxUsedSlotsCount);
 void sub_812225C(u16 *scrollOffset, u16 *cursorPos, u8 maxShownItems, u8 numItems);
 void sub_8122298(u16 *arg0, u16 *arg1, u8 arg2, u8 arg3, u8 arg4);

@@ -5,7 +5,7 @@
 #include "gpu_regs.h"
 #include "scanline_effect.h"
 #include "task.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "decompress.h"
 #include "bg.h"
 #include "window.h"
@@ -76,9 +76,9 @@ void CB2_ShowDiploma(void)
     sDiplomaTilemapPtr = malloc(0x1000);
     InitDiplomaBg();
     InitDiplomaWindow();
-    reset_temp_tile_data_buffers();
-    decompress_and_copy_tile_data_to_vram(1, &sDiplomaTiles, 0, 0, 0);
-    while (free_temp_tile_data_buffers_if_possible())
+    ResetTempTileDataBuffers();
+    DecompressAndCopyTileDataToVram(1, &sDiplomaTiles, 0, 0, 0);
+    while (FreeTempTileDataBuffersIfPossible())
         ;
     LZDecompressWram(sDiplomaTilemap, sDiplomaTilemapPtr);
     CopyBgTilemapBufferToVram(1);
@@ -127,7 +127,7 @@ static void Task_DiplomaFadeOut(u8 taskId)
 
 static void DisplayDiplomaText(void)
 {
-    if (sub_80C0944())
+    if (HasAllMons())
     {
         SetGpuReg(REG_OFFSET_BG1HOFS, DISPCNT_BG0_ON);
         StringCopy(gStringVar1, gText_DexNational);

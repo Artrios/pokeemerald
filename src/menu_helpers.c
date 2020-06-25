@@ -27,16 +27,16 @@ EWRAM_DATA static struct YesNoFuncTable gUnknown_0203A138 = {0};
 EWRAM_DATA static u8 gUnknown_0203A140 = 0;
 
 // IWRAM bss vars
-IWRAM_DATA static TaskFunc gUnknown_0300117C;
+static TaskFunc gUnknown_0300117C;
 
 // const rom data
 static const struct OamData sOamData_859F4E8 =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(16x16),
     .x = 0,
     .matrixNum = 0,
@@ -251,27 +251,27 @@ bool8 AdjustQuantityAccordingToDPadInput(s16 *arg0, u16 arg1)
     return FALSE;
 }
 
-u8 GetLRKeysState(void)
+u8 GetLRKeysPressed(void)
 {
     if (gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR)
     {
         if (gMain.newKeys & L_BUTTON)
-            return 1;
+            return MENU_L_PRESSED;
         if (gMain.newKeys & R_BUTTON)
-            return 2;
+            return MENU_R_PRESSED;
     }
 
     return 0;
 }
 
-u8 sub_812210C(void)
+u8 GetLRKeysPressedAndHeld(void)
 {
     if (gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR)
     {
         if (gMain.newAndRepeatedKeys & L_BUTTON)
-            return 1;
+            return MENU_L_PRESSED;
         if (gMain.newAndRepeatedKeys & R_BUTTON)
-            return 2;
+            return MENU_R_PRESSED;
     }
 
     return 0;
@@ -299,7 +299,7 @@ bool8 itemid_80BF6D8_mail_related(u16 itemId)
         return FALSE;
 }
 
-bool8 sub_81221AC(void)
+bool8 MenuHelpers_LinkSomething(void)
 {
     if (IsUpdateLinkStateCBActive() == TRUE || gReceivedRemoteLinkPlayers == 1)
         return TRUE;
@@ -309,13 +309,13 @@ bool8 sub_81221AC(void)
 
 static bool8 sub_81221D0(void)
 {
-    if (!sub_81221AC())
+    if (!MenuHelpers_LinkSomething())
         return FALSE;
     else
         return sub_8087598();
 }
 
-bool8 sub_81221EC(void)
+bool8 MenuHelpers_CallLinkSomething(void)
 {
     if (sub_81221D0() == TRUE)
         return TRUE;

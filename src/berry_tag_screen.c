@@ -4,7 +4,6 @@
 #include "decompress.h"
 #include "event_object_movement.h"
 #include "item_menu.h"
-#include "constants/items.h"
 #include "item.h"
 #include "item_use.h"
 #include "main.h"
@@ -15,20 +14,22 @@
 #include "menu_helpers.h"
 #include "palette.h"
 #include "overworld.h"
-#include "constants/songs.h"
 #include "sound.h"
 #include "sprite.h"
 #include "string_util.h"
 #include "strings.h"
 #include "bg.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "scanline_effect.h"
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "item_menu_icons.h"
 #include "decompress.h"
 #include "international_string_util.h"
+#include "constants/berry.h"
+#include "constants/items.h"
 #include "constants/rgb.h"
+#include "constants/songs.h"
 
 // There are 4 windows used in berry tag screen.
 enum
@@ -200,11 +201,11 @@ static void CB2_InitBerryTagScreen(void)
 {
     while (1)
     {
-        if (sub_81221EC() == TRUE)
+        if (MenuHelpers_CallLinkSomething() == TRUE)
             break;
         if (InitBerryTagScreen() == TRUE)
             break;
-        if (sub_81221AC() == TRUE)
+        if (MenuHelpers_LinkSomething() == TRUE)
             break;
     }
 }
@@ -237,7 +238,7 @@ static bool8 InitBerryTagScreen(void)
         gMain.state++;
         break;
     case 5:
-        if (!sub_81221AC())
+        if (!MenuHelpers_LinkSomething())
             ResetTasks();
         gMain.state++;
         break;
@@ -300,8 +301,8 @@ static void HandleInitBackgrounds(void)
     SetBgTilemapBuffer(2, sBerryTag->tilemapBuffers[0]);
     SetBgTilemapBuffer(3, sBerryTag->tilemapBuffers[1]);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(2);
-    schedule_bg_copy_tilemap_to_vram(3);
+    ScheduleBgCopyTilemapToVram(2);
+    ScheduleBgCopyTilemapToVram(3);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     ShowBg(0);
@@ -317,19 +318,19 @@ static bool8 LoadBerryTagGfx(void)
     switch (sBerryTag->gfxState)
     {
     case 0:
-        reset_temp_tile_data_buffers();
-        decompress_and_copy_tile_data_to_vram(2, gUnknown_08D9BB44, 0, 0, 0);
+        ResetTempTileDataBuffers();
+        DecompressAndCopyTileDataToVram(2, gBerryCheck_Gfx, 0, 0, 0);
         sBerryTag->gfxState++;
         break;
     case 1:
-        if (free_temp_tile_data_buffers_if_possible() != TRUE)
+        if (FreeTempTileDataBuffersIfPossible() != TRUE)
         {
-            LZDecompressWram(gUnknown_08D9BF98, sBerryTag->tilemapBuffers[0]);
+            LZDecompressWram(gBerryTag_Gfx, sBerryTag->tilemapBuffers[0]);
             sBerryTag->gfxState++;
         }
         break;
     case 2:
-        LZDecompressWram(gUnknown_08D9C13C, sBerryTag->tilemapBuffers[2]);
+        LZDecompressWram(gBerryTag_Pal, sBerryTag->tilemapBuffers[2]);
         sBerryTag->gfxState++;
         break;
     case 3:
@@ -346,15 +347,15 @@ static bool8 LoadBerryTagGfx(void)
         sBerryTag->gfxState++;
         break;
     case 4:
-        LoadCompressedPalette(gUnknown_08D9BEF0, 0, 0xC0);
+        LoadCompressedPalette(gBerryCheck_Pal, 0, 0xC0);
         sBerryTag->gfxState++;
         break;
     case 5:
-        LoadCompressedSpriteSheet(&gUnknown_0857FDEC);
+        LoadCompressedSpriteSheet(&gBerryCheckCircleSpriteSheet);
         sBerryTag->gfxState++;
         break;
     default:
-        LoadCompressedSpritePalette(&gUnknown_0857FDF4);
+        LoadCompressedSpritePalette(&gBerryCheckCirclePaletteTable);
         return TRUE; // done
     }
 
@@ -370,8 +371,8 @@ static void HandleInitWindows(void)
     LoadPalette(sFontPalette, 0xF0, 0x20);
     for (i = 0; i < ARRAY_COUNT(sWindowTemplates) - 1; i++)
         PutWindowTilemap(i);
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
 }
 
 static void PrintTextInBerryTagScreen(u8 windowId, const u8 *text, u8 x, u8 y, s32 speed, u8 colorStructId)
@@ -385,7 +386,7 @@ static void AddBerryTagTextToBg0(void)
     FillWindowPixelBuffer(WIN_BERRY_TAG, PIXEL_FILL(15));
     PrintTextInBerryTagScreen(WIN_BERRY_TAG, gText_BerryTag, GetStringCenterAlignXOffset(1, gText_BerryTag, 0x40), 1, 0, 1);
     PutWindowTilemap(WIN_BERRY_TAG);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
 }
 
 static void PrintAllBerryData(void)
@@ -400,9 +401,9 @@ static void PrintAllBerryData(void)
 static void PrintBerryNumberAndName(void)
 {
     const struct Berry *berry = GetBerryInfo(sBerryTag->berryId);
-    ConvertIntToDecimalStringN(gStringVar1, sBerryTag->berryId, 2, 2);
+    ConvertIntToDecimalStringN(gStringVar1, sBerryTag->berryId, STR_CONV_MODE_LEADING_ZEROS, 2);
     StringCopy(gStringVar2, berry->name);
-    StringExpandPlaceholders(gStringVar4, gText_UnkF908Var1Var2);
+    StringExpandPlaceholders(gStringVar4, gText_NumberVar1Var2);
     PrintTextInBerryTagScreen(WIN_BERRY_NAME, gStringVar4, 0, 1, 0, 0);
 }
 
@@ -420,8 +421,8 @@ static void PrintBerrySize(void)
         fraction = (inches % 100) / 10;
         inches /= 100;
 
-        ConvertIntToDecimalStringN(gStringVar1, inches, 0, 2);
-        ConvertIntToDecimalStringN(gStringVar2, fraction, 0, 2);
+        ConvertIntToDecimalStringN(gStringVar1, inches, STR_CONV_MODE_LEFT_ALIGN, 2);
+        ConvertIntToDecimalStringN(gStringVar2, fraction, STR_CONV_MODE_LEFT_ALIGN, 2);
         StringExpandPlaceholders(gStringVar4, gText_Var1DotVar2);
         AddTextPrinterParameterized(WIN_SIZE_FIRM, 1, gStringVar4, 0x28, 1, 0, NULL);
     }
@@ -526,7 +527,7 @@ static void Task_CloseBerryTagScreen(u8 taskId)
         DestroyFlavorCircleSprites();
         Free(sBerryTag);
         FreeAllWindowBuffers();
-        SetMainCallback2(bag_menu_mail_related);
+        SetMainCallback2(CB2_ReturnToBagMenuPocket);
         DestroyTask(taskId);
     }
 }
@@ -548,7 +549,7 @@ static void Task_HandleInput(u8 taskId)
 static void TryChangeDisplayedBerry(u8 taskId, s8 toMove)
 {
     s16 *data = gTasks[taskId].data;
-    s16 currPocketPosition = gUnknown_0203CE58.scrollPosition[3] + gUnknown_0203CE58.cursorPosition[3];
+    s16 currPocketPosition = gBagPositionStruct.scrollPosition[3] + gBagPositionStruct.cursorPosition[3];
     u32 newPocketPosition = currPocketPosition + toMove;
     if (newPocketPosition < 46 && BagGetItemIdByPocketPosition(POCKET_BERRIES, newPocketPosition) != 0)
     {
@@ -566,8 +567,8 @@ static void TryChangeDisplayedBerry(u8 taskId, s8 toMove)
 
 static void HandleBagCursorPositionChange(s8 toMove)
 {
-    u16 *scrollPos = &gUnknown_0203CE58.scrollPosition[3];
-    u16 *cursorPos = &gUnknown_0203CE58.cursorPosition[3];
+    u16 *scrollPos = &gBagPositionStruct.scrollPosition[3];
+    u16 *cursorPos = &gBagPositionStruct.cursorPosition[3];
     if (toMove > 0)
     {
         if (*cursorPos < 4 || BagGetItemIdByPocketPosition(POCKET_BERRIES, *scrollPos + 8) == 0)

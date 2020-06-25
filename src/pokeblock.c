@@ -1,9 +1,8 @@
 #include "global.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "battle.h"
 #include "battle_controllers.h"
 #include "battle_message.h"
-#include "berry.h"
 #include "bg.h"
 #include "decompress.h"
 #include "event_data.h"
@@ -30,6 +29,7 @@
 #include "task.h"
 #include "text.h"
 #include "text_window.h"
+#include "constants/berry.h"
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
@@ -219,10 +219,10 @@ static const u8 sContestStatsMonData[] = {MON_DATA_COOL, MON_DATA_BEAUTY, MON_DA
 static const struct OamData sOamData_PokeblockCase =
 {
     .y = 0,
-    .affineMode = 0,
-    .objMode = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = 0,
-    .bpp = 0,
+    .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(64x64),
     .x = 0,
     .matrixNum = 0,
@@ -451,7 +451,7 @@ void OpenPokeblockCase(u8 caseId, void (*callback)(void))
         sPokeblockMenu->pokeblockOptionsIds = sActionsWhenGivingToLady;
         sPokeblockMenu->optionsNo = ARRAY_COUNT(sActionsWhenGivingToLady);
         break;
-    default:
+    default: // PBLOCK_CASE_FIELD
         sPokeblockMenu->pokeblockOptionsIds = sActionsOnField;
         sPokeblockMenu->optionsNo = ARRAY_COUNT(sActionsOnField);
         break;
@@ -462,7 +462,7 @@ void OpenPokeblockCase(u8 caseId, void (*callback)(void))
 
 void OpenPokeblockCaseInBattle(void)
 {
-    OpenPokeblockCase(PBLOCK_CASE_BATTLE, SetCB2ToReshowScreenAfterMenu2);
+    OpenPokeblockCase(PBLOCK_CASE_BATTLE, CB2_SetUpReshowBattleScreenAfterMenu2);
 }
 
 void OpenPokeblockCaseOnFeeder(void)
@@ -490,11 +490,11 @@ static void CB2_InitPokeblockMenu(void)
 {
     while (1)
     {
-        if (sub_81221EC() == TRUE)
+        if (MenuHelpers_CallLinkSomething() == TRUE)
             break;
         if (InitPokeblockMenu() == TRUE)
             break;
-        if (sub_81221AC() == TRUE)
+        if (MenuHelpers_LinkSomething() == TRUE)
             break;
     }
 }
@@ -606,7 +606,7 @@ static void HandleInitBackgrounds(void)
     InitBgsFromTemplates(0, sBgTemplatesForPokeblockMenu, ARRAY_COUNT(sBgTemplatesForPokeblockMenu));
     SetBgTilemapBuffer(2, sPokeblockMenu->tilemap);
     ResetAllBgsCoordinates();
-    schedule_bg_copy_tilemap_to_vram(2);
+    ScheduleBgCopyTilemapToVram(2);
 
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
 
@@ -622,12 +622,12 @@ static bool8 LoadPokeblockMenuGfx(void)
     switch (sPokeblockMenu->gfxState)
     {
     case 0:
-        reset_temp_tile_data_buffers();
-        decompress_and_copy_tile_data_to_vram(2, gMenuPokeblock_Gfx, 0, 0, 0);
+        ResetTempTileDataBuffers();
+        DecompressAndCopyTileDataToVram(2, gMenuPokeblock_Gfx, 0, 0, 0);
         sPokeblockMenu->gfxState++;
         break;
     case 1:
-        if (free_temp_tile_data_buffers_if_possible() != TRUE)
+        if (FreeTempTileDataBuffersIfPossible() != TRUE)
         {
             LZDecompressWram(gMenuPokeblock_Tilemap, sPokeblockMenu->tilemap);
             sPokeblockMenu->gfxState++;
@@ -669,8 +669,8 @@ static void HandleInitWindows(void)
         FillWindowPixelBuffer(i, PIXEL_FILL(0));
     }
 
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(1);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(1);
 }
 
 static void PrintOnPokeblockWindow(u8 windowId, const u8 *string, s32 x)
@@ -786,14 +786,14 @@ static void sub_8135FCC(s32 pkblId)
         CopyWindowToVram(7, 2);
     }
 
-    schedule_bg_copy_tilemap_to_vram(0);
-    schedule_bg_copy_tilemap_to_vram(2);
+    ScheduleBgCopyTilemapToVram(0);
+    ScheduleBgCopyTilemapToVram(2);
 }
 
 static void HandlePokeblockMenuCursor(u16 cursorPos, u16 arg1)
 {
     FillBgTilemapBufferRect_Palette0(2, arg1, 0xF, (cursorPos * 2) + 1, 0xE, 2);
-    schedule_bg_copy_tilemap_to_vram(2);
+    ScheduleBgCopyTilemapToVram(2);
 }
 
 static void CompactPokeblockSlots(void)
@@ -928,7 +928,7 @@ static void sub_8136470(struct Sprite *sprite)
     switch (sprite->data[0])
     {
     case 0:
-        sprite->oam.affineMode = 1;
+        sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
         sprite->affineAnims = sSpriteAffineAnimTable_85B26F0;
         InitSpriteAffineAnim(sprite);
         sprite->data[0] = 1;
@@ -937,7 +937,7 @@ static void sub_8136470(struct Sprite *sprite)
     case 1:
         if (++sprite->data[1] > 11)
         {
-            sprite->oam.affineMode = 0;
+            sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
             sprite->data[0] = 0;
             sprite->data[1] = 0;
             FreeOamMatrix(sprite->oam.matrixNum);
@@ -960,7 +960,7 @@ static void Task_FreeDataAndExitPokeblockCase(u8 taskId)
     if (!gPaletteFade.active)
     {
         if (sPokeblockMenu->caseId == PBLOCK_CASE_FEEDER || sPokeblockMenu->caseId == PBLOCK_CASE_GIVE)
-            gFieldCallback = FieldCallback_ReturnToEventScript2;
+            gFieldCallback = FieldCB_ContinueScriptHandleMusic;
 
         DestroyListMenuTask(data[0], &sSavedPokeblockData.lastItemPage, &sSavedPokeblockData.lastItemPos);
         sub_8136418();
@@ -982,7 +982,7 @@ static void Task_HandlePokeblockMenuInput(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
-    if (!gPaletteFade.active && sub_81221EC() != TRUE)
+    if (!gPaletteFade.active && MenuHelpers_CallLinkSomething() != TRUE)
     {
         if (gMain.newKeys & SELECT_BUTTON)
         {
@@ -1032,7 +1032,7 @@ static void Task_HandlePokeblocksSwapInput(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
-    if (sub_81221EC() == TRUE)
+    if (MenuHelpers_CallLinkSomething() == TRUE)
         return;
 
     if (gMain.newKeys & SELECT_BUTTON)
@@ -1101,7 +1101,7 @@ static void HandlePokeblocksSwap(u8 taskId, bool8 noSwap)
         sSavedPokeblockData.lastItemPos--;
 
     data[0] = ListMenuInit(&gMultiuseListMenuTemplate, sSavedPokeblockData.lastItemPage, sSavedPokeblockData.lastItemPos);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     sub_81223FC(sPokeblockMenu->field_E75, FIELD_E75_COUNT, 1);
 
     for (i = 0; i < 9; i++)
@@ -1125,7 +1125,7 @@ static void PutPokeblockOptionsWindow(u8 taskId)
     sub_81995E4(data[1], sPokeblockMenu->optionsNo, sPokeblockMenuActions, sPokeblockMenu->pokeblockOptionsIds);
     InitMenuInUpperLeftCornerPlaySoundWhenAPressed(data[1], sPokeblockMenu->optionsNo, 0);
     PutWindowTilemap(data[1]);
-    schedule_bg_copy_tilemap_to_vram(1);
+    ScheduleBgCopyTilemapToVram(1);
 
     gTasks[taskId].func = Task_HandlePokeblockOptionsInput;
 }
@@ -1134,7 +1134,7 @@ static void Task_HandlePokeblockOptionsInput(u8 taskId)
 {
     s8 itemId;
 
-    if (sub_81221EC() == TRUE)
+    if (MenuHelpers_CallLinkSomething() == TRUE)
         return;
 
     itemId = Menu_ProcessInputNoWrap();
@@ -1212,8 +1212,8 @@ static void HandleErasePokeblock(u8 taskId)
         HandlePokeblockListMenuItems();
         data[0] = ListMenuInit(&gMultiuseListMenuTemplate, *lastPage, *lastPos);
         HandlePokeblockMenuCursor(*lastPos, 0x1005);
-        schedule_bg_copy_tilemap_to_vram(0);
-        schedule_bg_copy_tilemap_to_vram(1);
+        ScheduleBgCopyTilemapToVram(0);
+        ScheduleBgCopyTilemapToVram(1);
         TossPokeblockChoice_No(taskId);
     }
 }
@@ -1221,7 +1221,7 @@ static void HandleErasePokeblock(u8 taskId)
 static void TossPokeblockChoice_No(u8 taskId)
 {
     ClearDialogWindowAndFrameToTransparent(10, FALSE);
-    schedule_bg_copy_tilemap_to_vram(1);
+    ScheduleBgCopyTilemapToVram(1);
     sub_81363BC();
     gTasks[taskId].func = Task_HandlePokeblockMenuInput;
 }
@@ -1268,7 +1268,7 @@ static void PokeblockAction_Cancel(u8 taskId)
     s16 *data = gTasks[taskId].data;
 
     ClearStdWindowAndFrameToTransparent(data[1], FALSE);
-    schedule_bg_copy_tilemap_to_vram(1);
+    ScheduleBgCopyTilemapToVram(1);
     sub_81363BC();
     gTasks[taskId].func = Task_HandlePokeblockMenuInput;
 }

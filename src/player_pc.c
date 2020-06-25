@@ -14,7 +14,7 @@
 #include "list_menu.h"
 #include "mail.h"
 #include "main.h"
-#include "alloc.h"
+#include "malloc.h"
 #include "menu.h"
 #include "menu_helpers.h"
 #include "overworld.h"
@@ -340,7 +340,7 @@ static void InitPlayerPCMenu(u8 taskId)
     SetStandardWindowBorderStyle(data[4], 0);
     sub_81995E4(data[4], gPcItemMenuOptionsNum, sPlayerPCMenuActions, gPcItemMenuOptionOrder);
     InitMenuInUpperLeftCornerPlaySoundWhenAPressed(data[4], gPcItemMenuOptionsNum, 0);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = PlayerPCProcessMenuInput;
 }
 
@@ -364,14 +364,14 @@ static void PlayerPCProcessMenuInput(u8 taskId)
             ClearStdWindowAndFrameToTransparent(data[4], FALSE);
             ClearWindowTilemap(data[4]);
             RemoveWindow(data[4]);
-            schedule_bg_copy_tilemap_to_vram(0);
+            ScheduleBgCopyTilemapToVram(0);
             gTasks[taskId].func = PlayerPC_TurnOff;
             break;
         default:
             ClearStdWindowAndFrameToTransparent(data[4], FALSE);
             ClearWindowTilemap(data[4]);
             RemoveWindow(data[4]);
-            schedule_bg_copy_tilemap_to_vram(0);
+            ScheduleBgCopyTilemapToVram(0);
             gTasks[taskId].func = sPlayerPCMenuActions[gPcItemMenuOptionOrder[inputOptionId]].func.void_u8;
             break;
     }
@@ -419,12 +419,12 @@ static void PlayerPC_Decoration(u8 taskId)
 
 static void PlayerPC_TurnOff(u8 taskId)
 {
-    if (gPcItemMenuOptionsNum == 4) // if the option count is 4, we are at the bedroom PC and not player PC, so do gender specific handling.
+    if (gPcItemMenuOptionsNum == 4) // if the option count is 4, we are at the bedroom PC, so do gender specific handling.
     {
         if (gSaveBlock2Ptr->playerGender == MALE)
-            ScriptContext1_SetupScript(LittlerootTown_BrendansHouse_2F_EventScript_1F863F);
+            ScriptContext1_SetupScript(LittlerootTown_BrendansHouse_2F_EventScript_TurnOffPlayerPC);
         else
-            ScriptContext1_SetupScript(LittlerootTown_MaysHouse_2F_EventScript_1F958F);
+            ScriptContext1_SetupScript(LittlerootTown_MaysHouse_2F_EventScript_TurnOffPlayerPC);
     }
     else
     {
@@ -445,7 +445,7 @@ static void InitItemStorageMenu(u8 taskId, u8 var)
     SetStandardWindowBorderStyle(data[4], 0);
     PrintMenuTable(data[4], 4, gPCText_ItemPCOptionsText);
     InitMenuInUpperLeftCornerPlaySoundWhenAPressed(data[4], 4, var);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     ItemStorageMenuPrint(gPCText_OptionDescList[var]);
 }
 
@@ -484,7 +484,7 @@ static void ItemStorageMenuProcessInput(u8 taskId)
 static void ItemStorage_Deposit(u8 taskId)
 {
     gTasks[taskId].func = Task_ItemStorage_Deposit;
-    FadeScreen(1, 0);
+    FadeScreen(FADE_TO_BLACK, 0);
 }
 
 static void Task_ItemStorage_Deposit(u8 taskId)
@@ -492,7 +492,7 @@ static void Task_ItemStorage_Deposit(u8 taskId)
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
-        sub_81AAC14();
+        CB2_GoToItemDepositMenu();
         DestroyTask(taskId);
     }
 }
@@ -505,10 +505,10 @@ void sub_816B31C(void)
 
 void Mailbox_DoRedrawMailboxMenuAfterReturn(void)
 {
-    sub_81973A4();
+    LoadMessageBoxAndBorderGfx();
     DrawDialogueFrame(0, 1);
     InitItemStorageMenu(CreateTask(ItemStorage_HandleReturnToProcessInput, 0), 1);
-    pal_fill_black();
+    FadeInFromBlack();
 }
 
 static void ItemStorage_HandleReturnToProcessInput(u8 taskId)
@@ -586,7 +586,7 @@ static void sub_816B4DC(u8 taskId)
     ClearStdWindowAndFrameToTransparent(data[4], FALSE);
     ClearWindowTilemap(data[4]);
     RemoveWindow(data[4]);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
 }
 
 static u8 GetMailboxMailCount(void)
@@ -626,7 +626,7 @@ static void Mailbox_DrawMailboxMenu(u8 taskId)
     windowId = sub_81D1C84(0);
     sub_81D1C84(1);
     AddTextPrinterParameterized(windowId, 1, gText_Mailbox, GetStringCenterAlignXOffset(1, gText_Mailbox, 0x40), 1, 0, NULL);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].data[5] = sub_81D1DC0(&playerPCItemPageInfo);
     sub_81D1E90(&playerPCItemPageInfo);
 }
@@ -655,7 +655,7 @@ static void Mailbox_ProcessInput(u8 taskId)
                 sub_81D1D04(0);
                 sub_81D1D04(1);
                 DestroyListMenuTask(data[5], &(playerPCItemPageInfo.itemsAbove), &(playerPCItemPageInfo.cursorPos));
-                schedule_bg_copy_tilemap_to_vram(0);
+                ScheduleBgCopyTilemapToVram(0);
                 RemoveScrollIndicatorArrowPair(playerPCItemPageInfo.scrollIndicatorId);
                 gTasks[taskId].func = Mailbox_PrintWhatToDoWithPlayerMailText;
                 break;
@@ -678,7 +678,7 @@ static void Mailbox_ReturnToPlayerPC(u8 taskId)
     sub_81D1D04(0);
     sub_81D1D04(1);
     DestroyListMenuTask(data[5], NULL, NULL);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     sub_81D1EC0();
     ReshowPlayerPC(taskId);
 }
@@ -688,7 +688,7 @@ static void Mailbox_PrintMailOptions(u8 taskId)
     u8 r4 = sub_81D1C84(2);
     PrintMenuTable(r4, 4, gMailboxMailOptions);
     InitMenuInUpperLeftCornerPlaySoundWhenAPressed(r4, 4, 0);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = Mailbox_MailOptionsProcessInput;
 }
 
@@ -714,7 +714,7 @@ static void Mailbox_MailOptionsProcessInput(u8 taskId)
 
 static void Mailbox_DoMailRead(u8 taskId)
 {
-    FadeScreen(1, 0);
+    FadeScreen(FADE_TO_BLACK, 0);
     gTasks[taskId].func = Mailbox_FadeAndReadMail;
 }
 
@@ -739,13 +739,13 @@ static void pal_fill_for_maplights_or_black(void)
 {
     u8 taskId;
 
-    sub_81973A4();
+    LoadMessageBoxAndBorderGfx();
     taskId = CreateTask(Mailbox_HandleReturnToProcessInput, 0);
     if (sub_81D1C44(playerPCItemPageInfo.count) == TRUE)
         Mailbox_DrawMailboxMenu(taskId);
     else
         DestroyTask(taskId);
-    pal_fill_black();
+    FadeInFromBlack();
 }
 
 static void Mailbox_HandleReturnToProcessInput(u8 taskId)
@@ -813,7 +813,7 @@ static void Mailbox_Give(u8 taskId)
         Mailbox_NoPokemonForMail(taskId);
     else
     {
-        FadeScreen(1, 0);
+        FadeScreen(FADE_TO_BLACK, 0);
         gTasks[taskId].func = Mailbox_DoGiveMailPokeMenu;
     }
 }
@@ -824,7 +824,7 @@ static void Mailbox_DoGiveMailPokeMenu(u8 taskId)
     {
         sub_81D1EC0();
         CleanupOverworldWindowsAndTilemaps();
-        sub_81B8448();
+        ChooseMonToGiveMailFromMailbox();
         DestroyTask(taskId);
     }
 }
@@ -847,12 +847,12 @@ static void Mailbox_UpdateMailListAfterDeposit(void)
        && playerPCItemPageInfo.itemsAbove != 0)
         playerPCItemPageInfo.itemsAbove--;
     ItemStorage_SetItemAndMailCount(taskId);
-    sub_81973A4();
+    LoadMessageBoxAndBorderGfx();
     if (sub_81D1C44(playerPCItemPageInfo.count) == TRUE)
         Mailbox_DrawMailboxMenu(taskId);
     else
         DestroyTask(taskId);
-    pal_fill_black();
+    FadeInFromBlack();
 }
 
 static void Mailbox_NoPokemonForMail(u8 taskId)
@@ -865,7 +865,7 @@ static void Mailbox_Cancel(u8 taskId)
     sub_81D1D04(2);
     ClearDialogWindowAndFrame(0, 0);
     Mailbox_DrawMailboxMenu(taskId);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = Mailbox_ProcessInput;
 }
 
@@ -893,7 +893,7 @@ static u8 sub_816BC7C(u8 a)
     {
         *windowIdLoc = AddWindow(&gUnknown_085DFF5C[a]);
         DrawStdFrameWithCustomTileAndPalette(*windowIdLoc, FALSE, 0x214, 0xE);
-        schedule_bg_copy_tilemap_to_vram(0);
+        ScheduleBgCopyTilemapToVram(0);
     }
     return *windowIdLoc;
 }
@@ -905,7 +905,7 @@ static void sub_816BCC4(u8 a)
     {
         ClearStdWindowAndFrameToTransparent(*windowIdLoc, FALSE);
         ClearWindowTilemap(*windowIdLoc);
-        schedule_bg_copy_tilemap_to_vram(0);
+        ScheduleBgCopyTilemapToVram(0);
         RemoveWindow(*windowIdLoc);
         *windowIdLoc = 0xFF;
     }
@@ -1076,7 +1076,7 @@ static void ItemStorage_ProcessWithdrawTossInput(u8 taskId)
     ItemStorage_RefreshListMenu();
     data[5] = ListMenuInit(&gMultiuseListMenuTemplate, playerPCItemPageInfo.itemsAbove, playerPCItemPageInfo.cursorPos);
     ItemStorage_StartScrollIndicator();
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = ItemStorage_ProcessInput;
 }
 
@@ -1272,7 +1272,7 @@ static void ItemStorage_DoItemSwap(u8 taskId, bool8 a)
     sub_81223FC(gUnknown_0203BCC4->spriteIds, 7, 1);
     gUnknown_0203BCC4->unk666 = 0xFF;
     data[5] = ListMenuInit(&gMultiuseListMenuTemplate, playerPCItemPageInfo.itemsAbove, playerPCItemPageInfo.cursorPos);
-    schedule_bg_copy_tilemap_to_vram(0);
+    ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = ItemStorage_ProcessInput;
 }
 
