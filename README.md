@@ -1,5 +1,7 @@
 # About this branch
-This is a decapitalized (all-caps text replaced with proper capitalization) version of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly, originally made by [**Wyrserth**](https://github.com/Wyrserth) and adapted to the current structure of the project.
+This is a version of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly with a number of new features that were implemented in later generations.
+
+originally made by [**Wyrserth**](https://github.com/Wyrserth) and adapted to the current structure of the project.
 
 [![Build Status][travis-badge]][travis]
 
@@ -14,6 +16,27 @@ It builds the following ROM:
 
 To set up the repository, see [INSTALL.md](INSTALL.md).
 
+### Features
+* Dizzy's [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2)
+* Decapitalisation, originally by [**Wyrserth**](https://github.com/Wyrserth) and updated by [** AsparagusEduardo**](https://github.com/AsparagusEduardo) 
+* Running indoors
+* Coloured nature stats
+* Fly to Routes
+* Lati@s soaring (from ORAS)
+* Eggs hatch at Lv 1
+* Pokemon centers don't count eggs
+* Reusable TMs
+* Pokemarts sell based on No. of badges
+* EVs capped to 252
+
+### Planned Features
+* Dizzy's Item and Pokemon expansion
+* BW repel system
+* Auto-run
+* Remove badge boost
+* Bag sorting options
+* Make 'Move Pokemon' the first PC option
+* Move item in the party menu
 
 ## See also
 

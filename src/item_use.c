@@ -834,8 +834,15 @@ static void RemoveUsedItem(void)
 
 void ItemUseOutOfBattle_Repel(u8 taskId)
 {
-    if (VarGet(VAR_REPEL_STEP_COUNT) == 0)
+    if (VarGet(VAR_REPEL_STEP_COUNT) == 0) {
+        if (gSpecialVar_ItemId == ITEM_REPEL)
+            VarSet(VAR_REPEL_TYPE, 1);
+        if (gSpecialVar_ItemId == ITEM_SUPER_REPEL)
+            VarSet(VAR_REPEL_TYPE, 2);
+        if (gSpecialVar_ItemId == ITEM_MAX_REPEL)
+            VarSet(VAR_REPEL_TYPE, 3);
         gTasks[taskId].func = Task_StartUseRepel;
+    }
     else if (!InBattlePyramid())
         DisplayItemMessage(taskId, 1, gText_RepelEffectsLingered, BagMenu_InitListsMenu);
     else
