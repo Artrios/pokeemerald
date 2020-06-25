@@ -28,10 +28,10 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Reusable TMs
 * Pokemarts sell based on No. of badges
 * EVs capped to 252
+* BW repel system
 
 ### Planned Features
 * Dizzy's Item and Pokemon expansion
-* BW repel system
 * Auto-run
 * Remove badge boost
 * Bag sorting options
