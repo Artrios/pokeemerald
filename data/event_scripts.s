@@ -838,10 +838,12 @@ Common_EventScript_PlayerHandedOverTheItem:: @ 82723E4
 
 @ The below and surf.inc could be split into some text/notices.inc
 gText_PokemartSign:: @ 8272B6A
-	.string "“Selected items for your convenience!”\nPokémon Mart$"
+	.string "“Selected items for your convenience!”\n"
+	.string "Pokémon Mart$"
 
 gText_PokemonCenterSign:: @ 8272B9E
-	.string "“Rejuvenate your tired partners!”\nPokémon Center$"
+	.string "“Rejuvenate your tired partners!”\n"
+	.string "Pokémon Center$"
 
 gText_MomOrDadMightLikeThisProgram:: @ 8272BCF
 	.string "{STR_VAR_1} might like this program.\n"
@@ -857,7 +859,8 @@ gText_SandstormIsVicious:: @ 8272C5F
 	.string "It's impossible to keep going.$"
 
 gText_SelectWithoutRegisteredItem:: @ 8272C98
-	.string "An item in the Bag can be\nregistered to Select for easy use.$"
+	.string "An item in the Bag can be\n"
+	.string "registered to Select for easy use.$"
 
 gText_PokemonTrainerSchoolEmail:: @ 8272CD5
 	.string "There's an e-mail from Pokémon Trainer\n"
@@ -883,7 +886,8 @@ gText_PlayerWhitedOut:: @ 8272DE3
 	.string "Pokémon!\p{PLAYER} whited out!$"
 
 gText_RegisteredTrainerinPokeNav:: @ 8272E0F
-	.string "Registered {STR_VAR_1} {STR_VAR_2}\nin the PokéNav.$"
+	.string "Registered {STR_VAR_1} {STR_VAR_2}\n"
+	.string "in the PokéNav.$"
 
 gText_ComeBackWithSecretPower:: @ 8272E30
 	.string "Do you know the TM Secret Power?\p"

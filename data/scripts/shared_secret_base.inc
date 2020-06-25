@@ -214,11 +214,11 @@ SecretBase_Text_SmallIndentInWall:: @ 823B6E0
     .string "There's a small indent in the wall.$"
 
 SecretBase_Text_IndentUseSecretPower:: @ 823B704
-    .string "There's a small indent in the wall.\p"
-    .string "Use the SECRET POWER?$"
+	.string "There's a small indent in the wall.\p"
+	.string "Use the Secret Power?$"
 
 SecretBase_Text_DiscoveredSmallCavern:: @ 823B73E
     .string "Discovered a small cavern!$"
 
 SecretBase_Text_WantToMakeYourSecretBaseHere: @ 823B759
-    .string "Want to make your SECRET BASE here?$"
+	.string "Want to make your Secret Base here?$"

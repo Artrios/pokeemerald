@@ -109,7 +109,7 @@ static void SetUpItemUseCallback(u8 taskId)
         type = ItemId_GetType(gSpecialVar_ItemId) - 1;
     if (!InBattlePyramid())
     {
-        gBagMenu->mainCallback2 = sItemUseCallbacks[type];
+        gBagMenu->exitCallback = sItemUseCallbacks[type];
         Task_FadeAndCloseBagMenu(taskId);
     }
     else
@@ -194,7 +194,7 @@ static void CB2_CheckMail(void)
 
 void ItemUseOutOfBattle_Mail(u8 taskId)
 {
-    gBagMenu->mainCallback2 = CB2_CheckMail;
+    gBagMenu->exitCallback = CB2_CheckMail;
     Task_FadeAndCloseBagMenu(taskId);
 }
 
@@ -613,13 +613,13 @@ static void Task_StandingOnHiddenItem(u8 taskId)
 
 void ItemUseOutOfBattle_PokeblockCase(u8 taskId)
 {
-    if (sub_81221AC() == TRUE) // link func
+    if (MenuHelpers_LinkSomething() == TRUE) // link func
     {
         DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
     }
     else if (gTasks[taskId].tUsingRegisteredKeyItem != TRUE)
     {
-        gBagMenu->mainCallback2 = CB2_OpenPokeblockCaseOnField;
+        gBagMenu->exitCallback = CB2_OpenPokeblockCaseOnField;
         Task_FadeAndCloseBagMenu(taskId);
     }
     else
@@ -681,7 +681,7 @@ void ItemUseOutOfBattle_Berry(u8 taskId)
     {
         sItemUseOnFieldCB = ItemUseOnFieldCB_Berry;
         gFieldCallback = FieldCB_UseItemOnField;
-        gBagMenu->mainCallback2 = CB2_ReturnToField;
+        gBagMenu->exitCallback = CB2_ReturnToField;
         Task_FadeAndCloseBagMenu(taskId);
     }
     else
@@ -1026,7 +1026,7 @@ static void ItemUseInBattle_ShowPartyMenu(u8 taskId)
 {
     if (!InBattlePyramid())
     {
-        gBagMenu->mainCallback2 = ChooseMonForInBattleItem;
+        gBagMenu->exitCallback = ChooseMonForInBattleItem;
         Task_FadeAndCloseBagMenu(taskId);
     }
     else

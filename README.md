@@ -1,4 +1,5 @@
-# Pokémon Emerald
+# About this branch
+This is a decapitalized (all-caps text replaced with proper capitalization) version of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly, originally made by [**Wyrserth**](https://github.com/Wyrserth) and adapted to the current structure of the project.
 
 [![Build Status][travis-badge]][travis]
 
