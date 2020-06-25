@@ -1,10 +1,10 @@
 MauvilleCity_Mart_MapScripts:: @ 82110E5
 	.byte 0
 
-MauvilleCity_Mart_EventScript_2110E6:: 
+MauvilleCity_Mart_EventScript_Clerk:: 
 	lock
 	faceplayer
-	message gUnknown_08272A21
+	message gText_HowMayIServeYou
 	waitmessage
 	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
@@ -13,7 +13,7 @@ MauvilleCity_Mart_EventScript_2110E6::
 	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
 	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
 	pokemart Pokemart_No_Pokedex
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 

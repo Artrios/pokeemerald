@@ -6,7 +6,7 @@ Pokemart_No_Pokedex:
 
 Pokemart_Have_Pokedex_Setup:: 
 	pokemart Pokemart_Have_Pokedex
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
@@ -21,7 +21,7 @@ Pokemart_Have_Pokedex:
 
 Pokemart_1_Gym_Setup:: 
 	pokemart Pokemart_1_Badge
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
@@ -44,7 +44,7 @@ Pokemart_1_Badge:
 	
 Pokemart_2_Gym_Setup:: 
 	pokemart Pokemart_2_Badge
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
@@ -70,7 +70,7 @@ Pokemart_2_Badge:
 	
 Pokemart_3_Gym_Setup:: 
 	pokemart Pokemart_3_Badge
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
@@ -99,7 +99,7 @@ Pokemart_3_Badge:
 	
 Pokemart_4_Gym_Setup:: 
 	pokemart Pokemart_4_Badge
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
@@ -129,7 +129,7 @@ Pokemart_4_Badge:
 	
 Pokemart_5_Gym_Setup::
 	pokemart Pokemart_5_Badge
-	msgbox gUnknown_08272A3F, MSGBOX_DEFAULT
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
