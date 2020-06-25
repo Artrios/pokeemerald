@@ -73,7 +73,7 @@ EWRAM_DATA struct Pokemon gPlayerParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct Pokemon gEnemyParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct SpriteTemplate gMultiuseSpriteTemplate = {0};
 EWRAM_DATA struct Unknown_806F160_Struct *gUnknown_020249B4[2] = {NULL};
-extern EWRAM_DATA u8 gUnknown_02032298[2];
+extern EWRAM_DATA u8 gSelectedTradeMonPositions[2];
 
 // const rom data
 #include "data/battle_moves.h"
@@ -5264,7 +5264,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;
 			case EVO_TRADE_POKEMON:
-				if (gEvolutionTable[species][i].param == GetMonData(&gEnemyParty[gUnknown_02032298[1] % 6], MON_DATA_SPECIES, NULL))
+				if (gEvolutionTable[species][i].param == GetMonData(&gEnemyParty[gSelectedTradeMonPositions[1] % 6], MON_DATA_SPECIES, NULL))
 				{
 					targetSpecies = gEvolutionTable[species][i].targetSpecies;
 				}

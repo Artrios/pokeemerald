@@ -309,6 +309,21 @@
 #define EVO_LEVEL_NINJASK    0x000d // Pokémon reaches the specified level (special value for Ninjask)
 #define EVO_LEVEL_SHEDINJA   0x000e // Pokémon reaches the specified level (special value for Shedinja)
 #define EVO_BEAUTY           0x000f // Pokémon levels up with beauty ≥ specified value
+#define EVO_LEVEL_MALE       0x0010 // Pokemon levels up with a specific gender
+#define EVO_LEVEL_FEMALE     0x0011 // Pokemon levels up with a specific gender
+#define EVO_MOVE             0x0012 // Pokémon levels up while knowing the specified move
+#define EVO_MAP              0x0013 // Pokémon levels up in a specific map
+#define EVO_HELD_ITEM_DAY    0x0014 // Pokémon levels up during the day while holding the specified item
+#define EVO_HELD_ITEM_NIGHT  0x0015 // Pokémon levels up during the night while holding the specified item
+#define EVO_SPECIES          0x0016 // Pokémon levels up while a specific Pokémon is in the party.
+#define EVO_ITEM_MALE        0x0017 // Specified item is used on male Pokémon
+#define EVO_ITEM_FEMALE      0x0018 // Specified item is used on female Pokémon
+#define EVO_MOVE_TYPE        0x0019 // Pokémon levels up while knowing the specified move type
+#define EVO_SPECIES_TYPE     0x001A // Pokémon levels up while a Pokémon of a specific type is in the party.
+#define EVO_WEATHER          0x001B // Pokémon levels up with a specific weather.
+#define EVO_TRADE_POKEMON    0x001C // Pokémon is traded for a specific pokemon
+#define EVO_MAP_GROUP(map) (map >> 8) //Code to add
+#define EVO_MAP_NUM(map) (map & 0xFF) //Code to add
 
 #define EVOS_PER_MON 5
 

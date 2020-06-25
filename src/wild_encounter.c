@@ -620,7 +620,7 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-					u8 doublechance = Random() % (int)(100 / DOUBLE_WILD_CHANCE);
+					u8 doublechance = Random() % (int)(100 / 2);
                     if (USE_BATTLE_DEBUG && !GetSafariZoneFlag() && GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS && doublechance == 0)
                     {
                         struct Pokemon mon1 = gEnemyParty[0];
