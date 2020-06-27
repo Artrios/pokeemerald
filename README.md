@@ -28,10 +28,10 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * EVs capped to 252
 * BW repel system
 * Remove badge boost
+* Auto-run
 
 ### Planned Features
 * Dizzy's Item and Pokemon expansion
-* Auto-run
 * Bag sorting options
 * Make 'Move Pokemon' the first PC option
 * Move item in the party menu
