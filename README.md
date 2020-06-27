@@ -28,7 +28,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * EVs capped to 252
 * BW repel system
 * Remove badge boost
-* Auto-run
+* Auto-run (Press L button)
 
 ### Planned Features
 * Dizzy's Item and Pokemon expansion
