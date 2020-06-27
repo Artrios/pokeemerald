@@ -302,9 +302,9 @@ struct UnkStruct_2039D84
 
 enum
 {
+    BOX_OPTION_MOVE_MONS, 
     BOX_OPTION_WITHDRAW,
     BOX_OPTION_DEPOSIT,
-    BOX_OPTION_MOVE_MONS,
     BOX_OPTION_MOVE_ITEMS,
     BOX_OPTION_EXIT,
 };
@@ -718,9 +718,9 @@ static void sub_80D2C1C(struct UnkStruct_2000028 *unkStruct);
 // static const rom data
 static const struct PSS_MenuStringPtrs gUnknown_085716C0[] =
 {
+    {gText_MovePokemon, gText_MoveMonDescription},
     {gText_WithdrawPokemon, gText_WithdrawMonDescription},
     {gText_DepositPokemon, gText_DepositMonDescription},
-    {gText_MovePokemon, gText_MoveMonDescription},
     {gText_MoveItems, gText_MoveItemsDescription},
     {gText_SeeYa, gText_SeeYaDescription}
 };
@@ -1777,13 +1777,13 @@ static void Task_PokemonStorageSystemPC(u8 taskId)
             DestroyTask(taskId);
             break;
         default:
-            if (task->data[2] == 0 && CountPartyMons() == PARTY_SIZE)
+            if (task->data[2] == 1 && CountPartyMons() == PARTY_SIZE)
             {
                 FillWindowPixelBuffer(0, PIXEL_FILL(1));
                 AddTextPrinterParameterized2(0, 1, gText_PartyFull, 0, NULL, 2, 1, 3);
                 task->data[0] = 3;
             }
-            else if (task->data[2] == 1 && CountPartyMons() == 1)
+            else if (task->data[2] == 2 && CountPartyMons() == 1)
             {
                 FillWindowPixelBuffer(0, PIXEL_FILL(1));
                 AddTextPrinterParameterized2(0, 1, gText_JustOnePkmn, 0, NULL, 2, 1, 3);
