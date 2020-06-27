@@ -29,11 +29,11 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * BW repel system
 * Remove badge boost
 * Auto-run (Press L button)
+* 'Move Pokemon' is the first PC option
 
 ### Planned Features
 * Dizzy's Item and Pokemon expansion
 * Bag sorting options
-* Make 'Move Pokemon' the first PC option
 * Move item in the party menu
 
 ## See also
