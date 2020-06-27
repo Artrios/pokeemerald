@@ -482,6 +482,7 @@ struct SaveBlock2
     /*0x57C*/ struct RankingHall2P hallRecords2P[2][3]; // From record mixing.
     /*0x624*/ u16 contestLinkResults[5][4]; // 4 positions for 5 categories.
     /*0x64C*/ struct BattleFrontier frontier;
+    /*0xF2C*/ bool8 autoRun;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
