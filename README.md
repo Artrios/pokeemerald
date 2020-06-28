@@ -31,6 +31,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Auto-run (Press L button)
 * 'Move Pokemon' is the first PC option
 * Short low HP song
+* Wrapping Summary Screen
 
 ### Planned Features
 * Dizzy's Item and Pokemon expansion
