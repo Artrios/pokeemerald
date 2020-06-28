@@ -1766,7 +1766,7 @@ static s8 AdvanceMonIndex(s8 delta)
         return -1;
     else
         return index;
-    }
+   
 }
 
 static s8 AdvanceMultiBattleMonIndex(s8 delta)
