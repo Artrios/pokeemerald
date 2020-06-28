@@ -30,6 +30,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Remove badge boost
 * Auto-run (Press L button)
 * 'Move Pokemon' is the first PC option
+* Short low HP song
 
 ### Planned Features
 * Dizzy's Item and Pokemon expansion
