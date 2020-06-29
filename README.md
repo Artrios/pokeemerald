@@ -33,6 +33,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Short low HP song
 * Wrapping Summary Screen
 * More Bag pockets
+* Gen 6 (Destiny Knot, everstone, Ball inheritance) breeding mechanics
 
 ### Planned Features
 * Bag sorting options
