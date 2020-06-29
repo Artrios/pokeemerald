@@ -15,7 +15,7 @@ It builds the following ROM:
 To set up the repository, see [INSTALL.md](INSTALL.md).
 
 ### Features
-* Dizzy's [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2)
+* Dizzy's [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2), [**Pokemon Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/pokemon_expansion) and [**Item Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/item_expansion)
 * Decapitalisation, originally by [**Wyrserth**](https://github.com/Wyrserth) and updated by [**AsparagusEduardo**](https://github.com/AsparagusEduardo) 
 * Running indoors
 * Coloured nature stats
@@ -34,7 +34,6 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Wrapping Summary Screen
 
 ### Planned Features
-* Dizzy's Item and Pokemon expansion
 * Bag sorting options
 * Move item in the party menu
 
