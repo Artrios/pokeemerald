@@ -32,6 +32,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * 'Move Pokemon' is the first PC option
 * Short low HP song
 * Wrapping Summary Screen
+* More Bag pockets
 
 ### Planned Features
 * Bag sorting options
