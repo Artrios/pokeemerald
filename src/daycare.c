@@ -424,35 +424,13 @@ static s32 GetParentToInheritNature(struct DayCare *daycare)
     s32 dittoCount;
     s32 parent = -1;
 
-    // search for female gender
+    // search for everstone
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        if (GetBoxMonGender(&daycare->mons[i].mon) == MON_FEMALE)
+        if (GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_HELD_ITEM) == ITEM_EVERSTONE){
             parent = i;
-    }
-
-    // search for ditto
-    for (dittoCount = 0, i = 0; i < DAYCARE_MON_COUNT; i++)
-    {
-        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES);
-        if (species[i] == SPECIES_DITTO)
-            dittoCount++, parent = i;
-    }
-
-    // coin flip on ...two Dittos
-    if (dittoCount == DAYCARE_MON_COUNT)
-    {
-        if (Random() >= USHRT_MAX / 2)
-            parent = 0;
-        else
-            parent = 1;
-    }
-
-    // Don't inherit nature if not holding Everstone
-    if (GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_HELD_ITEM) != ITEM_EVERSTONE
-        || Random() >= USHRT_MAX / 2)
-    {
-        return -1;
+            break;
+        }
     }
 
     return parent;
@@ -547,7 +525,7 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
     }
 	
 	//If either parent has the destiny knot inherit 5 IVs
-	if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM) == ITEM_MASTER_BALL || GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM) == ITEM_MASTER_BALL) {
+	if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT || GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT) {
         INHERITED_IV_COUNT = 5;
 	}
 	else {
