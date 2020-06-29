@@ -17,7 +17,7 @@ MauvilleCity_Mart_EventScript_Clerk::
 	release
 	end
 
-MauvilleCity_Mart_EventScript_2:: 
+MauvilleCity_Mart_EventScript_Clerk2:: 
 	lock
 	faceplayer
 	message gText_HowMayIServeYou
@@ -29,7 +29,8 @@ MauvilleCity_Mart_EventScript_2::
 
 	.align 2
 MauvilleCity_Mart_Pokemart: @ 8211100
-	.2byte ITEM_POKE_BALL
+	.2byte ITEM_TM40_AERIAL_ACE
+	.2byte ITEM_TM42_FACADE
 	.2byte ITEM_NONE
 	release
 	end

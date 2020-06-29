@@ -6,6 +6,22 @@ FallarborTown_Mart_EventScript_Clerk:: @ 81FFCBF
 	faceplayer
 	message gText_HowMayIServeYou
 	waitmessage
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Pokemart_5_Gym_Setup
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, Pokemart_4_Gym_Setup
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, Pokemart_3_Gym_Setup
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, Pokemart_2_Gym_Setup
+	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, Pokemart_1_Gym_Setup
+	goto_if_set FLAG_ADVENTURE_STARTED, Pokemart_Have_Pokedex_Setup
+	pokemart Pokemart_No_Pokedex
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_Mart_EventScript_Clerk2:: 
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
 	pokemart FallarborTown_Mart_Pokemart
 	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
@@ -13,18 +29,9 @@ FallarborTown_Mart_EventScript_Clerk:: @ 81FFCBF
 
 	.align 2
 FallarborTown_Mart_Pokemart: @ 81FFCD8
-	.2byte ITEM_GREAT_BALL
-	.2byte ITEM_SUPER_POTION
-	.2byte ITEM_ANTIDOTE
-	.2byte ITEM_PARALYZE_HEAL
-	.2byte ITEM_ESCAPE_ROPE
-	.2byte ITEM_SUPER_REPEL
-	.2byte ITEM_X_SP_ATK
-	.2byte ITEM_X_SPEED
-	.2byte ITEM_X_ATTACK
-	.2byte ITEM_X_DEFENSE
-	.2byte ITEM_DIRE_HIT
-	.2byte ITEM_GUARD_SPEC
+	.2byte ITEM_QUICK_BALL
+	.2byte ITEM_DUSK_BALL
+	.2byte ITEM_DIVE_BALL
 	.2byte ITEM_NONE
 	release
 	end
