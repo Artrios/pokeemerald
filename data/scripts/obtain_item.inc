@@ -17,10 +17,13 @@ EventScript_ObtainItemMessage:: @ 8271AE3
 EventScript_BufferPocketNameAndTryFanfare:: @ 8271B08
 	switch VAR_RESULT
 	case POCKET_ITEMS, EventScript_BufferItemsPocket
-	case POCKET_KEY_ITEMS, EventScript_BufferKeyItemsPocket
+	case POCKET_MEDICINE, EventScript_BufferMedicinePocket
 	case POCKET_POKE_BALLS, EventScript_BufferPokeballsPocket
-	case POCKET_TM_HM, EventScript_BufferTMHMsPocket
+	case POCKET_BATTLE_ITEMS, EventScript_BufferBattleItemsPocket
 	case POCKET_BERRIES, EventScript_BufferBerriesPocket
+	case POCKET_POWER_UP, EventScript_BufferPowerUpPocket
+	case POCKET_TM_HM, EventScript_BufferTMHMsPocket
+	case POCKET_KEY_ITEMS, EventScript_BufferKeyItemsPocket
 	end
 
 EventScript_BufferItemsPocket:: @ 8271B45
@@ -49,6 +52,24 @@ EventScript_BufferTMHMsPocket:: @ 8271B75
 
 EventScript_BufferBerriesPocket:: @ 8271B85
 	bufferstdstring 2, STDSTRING_BERRIES
+	compare VAR_0x8007, 1
+	call_if_eq EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferMedicinePocket::
+	bufferstdstring 2, STDSTRING_MEDICINE
+	compare VAR_0x8007, 1
+	call_if_eq EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferBattleItemsPocket::
+	bufferstdstring 2, STDSTRING_BATTLEITEMS
+	compare VAR_0x8007, 1
+	call_if_eq EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferPowerUpPocket::
+	bufferstdstring 2, STDSTRING_POWERUP
 	compare VAR_0x8007, 1
 	call_if_eq EventScript_PlayFanfareObtainedItem
 	return
@@ -205,3 +226,4 @@ EventScript_NoRoomForHiddenItem:: @ 8271D47
 	setvar VAR_RESULT, 0
 	releaseall
 	end
+

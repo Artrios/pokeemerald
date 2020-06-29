@@ -1,5 +1,5 @@
 # About this branch
-This is a version of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly with a number of new features that were implemented in later generations.
+This is a branch of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly containing a number of new features that were implemented in later generations.
 
 [![Build Status][travis-badge]][travis]
 
