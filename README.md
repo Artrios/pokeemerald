@@ -34,10 +34,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Wrapping Summary Screen
 * More Bag pockets
 * Gen 6 (Destiny Knot, everstone, Ball inheritance) breeding mechanics
-
-### Planned Features
 * Bag sorting options
-* Move item in the party menu
 
 ## See also
 
