@@ -15,26 +15,27 @@ It builds the following ROM:
 To set up the repository, see [INSTALL.md](INSTALL.md).
 
 ### Features
-* Dizzy's [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2), [**Pokemon Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/pokemon_expansion) and [**Item Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/item_expansion)
-* Decapitalisation, originally by [**Wyrserth**](https://github.com/Wyrserth) and updated by [**AsparagusEduardo**](https://github.com/AsparagusEduardo) 
-* Running indoors
+* [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2), [**Pokemon Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/pokemon_expansion) and [**Item Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/item_expansion) (Credit: DizzyEgg)
+* Decapitalisation (Credit: Wyrserth and AsparagusEduardo)
+* Running indoors (Credit: TheXaman)
 * Coloured nature stats
 * Fly to Routes
 * Lati@s soaring (from ORAS)
-* Eggs hatch at Lv 1
-* Pokemon centers don't count eggs
 * Reusable TMs
 * Pokemarts sell based on No. of badges
 * EVs capped to 252
-* BW repel system
-* Remove badge boost
-* Auto-run (Press L button)
-* 'Move Pokemon' is the first PC option
+* BW repel system (Credit: DizzyEgg)
+* Remove badge boost (Credit: ThomasWinwood)
+* Auto-run (Credit: ghoulslash)
+* 'Move Pokemon' is the first PC option (Credit: AsparagusEduardo)
+* Wrapping Summary Screen (Credit: Zeturic)
+* More Bag pockets (Credit: AsparagusEduardo)
+* Bag sorting options (Credit: ghoulslash)
+* 'Move Item' option in party menu (Credit: Zeturic)
 * Short low HP song
-* Wrapping Summary Screen
-* More Bag pockets
 * Gen 6 (Destiny Knot, everstone, Ball inheritance) breeding mechanics
-* Bag sorting options
+* Eggs hatch at Lv 1
+* Pokemon centers don't count eggs
 
 ## See also
 
