@@ -3171,6 +3171,10 @@ static void SortItemsInBag(u8 pocket, u8 type)
         itemMem = gSaveBlock1Ptr->bagPocket_Items;
         itemAmount = BAG_ITEMS_COUNT;
         break;
+    case MEDICINE_POCKET:
+        itemMem = gSaveBlock1Ptr->bagPocket_Medicine;
+        itemAmount = BAG_MEDICINE_COUNT;
+        break;
     case KEYITEMS_POCKET:
         itemMem = gSaveBlock1Ptr->bagPocket_KeyItems;
         itemAmount = BAG_KEYITEMS_COUNT;
@@ -3179,9 +3183,17 @@ static void SortItemsInBag(u8 pocket, u8 type)
         itemMem = gSaveBlock1Ptr->bagPocket_PokeBalls;
         itemAmount = BAG_POKEBALLS_COUNT;
         break;
+    case BATTLEITEMS_POCKET:
+        itemMem = gSaveBlock1Ptr->bagPocket_BattleItems;
+        itemAmount = BAG_BATTLEITEMS_COUNT;
+        break;
     case BERRIES_POCKET:
         itemMem = gSaveBlock1Ptr->bagPocket_Berries;
         itemAmount = BAG_BERRIES_COUNT;
+        break;
+    case POWERUP_POCKET:
+        itemMem = gSaveBlock1Ptr->bagPocket_PowerUp;
+        itemAmount = BAG_POWERUP_COUNT;
         break;
     case TMHM_POCKET:
         itemMem = gSaveBlock1Ptr->bagPocket_TMHM;
