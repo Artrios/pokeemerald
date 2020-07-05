@@ -53,10 +53,10 @@ SootopolisCity_Gym_B1F_EventScript_Daphne:: @ 8225D5A
 
 SootopolisCity_Gym_B1F_Text_AndreaIntro: @ 8225D71
 	.string "I'll show you the sublime techniques\n"
-	.string "I learned from our Leader Juan!$"
+	.string "I learned from our Leader Wallace!$"
 
 SootopolisCity_Gym_B1F_Text_AndreaDefeat: @ 8225DB6
-	.string "Please forgive me, Juan…$"
+	.string "Please forgive me, Wallace…$"
 
 SootopolisCity_Gym_B1F_Text_AndreaPostBattle: @ 8225DCF
 	.string "Watch what happens if you crack all\n"
@@ -64,7 +64,7 @@ SootopolisCity_Gym_B1F_Text_AndreaPostBattle: @ 8225DCF
 
 SootopolisCity_Gym_B1F_Text_CrissyIntro: @ 8225E04
 	.string "You came all the way here, but you won't\n"
-	.string "get to see Juan.\p"
+	.string "get to see Wallace.\p"
 	.string "Not if you lose to me, you won't!$"
 
 SootopolisCity_Gym_B1F_Text_CrissyDefeat: @ 8225E60
@@ -73,10 +73,10 @@ SootopolisCity_Gym_B1F_Text_CrissyDefeat: @ 8225E60
 
 SootopolisCity_Gym_B1F_Text_CrissyPostBattle: @ 8225E90
 	.string "You might be good enough to avoid\n"
-	.string "being wiped out in one hit by Juan.$"
+	.string "being wiped out in one hit by Wallace.$"
 
 SootopolisCity_Gym_B1F_Text_DaphneIntro: @ 8225ED6
-	.string "The sight of Juan conducting\n"
+	.string "The sight of Wallace conducting\n"
 	.string "a battle…\p"
 	.string "The very beauty of it compelled me to\n"
 	.string "become a Trainer.$"
@@ -101,7 +101,7 @@ SootopolisCity_Gym_B1F_Text_ConnieDefeat: @ 8225FEB
 
 SootopolisCity_Gym_B1F_Text_ConniePostBattle: @ 8225FFE
 	.string "I'll tell you something good.\p"
-	.string "If you want to reach Juan, you\n"
+	.string "If you want to reach Wallace, you\n"
 	.string "need to walk on each floor tile once.$"
 
 SootopolisCity_Gym_B1F_Text_BridgetIntro: @ 8226061
@@ -120,7 +120,7 @@ SootopolisCity_Gym_B1F_Text_BridgetPostBattle: @ 82260D1
 
 SootopolisCity_Gym_B1F_Text_OliviaIntro: @ 8226164
 	.string "I train my Pokémon together with\n"
-	.string "Juan.\p"
+	.string "Wallace.\p"
 	.string "Don't think I'm a pushover.$"
 
 SootopolisCity_Gym_B1F_Text_OliviaDefeat: @ 82261A7
@@ -164,9 +164,9 @@ SootopolisCity_Gym_B1F_Text_AnnikaDefeat: @ 82263BD
 	.string "at my Pokémon?$"
 
 SootopolisCity_Gym_B1F_Text_AnnikaPostBattle: @ 82263F4
-	.string "I came to this Gym because Juan\n"
+	.string "I came to this Gym because Wallace\n"
 	.string "praised me for my darling Pokémon.\p"
-	.string "Oh, if only I'd met Juan years ago\n"
+	.string "Oh, if only I'd met Wallace years ago\n"
 	.string "when I was younger…$"
 
 SootopolisCity_Gym_B1F_Text_BriannaIntro: @ 822646E
@@ -178,6 +178,6 @@ SootopolisCity_Gym_B1F_Text_BriannaDefeat: @ 8226495
 	.string "I went much too easy on you.$"
 
 SootopolisCity_Gym_B1F_Text_BriannaPostBattle: @ 82264BC
-	.string "You couldn't lay a finger on Juan,\n"
+	.string "You couldn't lay a finger on Wallace,\n"
 	.string "I'm sure. Giggle…$"
 

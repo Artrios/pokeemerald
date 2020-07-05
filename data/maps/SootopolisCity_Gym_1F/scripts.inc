@@ -184,9 +184,9 @@ SootopolisCity_Gym_1F_EventScript_GymStatue:: @ 8225089
 SootopolisCity_Gym_1F_Text_GymGuideAdvice: @ 8225093
 	.string "Yo! How's it going, Champion-\n"
 	.string "bound {PLAYER}?\p"
-	.string "Sootopolis's Gym Leader Juan is\n"
+	.string "Sootopolis's Gym Leader Wallace is\n"
 	.string "a master of Water-type Pokémon.\p"
-	.string "And, to get to Juan, an icy floor\n"
+	.string "And, to get to Wallace, an icy floor\n"
 	.string "will hamper your progress…\p"
 	.string "Listen, I'm sorry, but that's all the\n"
 	.string "advice that I have for you.\p"
@@ -194,53 +194,45 @@ SootopolisCity_Gym_1F_Text_GymGuideAdvice: @ 8225093
 	.string "go for it yourself!$"
 
 SootopolisCity_Gym_1F_Text_GymGuidePostVictory: @ 82251AF
-	.string "Yow! You've beaten even Juan, who\n"
+	.string "Yow! You've beaten even Wallace, who\n"
 	.string "was supposedly the best in all Hoenn!\p"
 	.string "Okay! Check out your Trainer Card.\p"
 	.string "If you've gotten all the Badges, you're\n"
 	.string "set for the Pokémon League challenge!$"
 
 SootopolisCity_Gym_1F_Text_JuanIntro: @ 8225268
-	.string "Let me ask you.\n"
-	.string "Did you know?\l"
-	.string "Ah, I should not be so coy.\p"
-	.string "It was I who taught Wallace everything\n"
-	.string "there is to know about Pokémon.\p"
-	.string "Once, I had given up my position as\n"
-	.string "the Gym Leader.\p"
-	.string "In my place, I had entrusted Wallace\n"
-	.string "with the Gym.\p"
-	.string "However, a compelling reason arose for\n"
-	.string "me to make a comeback.\p"
-	.string "Ah, but enough chatter.\n"
-	.string "Let us begin our match, shall we?\p"
-	.string "Please, you shall bear witness to\n"
-	.string "our artistry.\p"
-	.string "A grand illusion of water sculpted\n"
-	.string "by Pokémon and myself!$"
+	.string "Allow me to formally introduce\n"
+	.string "myself.\p"
+	.string "I am Wallace.\n"
+	.string "The Gym Leader of Sootopolis.\p"
+	.string "There's something about you...\n"
+	.string "A difference in your demeanor.\p"
+	.string "I think I sense that in you.\p"
+	.string "What happened inside the Cave Of\n"
+	.string "Origin, and what you did, I will likely\l"
+	.string "learn through our upcoming battle.\p"
+	.string "Now, show me. Show me the power you\n"
+	.string "wield with your Pokémon.\p"
+	.string "And I, in turn, shall present you with\n"
+	.string "a performance of illusions in water\l"
+	.string "by me and my Pokémon!$"
 
 @ NOTE: This defeat text actually causes a buffer overflow. It's about 50 bytes too long for
 @ the gDisplayedStringBattle buffer that it's put into, and it stomps all over the gBattleTextBuffs
 @ after, as well as the otherwise unused array after that. One wonders if that's the reason for
 @ the existence of that unused array of ints.
 SootopolisCity_Gym_1F_Text_JuanDefeat: @ 8225432
-	.string "Ahahaha, excellent!\n"
-	.string "Very well, you are the winner.\p"
-	.string "From you, I sense the brilliant shine\n"
-	.string "of skill that will overcome all.\p"
-	.string "However, compared with me or even\n"
-	.string "Wallace, you are lacking in elegance.\p"
-	.string "Perhaps I should make you a loan\n"
-	.string "of my outfit?\p"
-	.string "… … … … … …\n"
-	.string "… … … … … …\p"
-	.string "Hahaha, I merely jest!\p"
-	.string "Rather than my clothes, I shall reward\n"
-	.string "you with this, the Rain Badge!$"
+	.string "Bravo.\p"
+	.string "I realize now your authenticity and\n"
+	.string "magnificence as a Pokémon Trainer.\p"
+	.string "I find much joy in having met you and\n"
+	.string "your Pokémon.\p"
+	.string "You have proven yourself worthy of\n"
+	.string "the Rain Badge. Accept it.$"
 
 SootopolisCity_Gym_1F_Text_ReceivedRainBadge: @ 8225598
 	.string "{PLAYER} received the Rain Badge\n"
-	.string "from Juan.$"
+	.string "from Wallace.$"
 
 SootopolisCity_Gym_1F_Text_ExplainRainBadgeTakeThis: @ 82255BE
 	.string "Having the Rain Badge shall assure you\n"
@@ -253,14 +245,13 @@ SootopolisCity_Gym_1F_Text_ExplainRainBadgeTakeThis: @ 82255BE
 	.string "battle we shared, take this…$"
 
 SootopolisCity_Gym_1F_Text_ExplainWaterPulse: @ 82256C1
-	.string "The Technical Machine I handed you\n"
-	.string "contains Water Pulse.\p"
+	.string "The TM I handed you contains\n"
+	.string "Water Pulse.\p"
 	.string "In use, it will occasionally confuse\n"
-	.string "the target with ultrasonic waves.\p"
-	.string "… … … … … …$"
+	.string "the target with ultrasonic waves.$"
 
 SootopolisCity_Gym_1F_Text_RegisteredJuan: @ 822574D
-	.string "Registered Gym Leader Juan\n"
+	.string "Registered Gym Leader Wallace\n"
 	.string "in the Pokénav.$"
 
 SootopolisCity_Gym_1F_Text_JuanPostBattle: @ 8225778
@@ -285,12 +276,12 @@ SootopolisCity_Gym_1F_Text_GymStatue: @ 82258FA
 
 SootopolisCity_Gym_1F_Text_GymStatueCertified: @ 8225916
 	.string "Sootopolis City Pokémon Gym\p"
-	.string "Juan's certified Trainers:\n"
+	.string "Wallace's certified Trainers:\n"
 	.string "{PLAYER}$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch: @ 8225950
-	.string "Juan: Ah, this Gym had returned to its\n"
-	.string "usual state of serenity…\p"
+	.string "Wallace: Ah, this Gym had returned to\n"
+	.string "its usual state of serenity…\p"
 	.string "But our young typhoon has returned\n"
 	.string "to put us to the test again!\p"
 	.string "Well, my friend, most certainly!\p"
@@ -302,7 +293,7 @@ SootopolisCity_Gym_1F_Text_JuanRematchDefeat: @ 8225A2E
 	.string "You have defeated me again!$"
 
 SootopolisCity_Gym_1F_Text_JuanPostRematch: @ 8225A67
-	.string "Juan: If I told you to become my\n"
+	.string "Wallace: If I told you to become my\n"
 	.string "apprentice, you will refuse, I am sure.\p"
 	.string "I would like to make a gift of my coat\n"
 	.string "to you.\p"
@@ -312,8 +303,8 @@ SootopolisCity_Gym_1F_Text_JuanPostRematch: @ 8225A67
 	.string "of nobility!$"
 
 SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons: @ 8225B48
-	.string "Juan: Ah, this Gym had returned to its\n"
-	.string "usual state of serenity…\p"
+	.string "Wallace: Ah, this Gym had returned to\n"
+	.string "its usual state of serenity…\p"
 	.string "But our young typhoon has returned\n"
 	.string "to put us to the test again!\p"
 	.string "Well, my friend, most certainly!\n"

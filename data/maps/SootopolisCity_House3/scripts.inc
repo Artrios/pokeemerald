@@ -22,8 +22,8 @@ SootopolisCity_House3_EventScript_Girl:: @ 8226B9B
 
 SootopolisCity_House3_Text_JuanHasManyFansDoYou: @ 8226BA4
 	.string "You're a Pokémon Trainer, aren't you?\p"
-	.string "Sootopolis's Juan has many fans.\n"
-	.string "Even more than his student Wallace!\p"
+	.string "Sootopolis's Wallace has many fans.\n"
+	.string "Even more than his teacher Juan!\p"
 	.string "Do you have any?$"
 
 SootopolisCity_House3_Text_YouMustBePrettyStrong: @ 8226C20
