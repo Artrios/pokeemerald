@@ -3599,16 +3599,16 @@ static const struct TrainerMonItemCustomMoves sParty_Juan1[] = {
     {
     .iv = 200,
     .lvl = 43,
-    .species = SPECIES_CRAWDAUNT,
+    .species = SPECIES_SEAKING,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_WATER_PULSE, MOVE_CRABHAMMER, MOVE_TAUNT, MOVE_LEER}
+    .moves = {MOVE_WATER_PULSE, MOVE_HORN_DRILL, MOVE_FURY_ATTACK, MOVE_RAIN_DANCE}
     },
     {
     .iv = 250,
     .lvl = 46,
-    .species = SPECIES_KINGDRA,
+    .species = SPECIES_MILOTIC,
     .heldItem = ITEM_CHESTO_BERRY,
-    .moves = {MOVE_WATER_PULSE, MOVE_DOUBLE_TEAM, MOVE_ICE_BEAM, MOVE_REST}
+    .moves = {MOVE_WATER_PULSE, MOVE_TWISTER, MOVE_ICE_BEAM, MOVE_RECOVER}
     }
 };
 
@@ -4415,44 +4415,44 @@ static const struct TrainerMonItemCustomMoves sParty_Wallace[] = {
     {
     .iv = 255,
     .lvl = 57,
-    .species = SPECIES_WAILORD,
+    .species = SPECIES_SKARMORY,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_RAIN_DANCE, MOVE_WATER_SPOUT, MOVE_DOUBLE_EDGE, MOVE_BLIZZARD}
+    .moves = {MOVE_STEEL_WING, MOVE_TOXIC, MOVE_AERIAL_ACE, MOVE_SPIKES}
     },
     {
     .iv = 255,
     .lvl = 55,
-    .species = SPECIES_TENTACRUEL,
+    .species = SPECIES_CLAYDOL,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_TOXIC, MOVE_HYDRO_PUMP, MOVE_SLUDGE_BOMB, MOVE_ICE_BEAM}
+    .moves = {MOVE_EARTHQUAKE, MOVE_ANCIENT_POWER, MOVE_LIGHT_SCREEN, MOVE_REFLECT}
     },
     {
     .iv = 255,
     .lvl = 56,
-    .species = SPECIES_LUDICOLO,
+    .species = SPECIES_AGGRON,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_GIGA_DRAIN, MOVE_SURF, MOVE_LEECH_SEED, MOVE_DOUBLE_TEAM}
+    .moves = {MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_THUNDER, MOVE_SOLAR_BEAM}
     },
     {
     .iv = 255,
     .lvl = 56,
-    .species = SPECIES_WHISCASH,
+    .species = SPECIES_CRADILY,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_EARTHQUAKE, MOVE_SURF, MOVE_AMNESIA, MOVE_HYPER_BEAM}
+    .moves = {MOVE_ANCIENT_POWER, MOVE_CONFUSE_RAY, MOVE_SLUDGE_BOMB, MOVE_GIGA_DRAIN}
     },
     {
     .iv = 255,
     .lvl = 56,
-    .species = SPECIES_GYARADOS,
+    .species = SPECIES_ARMALDO,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_DRAGON_DANCE, MOVE_EARTHQUAKE, MOVE_HYPER_BEAM, MOVE_SURF}
+    .moves = {MOVE_ANCIENT_POWER, MOVE_SLASH, MOVE_AERIAL_ACE, MOVE_WATER_PULSE}
     },
     {
     .iv = 255,
     .lvl = 58,
-    .species = SPECIES_MILOTIC,
+    .species = SPECIES_METAGROSS,
     .heldItem = ITEM_SITRUS_BERRY,
-    .moves = {MOVE_RECOVER, MOVE_SURF, MOVE_ICE_BEAM, MOVE_TOXIC}
+    .moves = {MOVE_METEOR_MASH, MOVE_EARTHQUAKE, MOVE_PSYCHIC, MOVE_HYPER_BEAM}
     }
 };
 
@@ -12434,3 +12434,4 @@ static const struct TrainerMonNoItemDefaultMoves sParty_MayLinkPlaceholder[] = {
     .species = SPECIES_KYOGRE,
     }
 };
+
