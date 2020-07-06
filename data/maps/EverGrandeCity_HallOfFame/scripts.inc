@@ -84,7 +84,7 @@ EverGrandeCity_HallOfFame_Movement_WalkIntoHallOfFame2: @ 8229908
 	step_end
 
 EverGrandeCity_HallOfFame_Text_HereWeHonorLeagueChampions: @ 822990E
-	.string "Wallace: This room…\p"
+	.string "Steven: This room…\p"
 	.string "This is where we keep records of\n"
 	.string "Pokémon that prevailed through\l"
 	.string "harsh battles.\p"
@@ -92,7 +92,7 @@ EverGrandeCity_HallOfFame_Text_HereWeHonorLeagueChampions: @ 822990E
 	.string "are honored.$"
 
 EverGrandeCity_HallOfFame_Text_LetsRecordYouAndYourPartnersNames: @ 82299A3
-	.string "Wallace: Come on, let's record your\n"
+	.string "Steven: Come on, let's record your\n"
 	.string "name as a Trainer who triumphed over\l"
 	.string "the Pokémon League, and the names of\l"
 	.string "the partners who battled with you.$"
