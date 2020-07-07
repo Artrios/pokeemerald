@@ -752,12 +752,12 @@ const struct SpriteFrameImage gObjectEventPicTable_TMBall[] = {
 };
 
 const struct SpriteFrameImage gObjectEventPicTable_MegaStoneSparkle[] = {
-    obj_frame_tiles(gObjectEventPic_MegaStoneSparkle, 2, 2, 0),
-    obj_frame_tiles(gObjectEventPic_MegaStoneSparkle, 2, 2, 1),
-    obj_frame_tiles(gObjectEventPic_MegaStoneSparkle, 2, 2, 2),
-    obj_frame_tiles(gObjectEventPic_MegaStoneSparkle, 2, 2, 3),
-    obj_frame_tiles(gObjectEventPic_MegaStoneSparkle, 2, 2, 4),
-    obj_frame_tiles(gObjectEventPic_MegaStoneSparkle, 2, 2, 5),
+    overworld_frame(gObjectEventPic_MegaStoneSparkle, 2, 2, 0),
+    overworld_frame(gObjectEventPic_MegaStoneSparkle, 2, 2, 1),
+    overworld_frame(gObjectEventPic_MegaStoneSparkle, 2, 2, 2),
+    overworld_frame(gObjectEventPic_MegaStoneSparkle, 2, 2, 3),
+    overworld_frame(gObjectEventPic_MegaStoneSparkle, 2, 2, 4),
+    overworld_frame(gObjectEventPic_MegaStoneSparkle, 2, 2, 5),
 };
 
 const struct SpriteFrameImage gObjectEventPicTable_ProfBirch[] = {
