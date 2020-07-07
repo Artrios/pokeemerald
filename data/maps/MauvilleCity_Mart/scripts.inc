@@ -29,8 +29,14 @@ MauvilleCity_Mart_EventScript_Clerk2::
 
 	.align 2
 MauvilleCity_Mart_Pokemart: @ 8211100
+	.2byte ITEM_TM09_VENOSHOCK
 	.2byte ITEM_TM40_AERIAL_ACE
 	.2byte ITEM_TM42_FACADE
+	.2byte ITEM_TM47_LOW_SWEEP
+	.2byte ITEM_TM57_CHARGE_BEAM
+	.2byte ITEM_TM78_BULLDOZE
+	.2byte ITEM_TM82_DRAGON_TAIL
+	.2byte ITEM_TM98_POWER_UP_PUNCH
 	.2byte ITEM_NONE
 	release
 	end
