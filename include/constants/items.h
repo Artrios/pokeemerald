@@ -603,14 +603,14 @@
 #define ITEM_TM99 580
 #define ITEM_TM100 581
 
-#define ITEM_HM01 532
-#define ITEM_HM02 533
-#define ITEM_HM03 534
-#define ITEM_HM04 535
-#define ITEM_HM05 536
-#define ITEM_HM06 537
-#define ITEM_HM07 538
-#define ITEM_HM08 539
+#define ITEM_HM01 582
+#define ITEM_HM02 583
+#define ITEM_HM03 584
+#define ITEM_HM04 585
+#define ITEM_HM05 586
+#define ITEM_HM06 587
+#define ITEM_HM07 588
+#define ITEM_HM08 589
 
 #define ITEM_TM01_HONE_CLAWS ITEM_TM01
 #define ITEM_TM02_DRAGON_CLAW ITEM_TM02
