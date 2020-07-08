@@ -156,4 +156,4 @@ Pokemart_5_Badge:
 	.2byte ITEM_MAX_REPEL
 	.2byte ITEM_NONE
 	release
-	end	
+	end
