@@ -657,3 +657,107 @@ MagmaHideout_4F_EventScript_MaxRevive:: @ 829151F
 MagmaHideout_3F_3R_EventScript_ItemEscapeRope:: @ 829152C
 	finditem ITEM_ESCAPE_ROPE
 	end
+
+SafariZone_South_EventScript_ItemAbsolite:: @ 82912F0
+	finditem ITEM_ABSOLITE
+	end
+
+Slateport_EventScript_ItemAlakazite:: @ 82912F0
+	finditem ITEM_ALAKAZITE
+	end
+
+MtPyre_EventScript_ItemBanettite:: @ 82912F0
+	finditem ITEM_BANETTITE
+	end
+
+AbandonedShip_EventScript_ItemBeedrillite:: @ 82912F0
+	finditem ITEM_BEEDRILLITE
+	end
+
+ShoalCave_EventScript_ItemGlalitite:: @ 82912F0
+	finditem ITEM_GLALITITE
+	end
+
+Route127_EventScript_ItemHeracronite:: @ 82912F0
+	finditem ITEM_HERACRONITE
+	end
+
+Route110_EventScript_ItemManectite:: @ 82912F0
+	finditem ITEM_MANECTITE
+	end
+
+Verdanturf_EventScript_ItemMawilite:: @ 82912F0
+	finditem ITEM_MAWILITE
+	end
+
+MtPyre_EventScript_ItemMedichamite:: @ 82912F0
+	finditem ITEM_MEDICHAMITE
+	end
+
+Route124_EventScript_ItemPinsirite:: @ 82912F0
+	finditem ITEM_PINSIRITE
+	end
+
+Sootopolis_EventScript_ItemSablenite:: @ 82912F0
+	finditem ITEM_SABLENITE
+	end
+
+GraniteCave_EventScript_ItemSteelixite:: @ 82912F0
+	finditem ITEM_STEELIXITE
+	end
+
+Route123_EventScript_ItemAbomasite:: @ 82912F0
+	finditem ITEM_ABOMASITE
+	end
+
+MeteorFalls_EventScript_ItemAerodactylite:: @ 82912F0
+	finditem ITEM_AERODACTYLITE
+	end
+
+NewMauville_EventScript_ItemAmpharosite:: @ 82912F0
+	finditem ITEM_AMPHAROSITE
+	end
+
+FieryPath_EventScript_ItemCharizarditeX:: @ 82912F0
+	finditem ITEM_CHARIZARDITE_X
+	end
+
+ScorchedSlab_EventScript_ItemCharizarditeY:: @ 82912F0
+	finditem ITEM_CHARIZARDITE_Y
+	end
+
+Lavaridge_EventScript_ItemHoundoominite:: @ 82912F0
+	finditem ITEM_HOUNDOOMINITE
+	end
+
+Pacifidlog_EventScript_ItemKangaskhanite:: @ 82912F0
+	finditem ITEM_KANGASKHANITE
+	end
+
+Littleroot_EventScript_ItemMewtwoniteX:: @ 82912F0
+	finditem ITEM_MEWTWONITE_X
+	end
+
+EverGrande_EventScript_ItemMewtwoniteY:: @ 82912F0
+	finditem ITEM_MEWTWONITE_Y
+	end
+
+JaggedPass_EventScript_ItemTyranitarite:: @ 82912F0
+	finditem ITEM_TYRANITARITE
+	end
+
+PetalburgWoods_EventScript_ItemScizorite:: @ 82912F0
+	finditem ITEM_SCIZORITE
+	end
+
+Route119_EventScript_ItemVenusaurite:: @ 82912F0
+	finditem ITEM_VENUSAURITE
+	end
+
+BatlleFrontier_EventScript_ItemGengarite:: @ 82912F0
+	finditem ITEM_GENGARITE
+	end
+
+SSTidal_EventScript_ItemBlastoisinite:: @ 82912F0
+	finditem ITEM_BLASTOISINITE
+	end
