@@ -53,3 +53,132 @@ SouthernIsland_Exterior_EventScript_Sign:: @ 8242A3C
 	msgbox SouthernIsland_Exterior_Text_Sign, MSGBOX_SIGN
 	end
 
+SouthernIsland_Exterior_EventScript_Steven:: @ 81F3E8E
+	lockall
+	setvar VAR_0x8008, 0
+	faceplayer
+	goto SouthernIsland_Exterior_EventScript_StevenEvent
+	end
+
+SouthernIsland_Exterior_EventScript_StevenTrigger:: @ 81F3E8E
+	lockall
+	setvar VAR_0x8008, 1
+	call SouthernIsland_Exterior_EventScript_StevenTurn0
+	goto SouthernIsland_Exterior_EventScript_StevenEvent
+	end
+
+SouthernIsland_Exterior_EventScript_StevenEvent:: @ 81F3E8E
+	lockall
+	msgbox SouthernIsland_Exterior_Text_StevenArrives0, MSGBOX_DEFAULT
+	call SouthernIsland_Exterior_EventScript_StevenTurn1
+	msgbox SouthernIsland_Exterior_Text_StevenArrives1, MSGBOX_DEFAULT
+	compare VAR_0x8008, 0
+	call_if_eq SouthernIsland_Exterior_EventScript_StevenTurn3
+	compare VAR_0x8008, 1
+	call_if_eq SouthernIsland_Exterior_EventScript_StevenTurn2
+	msgbox SouthernIsland_Exterior_Text_StevenArrives2, MSGBOX_DEFAULT
+	closemessage
+	call SouthernIsland_Exterior_EventScript_StevenLeaves
+	removeobject 3
+	setvar VAR_ROUTE118_STATE, 1
+	release
+	end
+
+SouthernIsland_Exterior_EventScript_StevenTurn0:: @ 81F3F28
+	applymovement OBJ_EVENT_ID_PLAYER, SouthernIsland_Exterior_Movement_PlayerTurnsRight
+	applymovement 3, SouthernIsland_Exterior_Movement_PlayerTurnsLeft
+	waitmovement 0
+	return
+
+SouthernIsland_Exterior_EventScript_StevenTurn1:: @ 81F3F28
+	applymovement 3, SouthernIsland_Exterior_Movement_PlayerTurnsUp
+	waitmovement 0
+	return
+
+SouthernIsland_Exterior_EventScript_StevenTurn2:: @ 81F3F28
+	applymovement 3, SouthernIsland_Exterior_Movement_PlayerTurnsLeft
+	waitmovement 0
+	return
+
+SouthernIsland_Exterior_EventScript_StevenTurn3:: @ 81F3F28
+	applymovement 3, SouthernIsland_Exterior_Movement_PlayerTurnsDown
+	waitmovement 0
+	return
+
+SouthernIsland_Exterior_EventScript_StevenLeaves:: @ 81F3F28
+	applymovement 3, SouthernIsland_Exterior_Movement_StevenLeaves
+	waitmovement 0
+	return
+
+SouthernIsland_Exterior_Movement_PlayerTurnsRight::
+	walk_in_place_fastest_right
+	step_end
+
+SouthernIsland_Exterior_Movement_PlayerTurnsLeft::
+	walk_in_place_fastest_left
+	step_end
+
+SouthernIsland_Exterior_Movement_PlayerTurnsUp::
+	walk_in_place_fastest_up
+	step_end
+
+SouthernIsland_Exterior_Movement_PlayerTurnsDown::
+	walk_in_place_fastest_down
+	step_end
+
+SouthernIsland_Exterior_Movement_StevenLeaves::
+	walk_up
+	walk_up
+	walk_up
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	step_end
+
+SouthernIsland_Exterior_EventScript_Trigger0:: @ 81F3E8E
+	lockall
+	msgbox SouthernIsland_Exterior_Text_Voice0, MSGBOX_DEFAULT
+	closemessage
+	playse SE_PIN
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_ExclamationMark
+	delay 60
+	msgbox SouthernIsland_Exterior_Text_Voice1, MSGBOX_DEFAULT
+	setvar VAR_ROUTE118_STATE, 2
+	release
+	end
+
+SouthernIsland_Exterior_Text_StevenArrives0::
+	.string "Steven: We've arrived.\p"
+	.string "But where did Latias fly off to?$"
+
+SouthernIsland_Exterior_Text_StevenArrives1::
+	.string "...\p"
+	.string "I don't know what it is...\p"
+	.string "Not quite unease, not quite fear...\p"
+	.string "But there is something...unsettling...\p"
+	.string "It is an odd feeling, as though I am\n"
+	.string "walking in a dream-or an illusion.$"
+
+SouthernIsland_Exterior_Text_StevenArrives2::
+	.string "I once heard an odd fable.\p"
+	.string "It was said that the two Pokémon that\n"
+	.string "live on this island guard some secret\l"
+	.string "about that great form of Evolution:\l"
+	.string "Mega Evolution.\p"
+	.string "Could it be that some dangerous element\n"
+	.string "is here because of that?\p"
+	.string "...\p"
+	.string "Come, we should be going.$"
+
+SouthernIsland_Exterior_Text_Voice0::
+	.string "(Th- wh- mem-de\n"
+	.string "se- to carv- th-rts...)$"
+
+SouthernIsland_Exterior_Text_Voice1::
+	.string "(Those whose mememories fade\n"
+	.string "seek to carve them in their hearts...)$"
