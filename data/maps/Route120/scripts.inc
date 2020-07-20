@@ -239,6 +239,13 @@ Route120_EventScript_StevenGiveDeconScope:: @ 81F572C
 	msgbox Route120_Text_StevenGiveDevonScope, MSGBOX_DEFAULT
 	giveitem ITEM_DEVON_SCOPE
 	setflag FLAG_RECEIVED_DEVON_SCOPE
+	msgbox Route120_Text_StevenMegaStone, MSGBOX_DEFAULT
+	compare VAR_STARTER_MON, 0
+	call_if_eq Route120_EventScript_StevenTreeko
+	compare VAR_STARTER_MON, 1
+	call_if_eq Route120_EventScript_StevenTorchic
+	compare VAR_STARTER_MON, 2
+	call_if_eq Route120_EventScript_StevenMudkip
 	msgbox Route120_Text_StevenGoodbye, MSGBOX_DEFAULT
 	closemessage
 	applymovement 31, Common_Movement_WalkInPlaceFastestDown
@@ -256,6 +263,18 @@ Route120_EventScript_StevenGiveDeconScope:: @ 81F572C
 	special DrawWholeMapView
 	release
 	end
+
+Route120_EventScript_StevenTreeko::
+	giveitem ITEM_SCEPTILITE
+	return
+
+Route120_EventScript_StevenTorchic::
+	giveitem ITEM_BLAZIKENITE
+	return
+
+Route120_EventScript_StevenMudkip::
+	giveitem ITEM_SWAMPERTITE
+	return
 
 Route120_EventScript_PlayerApproachKecleonNorth:: @ 81F57A3
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestLeft
@@ -386,6 +405,12 @@ Route120_EventScript_Callie:: @ 81F5981
 Route120_Text_StevenGreeting: @ 81F5998
 	.string "Steven: Hm? {PLAYER}{KUN}, hi.\n"
 	.string "It's been a while.\p"
+	.string "How has it been? Have you been\n"
+	.string "using the Mega Bracelet wisely?\p"
+	.string "I suppose I needn't even ask, though.\n"
+	.string "Not when it comes to you and your team.\p"
+	.string "I wonder...\n"
+	.string "Have you noticed? Hm?\p"
 	.string "There's something here that you can't\n"
 	.string "see, right?\p"
 	.string "Now, if I were to use this device on\n"
@@ -424,7 +449,15 @@ Route120_Text_StevenGiveDevonScope: @ 81F5BAF
 	.string "Who knows, there may be other\n"
 	.string "concealed Pokémon.$"
 
+Route120_Text_StevenMegaStone: @ 81F5C7B
+	.string "And one more thing...$"
+
 Route120_Text_StevenGoodbye: @ 81F5C7B
+	.string "This stone ranks as one of my top five\n"
+	.string "favourite stones in existence.\p"
+	.string "I have no doubt that your Pokémon\n"
+	.string "will like it, too.\p"
+	.string "You know, {PLAYER}{KUN}...\n"
 	.string "Steven: {PLAYER}{KUN}.\p"
 	.string "I enjoy seeing Pokémon and Trainers\n"
 	.string "who strive together.\p"
