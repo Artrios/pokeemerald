@@ -1,5 +1,6 @@
 # About this branch
-This is a branch of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly containing a number of new features that were implemented in later generations.
+This is a branch of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly that is meant to act as somewhat of a demake of ORAS with as many of their mechanics as possible, but with Emerald's story.
+It uses the [**feature_update**](https://github.com/Artrios/pokeemerald/tree/feature_update) branch as a base.
 
 [![Build Status][travis-badge]][travis]
 
@@ -14,7 +15,32 @@ It builds the following ROM:
 
 To set up the repository, see [INSTALL.md](INSTALL.md).
 
-### Features
+### Changes
+* 100 TMs
+* Gen I-VI pokemon TM learnsets are updated
+* TM overworld balls are yellow
+* Rival gives you strength, guy that gave you strength gives you Aggronite (like in ORAS)
+* Steven gives you the Mega Stone for your starter
+* Wallace is a Gym Leader again (sorry Juan) and Steven's the Champion
+* Changed regi sprites to their doll sprites (they look more accurate!)
+
+### Changes (WIP)
+* Southern Island Event (works well enough for now)
+* Animate Mega Stone overworld sprite
+
+### Changes (Planned)
+* Incorparate Primal Kyogre/Groudon & Mega Rayquaza
+* Receive Eon Flute
+* Increase bag storage for TMs
+* Day/Night system
+* Change Team Leader and Admin sprites
+* Change Trainer teams
+* Add all currently missing TMs/Mega Stones
+* Can only buy TMs once
+* Change Battle Frontier Pokemon
+* Receive both bikes
+
+### Features Added (from [**feature_update**](https://github.com/Artrios/pokeemerald/tree/feature_update) branch)
 * [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2), [**Pokemon Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/pokemon_expansion) and [**Item Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/item_expansion) (Credit: DizzyEgg)
 * Decapitalisation (Credit: Wyrserth and AsparagusEduardo)
 * Running indoors (Credit: TheXaman)
