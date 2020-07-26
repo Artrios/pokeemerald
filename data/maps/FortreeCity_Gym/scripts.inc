@@ -49,7 +49,7 @@ FortreeCity_Gym_EventScript_WinonaDefeated:: @ 82165FD
 	end
 
 FortreeCity_Gym_EventScript_GiveAerialAce2:: @ 8216646
-	giveitem ITEM_TM40
+	giveitem ITEM_TM19
 	compare VAR_RESULT, 0
 	goto_if_eq Common_EventScript_ShowBagIsFull
 	msgbox FortreeCity_Gym_Text_ExplainAerialAce, MSGBOX_DEFAULT
@@ -58,7 +58,7 @@ FortreeCity_Gym_EventScript_GiveAerialAce2:: @ 8216646
 	end
 
 FortreeCity_Gym_EventScript_GiveAerialAce:: @ 821666A
-	giveitem ITEM_TM40
+	giveitem ITEM_TM19
 	compare VAR_RESULT, 0
 	goto_if_eq Common_EventScript_BagIsFull
 	msgbox FortreeCity_Gym_Text_ExplainAerialAce, MSGBOX_DEFAULT
@@ -264,9 +264,12 @@ FortreeCity_Gym_Text_ExplainFeatherBadgeTakeThis: @ 8216F17
 	.string "This is a gift from me.$"
 
 FortreeCity_Gym_Text_ExplainAerialAce: @ 8216FEC
-	.string "TM40 contains Aerial Ace.\p"
-	.string "Its speed…\n"
-	.string "No Pokémon should be able to avoid it.\p"
+	.string "TM19 contains Roost.\p"
+	.string "With this move, the user can restore\n"
+	.string "its HP by half by landing on the ground\l"
+	.string "and resting its injured body.\p"
+	.string "However, the user loses its Flying-type\n"
+	.string "during the turn so be cautious.\p"
 	.string "… … … … … …$"
 
 FortreeCity_Gym_Text_RegisteredWinona: @ 8217044

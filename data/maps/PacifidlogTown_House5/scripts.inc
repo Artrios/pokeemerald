@@ -18,6 +18,12 @@ PacifidlogTown_House5_EventScript_MirageIslandPresent:: @ 820412D
 
 PacifidlogTown_House5_EventScript_Gentleman:: @ 8204137
 	msgbox PacifidlogTown_House5_Text_MirageIslandAppearDependingOnWeather, MSGBOX_NPC
+	goto_if_unset FLAG_RECEIVED_TM03, PacifidlogTown_House5_EventScript_GiveTM03
+	end
+
+PacifidlogTown_House5_EventScript_GiveTM03::
+	giveitem ITEM_TM03
+	setflag FLAG_RECEIVED_TM03
 	end
 
 PacifidlogTown_House5_Text_CantSeeMirageIslandToday: @ 8204140

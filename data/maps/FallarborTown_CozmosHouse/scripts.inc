@@ -5,10 +5,9 @@ FallarborTown_CozmosHouse_EventScript_ProfCozmo:: @ 8200F13
 	lock
 	faceplayer
 	goto_if_set FLAG_RECEIVED_TM27, FallarborTown_CozmosHouse_EventScript_GaveMeteorite
-	checkitem ITEM_METEORITE, 1
-	compare VAR_RESULT, TRUE
-	goto_if_eq FallarborTown_CozmosHouse_EventScript_PlayerHasMeteorite
 	msgbox FallarborTown_CozmosHouse_Text_MeteoriteWillNeverBeMineNow, MSGBOX_DEFAULT
+	giveitem ITEM_TM23
+	setflag FLAG_RECEIVED_TM27
 	release
 	end
 
@@ -44,7 +43,7 @@ FallarborTown_CozmosHouse_EventScript_DeclineGiveMeteorite:: @ 8200FA5
 	end
 
 FallarborTown_CozmosHouse_EventScript_GaveMeteorite:: @ 8200FB2
-	msgbox FallarborTown_CozmosHouse_Text_ReallyGoingToHelpMyResearch, MSGBOX_DEFAULT
+	msgbox FallarborTown_CozmosHouse_Text_PleaseUseThisTM, MSGBOX_DEFAULT
 	release
 	end
 
@@ -73,7 +72,11 @@ FallarborTown_CozmosHouse_Text_MeteoriteWillNeverBeMineNow: @ 8200FEE
 	.string "conned into telling Team Magma where\l"
 	.string "you can find Meteorites…\p"
 	.string "That Meteorite from Meteor Falls…\n"
-	.string "It's never going to be mine now…$"
+	.string "It's never going to be mine now…\p"
+	.string "But I need to thank you, as well.\n"
+	.string "You truly saved me from disaster.\p"
+	.string "I hope you'll take this TM as some\n"
+	.string "small form of repayment.$"
 
 FallarborTown_CozmosHouse_Text_IsThatMeteoriteMayIHaveIt: @ 82010A2
 	.string "Oh!\n"
@@ -87,7 +90,7 @@ FallarborTown_CozmosHouse_Text_IsThatMeteoriteMayIHaveIt: @ 82010A2
 	.string "How about in exchange for this TM?$"
 
 FallarborTown_CozmosHouse_Text_PleaseUseThisTM: @ 8201159
-	.string "Prof. Cozmo: This TM, it represents\n"
+	.string "Prof. Cozmo: That TM, it represents\n"
 	.string "my feeling of gratitude.\l"
 	.string "Please use it!$"
 
