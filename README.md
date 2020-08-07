@@ -27,6 +27,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 ### Changes (WIP)
 * Southern Island Event (works well enough for now)
 * Animate Mega Stone overworld sprite
+* Put TMs in correct place
 
 ### Changes (Planned)
 * Incorparate Primal Kyogre/Groudon & Mega Rayquaza
