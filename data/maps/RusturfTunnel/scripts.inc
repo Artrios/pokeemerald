@@ -10,6 +10,7 @@ RusturfTunnel_OnFrame: @ 822CE32
 
 RusturfTunnel_OnTransition: @ 822CE44
 	compare VAR_RUSTURF_TUNNEL_STATE, 2
+	setflag FLAG_VISITED_ROUTE116
 	call_if_eq RusturfTunnel_EventScript_SetAquaGruntAndPeekoPos
 	end
 
