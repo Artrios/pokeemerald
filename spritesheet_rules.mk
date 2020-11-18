@@ -694,3 +694,6 @@ $(FLDEFFGFXDIR)/unknown_35.4bpp: %.4bpp: %.png
 
 $(FLDEFFGFXDIR)/unused_grass.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 2
+
+$(OBJEVENTGFXDIR)/misc/megastone_sparkle.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 2

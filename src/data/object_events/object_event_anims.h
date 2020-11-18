@@ -795,6 +795,38 @@ const union AnimCmd gObjectEventImageAnim_HoOhStayStill[] =
     ANIMCMD_JUMP(0),
 };
 
+const union AnimCmd gObjectEventImageAnim_MegaStoneSparkle[] =
+{
+    ANIMCMD_FRAME(0, 8),
+    ANIMCMD_FRAME(1, 8),
+    ANIMCMD_FRAME(2, 8),
+    ANIMCMD_FRAME(3, 8),
+    ANIMCMD_JUMP(0),
+};
+
+const union AnimCmd* const gObjectEventImageAnimTable_MegaStoneSparkle[] = {
+    gObjectEventImageAnim_FaceSouth,
+    gObjectEventImageAnim_FaceNorth,
+    gObjectEventImageAnim_FaceWest,
+    gObjectEventImageAnim_FaceEast,
+    gObjectEventImageAnim_MegaStoneSparkle,
+    gObjectEventImageAnim_GoNorth,
+    gObjectEventImageAnim_GoWest,
+    gObjectEventImageAnim_GoEast,
+    gObjectEventImageAnim_GoFastSouth,
+    gObjectEventImageAnim_GoFastNorth,
+    gObjectEventImageAnim_GoFastWest,
+    gObjectEventImageAnim_GoFastEast,
+    gObjectEventImageAnim_GoFasterSouth,
+    gObjectEventImageAnim_GoFasterNorth,
+    gObjectEventImageAnim_GoFasterWest,
+    gObjectEventImageAnim_GoFasterEast,
+    gObjectEventImageAnim_GoFastestSouth,
+    gObjectEventImageAnim_GoFastestNorth,
+    gObjectEventImageAnim_GoFastestWest,
+    gObjectEventImageAnim_GoFastestEast,
+};
+
 const union AnimCmd *const gObjectEventImageAnimTable_Inanimate[] = {
     gObjectEventImageAnim_StayStill,
 };
@@ -1162,6 +1194,10 @@ const struct UnkStruct_085094AC gUnknown_085094AC[] = {
     },
     {
         .anims = gObjectEventImageAnimTable_Fishing,
+        .animPos = {1, 3, 0, 2},
+    },
+    {
+        .anims = gObjectEventImageAnimTable_MegaStoneSparkle,
         .animPos = {1, 3, 0, 2},
     },
     {
