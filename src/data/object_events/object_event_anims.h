@@ -804,7 +804,7 @@ const union AnimCmd gObjectEventImageAnim_MegaStoneSparkle[] =
     ANIMCMD_JUMP(0),
 };
 
-const union AnimCmd* const gObjectEventImageAnimTable_MegaStoneSparkle[] = {
+const union AnimCmd *const gObjectEventImageAnimTable_MegaStoneSparkle[] = {
     gObjectEventImageAnim_FaceSouth,
     gObjectEventImageAnim_FaceNorth,
     gObjectEventImageAnim_FaceWest,
