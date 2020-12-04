@@ -23,10 +23,10 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Steven gives you the Mega Stone for your starter
 * Wallace is a Gym Leader again (sorry Juan) and Steven's the Champion
 * Changed regi sprites to their doll sprites (they look more accurate!)
+* Animated Mega Stone overworld sprite
 
 ### Changes (WIP)
 * Southern Island Event (works well enough for now)
-* Animate Mega Stone overworld sprite
 * Put TMs in correct place
 
 ### Changes (Planned)
