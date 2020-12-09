@@ -79,7 +79,7 @@ Route112_EventScript_ItemNugget:: @ 8290DCF
 	end
 
 Route113_EventScript_ItemMaxEther:: @ 8290DDC
-	finditem ITEM_MAX_ETHER
+	finditem ITEM_TM32
 	end
 
 Route113_EventScript_ItemSuperRepel:: @ 8290DE9
@@ -760,4 +760,32 @@ BatlleFrontier_EventScript_ItemGengarite:: @ 82912F0
 
 SSTidal_EventScript_ItemBlastoisinite:: @ 82912F0
 	finditem ITEM_BLASTOISINITE
+	end
+ 
+Route132_EventScript_ItemTM34:: @ 82912F0
+	finditem ITEM_TM34
+	end
+
+VictoryRoad_EventScript_ItemTM35:: @ 82912F0
+	finditem ITEM_TM35
+	end
+
+JaggedPass_EventScript_ItemTM43:: @ 82912F0
+	finditem ITEM_TM43
+	end
+
+MtChimney_EventScript_ItemTM59:: @ 82912F0
+	finditem ITEM_TM59
+	end
+
+MtPyre_EventScript_ItemTM61:: @ 82912F0
+	finditem ITEM_TM61
+	end
+
+Route119_EventScript_ItemTM62:: @ 82912F0
+	finditem ITEM_TM62
+	end
+
+GraniteCave_EventScript_ItemTM65:: @ 82912F0
+	finditem ITEM_TM65
 	end

@@ -1075,9 +1075,7 @@
 #define FLAG_ITEM_ROUTE_120_NUGGET                                  0x406
 #define FLAG_ITEM_ROUTE_120_FULL_HEAL                               0x407
 #define FLAG_ITEM_ROUTE_123_CALCIUM                                 0x408
-
-#define FLAG_UNUSED_0x409                                           0x409 // Unused Flag
-
+#define FLAG_ITEM_ROUTE_132_TM_34                                   0x409
 #define FLAG_ITEM_ROUTE_127_ZINC                                    0x40A
 #define FLAG_ITEM_ROUTE_127_CARBOS                                  0x40B
 #define FLAG_ITEM_ROUTE_132_RARE_CANDY                              0x40C
@@ -1169,24 +1167,18 @@
 #define FLAG_ITEM_NEW_MAUVILLE_FULL_HEAL                            0x462
 #define FLAG_ITEM_NEW_MAUVILLE_PARALYZE_HEAL                        0x463
 #define FLAG_ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL                      0x464
-
-#define FLAG_UNUSED_0x465                                           0x465 // Unused Flag
-#define FLAG_UNUSED_0x466                                           0x466 // Unused Flag
-#define FLAG_UNUSED_0x467                                           0x467 // Unused Flag
-#define FLAG_UNUSED_0x468                                           0x468 // Unused Flag
-
+#define FLAG_ITEM_VICTORY_ROAD_B1F_TM35                             0x465
+#define FLAG_ITEM_JAGGED_PASS_TM43                                  0x466
+#define FLAG_ITEM_MT_CHIMNEY_TM59                                   0x467
+#define FLAG_ITEM_MT_PYRE_TM61                                      0x468
 #define FLAG_ITEM_MT_PYRE_2F_ULTRA_BALL                             0x469
 #define FLAG_ITEM_MT_PYRE_4F_SEA_INCENSE                            0x46A
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE                 0x46B
 #define FLAG_ITEM_AQUA_HIDEOUT_B1F_NUGGET                           0x46C
-
-#define FLAG_UNUSED_0x46D                                           0x46D // Unused Flag
-
+#define FLAG_ITEM_ROUTE_119_TM_62                                   0x46D
 #define FLAG_ITEM_ROUTE_119_NUGGET                                  0x46E
 #define FLAG_ITEM_ROUTE_104_POTION                                  0x46F
-
-#define FLAG_UNUSED_0x470                                           0x470 // Unused Flag
-
+#define FLAG_ITEM_GRANITE_CAVE_TM_65                                0x470
 #define FLAG_ITEM_ROUTE_103_PP_UP                                   0x471
 
 #define FLAG_UNUSED_0x472                                           0x472 // Unused Flag
@@ -1226,32 +1218,32 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
-#define FLAG_ITEM_ABSOLITE                                          0x493 // Unused Flag
-#define FLAG_ITEM_ALAKAZITE                                         0x494 // Unused Flag
-#define FLAG_ITEM_BANETTITE                                         0x495 // Unused Flag
-#define FLAG_ITEM_BEEDRILLITE                                       0x496 // Unused Flag
-#define FLAG_ITEM_GLALITITE                                         0x497 // Unused Flag
-#define FLAG_ITEM_HERACRONITE                                       0x498 // Unused Flag
-#define FLAG_ITEM_MANECTITE                                         0x499 // Unused Flag
-#define FLAG_ITEM_MAWILITE                                          0x49A // Unused Flag
-#define FLAG_ITEM_MEDICHAMITE                                       0x49B // Unused Flag
-#define FLAG_ITEM_PINSIRITE                                         0x49C // Unused Flag
-#define FLAG_ITEM_SABLENITE                                         0x49D // Unused Flag
-#define FLAG_ITEM_STEELIXITE                                        0x49E // Unused Flag
-#define FLAG_ITEM_ABOMASITE                                         0x49F // Unused Flag
-#define FLAG_ITEM_AERODACTYLITE                                     0x4A0 // Unused Flag
-#define FLAG_ITEM_AMPHAROSITE                                       0x4A1 // Unused Flag
-#define FLAG_ITEM_CHARZARDITE_X                                     0x4A2 // Unused Flag
-#define FLAG_ITEM_CHARZARDITE_Y                                     0x4A3 // Unused Flag
-#define FLAG_ITEM_HOUNDOOMINITE                                     0x4A4 // Unused Flag
-#define FLAG_ITEM_KANGASKHANITE                                     0x4A5 // Unused Flag
-#define FLAG_ITEM_MEWTWONITE_X                                      0x4A6 // Unused Flag
-#define FLAG_ITEM_MEWTWONITE_Y                                      0x4A7 // Unused Flag
-#define FLAG_ITEM_TYRANITARITE                                      0x4A8 // Unused Flag
-#define FLAG_ITEM_SCIZORITE                                         0x4A9 // Unused Flag
-#define FLAG_ITEM_VENUSAURITE                                       0x4AA // Unused Flag
-#define FLAG_ITEM_GENGARITE                                         0x4AB // Unused Flag
-#define FLAG_ITEM_BLASTOISINITE                                     0x4AC // Unused Flag
+#define FLAG_ITEM_ABSOLITE                                          0x493
+#define FLAG_ITEM_ALAKAZITE                                         0x494
+#define FLAG_ITEM_BANETTITE                                         0x495
+#define FLAG_ITEM_BEEDRILLITE                                       0x496
+#define FLAG_ITEM_GLALITITE                                         0x497
+#define FLAG_ITEM_HERACRONITE                                       0x498
+#define FLAG_ITEM_MANECTITE                                         0x499 
+#define FLAG_ITEM_MAWILITE                                          0x49A
+#define FLAG_ITEM_MEDICHAMITE                                       0x49B
+#define FLAG_ITEM_PINSIRITE                                         0x49C
+#define FLAG_ITEM_SABLENITE                                         0x49D
+#define FLAG_ITEM_STEELIXITE                                        0x49E
+#define FLAG_ITEM_ABOMASITE                                         0x49F
+#define FLAG_ITEM_AERODACTYLITE                                     0x4A0
+#define FLAG_ITEM_AMPHAROSITE                                       0x4A1
+#define FLAG_ITEM_CHARZARDITE_X                                     0x4A2
+#define FLAG_ITEM_CHARZARDITE_Y                                     0x4A3
+#define FLAG_ITEM_HOUNDOOMINITE                                     0x4A4
+#define FLAG_ITEM_KANGASKHANITE                                     0x4A5
+#define FLAG_ITEM_MEWTWONITE_X                                      0x4A6
+#define FLAG_ITEM_MEWTWONITE_Y                                      0x4A7
+#define FLAG_ITEM_TYRANITARITE                                      0x4A8
+#define FLAG_ITEM_SCIZORITE                                         0x4A9
+#define FLAG_ITEM_VENUSAURITE                                       0x4AA
+#define FLAG_ITEM_GENGARITE                                         0x4AB
+#define FLAG_ITEM_BLASTOISINITE                                     0x4AC
 #define FLAG_UNUSED_0x4AD                                           0x4AD // Unused Flag
 #define FLAG_UNUSED_0x4AE                                           0x4AE // Unused Flag
 #define FLAG_UNUSED_0x4AF                                           0x4AF // Unused Flag
@@ -1391,7 +1383,7 @@
 #define FLAG_IS_CHAMPION                            (SYSTEM_FLAGS + 0x1F) // Seems to be related to linking.
 #define FLAG_NURSE_UNION_ROOM_REMINDER              (SYSTEM_FLAGS + 0x20)
 
-#define FLAG_EON_LATI								(SYSTEM_FLAGS + 0x21) // Unused Flag
+#define FLAG_EON_LATI								(SYSTEM_FLAGS + 0x21)
 #define FLAG_UNUSED_0x882                           (SYSTEM_FLAGS + 0x22) // Unused Flag
 #define FLAG_UNUSED_0x883                           (SYSTEM_FLAGS + 0x23) // Unused Flag
 #define FLAG_UNUSED_0x884                           (SYSTEM_FLAGS + 0x24) // Unused Flag
