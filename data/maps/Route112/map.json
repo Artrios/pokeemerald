@@ -280,7 +280,7 @@
       "var_value": "0",
       "script": "Route112_EventScript_RivalScene"
     }
-   ],
+  ],
   "bg_events": [
     {
       "type": "sign",
