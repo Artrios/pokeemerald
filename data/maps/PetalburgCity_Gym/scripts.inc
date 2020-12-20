@@ -437,7 +437,7 @@ PetalburgCity_Gym_EventScript_NormanBattle:: @ 8204E3B
 	end
 
 PetalburgCity_Gym_EventScript_GiveFacade:: @ 8204ED2
-	giveitem ITEM_TM42
+	giveitem ITEM_TM67
 	compare VAR_RESULT, 0
 	goto_if_eq Common_EventScript_BagIsFull
 	setflag FLAG_RECEIVED_TM42
@@ -1375,12 +1375,13 @@ PetalburgCity_Gym_Text_ExplainBalanceBadgeTakeThis: @ 820618A
 	.string "sure you can use it correctly.$"
 
 PetalburgCity_Gym_Text_ExplainFacade: @ 8206254
-	.string "Dad: TM42 contains Facade.\p"
-	.string "It doubles the power of moves if\n"
-	.string "the Pokémon is poisoned, paralyzed,\l"
-	.string "or burned.\p"
-	.string "It might be able to turn a bad\n"
-	.string "situation into an advantage.$"
+	.string "Dad: TM67 contains Retaliate.\p"
+	.string "Retaliate will allow you to\n"
+	.string "take revenge for a fallen team\l"
+	.string "member.\p"
+	.string "Its power will be doubled if\n"
+	.string "you have a Pokémon use it in\l"
+	.string "the very next turn.$"
 
 PetalburgCity_Gym_Text_DadHappyAndSad: @ 82062FB
 	.string "Dad: As the Gym Leader, I can't\n"
