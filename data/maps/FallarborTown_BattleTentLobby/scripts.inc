@@ -1,3 +1,5 @@
+.set LOCALID_ATTENDANT, 1
+
 FallarborTown_BattleTentLobby_MapScripts:: @ 81FFE66
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, FallarborTown_BattleTentLobby_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, FallarborTown_BattleTentLobby_OnWarp
@@ -53,7 +55,7 @@ FallarborTown_BattleTentLobby_EventScript_GivePrize:: @ 81FFF27
 	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, 0
 	message FallarborTown_BattleTentLobby_Text_ReceivedPrize
 	waitmessage
-	playfanfare MUS_FANFA4
+	playfanfare MUS_OBTAIN_ITEM
 	waitfanfare
 	msgbox FallarborTown_BattleTentLobby_Text_AwaitAnotherChallenge2, MSGBOX_DEFAULT
 	closemessage
@@ -111,7 +113,7 @@ FallarborTown_BattleTentLobby_EventScript_Attendant:: @ 8200001
 FallarborTown_BattleTentLobby_EventScript_AskEnterChallenge:: @ 8200021
 	message FallarborTown_BattleTentLobby_Text_TakeChallenge
 	waitmessage
-	multichoice 17, 6, MULTI_CHALLENGEINFO, 0
+	multichoice 17, 6, MULTI_CHALLENGEINFO, FALSE
 	switch VAR_RESULT
 	case 0, FallarborTown_BattleTentLobby_EventScript_TryEnterChallenge
 	case 1, FallarborTown_BattleTentLobby_EventScript_ExplainChallenge
@@ -193,12 +195,12 @@ FallarborTown_BattleTentLobby_EventScript_EndCancelChallenge:: @ 82001CD
 	end
 
 FallarborTown_BattleTentLobby_EventScript_WalkToDoor:: @ 82001CF
-	applymovement 1, FallarborTown_BattleTentLobby_Movement_AttendantWalkToDoor
+	applymovement LOCALID_ATTENDANT, FallarborTown_BattleTentLobby_Movement_AttendantWalkToDoor
 	applymovement OBJ_EVENT_ID_PLAYER, FallarborTown_BattleTentLobby_Movement_PlayerWalkToDoor
 	waitmovement 0
 	opendoor 6, 1
 	waitdooranim
-	applymovement 1, FallarborTown_BattleTentLobby_Movement_AttendantEnterDoor
+	applymovement LOCALID_ATTENDANT, FallarborTown_BattleTentLobby_Movement_AttendantEnterDoor
 	applymovement OBJ_EVENT_ID_PLAYER, FallarborTown_BattleTentLobby_Movement_PlayerEnterDoor
 	waitmovement 0
 	closedoor 6, 1
@@ -264,7 +266,7 @@ FallarborTown_BattleTentLobby_EventScript_RulesBoard:: @ 820024F
 FallarborTown_BattleTentLobby_EventScript_ReadRulesBoard:: @ 820025E
 	message BattleFrontier_BattleArenaLobby_Text_ReadWhichHeading
 	waitmessage
-	multichoice 17, 0, MULTI_FALLARBOR_TENT_RULES, 0
+	multichoice 17, 0, MULTI_FALLARBOR_TENT_RULES, FALSE
 	switch VAR_RESULT
 	case 0, FallarborTown_BattleTentLobby_EventScript_RulesLevel
 	case 1, FallarborTown_BattleTentLobby_EventScript_RulesBattle

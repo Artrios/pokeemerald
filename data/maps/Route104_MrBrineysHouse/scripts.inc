@@ -1,3 +1,6 @@
+.set LOCALID_BRINEY, 1
+.set LOCALID_PEEKO, 2
+
 Route104_MrBrineysHouse_MapScripts:: @ 8229D2E
 	map_script MAP_SCRIPT_ON_TRANSITION, Route104_MrBrineysHouse_OnTransition
 	.byte 0
@@ -14,10 +17,10 @@ Route104_MrBrineysHouse_EventScript_HideRustboroRival:: @ 8229D4C
 	return
 
 Route104_MrBrineysHouse_EventScript_SetBrineyPeekoPos:: @ 8229D50
-	setobjectxyperm 1, 9, 3
-	setobjectmovementtype 1, MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_LEFT_UP_RIGHT
-	setobjectxyperm 2, 9, 6
-	setobjectmovementtype 2, MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_UP_RIGHT_DOWN
+	setobjectxyperm LOCALID_BRINEY, 9, 3
+	setobjectmovementtype LOCALID_BRINEY, MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_LEFT_UP_RIGHT
+	setobjectxyperm LOCALID_PEEKO, 9, 6
+	setobjectmovementtype LOCALID_PEEKO, MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_UP_RIGHT_DOWN
 	return
 
 Route104_MrBrineysHouse_EventScript_Briney:: @ 8229D67
@@ -41,7 +44,7 @@ Route104_MrBrineysHouse_EventScript_SailingIntro:: @ 8229D8A
 Route104_MrBrineysHouse_EventScript_WhereAreWeBound:: @ 8229DAE
 	message Route104_MrBrineysHouse_Text_WhereAreWeBound
 	waitmessage
-	multichoicedefault 20, 8, MULTI_BRINEY_OFF_DEWFORD, 1, 0
+	multichoicedefault 20, 8, MULTI_BRINEY_OFF_DEWFORD, 1, FALSE
 	switch VAR_RESULT
 	case 0, Route104_MrBrineysHouse_EventScript_SailToDewford
 	case 1, Route104_MrBrineysHouse_EventScript_DeclineSailing

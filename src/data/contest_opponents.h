@@ -1,7 +1,6 @@
 
 #include "global.h"
 #include "contest.h"
-#include "constants/species.h"
 
 #define CONTEST_OPPONENT_JIMMY 0
 #define CONTEST_OPPONENT_EDITH 1
@@ -100,9 +99,46 @@
 #define CONTEST_OPPONENT_TREY 94
 #define CONTEST_OPPONENT_LANE 95
 
-const struct ContestWinner gUnknown_08587FA4[] =
+// All contest opponents have a common set of AI flags (which contains all of the actually 
+// useful AI scripts, as well as some dummys) and a random combination of 2-3 dummy flags. 
+// Seems that like the battle AI they had more plans for this than what ended up in the final game
+#define CONTEST_AI_SET_1  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_20 | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_2  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_19 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_3  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_18 | CONTEST_AI_DUMMY_23)
+#define CONTEST_AI_SET_4  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_17 | CONTEST_AI_DUMMY_23)
+#define CONTEST_AI_SET_5  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_16 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_6  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_15 | CONTEST_AI_DUMMY_22)
+#define CONTEST_AI_SET_7  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_14 | CONTEST_AI_DUMMY_23)
+#define CONTEST_AI_SET_8  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_13 | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_9  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_12 | CONTEST_AI_DUMMY_24)
+#define CONTEST_AI_SET_A  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_11 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_B  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_10 | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_C  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_9  | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_D  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_8  | CONTEST_AI_DUMMY_22 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_E  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_7  | CONTEST_AI_DUMMY_24)
+#define CONTEST_AI_SET_F  (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_6  | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_10 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_20 | CONTEST_AI_DUMMY_23)
+#define CONTEST_AI_SET_11 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_18 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_12 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_17 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_13 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_16 | CONTEST_AI_DUMMY_22)
+#define CONTEST_AI_SET_14 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_15 | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_15 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_14 | CONTEST_AI_DUMMY_22)
+#define CONTEST_AI_SET_16 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_13 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_17 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_12 | CONTEST_AI_DUMMY_23 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_18 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_10 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_19 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_9  | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_1A (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_8  | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_1B (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_7  | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_1C (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_6  | CONTEST_AI_DUMMY_21)
+#define CONTEST_AI_SET_1D (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_20 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_1E (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_15 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_1F (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_14 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_20 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_12 | CONTEST_AI_DUMMY_25)
+#define CONTEST_AI_SET_21 (CONTEST_AI_COMMON | CONTEST_AI_DUMMY_7  | CONTEST_AI_DUMMY_25)
+
+const struct ContestWinner gDefaultContestWinners[] =
 {
-    {
+    [CONTEST_WINNER_HALL_1 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_ELECTRIKE,
@@ -111,7 +147,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Ezra"),
         .contestRank = CONTEST_RANK_NORMAL
     },
-    {
+    [CONTEST_WINNER_HALL_2 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_TROPIUS,
@@ -120,7 +156,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Allan"),
         .contestRank = CONTEST_RANK_HYPER
     },
-    {
+    [CONTEST_WINNER_HALL_3 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_XATU,
@@ -129,7 +165,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Juliet"),
         .contestRank = CONTEST_RANK_NORMAL
     },
-    {
+    [CONTEST_WINNER_HALL_4 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_PLUSLE,
@@ -138,7 +174,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Baily"),
         .contestRank = CONTEST_RANK_MASTER
     },
-    {
+    [CONTEST_WINNER_HALL_5 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_SHUPPET,
@@ -147,7 +183,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Melany"),
         .contestRank = CONTEST_RANK_SUPER
     },
-    {
+    [CONTEST_WINNER_HALL_6 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_ZANGOOSE,
@@ -156,7 +192,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Hana"),
         .contestRank = CONTEST_RANK_HYPER
     },
-    {
+    [CONTEST_WINNER_HALL_UNUSED_1 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_LOUDRED,
@@ -165,7 +201,7 @@ const struct ContestWinner gUnknown_08587FA4[] =
         .trainerName = _("Bryant"),
         .contestRank = CONTEST_RANK_HYPER
     },
-    {
+    [CONTEST_WINNER_HALL_UNUSED_2 - 1] = {
         .personality = 0,
         .trainerId = 0xFFFF,
         .species = SPECIES_DELCATTY,
@@ -183,7 +219,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Poochy"),
         .trainerName = _("Jimmy"),
         .trainerGfxId = OBJ_EVENT_GFX_BOY_1,
-        .aiChecks = 0xC000FFF,
+        .aiFlags = CONTEST_AI_SET_1,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -203,7 +239,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 3,
         .tough = 4,
         .sheen = 50,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -212,7 +247,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Musille"),
         .trainerName = _("Edith"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_1,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -232,7 +267,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 1,
         .tough = 2,
         .sheen = 60,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -241,7 +275,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Duster"),
         .trainerName = _("Evan"),
         .trainerGfxId = OBJ_EVENT_GFX_LITTLE_BOY,
-        .aiChecks = 0x21000FFF,
+        .aiFlags = CONTEST_AI_SET_3,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -261,7 +295,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 12,
         .tough = 4,
         .sheen = 70,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -270,7 +303,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Dots"),
         .trainerName = _("Kelsey"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_1,
-        .aiChecks = 0x20800FFF,
+        .aiFlags = CONTEST_AI_SET_4,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -290,7 +323,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 2,
         .tough = 7,
         .sheen = 80,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -299,7 +331,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Tatay"),
         .trainerName = _("Madison"),
         .trainerGfxId = OBJ_EVENT_GFX_POKEFAN_F,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -319,7 +351,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 5,
         .tough = 4,
         .sheen = 90,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -328,7 +359,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Ninda"),
         .trainerName = _("Raymond"),
         .trainerGfxId = OBJ_EVENT_GFX_BLACK_BELT,
-        .aiChecks = 0x10200FFF,
+        .aiFlags = CONTEST_AI_SET_6,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -348,7 +379,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 7,
         .tough = 8,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -357,7 +387,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Smish"),
         .trainerName = _("Grant"),
         .trainerGfxId = OBJ_EVENT_GFX_YOUNGSTER,
-        .aiChecks = 0x20100FFF,
+        .aiFlags = CONTEST_AI_SET_7,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -377,7 +407,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 2,
         .tough = 2,
         .sheen = 50,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -386,7 +415,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Sleal"),
         .trainerName = _("Paige"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_4,
-        .aiChecks = 0x8080FFF,
+        .aiFlags = CONTEST_AI_SET_8,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -406,7 +435,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 10,
         .sheen = 60,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -415,7 +443,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Slokth"),
         .trainerName = _("Alec"),
         .trainerGfxId = OBJ_EVENT_GFX_CAMPER,
-        .aiChecks = 0x40040FFF,
+        .aiFlags = CONTEST_AI_SET_9,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -435,7 +463,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 5,
         .tough = 18,
         .sheen = 70,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -444,7 +471,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Whiris"),
         .trainerName = _("Sydney"),
         .trainerGfxId = OBJ_EVENT_GFX_LASS,
-        .aiChecks = 0x80020FFF,
+        .aiFlags = CONTEST_AI_SET_A,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -464,7 +491,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 2,
         .tough = 7,
         .sheen = 80,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -473,7 +499,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Mahita"),
         .trainerName = _("Morris"),
         .trainerGfxId = OBJ_EVENT_GFX_SCHOOL_KID_M,
-        .aiChecks = 0x8010FFF,
+        .aiFlags = CONTEST_AI_SET_B,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -493,7 +519,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 8,
         .tough = 1,
         .sheen = 90,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -502,7 +527,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Ronar"),
         .trainerName = _("Mariah"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_2,
-        .aiChecks = 0x8008FFF,
+        .aiFlags = CONTEST_AI_SET_C,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -522,7 +547,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 2,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -531,7 +555,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Batro"),
         .trainerName = _("Russell"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_3,
-        .aiChecks = 0x90004FFF,
+        .aiFlags = CONTEST_AI_SET_D,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -551,7 +575,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 2,
         .tough = 10,
         .sheen = 50,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -560,7 +583,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Gulin"),
         .trainerName = _("Melanie"),
         .trainerGfxId = OBJ_EVENT_GFX_TWIN,
-        .aiChecks = 0x40002FFF,
+        .aiFlags = CONTEST_AI_SET_E,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -580,7 +603,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 5,
         .sheen = 60,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -589,7 +611,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Rikelec"),
         .trainerName = _("Chance"),
         .trainerGfxId = OBJ_EVENT_GFX_RICH_BOY,
-        .aiChecks = 0x80001FFF,
+        .aiFlags = CONTEST_AI_SET_F,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -609,7 +631,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 1,
         .tough = 1,
         .sheen = 70,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -618,7 +639,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Bulby"),
         .trainerName = _("Agatha"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_2,
-        .aiChecks = 0xC000FFF,
+        .aiFlags = CONTEST_AI_SET_1,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -638,7 +659,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 4,
         .sheen = 50,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -647,7 +667,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Futterbe"),
         .trainerName = _("Beau"),
         .trainerGfxId = OBJ_EVENT_GFX_HEX_MANIAC,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -667,7 +687,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 4,
         .sheen = 60,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -676,7 +695,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Pideot"),
         .trainerName = _("Kay"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_5,
-        .aiChecks = 0x21000FFF,
+        .aiFlags = CONTEST_AI_SET_3,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -696,7 +715,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 2,
         .tough = 3,
         .sheen = 70,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -705,7 +723,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Digle"),
         .trainerName = _("Cale"),
         .trainerGfxId = OBJ_EVENT_GFX_HIKER,
-        .aiChecks = 0x20800FFF,
+        .aiFlags = CONTEST_AI_SET_4,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -725,7 +743,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 5,
         .tough = 10,
         .sheen = 80,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -734,7 +751,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Wagil"),
         .trainerName = _("Caitlin"),
         .trainerGfxId = OBJ_EVENT_GFX_TUBER_F,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -754,7 +771,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 3,
         .tough = 10,
         .sheen = 90,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -763,7 +779,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Totdil"),
         .trainerName = _("Colby"),
         .trainerGfxId = OBJ_EVENT_GFX_NINJA_BOY,
-        .aiChecks = 0x10200FFF,
+        .aiFlags = CONTEST_AI_SET_6,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -783,7 +799,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 1,
         .tough = 5,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -792,7 +807,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Baledy"),
         .trainerName = _("Kylie"),
         .trainerGfxId = OBJ_EVENT_GFX_BEAUTY,
-        .aiChecks = 0x20100FFF,
+        .aiFlags = CONTEST_AI_SET_7,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -812,7 +827,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 6,
         .tough = 2,
         .sheen = 90,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -821,7 +835,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Birdly"),
         .trainerName = _("Liam"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_5,
-        .aiChecks = 0x8080FFF,
+        .aiFlags = CONTEST_AI_SET_8,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -841,7 +855,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 5,
         .tough = 3,
         .sheen = 80,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -850,7 +863,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Tarvitar"),
         .trainerName = _("Milo"),
         .trainerGfxId = OBJ_EVENT_GFX_MANIAC,
-        .aiChecks = 0x40040FFF,
+        .aiFlags = CONTEST_AI_SET_9,
         .whichRank = CONTEST_RANK_NORMAL,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -870,7 +883,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 8,
         .tough = 10,
         .sheen = 70,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -879,7 +891,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Relia"),
         .trainerName = _("Karina"),
         .trainerGfxId = OBJ_EVENT_GFX_PICNICKER,
-        .aiChecks = 0x24000FFF,
+        .aiFlags = CONTEST_AI_SET_10,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -899,7 +911,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 20,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -908,7 +919,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Duodo"),
         .trainerName = _("Bobby"),
         .trainerGfxId = OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -928,7 +939,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 85,
         .tough = 35,
         .sheen = 110,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -937,7 +947,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Pinchin"),
         .trainerName = _("Claire"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_1,
-        .aiChecks = 0x81000FFF,
+        .aiFlags = CONTEST_AI_SET_11,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -949,7 +959,7 @@ const struct ContestPokemon gContestOpponents[] =
             MOVE_BITE,
             MOVE_SAND_ATTACK,
             MOVE_DIG,
-            MOVE_FAINT_ATTACK
+            MOVE_FEINT_ATTACK
         },
         .cool = 75,
         .beauty = 25,
@@ -957,7 +967,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 25,
         .sheen = 120,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -966,7 +975,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Nacac"),
         .trainerName = _("Willie"),
         .trainerGfxId = OBJ_EVENT_GFX_LITTLE_BOY,
-        .aiChecks = 0x80800FFF,
+        .aiFlags = CONTEST_AI_SET_12,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -986,7 +995,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 65,
         .tough = 25,
         .sheen = 130,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -995,7 +1003,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Shrand"),
         .trainerName = _("Cassidy"),
         .trainerGfxId = OBJ_EVENT_GFX_POKEFAN_F,
-        .aiChecks = 0x10400FFF,
+        .aiFlags = CONTEST_AI_SET_13,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -1015,7 +1023,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 100,
         .sheen = 140,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1024,7 +1031,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Toybal"),
         .trainerName = _("Morgan"),
         .trainerGfxId = OBJ_EVENT_GFX_BLACK_BELT,
-        .aiChecks = 0x8200FFF,
+        .aiFlags = CONTEST_AI_SET_14,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1044,7 +1051,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 35,
         .tough = 35,
         .sheen = 150,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1053,7 +1059,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Chamcham"),
         .trainerName = _("Summer"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_4,
-        .aiChecks = 0x10100FFF,
+        .aiFlags = CONTEST_AI_SET_15,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -1073,7 +1079,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 40,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1082,7 +1087,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Spinin"),
         .trainerName = _("Miles"),
         .trainerGfxId = OBJ_EVENT_GFX_CAMPER,
-        .aiChecks = 0x80080FFF,
+        .aiFlags = CONTEST_AI_SET_16,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1102,7 +1107,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 10,
         .tough = 25,
         .sheen = 110,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1111,7 +1115,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Swaby"),
         .trainerName = _("Audrey"),
         .trainerGfxId = OBJ_EVENT_GFX_LASS,
-        .aiChecks = 0xA0040FFF,
+        .aiFlags = CONTEST_AI_SET_17,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1131,7 +1135,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 30,
         .tough = 25,
         .sheen = 120,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1140,7 +1143,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Poinker"),
         .trainerName = _("Avery"),
         .trainerGfxId = OBJ_EVENT_GFX_SCHOOL_KID_M,
-        .aiChecks = 0x80020FFF,
+        .aiFlags = CONTEST_AI_SET_A,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1160,7 +1163,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 30,
         .sheen = 130,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1169,7 +1171,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Kecon"),
         .trainerName = _("Ariana"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_2,
-        .aiChecks = 0x80010FFF,
+        .aiFlags = CONTEST_AI_SET_18,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1189,7 +1191,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 75,
         .tough = 35,
         .sheen = 140,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1198,7 +1199,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Golden"),
         .trainerName = _("Ashton"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_3,
-        .aiChecks = 0x80008FFF,
+        .aiFlags = CONTEST_AI_SET_19,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -1218,7 +1219,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 30,
         .tough = 25,
         .sheen = 150,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1227,7 +1227,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Boboach"),
         .trainerName = _("Sandra"),
         .trainerGfxId = OBJ_EVENT_GFX_TWIN,
-        .aiChecks = 0x80004FFF,
+        .aiFlags = CONTEST_AI_SET_1A,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1247,7 +1247,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 25,
         .tough = 15,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1256,7 +1255,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Corpy"),
         .trainerName = _("Carson"),
         .trainerGfxId = OBJ_EVENT_GFX_YOUNGSTER,
-        .aiChecks = 0x8002FFF,
+        .aiFlags = CONTEST_AI_SET_1B,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -1276,7 +1275,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 60,
         .tough = 20,
         .sheen = 110,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1285,7 +1283,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Tado"),
         .trainerName = _("Katrina"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_1,
-        .aiChecks = 0x8001FFF,
+        .aiFlags = CONTEST_AI_SET_1C,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1305,7 +1303,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 15,
         .tough = 75,
         .sheen = 120,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1314,7 +1311,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Browlo"),
         .trainerName = _("Luke"),
         .trainerGfxId = OBJ_EVENT_GFX_FAT_MAN,
-        .aiChecks = 0xC000FFF,
+        .aiFlags = CONTEST_AI_SET_1,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1334,7 +1331,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 30,
         .tough = 20,
         .sheen = 100,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1343,7 +1339,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Fetchin"),
         .trainerName = _("Raul"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_5,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -1363,7 +1359,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 20,
         .tough = 20,
         .sheen = 110,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1372,7 +1367,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Seeley"),
         .trainerName = _("Jada"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_2,
-        .aiChecks = 0x21000FFF,
+        .aiFlags = CONTEST_AI_SET_3,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1392,7 +1387,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 20,
         .tough = 20,
         .sheen = 120,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1401,7 +1395,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Drowzin"),
         .trainerName = _("Zeek"),
         .trainerGfxId = OBJ_EVENT_GFX_PSYCHIC_M,
-        .aiChecks = 0x20800FFF,
+        .aiFlags = CONTEST_AI_SET_4,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1421,7 +1415,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 30,
         .tough = 45,
         .sheen = 130,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1430,7 +1423,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Hitemon"),
         .trainerName = _("Diego"),
         .trainerGfxId = OBJ_EVENT_GFX_EXPERT_M,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -1450,7 +1443,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 20,
         .tough = 45,
         .sheen = 140,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1459,7 +1451,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Bliss"),
         .trainerName = _("Aliyah"),
         .trainerGfxId = OBJ_EVENT_GFX_TEALA,
-        .aiChecks = 0x10200FFF,
+        .aiFlags = CONTEST_AI_SET_6,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1479,7 +1471,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 20,
         .tough = 20,
         .sheen = 150,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1488,7 +1479,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Kidlek"),
         .trainerName = _("Natalia"),
         .trainerGfxId = OBJ_EVENT_GFX_POKEFAN_F,
-        .aiChecks = 0x20100FFF,
+        .aiFlags = CONTEST_AI_SET_7,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -1508,7 +1499,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 25,
         .tough = 25,
         .sheen = 140,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1517,7 +1507,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Snubbins"),
         .trainerName = _("Devin"),
         .trainerGfxId = OBJ_EVENT_GFX_GENTLEMAN,
-        .aiChecks = 0x8080FFF,
+        .aiFlags = CONTEST_AI_SET_8,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1537,7 +1527,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 20,
         .tough = 20,
         .sheen = 130,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1546,7 +1535,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Dreavis"),
         .trainerName = _("Tylor"),
         .trainerGfxId = OBJ_EVENT_GFX_HEX_MANIAC,
-        .aiChecks = 0x40040FFF,
+        .aiFlags = CONTEST_AI_SET_9,
         .whichRank = CONTEST_RANK_SUPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1566,7 +1555,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 45,
         .tough = 20,
         .sheen = 120,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1575,7 +1563,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Lairn"),
         .trainerName = _("Ronnie"),
         .trainerGfxId = OBJ_EVENT_GFX_HIKER,
-        .aiChecks = 0x84000FFF,
+        .aiFlags = CONTEST_AI_SET_1D,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1595,7 +1583,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 100,
         .tough = 90,
         .sheen = 200,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1604,7 +1591,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Shifty"),
         .trainerName = _("Claudia"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_1,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -1624,7 +1611,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 35,
         .tough = 70,
         .sheen = 210,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1633,7 +1619,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Ninas"),
         .trainerName = _("Elias"),
         .trainerGfxId = OBJ_EVENT_GFX_LITTLE_BOY,
-        .aiChecks = 0x81000FFF,
+        .aiFlags = CONTEST_AI_SET_11,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1653,7 +1639,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 70,
         .tough = 70,
         .sheen = 220,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1662,7 +1647,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Welow"),
         .trainerName = _("Jade"),
         .trainerGfxId = OBJ_EVENT_GFX_POKEFAN_F,
-        .aiChecks = 0x80800FFF,
+        .aiFlags = CONTEST_AI_SET_12,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -1682,7 +1667,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 75,
         .tough = 40,
         .sheen = 230,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1691,7 +1675,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Yena"),
         .trainerName = _("Francis"),
         .trainerGfxId = OBJ_EVENT_GFX_BLACK_BELT,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1711,7 +1695,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 70,
         .tough = 70,
         .sheen = 240,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1720,7 +1703,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Tifly"),
         .trainerName = _("Alisha"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_4,
-        .aiChecks = 0x80200FFF,
+        .aiFlags = CONTEST_AI_SET_1E,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1740,7 +1723,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 80,
         .tough = 100,
         .sheen = 250,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1749,7 +1731,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Kingsea"),
         .trainerName = _("Saul"),
         .trainerGfxId = OBJ_EVENT_GFX_CAMPER,
-        .aiChecks = 0x80100FFF,
+        .aiFlags = CONTEST_AI_SET_1F,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -1769,7 +1751,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 70,
         .tough = 90,
         .sheen = 200,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1778,7 +1759,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Caster"),
         .trainerName = _("Felicia"),
         .trainerGfxId = OBJ_EVENT_GFX_LASS,
-        .aiChecks = 0x80080FFF,
+        .aiFlags = CONTEST_AI_SET_16,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -1798,7 +1779,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 50,
         .tough = 65,
         .sheen = 210,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1807,7 +1787,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Chokem"),
         .trainerName = _("Emilio"),
         .trainerGfxId = OBJ_EVENT_GFX_SCHOOL_KID_M,
-        .aiChecks = 0x80040FFF,
+        .aiFlags = CONTEST_AI_SET_20,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -1827,7 +1807,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 60,
         .tough = 50,
         .sheen = 220,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1836,7 +1815,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Lombe"),
         .trainerName = _("Karla"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_2,
-        .aiChecks = 0x80020FFF,
+        .aiFlags = CONTEST_AI_SET_A,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1856,7 +1835,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 45,
         .tough = 70,
         .sheen = 230,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1865,7 +1843,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Vipes"),
         .trainerName = _("Darryl"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_3,
-        .aiChecks = 0x80010FFF,
+        .aiFlags = CONTEST_AI_SET_18,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1885,7 +1863,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 100,
         .sheen = 240,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1894,7 +1871,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Merail"),
         .trainerName = _("Selena"),
         .trainerGfxId = OBJ_EVENT_GFX_EXPERT_F,
-        .aiChecks = 0x80008FFF,
+        .aiFlags = CONTEST_AI_SET_19,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1914,7 +1891,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 50,
         .tough = 30,
         .sheen = 250,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1923,7 +1899,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Karpag"),
         .trainerName = _("Noel"),
         .trainerGfxId = OBJ_EVENT_GFX_YOUNGSTER,
-        .aiChecks = 0x80004FFF,
+        .aiFlags = CONTEST_AI_SET_1A,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -1943,7 +1919,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 50,
         .tough = 160,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1952,7 +1927,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Lunone"),
         .trainerName = _("Lacey"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_1,
-        .aiChecks = 0x80002FFF,
+        .aiFlags = CONTEST_AI_SET_21,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -1972,7 +1947,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 70,
         .tough = 50,
         .sheen = 210,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -1981,7 +1955,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Abso"),
         .trainerName = _("Corbin"),
         .trainerGfxId = OBJ_EVENT_GFX_MANIAC,
-        .aiChecks = 0x80001FFF,
+        .aiFlags = CONTEST_AI_SET_F,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2001,7 +1975,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 35,
         .tough = 35,
         .sheen = 220,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2010,7 +1983,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Eggsor"),
         .trainerName = _("Gracie"),
         .trainerGfxId = OBJ_EVENT_GFX_PICNICKER,
-        .aiChecks = 0xC000FFF,
+        .aiFlags = CONTEST_AI_SET_1,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2030,7 +2003,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 100,
         .tough = 80,
         .sheen = 200,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2039,7 +2011,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Cubin"),
         .trainerName = _("Coltin"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_4, 
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2059,7 +2031,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 35,
         .tough = 100,
         .sheen = 210,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2068,7 +2039,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Hitmon"),
         .trainerName = _("Ellie"),
         .trainerGfxId = OBJ_EVENT_GFX_EXPERT_F,
-        .aiChecks = 0x21000FFF,
+        .aiFlags = CONTEST_AI_SET_3,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2088,7 +2059,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 50,
         .tough = 100,
         .sheen = 220,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2097,7 +2067,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Surtle"),
         .trainerName = _("Marcus"),
         .trainerGfxId = OBJ_EVENT_GFX_SAILOR,
-        .aiChecks = 0x20800FFF,
+        .aiFlags = CONTEST_AI_SET_4,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2117,7 +2087,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 95,
         .sheen = 230,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2126,7 +2095,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Khankan"),
         .trainerName = _("Kiara"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_3,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2146,7 +2115,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 50,
         .tough = 100,
         .sheen = 240,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2155,7 +2123,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Pinoc"),
         .trainerName = _("Bryce"),
         .trainerGfxId = OBJ_EVENT_GFX_BUG_CATCHER,
-        .aiChecks = 0x10200FFF,
+        .aiFlags = CONTEST_AI_SET_6,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -2175,7 +2143,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 80,
         .tough = 80,
         .sheen = 250,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2184,7 +2151,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Diltot"),
         .trainerName = _("Jamie"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_5,
-        .aiChecks = 0x20100FFF,
+        .aiFlags = CONTEST_AI_SET_7,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2204,7 +2171,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 110,
         .sheen = 240,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2213,7 +2179,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Doomond"),
         .trainerName = _("Jorge"),
         .trainerGfxId = OBJ_EVENT_GFX_GENTLEMAN,
-        .aiChecks = 0x8080FFF,
+        .aiFlags = CONTEST_AI_SET_8,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2224,7 +2190,7 @@ const struct ContestPokemon gContestOpponents[] =
         {
             MOVE_ROAR,
             MOVE_FLAMETHROWER,
-            MOVE_FAINT_ATTACK,
+            MOVE_FEINT_ATTACK,
             MOVE_SUNNY_DAY
         },
         .cool = 100,
@@ -2233,7 +2199,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 25,
         .tough = 80,
         .sheen = 230,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2242,7 +2207,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Milkan"),
         .trainerName = _("Devon"),
         .trainerGfxId = OBJ_EVENT_GFX_POKEFAN_M,
-        .aiChecks = 0x40040FFF,
+        .aiFlags = CONTEST_AI_SET_9,
         .whichRank = CONTEST_RANK_HYPER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -2262,7 +2227,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 35,
         .tough = 40,
         .sheen = 220,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2271,7 +2235,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Rados"),
         .trainerName = _("Justina"),
         .trainerGfxId = OBJ_EVENT_GFX_PICNICKER,
-        .aiChecks = 0x84000FFF,
+        .aiFlags = CONTEST_AI_SET_1D,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2291,7 +2255,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 160,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2300,7 +2263,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Louderd"),
         .trainerName = _("Ralph"),
         .trainerGfxId = OBJ_EVENT_GFX_EXPERT_M,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2320,7 +2283,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 150,
         .tough = 160,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2329,7 +2291,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Sitty"),
         .trainerName = _("Rosa"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_1,
-        .aiChecks = 0x81000FFF,
+        .aiFlags = CONTEST_AI_SET_11,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -2340,7 +2302,7 @@ const struct ContestPokemon gContestOpponents[] =
         {
             MOVE_ATTRACT,
             MOVE_ASSIST,
-            MOVE_FAINT_ATTACK,
+            MOVE_FEINT_ATTACK,
             MOVE_TAIL_WHIP
         },
         .cool = 40,
@@ -2349,7 +2311,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 185,
         .tough = 60,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2358,7 +2319,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Sling"),
         .trainerName = _("Keaton"),
         .trainerGfxId = OBJ_EVENT_GFX_LITTLE_BOY,
-        .aiChecks = 0x80800FFF,
+        .aiFlags = CONTEST_AI_SET_12,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2378,7 +2339,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 110,
         .tough = 150,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2387,7 +2347,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Taria"),
         .trainerName = _("Mayra"),
         .trainerGfxId = OBJ_EVENT_GFX_POKEFAN_F,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2407,7 +2367,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 30,
         .tough = 90,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2416,7 +2375,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Lirki"),
         .trainerName = _("Lamar"),
         .trainerGfxId = OBJ_EVENT_GFX_RICH_BOY,
-        .aiChecks = 0x80200FFF,
+        .aiFlags = CONTEST_AI_SET_1E,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2436,7 +2395,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 230,
         .tough = 80,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2445,7 +2403,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Blossom"),
         .trainerName = _("Aubrey"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_4,
-        .aiChecks = 0x80100FFF,
+        .aiFlags = CONTEST_AI_SET_1F,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -2465,7 +2423,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 130,
         .tough = 40,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2474,7 +2431,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Eyesab"),
         .trainerName = _("Nigel"),
         .trainerGfxId = OBJ_EVENT_GFX_CAMPER,
-        .aiChecks = 0x80080FFF,
+        .aiFlags = CONTEST_AI_SET_16,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2484,7 +2441,7 @@ const struct ContestPokemon gContestOpponents[] =
         .moves =
         {
             MOVE_MEAN_LOOK,
-            MOVE_FAINT_ATTACK,
+            MOVE_FEINT_ATTACK,
             MOVE_KNOCK_OFF,
             MOVE_CONFUSE_RAY
         },
@@ -2494,7 +2451,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 150,
         .tough = 160,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2503,7 +2459,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Utan"),
         .trainerName = _("Camille"),
         .trainerGfxId = OBJ_EVENT_GFX_LASS,
-        .aiChecks = 0x80040FFF,
+        .aiFlags = CONTEST_AI_SET_20,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2523,7 +2479,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 130,
         .tough = 170,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2532,7 +2487,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Pedos"),
         .trainerName = _("Deon"),
         .trainerGfxId = OBJ_EVENT_GFX_SCHOOL_KID_M,
-        .aiChecks = 0x80020FFF,
+        .aiFlags = CONTEST_AI_SET_A,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2552,7 +2507,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 75,
         .tough = 100,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2561,7 +2515,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Luvis"),
         .trainerName = _("Janelle"),
         .trainerGfxId = OBJ_EVENT_GFX_GIRL_2,
-        .aiChecks = 0x80010FFF,
+        .aiFlags = CONTEST_AI_SET_18,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2581,7 +2535,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 40,
         .tough = 190,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2590,7 +2543,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Heross"),
         .trainerName = _("Heath"),
         .trainerGfxId = OBJ_EVENT_GFX_MAN_3,
-        .aiChecks = 0x80008FFF,
+        .aiFlags = CONTEST_AI_SET_19,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2610,7 +2563,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 240,
         .tough = 140,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2619,7 +2571,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Rodlect"),
         .trainerName = _("Sasha"),
         .trainerGfxId = OBJ_EVENT_GFX_TWIN,
-        .aiChecks = 0x80004FFF,
+        .aiFlags = CONTEST_AI_SET_1A,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2639,7 +2591,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 35,
         .tough = 50,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2648,7 +2599,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Chupy"),
         .trainerName = _("Frankie"),
         .trainerGfxId = OBJ_EVENT_GFX_YOUNGSTER,
-        .aiChecks = 0x80002FFF,
+        .aiFlags = CONTEST_AI_SET_21,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -2668,7 +2619,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 115,
         .tough = 120,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2677,7 +2627,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Wobet"),
         .trainerName = _("Helen"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_1,
-        .aiChecks = 0x80001FFF,
+        .aiFlags = CONTEST_AI_SET_F,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2697,7 +2647,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 220,
         .tough = 210,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2706,7 +2655,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Garen"),
         .trainerName = _("Camile"),
         .trainerGfxId = OBJ_EVENT_GFX_HEX_MANIAC,
-        .aiChecks = 0xC000FFF,
+        .aiFlags = CONTEST_AI_SET_1,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2726,7 +2675,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 80,
         .tough = 180,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2735,7 +2683,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Gonpor"),
         .trainerName = _("Martin"),
         .trainerGfxId = OBJ_EVENT_GFX_SCIENTIST_1,
-        .aiChecks = 0x82000FFF,
+        .aiFlags = CONTEST_AI_SET_2,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2755,7 +2703,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 130,
         .tough = 130,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2764,7 +2711,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Drite"),
         .trainerName = _("Sergio"),
         .trainerGfxId = OBJ_EVENT_GFX_BOY_1,
-        .aiChecks = 0x21000FFF,
+        .aiFlags = CONTEST_AI_SET_3,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2784,7 +2731,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 120,
         .tough = 150,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2793,7 +2739,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Meowy"),
         .trainerName = _("Kailey"),
         .trainerGfxId = OBJ_EVENT_GFX_TWIN,
-        .aiChecks = 0x20800FFF,
+        .aiFlags = CONTEST_AI_SET_4,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2813,7 +2759,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 170,
         .tough = 80,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2822,7 +2767,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Nyx"),
         .trainerName = _("Perla"),
         .trainerGfxId = OBJ_EVENT_GFX_BEAUTY,
-        .aiChecks = 0x80400FFF,
+        .aiFlags = CONTEST_AI_SET_5,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = TRUE,
@@ -2842,7 +2787,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 150,
         .tough = 120,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2851,7 +2795,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Gepito"),
         .trainerName = _("Clara"),
         .trainerGfxId = OBJ_EVENT_GFX_WOMAN_2,
-        .aiChecks = 0x10200FFF,
+        .aiFlags = CONTEST_AI_SET_6,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2871,7 +2815,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 120,
         .tough = 80,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2880,7 +2823,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Speon"),
         .trainerName = _("Jakob"),
         .trainerGfxId = OBJ_EVENT_GFX_PSYCHIC_M,
-        .aiChecks = 0x20100FFF,
+        .aiFlags = CONTEST_AI_SET_7,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = TRUE,
@@ -2900,7 +2843,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 80,
         .tough = 150,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2909,7 +2851,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Slowgo"),
         .trainerName = _("Trey"),
         .trainerGfxId = OBJ_EVENT_GFX_SAILOR,
-        .aiChecks = 0x8080FFF,
+        .aiFlags = CONTEST_AI_SET_8,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = FALSE,
         .aiPool_Beauty = FALSE,
@@ -2929,7 +2871,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 110,
         .tough = 170,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     },
@@ -2938,7 +2879,7 @@ const struct ContestPokemon gContestOpponents[] =
         .nickname = _("Ursing"),
         .trainerName = _("Lane"),
         .trainerGfxId = OBJ_EVENT_GFX_BLACK_BELT,
-        .aiChecks = 0x40040FFF,
+        .aiFlags = CONTEST_AI_SET_9,
         .whichRank = CONTEST_RANK_MASTER,
         .aiPool_Cool = TRUE,
         .aiPool_Beauty = FALSE,
@@ -2958,7 +2899,6 @@ const struct ContestPokemon gContestOpponents[] =
         .smart = 80,
         .tough = 190,
         .sheen = 255,
-        .unk2C = {0},
         .personality = 0,
         .otId = 0xFFFF
     }

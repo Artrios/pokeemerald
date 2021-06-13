@@ -1,3 +1,5 @@
+.set LOCALID_ATTENDANT, 1
+
 SlateportCity_BattleTentCorridor_MapScripts:: @ 8208E26
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, SlateportCity_BattleTentCorridor_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, SlateportCity_BattleTentCorridor_OnWarp
@@ -13,8 +15,8 @@ SlateportCity_BattleTentCorridor_EventScript_SetUpObjects:: @ 8208E3B
 	setvar VAR_TEMP_1, 1
 	compare VAR_0x8006, 1
 	goto_if_ne SlateportCity_BattleTentCorridor_EventScript_TurnPlayerNorth
-	setobjectxy 1, 2, 2
-	turnobject 1, DIR_SOUTH
+	setobjectxy LOCALID_ATTENDANT, 2, 2
+	turnobject LOCALID_ATTENDANT, DIR_SOUTH
 SlateportCity_BattleTentCorridor_EventScript_TurnPlayerNorth:: @ 8208E56
 	turnobject OBJ_EVENT_ID_PLAYER, DIR_NORTH
 	end
@@ -27,7 +29,7 @@ SlateportCity_BattleTentCorridor_EventScript_EnterCorridor:: @ 8208E65
 	compare VAR_0x8006, 1
 	goto_if_eq SlateportCity_BattleTentCorridor_EventScript_ReturnToRoomFromBattle
 	setvar VAR_TEMP_0, 1
-	applymovement 1, SlateportCity_BattleTentCorridor_Movement_AttendantEnter
+	applymovement LOCALID_ATTENDANT, SlateportCity_BattleTentCorridor_Movement_AttendantEnter
 	applymovement OBJ_EVENT_ID_PLAYER, SlateportCity_BattleTentCorridor_Movement_PlayerEnter
 	waitmovement 0
 	compare VAR_0x8006, 2
@@ -41,11 +43,11 @@ SlateportCity_BattleTentCorridor_EventScript_EnterCorridor:: @ 8208E65
 SlateportCity_BattleTentCorridor_EventScript_EnterBattleRoom:: @ 8208EB4
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_RightThisWay, MSGBOX_DEFAULT
 	closemessage
-	applymovement 1, Common_Movement_WalkInPlaceFastestUp
+	applymovement LOCALID_ATTENDANT, Common_Movement_WalkInPlaceFastestUp
 	waitmovement 0
 	opendoor 2, 1
 	waitdooranim
-	applymovement 1, SlateportCity_BattleTentCorridor_Movement_AttendantExit
+	applymovement LOCALID_ATTENDANT, SlateportCity_BattleTentCorridor_Movement_AttendantExit
 	applymovement OBJ_EVENT_ID_PLAYER, SlateportCity_BattleTentCorridor_Movement_PlayerExit
 	waitmovement 0
 	closedoor 2, 1
@@ -58,7 +60,7 @@ SlateportCity_BattleTentCorridor_EventScript_ReturnToRoomFromBattle:: @ 8208EEE
 	factory_setopponentmons
 	factory_resethelditems
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons, MSGBOX_DEFAULT
-	playfanfare MUS_ME_ASA
+	playfanfare MUS_HEAL
 	waitfanfare
 	special HealPlayerParty
 SlateportCity_BattleTentCorridor_EventScript_AskReadyForOpponent:: @ 8208F0D
@@ -67,7 +69,7 @@ SlateportCity_BattleTentCorridor_EventScript_AskReadyForOpponent:: @ 8208F0D
 	call_if_eq SlateportCity_BattleTentCorridor_EventScript_ReadyFor2ndOpponent
 	compare VAR_RESULT, 2
 	call_if_eq SlateportCity_BattleTentCorridor_EventScript_ReadyFor3rdOpponent
-	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, 1
+	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, TRUE
 	switch VAR_RESULT
 	case 0, SlateportCity_BattleTentCorridor_EventScript_AskSwapMon
 	case 1, SlateportCity_BattleTentCorridor_EventScript_AskPauseChallenge
@@ -83,7 +85,7 @@ SlateportCity_BattleTentCorridor_EventScript_AskPauseChallenge:: @ 8208F5B
 SlateportCity_BattleTentCorridor_EventScript_AskRetireChallenge:: @ 8208F89
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_RetireFromChallenge
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, SlateportCity_BattleTentCorridor_EventScript_AskReadyForOpponent
 	case 0, SlateportCity_BattleTent_EventScript_WarpToLobbyLost

@@ -270,7 +270,7 @@ static void AnimTranslateWebThread(struct Sprite *sprite)
         SetAverageBattlerPositions(gBattleAnimTarget, 1, &sprite->data[2], &sprite->data[4]);
     }
 
-    sub_80A6FD4(sprite);
+    InitAnimLinearTranslationWithSpeed(sprite);
     sprite->data[5] = gBattleAnimArgs[3];
     sprite->callback = AnimTranslateWebThread_Step;
 }
@@ -395,13 +395,8 @@ static void AnimTranslateStinger(struct Sprite *sprite)
         if (GetBattlerPosition(gBattleAnimTarget) == B_POSITION_PLAYER_LEFT
          || GetBattlerPosition(gBattleAnimTarget) == B_POSITION_OPPONENT_LEFT)
         {
-            s16 temp1, temp2;
-
-            temp1 = gBattleAnimArgs[2];
-            gBattleAnimArgs[2] = -temp1;
-
-            temp2 = gBattleAnimArgs[0];
-            gBattleAnimArgs[0] = -temp2;
+            gBattleAnimArgs[2] *= -1;
+            gBattleAnimArgs[0] *= -1;
         }
     }
 

@@ -34,16 +34,22 @@
 #define sSAVED_MOVE_EFFECT gBattleScripting + 0x2C
 #define sMOVE_EFFECT gBattleScripting + 0x2E
 #define sMULTIHIT_EFFECT gBattleScripting + 0x30
+#define sILLUSION_NICK_HACK gBattleScripting + 0x32
+#define sFIXED_ABILITY_POPUP gBattleScripting + 0x33
+#define sABILITY_OVERWRITE gBattleScripting + 0x34
 
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
+#define cMISS_TYPE gBattleCommunication + 6
 
 // Battle Script defines for getting the wanted battler
 #define BS_TARGET                   0
 #define BS_ATTACKER                 1
 #define BS_EFFECT_BATTLER           2
 #define BS_FAINTED                  3
-#define BS_BATTLER_0                7
 #define BS_ATTACKER_WITH_PARTNER    4 // for Cmd_updatestatusicon
+#define BS_UNK_5                    5
+#define BS_UNK_6                    6
+#define BS_BATTLER_0                7
 #define BS_ATTACKER_SIDE            8 // for Cmd_jumpifability
 #define BS_TARGET_SIDE              9 // for Cmd_jumpifability
 #define BS_SCRIPTING                10
@@ -58,20 +64,22 @@
 #define ACC_CURR_MOVE 0
 
 // compare operands
-#define CMP_EQUAL               0x0
-#define CMP_NOT_EQUAL           0x1
-#define CMP_GREATER_THAN        0x2
-#define CMP_LESS_THAN           0x3
-#define CMP_COMMON_BITS         0x4
-#define CMP_NO_COMMON_BITS      0x5
+#define CMP_EQUAL               0
+#define CMP_NOT_EQUAL           1
+#define CMP_GREATER_THAN        2
+#define CMP_LESS_THAN           3
+#define CMP_COMMON_BITS         4
+#define CMP_NO_COMMON_BITS      5
 
 // Cmd_various
 #define VARIOUS_CANCEL_MULTI_TURN_MOVES         0
 #define VARIOUS_SET_MAGIC_COAT_TARGET           1
 #define VARIOUS_IS_RUNNING_IMPOSSIBLE           2
 #define VARIOUS_GET_MOVE_TARGET                 3
+#define VARIOUS_GET_BATTLER_FAINTED             4
 #define VARIOUS_RESET_INTIMIDATE_TRACE_BITS     5
 #define VARIOUS_UPDATE_CHOICE_MOVE_ON_LVL_UP    6
+#define VARIOUS_PALACE_FLAVOR_TEXT              8
 #define VARIOUS_ARENA_JUDGMENT_WINDOW           9
 #define VARIOUS_ARENA_OPPONENT_MON_LOST         10
 #define VARIOUS_ARENA_PLAYER_MON_LOST           11
@@ -115,7 +123,7 @@
 #define VARIOUS_TRY_LAST_RESORT                 52
 #define VARIOUS_ARGUMENT_STATUS_EFFECT          53
 #define VARIOUS_TRY_HIT_SWITCH_TARGET           54
-#define VARIOUS_TRY_AUTONOMIZE                  55
+#define VARIOUS_TRY_AUTOTOMIZE                  55
 #define VARIOUS_TRY_COPYCAT                     56
 #define VARIOUS_ABILITY_POPUP                   57
 #define VARIOUS_DEFOG                           58
@@ -161,6 +169,10 @@
 #define VARIOUS_INFATUATE_WITH_BATTLER          98
 #define VARIOUS_SET_LAST_USED_ITEM              99
 #define VARIOUS_PARALYZE_TYPE_IMMUNITY          100
+#define VARIOUS_JUMP_IF_ABSENT                  101
+#define VARIOUS_DESTROY_ABILITY_POPUP           102
+#define VARIOUS_TOTEM_BOOST                     103
+#define VARIOUS_TRY_ACTIVATE_GRIM_NEIGH         104
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0
@@ -171,54 +183,59 @@
 #define DMG_CURR_ATTACKER_HP       5
 #define DMG_BIG_ROOT               6
 #define DMG_1_2_ATTACKER_HP        7
+#define DMG_RECOIL_FROM_IMMUNE     8 // Used to calculate recoil for the Gen 4 version of Jump Kick
 
 // Cmd_jumpifcantswitch
-#define SWITCH_IGNORE_ESCAPE_PREVENTION   0x80
+#define SWITCH_IGNORE_ESCAPE_PREVENTION   (1 << 7)
 
 // Cmd_statbuffchange
-#define STAT_BUFF_ALLOW_PTR                 0x1   // If set, allow use of jumpptr. Set in every use of statbuffchange
-#define STAT_BUFF_NOT_PROTECT_AFFECTED      0x20
+#define STAT_BUFF_ALLOW_PTR                 (1 << 0)   // If set, allow use of jumpptr. Set in every use of statbuffchange
+#define STAT_BUFF_NOT_PROTECT_AFFECTED      (1 << 5)
 
 // stat change flags for Cmd_playstatchangeanimation
-#define STAT_CHANGE_NEGATIVE         0x1
-#define STAT_CHANGE_BY_TWO           0x2
-#define STAT_CHANGE_ONLY_MULTIPLE    0x4
-#define STAT_CHANGE_CANT_PREVENT 	 0x8
-
-// cases for Cmd_moveend
-#define MOVEEND_PROTECT_LIKE_EFFECT 0
-#define MOVEEND_RAGE 1
-#define MOVEEND_DEFROST 2
-#define MOVEEND_SYNCHRONIZE_TARGET 3
-#define MOVEEND_ABILITIES 4
-#define MOVEEND_ABILITIES_ATTACKER 5
-#define MOVEEND_STATUS_IMMUNITY_ABILITIES 6
-#define MOVEEND_SYNCHRONIZE_ATTACKER 7
-#define MOVEEND_CHOICE_MOVE 8
-#define MOVEEND_CHANGED_ITEMS 9
-#define MOVEEND_ATTACKER_INVISIBLE 10
-#define MOVEEND_ATTACKER_VISIBLE 11
-#define MOVEEND_TARGET_VISIBLE 12
-#define MOVEEND_ITEM_EFFECTS_TARGET 13
-#define MOVEEND_ITEM_EFFECTS_ALL 14
-#define MOVEEND_KINGSROCK_SHELLBELL 15
-#define MOVEEND_SUBSTITUTE 16
-#define MOVEEND_UPDATE_LAST_MOVES 17
-#define MOVEEND_MIRROR_MOVE 18
-#define MOVEEND_NEXT_TARGET 19
-#define MOVEEND_LIFE_ORB 20
-#define MOVEEND_DANCER 21
-#define MOVEEND_CLEAR_BITS 22
-#define MOVEEND_COUNT 23
+#define STAT_CHANGE_NEGATIVE             (1 << 0)
+#define STAT_CHANGE_BY_TWO               (1 << 1)
+#define STAT_CHANGE_MULTIPLE_STATS       (1 << 2)
+#define STAT_CHANGE_CANT_PREVENT         (1 << 3)
 
 // stat flags for Cmd_playstatchangeanimation
-#define BIT_HP                      0x1
-#define BIT_ATK                     0x2
-#define BIT_DEF                     0x4
-#define BIT_SPEED                   0x8
-#define BIT_SPATK                   0x10
-#define BIT_SPDEF                   0x20
-#define BIT_ACC                     0x40
-#define BIT_EVASION                 0x80
+#define BIT_HP                      (1 << 0)
+#define BIT_ATK                     (1 << 1)
+#define BIT_DEF                     (1 << 2)
+#define BIT_SPEED                   (1 << 3)
+#define BIT_SPATK                   (1 << 4)
+#define BIT_SPDEF                   (1 << 5)
+#define BIT_ACC                     (1 << 6)
+#define BIT_EVASION                 (1 << 7)
+
+#define PARTY_SCREEN_OPTIONAL (1 << 7) // Flag for first argument to openpartyscreen
+
+// cases for Cmd_moveend
+#define MOVEEND_PROTECT_LIKE_EFFECT               0
+#define MOVEEND_RAGE                              1
+#define MOVEEND_DEFROST                           2
+#define MOVEEND_SYNCHRONIZE_TARGET                3
+#define MOVEEND_ABILITIES                         4
+#define MOVEEND_ABILITIES_ATTACKER                5
+#define MOVEEND_STATUS_IMMUNITY_ABILITIES         6
+#define MOVEEND_SYNCHRONIZE_ATTACKER              7
+#define MOVEEND_CHOICE_MOVE                       8
+#define MOVEEND_CHANGED_ITEMS                     9
+#define MOVEEND_ATTACKER_INVISIBLE                10
+#define MOVEEND_ATTACKER_VISIBLE                  11
+#define MOVEEND_TARGET_VISIBLE                    12
+#define MOVEEND_ITEM_EFFECTS_TARGET               13
+#define MOVEEND_MOVE_EFFECTS2                     14
+#define MOVEEND_ITEM_EFFECTS_ALL                  15
+#define MOVEEND_KINGSROCK_SHELLBELL               16
+#define MOVEEND_SUBSTITUTE                        17
+#define MOVEEND_UPDATE_LAST_MOVES                 18
+#define MOVEEND_MIRROR_MOVE                       19
+#define MOVEEND_NEXT_TARGET                       20
+#define MOVEEND_LIFE_ORB                          21
+#define MOVEEND_DANCER                            22
+#define MOVEEND_EMERGENCY_EXIT                    23
+#define MOVEEND_CLEAR_BITS                        24
+#define MOVEEND_COUNT                             25
 
 #endif // GUARD_CONSTANTS_BATTLE_SCRIPT_COMMANDS_H

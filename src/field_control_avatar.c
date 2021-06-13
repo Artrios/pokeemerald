@@ -67,7 +67,7 @@ static bool8 TryStartCoordEventScript(struct MapPosition *);
 static bool8 TryStartWarpEventScript(struct MapPosition *, u16);
 static bool8 TryStartMiscWalkingScripts(u16);
 static bool8 TryStartStepCountScript(u16);
-static void UpdateHappinessStepCounter(void);
+static void UpdateFriendshipStepCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
 static bool8 EnableAutoRun(void);
 
@@ -549,10 +549,10 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
     }
 
     IncrementRematchStepCounter();
-    UpdateHappinessStepCounter();
+    UpdateFriendshipStepCounter();
     UpdateFarawayIslandStepCounter();
 
-    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_6) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
+    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FORCED_MOVE) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
     {
         if (UpdatePoisonStepCounter() == TRUE)
         {
@@ -614,14 +614,15 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
     return FALSE;
 }
 
-void Unref_ClearHappinessStepCounter(void)
+// Unused
+static void ClearFriendshipStepCounter(void)
 {
-    VarSet(VAR_HAPPINESS_STEP_COUNTER, 0);
+    VarSet(VAR_FRIENDSHIP_STEP_COUNTER, 0);
 }
 
-static void UpdateHappinessStepCounter(void)
+static void UpdateFriendshipStepCounter(void)
 {
-    u16 *ptr = GetVarPointer(VAR_HAPPINESS_STEP_COUNTER);
+    u16 *ptr = GetVarPointer(VAR_FRIENDSHIP_STEP_COUNTER);
     int i;
 
     (*ptr)++;
@@ -732,12 +733,13 @@ static bool8 TryStartWarpEventScript(struct MapPosition *position, u16 metatileB
         }
         if (MetatileBehavior_IsAquaHideoutWarp(metatileBehavior) == TRUE)
         {
-            DoTeleportWarp();
+            DoTeleportTileWarp();
             return TRUE;
         }
         if (MetatileBehavior_IsWarpOrBridge(metatileBehavior) == TRUE)
         {
-            sub_80B0268();
+            // Maybe unused? This MB is used by log bridges, but there's never a warp event on them
+            DoSpinExitWarp();
             return TRUE;
         }
         if (MetatileBehavior_IsMtPyreHole(metatileBehavior) == TRUE)
@@ -945,7 +947,7 @@ static struct BgEvent *GetBackgroundEventAtPosition(struct MapHeader *mapHeader,
     return NULL;
 }
 
-bool8 dive_warp(struct MapPosition *position, u16 metatileBehavior)
+bool8 TryDoDiveWarp(struct MapPosition *position, u16 metatileBehavior)
 {
     if (gMapHeader.mapType == MAP_TYPE_UNDERWATER && !MetatileBehavior_IsUnableToEmerge(metatileBehavior))
     {
@@ -953,7 +955,7 @@ bool8 dive_warp(struct MapPosition *position, u16 metatileBehavior)
         {
             StoreInitialPlayerAvatarState();
             DoDiveWarp();
-            PlaySE(SE_W291);
+            PlaySE(SE_M_DIVE);
             return TRUE;
         }
     }
@@ -963,7 +965,7 @@ bool8 dive_warp(struct MapPosition *position, u16 metatileBehavior)
         {
             StoreInitialPlayerAvatarState();
             DoDiveWarp();
-            PlaySE(SE_W291);
+            PlaySE(SE_M_DIVE);
             return TRUE;
         }
     }

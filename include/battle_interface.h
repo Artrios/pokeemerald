@@ -74,7 +74,7 @@ void SetHealthboxSpriteInvisible(u8 healthboxSpriteId);
 void SetHealthboxSpriteVisible(u8 healthboxSpriteId);
 void DestoryHealthboxSprite(u8 healthboxSpriteId);
 void DummyBattleInterfaceFunc(u8 healthboxSpriteId, bool8 isDoubleBattleBankOnly);
-void UpdateOamPriorityInAllHealthboxes(u8 priority);
+void UpdateOamPriorityInAllHealthboxes(u8 priority, bool32 hideHpBoxes);
 void InitBattlerHealthboxCoords(u8 battler);
 void UpdateHpTextInHealthbox(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent);
 void SwapHpBarsWithHpText(void);
@@ -92,5 +92,6 @@ s32 MoveBattleBar(u8 battler, u8 healthboxSpriteId, u8 whichBar, u8 arg3);
 u8 GetScaledHPFraction(s16 hp, s16 maxhp, u8 scale);
 u8 GetHPBarLevel(s16 hp, s16 maxhp);
 void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle);
+void DestroyAbilityPopUp(u8 battlerId);
 
 #endif // GUARD_BATTLE_INTERFACE_H

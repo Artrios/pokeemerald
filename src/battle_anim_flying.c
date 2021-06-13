@@ -13,9 +13,9 @@ static void AnimEllipticalGust_Step(struct Sprite *);
 static void AnimGustToTarget(struct Sprite *);
 static void AnimGustToTarget_Step(struct Sprite *);
 static void AnimFallingFeather(struct Sprite *);
-static void sub_810E520(struct Sprite *);
-static void sub_810EB40(struct Sprite *);
-static void sub_810EA4C(struct Sprite *);
+static void AnimFallingFeather_Step(struct Sprite *);
+static void AnimWhirlwindLine_Step(struct Sprite *);
+static void AnimUnusedBubbleThrow(struct Sprite *);
 static void AnimWhirlwindLine(struct Sprite *);
 static void AnimBounceBallShrink(struct Sprite *);
 static void AnimBounceBallLand(struct Sprite *);
@@ -25,8 +25,8 @@ static void AnimDiveBall_Step2(struct Sprite *);
 static void AnimDiveWaterSplash(struct Sprite *);
 static void AnimSprayWaterDroplet(struct Sprite *);
 static void AnimSprayWaterDroplet_Step(struct Sprite *);
-static void sub_810F004(struct Sprite *);
-static void sub_810F018(struct Sprite *);
+static void AnimUnusedFlashingLight(struct Sprite *);
+static void AnimUnusedFlashingLight_Step(struct Sprite *);
 static void AnimSkyAttackBird(struct Sprite *);
 static void AnimSkyAttackBird_Step(struct Sprite *);
 static void AnimTask_AnimateGustTornadoPalette_Step(u8);
@@ -174,7 +174,8 @@ const struct SpriteTemplate gFallingFeatherSpriteTemplate =
     .callback = AnimFallingFeather,
 };
 
-const struct SpriteTemplate gUnknown_085963A0 =
+// Unused
+static const struct SpriteTemplate sUnusedBubbleThrowSpriteTemplate =
 {
     .tileTag = ANIM_TAG_SMALL_BUBBLES,
     .paletteTag = ANIM_TAG_SMALL_BUBBLES,
@@ -182,7 +183,7 @@ const struct SpriteTemplate gUnknown_085963A0 =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_810EA4C,
+    .callback = AnimUnusedBubbleThrow,
 };
 
 static const union AnimCmd sAnim_WhirlwindLines[] =
@@ -284,7 +285,7 @@ const struct SpriteTemplate gDiveBallSpriteTemplate =
     .callback = AnimDiveBall,
 };
 
-static const union AffineAnimCmd gUnknown_085964A8[] =
+static const union AffineAnimCmd sAnim_Unused[] =
 {
     AFFINEANIMCMD_FRAME(0x100, 0x0, 0, 0),
     AFFINEANIMCMD_FRAME(0x0, 0x20, 0, 12),
@@ -293,9 +294,9 @@ static const union AffineAnimCmd gUnknown_085964A8[] =
 };
 
 // Unused
-static const union AffineAnimCmd *const gUnknown_085964C8[] =
+static const union AffineAnimCmd *const sAnims_Unused[] =
 {
-    gUnknown_085964A8,
+    sAnim_Unused,
 };
 
 const struct SpriteTemplate gDiveWaterSplashSpriteTemplate =
@@ -320,7 +321,8 @@ const struct SpriteTemplate gSprayWaterDropletSpriteTemplate =
     .callback = AnimSprayWaterDroplet,
 };
 
-const struct SpriteTemplate gUnknown_085964FC =
+// Unused
+static const struct SpriteTemplate sUnusedFlashingLightSpriteTemplate =
 {
     .tileTag = ANIM_TAG_CIRCLE_OF_LIGHT,
     .paletteTag = ANIM_TAG_CIRCLE_OF_LIGHT,
@@ -328,7 +330,7 @@ const struct SpriteTemplate gUnknown_085964FC =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_810F004,
+    .callback = AnimUnusedFlashingLight,
 };
 
 const struct SpriteTemplate gSkyAttackBirdSpriteTemplate =
@@ -489,7 +491,7 @@ void AnimFlyBallAttack(struct Sprite *sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
-        sprite->pos1.x = 272;
+        sprite->pos1.x = DISPLAY_WIDTH + 32;
         sprite->pos1.y = -32;
         StartSpriteAffineAnim(sprite, 1);
     }
@@ -522,8 +524,8 @@ void AnimFlyBallAttack_Step(struct Sprite *sprite)
     }
 
     if (sprite->pos1.x + sprite->pos2.x < -32
-        || sprite->pos1.x + sprite->pos2.x > 272
-        || sprite->pos1.y + sprite->pos2.y > 160)
+        || sprite->pos1.x + sprite->pos2.x > DISPLAY_WIDTH + 32
+        || sprite->pos1.y + sprite->pos2.y > DISPLAY_HEIGHT)
     {
         gSprites[GetAnimBattlerSpriteId(ANIM_ATTACKER)].invisible = sprite->data[5];
         DestroyAnimSprite(sprite);
@@ -566,7 +568,7 @@ struct FeatherDanceData
 static void AnimFallingFeather(struct Sprite *sprite)
 {
     u8 battler, matrixNum, sinIndex;
-    s16 spriteCoord, sinVal;
+    s16 spriteCoord;
 
     struct FeatherDanceData *data = (struct FeatherDanceData *)sprite->data;
 
@@ -629,27 +631,16 @@ static void AnimFallingFeather(struct Sprite *sprite)
     matrixNum = sprite->oam.matrixNum;
 
     sinIndex = (-sprite->pos2.x >> 1) + data->unkA;
-    sinVal = gSineTable[sinIndex];
+    spriteCoord = gSineTable[sinIndex];
 
     gOamMatrices[matrixNum].a = gOamMatrices[matrixNum].d = gSineTable[sinIndex + 64];
-    // The comparison below is completely pointless. 'sprite' is sure to be a valid pointer and
-    // both the 'if' and 'else' parts are exactly the same.
-    // The only reason for this is making sure the compiler generates the exact ASM.
-    if (sprite)
-    {
-        gOamMatrices[matrixNum].b = sinVal;
-        gOamMatrices[matrixNum].c = -sinVal;
-    }
-    else
-    {
-        gOamMatrices[matrixNum].b = sinVal;
-        gOamMatrices[matrixNum].c = -sinVal;
-    }
+    gOamMatrices[matrixNum].b = spriteCoord;
+    gOamMatrices[matrixNum].c = -spriteCoord;
 
-    sprite->callback = sub_810E520;
+    sprite->callback = AnimFallingFeather_Step;
 }
 
-static void sub_810E520(struct Sprite *sprite)
+static void AnimFallingFeather_Step(struct Sprite *sprite)
 {
     u8 matrixNum, sinIndex;
     s16 sinVal = 0;
@@ -666,14 +657,14 @@ static void sub_810E520(struct Sprite *sprite)
     {
         switch (data->unk2 / 64)
         {
-        case 0:
-            if (data->unk0_1 << 24 >> 24 == 1) // the shifts have to be here
+        case 0: 
+            if ((u8)data->unk0_1 == 1) //casts to u8 here are necessary for matching
             {
                 data->unk0_0d = 1;
                 data->unk0_0a = 1;
                 data->unk1 = 0;
             }
-            else if (data->unk0_1 << 24 >> 24 == 3)
+            else if ((u8)data->unk0_1 == 3)
             {
                 data->unk0_0b ^= 1;
                 data->unk0_0a = 1;
@@ -715,18 +706,17 @@ static void sub_810E520(struct Sprite *sprite)
                     }
                 }
                 data->unk0_0d = 0;
-                data->unk2;
             }
             data->unk0_1 = 0;
             break;
         case 1:
-            if (data->unk0_1 << 24 >> 24 == 0)
+            if ((u8)data->unk0_1 == 0)
             {
                 data->unk0_0d = 1;
                 data->unk0_0a = 1;
                 data->unk1 = 0;
             }
-            else if (data->unk0_1 << 24 >> 24 == 2)
+            else if ((u8)data->unk0_1 == 2)
             {
                 data->unk0_0a = 1;
                 data->unk1 = 0;
@@ -771,13 +761,13 @@ static void sub_810E520(struct Sprite *sprite)
             data->unk0_1 = 1;
             break;
         case 2:
-            if (data->unk0_1 << 24 >> 24 == 3)
+            if ((u8)data->unk0_1 == 3)
             {
                 data->unk0_0d = 1;
                 data->unk0_0a = 1;
                 data->unk1 = 0;
             }
-            else if (data->unk0_1 << 24 >> 24 == 1)
+            else if ((u8)data->unk0_1 == 1)
             {
                 data->unk0_0a = 1;
                 data->unk1 = 0;
@@ -822,11 +812,11 @@ static void sub_810E520(struct Sprite *sprite)
             data->unk0_1 = 2;
             break;
         case 3:
-            if (data->unk0_1 << 24 >> 24 == 2)
+            if ((u8)data->unk0_1 == 2)
             {
                 data->unk0_0d = 1;
             }
-            else if (data->unk0_1 << 24 >> 24 == 0)
+            else if ((u8)data->unk0_1 == 0)
             {
                 data->unk0_0b ^= 1;
                 data->unk0_0a = 1;
@@ -872,10 +862,8 @@ static void sub_810E520(struct Sprite *sprite)
             data->unk0_1 = 3;
             break;
         }
-        #ifndef NONMATCHING
-            asm("":::"r8");
-        #endif
-        sprite->pos2.x = (data->unkC[data->unk0_0b] * gSineTable[data->unk2]) >> 8;
+
+        sprite->pos2.x = ((s32)data->unkC[data->unk0_0b] * gSineTable[data->unk2]) >> 8;
         matrixNum = sprite->oam.matrixNum;
 
         sinIndex = (-sprite->pos2.x >> 1) + data->unkA;
@@ -900,7 +888,7 @@ static void sub_810E520(struct Sprite *sprite)
     }
 }
 
-static void sub_810EA4C(struct Sprite *sprite)
+static void AnimUnusedBubbleThrow(struct Sprite *sprite)
 {
     sprite->oam.priority = GetBattlerSpriteBGPriority(gBattleAnimTarget);
     sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimAttacker, 2);
@@ -910,7 +898,7 @@ static void sub_810EA4C(struct Sprite *sprite)
 
 static void AnimWhirlwindLine(struct Sprite * sprite)
 {
-    u16 arg;
+    u16 offset;
     u8 mult;
 
     if (gBattleAnimArgs[2] == ANIM_ATTACKER)
@@ -928,15 +916,15 @@ static void AnimWhirlwindLine(struct Sprite * sprite)
     sprite->pos1.x -= 32;
     sprite->data[1] = 0x0ccc;
 
-    arg = gBattleAnimArgs[4];
+    offset = gBattleAnimArgs[4];
     mult = 12;
-    sprite->pos2.x += mult * arg;
-    sprite->data[0] = arg;
+    sprite->pos2.x += mult * offset;
+    sprite->data[0] = offset;
     sprite->data[7] = gBattleAnimArgs[3];
-    sprite->callback = sub_810EB40;
+    sprite->callback = AnimWhirlwindLine_Step;
 }
 
-static void sub_810EB40(struct Sprite *sprite)
+static void AnimWhirlwindLine_Step(struct Sprite *sprite)
 {
     sprite->pos2.x += sprite->data[1] >> 8;
 
@@ -1073,9 +1061,9 @@ static void AnimDiveWaterSplash(struct Sprite *sprite)
             sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimTarget, 1);
         }
 
-        sprite->data[1] = 512;
+        sprite->data[1] = 0x200;
 
-        TrySetSpriteRotScale(sprite, 0, 256, sprite->data[1], 0);
+        TrySetSpriteRotScale(sprite, 0, 0x100, sprite->data[1], 0);
         sprite->data[0]++;
         break;
     case 1:
@@ -1086,11 +1074,11 @@ static void AnimDiveWaterSplash(struct Sprite *sprite)
 
         sprite->data[2]++;
 
-        TrySetSpriteRotScale(sprite, 0, 256, sprite->data[1], 0);
+        TrySetSpriteRotScale(sprite, 0, 0x100, sprite->data[1], 0);
 
         matrixNum = sprite->oam.matrixNum;
 
-        t1 = 15616;
+        t1 = 0x3D00;
         t2 = t1 / gOamMatrices[matrixNum].d + 1;
 
         if (t2 > 128)
@@ -1101,7 +1089,7 @@ static void AnimDiveWaterSplash(struct Sprite *sprite)
 
         if (sprite->data[2] == 24)
         {
-            sub_80A749C(sprite);
+            ResetSpriteRotScale_PreserveAffine(sprite);
             DestroyAnimSprite(sprite);
         }
         break;
@@ -1166,14 +1154,14 @@ static void AnimSprayWaterDroplet_Step(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void sub_810F004(struct Sprite *sprite)
+static void AnimUnusedFlashingLight(struct Sprite *sprite)
 {
     sprite->data[6] = 0;
     sprite->data[7] = 64;
-    sprite->callback = sub_810F018;
+    sprite->callback = AnimUnusedFlashingLight_Step;
 }
 
-static void sub_810F018(struct Sprite *sprite)
+static void AnimUnusedFlashingLight_Step(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {
@@ -1208,7 +1196,7 @@ static void AnimSkyAttackBird(struct Sprite *sprite)
     sprite->data[7] = ((posy - sprite->pos1.y) << 4) / 12;
 
     rotation = ArcTan2Neg(posx - sprite->pos1.x, posy - sprite->pos1.y);
-    rotation += 49152;
+    rotation -= 16384;
 
     TrySetSpriteRotScale(sprite, 1, 0x100, 0x100, rotation);
 
@@ -1228,7 +1216,8 @@ void AnimSkyAttackBird_Step(struct Sprite *sprite)
         DestroySpriteAndMatrix(sprite);
 }
 
-void unref_sub_810F184(u8 taskId)
+// Unused
+static void AnimTask_SetAttackerVisibility(u8 taskId)
 {
     if (gBattleAnimArgs[0] == 0)
     {

@@ -1,11 +1,6 @@
 # About this branch
 This is a branch of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly containing a number of new features that were implemented in later generations.
 
-[![Build Status][travis-badge]][travis]
-
-[travis]: https://travis-ci.org/pret/pokeemerald
-[travis-badge]: https://travis-ci.org/pret/pokeemerald.svg?branch=master
-
 This is a decompilation of Pokémon Emerald.
 
 It builds the following ROM:

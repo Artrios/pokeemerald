@@ -1,3 +1,5 @@
+.set LOCALID_FOSSIL_SCIENTIST, 5
+
 RustboroCity_DevonCorp_2F_MapScripts:: @ 8211857
 	map_script MAP_SCRIPT_ON_TRANSITION, RustboroCity_DevonCorp_2F_OnTransition
 	.byte 0
@@ -80,9 +82,9 @@ RustboroCity_DevonCorp_2F_EventScript_FossilScientist:: @ 82118F1
 RustboroCity_DevonCorp_2F_EventScript_NoticeRootFossil:: @ 8211933
 	closemessage
 	playse SE_PIN
-	applymovement 5, Common_Movement_ExclamationMark
+	applymovement LOCALID_FOSSIL_SCIENTIST, Common_Movement_ExclamationMark
 	waitmovement 0
-	applymovement 5, Common_Movement_Delay48
+	applymovement LOCALID_FOSSIL_SCIENTIST, Common_Movement_Delay48
 	waitmovement 0
 	msgbox RustboroCity_DevonCorp_2F_Text_WantToBringFossilBackToLife, MSGBOX_YESNO
 	compare VAR_RESULT, NO
@@ -105,9 +107,9 @@ RustboroCity_DevonCorp_2F_EventScript_GiveRootFossil:: @ 8211974
 RustboroCity_DevonCorp_2F_EventScript_NoticeClawFossil:: @ 8211991
 	closemessage
 	playse SE_PIN
-	applymovement 5, Common_Movement_ExclamationMark
+	applymovement LOCALID_FOSSIL_SCIENTIST, Common_Movement_ExclamationMark
 	waitmovement 0
-	applymovement 5, Common_Movement_Delay48
+	applymovement LOCALID_FOSSIL_SCIENTIST, Common_Movement_Delay48
 	waitmovement 0
 	msgbox RustboroCity_DevonCorp_2F_Text_WantToBringFossilBackToLife, MSGBOX_YESNO
 	compare VAR_RESULT, NO
@@ -192,7 +194,7 @@ RustboroCity_DevonCorp_2F_EventScript_TransferLileepToPC:: @ 8211AB9
 
 RustboroCity_DevonCorp_2F_EventScript_ReceivedLileepFanfare:: @ 8211AC4
 	bufferspeciesname 1, SPECIES_LILEEP
-	playfanfare MUS_FANFA4
+	playfanfare MUS_OBTAIN_ITEM
 	message RustboroCity_DevonCorp_2F_Text_ReceivedMonFromResearcher
 	waitmessage
 	waitfanfare
@@ -241,7 +243,7 @@ RustboroCity_DevonCorp_2F_EventScript_TransferAnorithToPC:: @ 8211B5C
 
 RustboroCity_DevonCorp_2F_EventScript_ReceivedAnorithFanfare:: @ 8211B67
 	bufferspeciesname 1, SPECIES_ANORITH
-	playfanfare MUS_FANFA4
+	playfanfare MUS_OBTAIN_ITEM
 	message RustboroCity_DevonCorp_2F_Text_ReceivedMonFromResearcher
 	waitmessage
 	waitfanfare
@@ -257,7 +259,7 @@ RustboroCity_DevonCorp_2F_EventScript_FinishReceivingAnorith:: @ 8211B7A
 RustboroCity_DevonCorp_2F_EventScript_ChooseFossil:: @ 8211B84
 	message RustboroCity_DevonCorp_2F_Text_TwoFossilsPickOne
 	waitmessage
-	multichoice 17, 6, MULTI_FOSSIL, 0
+	multichoice 17, 6, MULTI_FOSSIL, FALSE
 	switch VAR_RESULT
 	case 0, RustboroCity_DevonCorp_2F_EventScript_ChooseClawFossil
 	case 1, RustboroCity_DevonCorp_2F_EventScript_ChooseRootFossil
