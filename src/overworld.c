@@ -104,7 +104,6 @@ static void CB2_LoadMapOnReturnToFieldCableClub(void);
 static void CB2_LoadMap2(void);
 static void VBlankCB_Field(void);
 static void SpriteCB_LinkPlayer(struct Sprite *);
-static void ChooseAmbientCrySpecies(void);
 static void DoMapLoadLoop(u8 *);
 static bool32 LoadMapInStepsLocal(u8 *, bool32);
 static bool32 LoadMapInStepsLink(u8 *);
