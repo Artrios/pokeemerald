@@ -209,7 +209,7 @@ void CB2_InitSoar(void)
 			sPlayerYaw = 0;
 			sPlayerPitch = 0;
 
-			FadeOutAndFadeInNewMapMusic(MUS_NAMINORI, 2, 2);
+			FadeOutAndFadeInNewMapMusic(MUS_SURF, 2, 2);
 
 			// some of these may not be necessary, but I'm just being safe
 			ScanlineEffect_Stop();

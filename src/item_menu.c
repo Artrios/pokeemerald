@@ -2663,13 +2663,13 @@ static const u16 sItemsByType[ITEMS_COUNT] =
     
     [ITEM_ABILITY_CAPSULE] = ITEM_TYPE_STAT_BOOST_DRINK,
 
-    [ITEM_HEALTH_WING] = ITEM_TYPE_STAT_BOOST_WING,
-    [ITEM_MUSCLE_WING] = ITEM_TYPE_STAT_BOOST_WING,
-    [ITEM_RESIST_WING] = ITEM_TYPE_STAT_BOOST_WING,
-    [ITEM_GENIUS_WING] = ITEM_TYPE_STAT_BOOST_WING,
-    [ITEM_CLEVER_WING] = ITEM_TYPE_STAT_BOOST_WING,
-    [ITEM_SWIFT_WING] = ITEM_TYPE_STAT_BOOST_WING,
-    [ITEM_PRETTY_WING] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_HEALTH_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_MUSCLE_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_RESIST_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_GENIUS_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_CLEVER_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_SWIFT_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
+    [ITEM_PRETTY_FEATHER] = ITEM_TYPE_STAT_BOOST_WING,
     
     [ITEM_POWER_BRACER] = ITEM_TYPE_STAT_BOOST_HELD_ITEM,
     [ITEM_POWER_BELT] = ITEM_TYPE_STAT_BOOST_HELD_ITEM,
@@ -3125,7 +3125,7 @@ static void Task_SortFinish(u8 taskId)
     {
         //BagPrintTextOnWindow(ShowBagWindow(6, 3), 2, gStringVar4, 0, 2, 1, 0, 0, 1);
         SortItemsInBag(gBagPositionStruct.pocket, tSortType);
-        bag_menu_RemoveBagItem_message_window(4);
+        BagMenu_RemoveBagItemMessageWindow(4);
         DestroyListMenuTask(data[0], scrollPos, cursorPos);
         SetInitialScrollAndCursorPositions(gBagPositionStruct.pocket);
         LoadBagItemListBuffers(gBagPositionStruct.pocket);

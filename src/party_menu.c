@@ -6470,7 +6470,7 @@ void CursorCb_MoveItemCallback(u8 taskId)
         if (GetMonData(&gPlayerParty[gPartyMenu.slotId2], MON_DATA_IS_EGG)
             || gPartyMenu.slotId == gPartyMenu.slotId2)
         {
-            PlaySE(SE_HAZURE);
+            PlaySE(SE_FAILURE);
             return;
         }
 

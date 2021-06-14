@@ -1352,7 +1352,7 @@ static void FieldCallback_Fly_2(void)
 {
 	u8 taskId;
     FadeInFromBlack();
-	taskId = CreateTask(task00_8084310, 0);
+	taskId = CreateTask(Task_UseFly, 0);
 	gTasks[taskId].data[0] = 1; //do landing anim only
 	ScriptContext2_Enable();
     FreezeObjectEvents();
