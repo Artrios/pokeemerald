@@ -13,6 +13,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2), [**Pokemon Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/pokemon_expansion) and [**Item Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/item_expansion) (Credit: DizzyEgg)
 * Decapitalisation (Credit: Wyrserth and AsparagusEduardo)
 * Running indoors (Credit: TheXaman)
+* [**Day Night System**](https://github.com/Sierraffinity/pokeemerald/tree/daynight) (Credit: Sierraffinity)
 * Coloured nature stats
 * Fly to Routes
 * Lati@s soaring (from ORAS)
