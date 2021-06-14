@@ -682,14 +682,14 @@ static void AnimDefensiveWall_Step5(struct Sprite *sprite)
         u8 battler = battlerCopy = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
         u8 rank = GetBattlerSpriteBGPriorityRank(battler);
         int var0 = 1;
-        u8 toBG_2 = (rank ^ var0) != 0;
+        bool8 toBG2 = (rank ^ var0) != 0;
 
         if (IsBattlerSpriteVisible(battler))
-            sub_80A477C(toBG_2);
+            ResetBattleAnimBg(toBG2);
 
         battler = battlerCopy ^ 2;
         if (IsBattlerSpriteVisible(battler))
-            sub_80A477C(toBG_2 ^ var0);
+            ResetBattleAnimBg(toBG2 ^ var0);
     }
 
     sprite->callback = DestroyAnimSprite;
@@ -854,7 +854,7 @@ static void AnimTask_Teleport_Step(u8 taskId)
         else
         {
             gSprites[task->data[0]].invisible = TRUE;
-            gSprites[task->data[0]].pos1.x = 272;
+            gSprites[task->data[0]].pos1.x = DISPLAY_WIDTH + 32;
             ResetSpriteRotScale(task->data[0]);
             DestroyAnimVisualTask(taskId);
         }
@@ -953,7 +953,7 @@ static void AnimTask_ImprisonOrbs_Step(u8 taskId)
     }
 }
 
-static void sub_810FB60(struct Sprite *sprite)
+static void AnimRedX_Step(struct Sprite *sprite)
 {
     if (sprite->data[1] > sprite->data[0] - 10)
         sprite->invisible = sprite->data[1] & 1;
@@ -973,7 +973,7 @@ static void AnimRedX(struct Sprite *sprite)
     }
 
     sprite->data[0] = gBattleAnimArgs[1];
-    sprite->callback = sub_810FB60;
+    sprite->callback = AnimRedX_Step;
 }
 
 void AnimTask_SkillSwap(u8 taskId)
@@ -1218,7 +1218,7 @@ static void AnimTask_TransparentCloneGrowAndShrink_Step(u8 taskId)
         break;
     case 1:
         task->data[1] -= 4;
-        task->data[2] = 256 - (gSineTable[task->data[1]] >> 1);;
+        task->data[2] = 256 - (gSineTable[task->data[1]] >> 1);
         SetSpriteRotScale(task->data[15], task->data[2], task->data[2], 0);
         SetBattlerSpriteYOffsetFromOtherYScale(task->data[15], task->data[13]);
         if (task->data[1] == 0)
@@ -1254,7 +1254,7 @@ void AnimPsychoBoost(struct Sprite *sprite)
     case 1:
         if (sprite->affineAnimEnded)
         {
-            PlaySE12WithPanning(SE_W100, BattleAnimAdjustPanning(-64));
+            PlaySE12WithPanning(SE_M_TELEPORT, BattleAnimAdjustPanning(-64));
             ChangeSpriteAffineAnim(sprite, 1);
             sprite->data[0]++;
         }

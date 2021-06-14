@@ -1,3 +1,5 @@
+.set LOCALID_ATTENDANT, 1
+
 BattleFrontier_BattleArenaLobby_MapScripts:: @ 8255C36
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, BattleFrontier_BattleArenaLobby_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, BattleFrontier_BattleArenaLobby_OnWarp
@@ -82,7 +84,7 @@ BattleFrontier_BattleArenaLobby_EventScript_SaveAfterChallenge:: @ 8255D59
 	goto_if_eq BattleFrontier_BattleArenaLobby_EventScript_EndSaveAfterChallenge
 	message BattleFrontier_BattleArenaLobby_Text_RecordLastMatch
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleArenaLobby_EventScript_EndSaveAfterChallenge
 	case 0, BattleFrontier_BattleArenaLobby_EventScript_RecordMatch
@@ -114,7 +116,7 @@ BattleFrontier_BattleArenaLobby_EventScript_Attendant:: @ 8255DF4
 BattleFrontier_BattleArenaLobby_EventScript_AskTakeChallenge:: @ 8255E0B
 	message BattleFrontier_BattleArenaLobby_Text_WishToTakeChallenge
 	waitmessage
-	multichoice 17, 6, MULTI_CHALLENGEINFO, 0
+	multichoice 17, 6, MULTI_CHALLENGEINFO, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleArenaLobby_EventScript_TryEnterChallenge
 	case 1, BattleFrontier_BattleArenaLobby_EventScript_ExplainChallenge
@@ -124,7 +126,7 @@ BattleFrontier_BattleArenaLobby_EventScript_AskTakeChallenge:: @ 8255E0B
 BattleFrontier_BattleArenaLobby_EventScript_TryEnterChallenge:: @ 8255E47
 	message BattleFrontier_BattleArenaLobby_Text_WhichLevelMode
 	waitmessage
-	multichoice 17, 6, MULTI_LEVEL_MODE, 0
+	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleArenaLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleArenaLobby_EventScript_CancelChallenge
@@ -206,12 +208,12 @@ BattleFrontier_BattleArenaLobby_EventScript_EndCancelChallenge:: @ 8256003
 	end
 
 BattleFrontier_BattleArenaLobby_EventScript_WalkToDoorLv50:: @ 8256005
-	applymovement 1, BattleFrontier_BattleArenaLobby_Movement_AttendantWalkToLeftDoor
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleArenaLobby_Movement_AttendantWalkToLeftDoor
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleArenaLobby_Movement_PlayerWalkToLeftDoor
 	waitmovement 0
 	opendoor 2, 2
 	waitdooranim
-	applymovement 1, BattleFrontier_BattleArenaLobby_Movement_AttendantEnterDoor
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleArenaLobby_Movement_AttendantEnterDoor
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleArenaLobby_Movement_PlayerEnterDoor
 	waitmovement 0
 	closedoor 2, 2
@@ -255,12 +257,12 @@ BattleFrontier_BattleArenaLobby_Movement_PlayerEnterDoor: @ 825604C
 	step_end
 
 BattleFrontier_BattleArenaLobby_EventScript_WalkToDoorLvOpen:: @ 8256050
-	applymovement 1, BattleFrontier_BattleArenaLobby_Movement_AttendantWalkToRightDoor
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleArenaLobby_Movement_AttendantWalkToRightDoor
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleArenaLobby_Movement_PlayerWalkToRightDoor
 	waitmovement 0
 	opendoor 11, 2
 	waitdooranim
-	applymovement 1, BattleFrontier_BattleArenaLobby_Movement_AttendantEnterDoor
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleArenaLobby_Movement_AttendantEnterDoor
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleArenaLobby_Movement_PlayerEnterDoor
 	waitmovement 0
 	closedoor 11, 2
@@ -323,7 +325,7 @@ BattleFrontier_BattleArenaLobby_EventScript_RulesBoard:: @ 82560CA
 BattleFrontier_BattleArenaLobby_EventScript_ReadRulesBoard:: @ 82560D9
 	message BattleFrontier_BattleArenaLobby_Text_ReadWhichHeading
 	waitmessage
-	multichoice 17, 2, MULTI_BATTLE_ARENA_RULES, 0
+	multichoice 17, 2, MULTI_BATTLE_ARENA_RULES, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleArenaLobby_EventScript_BattleRules
 	case 1, BattleFrontier_BattleArenaLobby_EventScript_MindRules

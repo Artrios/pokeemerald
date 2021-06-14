@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle.h"
+#include "battle_anim.h"
 #include "battle_bg.h"
 #include "battle_main.h"
 #include "battle_message.h"
@@ -23,6 +24,7 @@
 #include "constants/map_types.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
+#include "constants/battle_anim.h"
 
 struct BattleBackground
 {
@@ -100,7 +102,7 @@ static const struct SpriteTemplate sVsLetter_V_SpriteTemplate =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = sVsLetterAffineAnimTable,
-    .callback = nullsub_17
+    .callback = SpriteCB_VsLetterDummy
 };
 
 static const struct SpriteTemplate sVsLetter_S_SpriteTemplate =
@@ -111,7 +113,7 @@ static const struct SpriteTemplate sVsLetter_S_SpriteTemplate =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = sVsLetterAffineAnimTable,
-    .callback = nullsub_17
+    .callback = SpriteCB_VsLetterDummy
 };
 
 static const struct CompressedSpriteSheet sVsLettersSpriteSheet =
@@ -759,7 +761,7 @@ void LoadBattleMenuWindowGfx(void)
 
 void DrawMainBattleBackground(void)
 {
-    if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_x2000000))
+    if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK))
     {
         LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
         LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
@@ -863,7 +865,11 @@ void LoadBattleTextboxAndBackground(void)
     CopyBgTilemapBufferToVram(0);
     LoadCompressedPalette(gBattleTextboxPalette, 0, 0x40);
     LoadBattleMenuWindowGfx();
-    DrawMainBattleBackground();
+    #if B_TERRAIN_BG_CHANGE == TRUE
+        DrawTerrainTypeBattleBackground();
+    #else
+        DrawMainBattleBackground();
+    #endif
 }
 
 static void DrawLinkBattleParticipantPokeballs(u8 taskId, u8 multiplayerId, u8 bgId, u8 destX, u8 destY)
@@ -1105,7 +1111,7 @@ void InitLinkBattleVsScreen(u8 taskId)
             if (gTasks[taskId].data[5] != 0)
                 DrawLinkBattleVsScreenOutcomeText();
 
-            PlaySE(SE_W231);
+            PlaySE(SE_M_HARDEN);
             DestroyTask(taskId);
             gSprites[gBattleStruct->linkBattleVsSpriteId_V].invisible = FALSE;
             gSprites[gBattleStruct->linkBattleVsSpriteId_S].invisible = FALSE;
@@ -1126,7 +1132,7 @@ void DrawBattleEntryBackground(void)
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
     {
         LZDecompressVram(gUnknown_08D778F0, (void*)(BG_CHAR_ADDR(1)));
-        LZDecompressVram(gVsLettersGfx, (void*)(VRAM + 0x10000));
+        LZDecompressVram(gVsLettersGfx, (void*)OBJ_VRAM0);
         LoadCompressedPalette(gUnknown_08D77AE4, 0x60, 0x20);
         SetBgAttribute(1, BG_ATTR_SCREENSIZE, 1);
         SetGpuReg(REG_OFFSET_BG1CNT, 0x5C04);
@@ -1134,13 +1140,13 @@ void DrawBattleEntryBackground(void)
         CopyToBgTilemapBuffer(2, gUnknown_08D779D8, 0, 0);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(2);
-        SetGpuReg(REG_OFFSET_WININ, 0x36);
-        SetGpuReg(REG_OFFSET_WINOUT, 0x36);
+        SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG1 | WININ_WIN0_BG2 | WININ_WIN0_OBJ | WININ_WIN0_CLR);
+        SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG1 | WINOUT_WIN01_BG2 | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
         gBattle_BG1_Y = 0xFF5C;
         gBattle_BG2_Y = 0xFF5C;
         LoadCompressedSpriteSheetUsingHeap(&sVsLettersSpriteSheet);
     }
-    else if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000 | BATTLE_TYPE_EREADER_TRAINER))
+    else if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))
     {
         if (!(gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER) || gPartnerTrainerId == TRAINER_STEVEN_PARTNER || gPartnerTrainerId >= TRAINER_CUSTOM_PARTNER)
         {
@@ -1221,7 +1227,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
         LoadCompressedPalette(gBattleTextboxPalette, 0, 0x40);
         break;
     case 3:
-        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000 | BATTLE_TYPE_EREADER_TRAINER))
+        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))
         {
             LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
         }
@@ -1280,7 +1286,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
         }
         break;
     case 4:
-        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000 | BATTLE_TYPE_EREADER_TRAINER))
+        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))
         {
             LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
         }
@@ -1342,7 +1348,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
         }
         break;
     case 5:
-        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000 | BATTLE_TYPE_EREADER_TRAINER))
+        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))
         {
             LoadCompressedPalette(gBattleTerrainPalette_Frontier, 0x20, 0x60);
         }
@@ -1413,3 +1419,26 @@ bool8 LoadChosenBattleElement(u8 caseId)
 
     return ret;
 }
+
+void DrawTerrainTypeBattleBackground(void)
+{
+    switch (gFieldStatuses & STATUS_TERRAIN_ANY)
+    {
+    case STATUS_FIELD_GRASSY_TERRAIN:
+        LoadMoveBg(BG_GRASSY_TERRAIN);
+        break;
+    case STATUS_FIELD_MISTY_TERRAIN:
+        LoadMoveBg(BG_MISTY_TERRAIN);
+        break;
+    case STATUS_FIELD_ELECTRIC_TERRAIN:
+        LoadMoveBg(BG_ELECTRIC_TERRAIN);
+        break;
+    case STATUS_FIELD_PSYCHIC_TERRAIN:
+        LoadMoveBg(BG_PSYCHIC_TERRAIN);
+        break;
+    default:
+        DrawMainBattleBackground();
+        break;
+    }
+}
+

@@ -1,3 +1,8 @@
+.set LOCALID_ATTENDANT_SINGLES, 1
+.set LOCALID_ATTENDANT_DOUBLES, 7
+.set LOCALID_ATTENDANT_MULTIS, 8
+.set LOCALID_ATTENDANT_LINK_MULTIS, 9
+
 BattleFrontier_BattleTowerLobby_MapScripts:: @ 823E67B
 	map_script MAP_SCRIPT_ON_RESUME, BattleFrontier_BattleTowerLobby_OnResume
 	map_script MAP_SCRIPT_ON_TRANSITION, BattleFrontier_BattleTowerLobby_OnTransition
@@ -76,7 +81,7 @@ BattleFrontier_BattleTowerLobby_EventScript_GiveRibbons:: @ 823E780
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_GiveBattlePoints
 	message BattleFrontier_BattleTowerLobby_Text_HereAreSomeRibbons
 	waitmessage
-	playfanfare MUS_FANFA4
+	playfanfare MUS_OBTAIN_ITEM
 	waitfanfare
 	msgbox BattleFrontier_BattleTowerLobby_Text_PutRibbonOnMons, MSGBOX_DEFAULT
 BattleFrontier_BattleTowerLobby_EventScript_GiveBattlePoints:: @ 823E7A5
@@ -130,7 +135,7 @@ BattleFrontier_BattleTowerLobby_EventScript_AskSaveBattle:: @ 823E84D
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_EndSaveBattle
 	message BattleFrontier_BattleTowerLobby_Text_RecordLastMatch
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_EndSaveBattle
 	case 0, BattleFrontier_EventScript_SaveBattle
@@ -182,7 +187,7 @@ BattleFrontier_BattleTowerLobby_EventScript_SinglesAttendant:: @ 823E936
 BattleFrontier_BattleTowerLobby_EventScript_AskEnterSinglesChallenge:: @ 823E948
 	message BattleFrontier_BattleTowerLobby_Text_TakeSinglesChallenge
 	waitmessage
-	multichoice 17, 6, MULTI_CHALLENGEINFO, 0
+	multichoice 17, 6, MULTI_CHALLENGEINFO, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_TryEnterSinglesChallenge
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_ExplainSinglesChallenge
@@ -193,7 +198,7 @@ BattleFrontier_BattleTowerLobby_EventScript_TryEnterSinglesChallenge:: @ 823E984
 	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES
 	message BattleFrontier_BattleTowerLobby_Text_WhichLevelMode
 	waitmessage
-	multichoice 17, 6, MULTI_LEVEL_MODE, 0
+	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
@@ -248,7 +253,7 @@ BattleFrontier_BattleTowerLobby_EventScript_DoublesAttendant:: @ 823EA9F
 BattleFrontier_BattleTowerLobby_EventScript_AskEnterDoublesChallenge:: @ 823EAB1
 	message BattleFrontier_BattleTowerLobby_Text_TakeDoublesChallenge
 	waitmessage
-	multichoice 17, 6, MULTI_CHALLENGEINFO, 0
+	multichoice 17, 6, MULTI_CHALLENGEINFO, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_TryEnterDoublesChallenge
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_ExplainDoublesChallenge
@@ -259,7 +264,7 @@ BattleFrontier_BattleTowerLobby_EventScript_TryEnterDoublesChallenge:: @ 823EAED
 	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_DOUBLES
 	message BattleFrontier_BattleTowerLobby_Text_WhichLevelMode
 	waitmessage
-	multichoice 17, 6, MULTI_LEVEL_MODE, 0
+	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
@@ -315,7 +320,7 @@ BattleFrontier_BattleTowerLobby_EventScript_MultisAttendant:: @ 823EC08
 BattleFrontier_BattleTowerLobby_EventScript_AskEnterMultisChallenge:: @ 823EC1D
 	message BattleFrontier_BattleTowerLobby_Text_TakeMultisChallenge
 	waitmessage
-	multichoice 17, 6, MULTI_CHALLENGEINFO, 0
+	multichoice 17, 6, MULTI_CHALLENGEINFO, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_TryEnterMultisChallenge
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_ExplainMultisChallenge
@@ -326,7 +331,7 @@ BattleFrontier_BattleTowerLobby_EventScript_TryEnterMultisChallenge:: @ 823EC59
 	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_MULTIS
 	message BattleFrontier_BattleTowerLobby_Text_WhichLevelMode
 	waitmessage
-	multichoice 17, 6, MULTI_LEVEL_MODE, 0
+	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
@@ -381,7 +386,7 @@ BattleFrontier_BattleTowerLobby_EventScript_LinkMultisAttendant:: @ 823ED74
 BattleFrontier_BattleTowerLobby_EventScript_AskEnterLinkMultisChallenge:: @ 823ED86
 	message BattleFrontier_BattleTowerLobby_Text_TakeLinkMultisChallenge
 	waitmessage
-	multichoice 17, 6, MULTI_CHALLENGEINFO, 0
+	multichoice 17, 6, MULTI_CHALLENGEINFO, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_TryEnterLinkMultisChallenge
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_ExplainLinkMultisChallenge
@@ -392,7 +397,7 @@ BattleFrontier_BattleTowerLobby_EventScript_TryEnterLinkMultisChallenge:: @ 823E
 	setvar VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_LINK_MULTIS
 	message BattleFrontier_BattleTowerLobby_Text_WhichLevelMode
 	waitmessage
-	multichoice 17, 6, MULTI_LEVEL_MODE, 0
+	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
 	switch VAR_RESULT
 	case FRONTIER_LVL_TENT, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
 	case MULTI_B_PRESSED, BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
@@ -441,7 +446,7 @@ BattleFrontier_BattleTowerLobby_EventScript_FeelingsMan:: @ 823EEE7
 	faceplayer
 	message BattleFrontier_BattleTowerLobby_Text_DescribeFeelingsAboutBattleTower
 	waitmessage
-	multichoice 16, 4, MULTI_BATTLE_TOWER_FEELINGS, 0
+	multichoice 16, 4, MULTI_BATTLE_TOWER_FEELINGS, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_FeelingsBattleNow
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_FeelingsIWon
@@ -706,19 +711,19 @@ BattleFrontier_BattleTowerLobby_EventScript_SetAttendantTalkedTo:: @ 823F1E8
 	return
 
 BattleFrontier_BattleTowerLobby_EventScript_TalkedToSinglesAttendant:: @ 823F215
-	setvar VAR_LAST_TALKED, 1
+	setvar VAR_LAST_TALKED, LOCALID_ATTENDANT_SINGLES
 	return
 
 BattleFrontier_BattleTowerLobby_EventScript_TalkedToDoublesAttendant:: @ 823F21B
-	setvar VAR_LAST_TALKED, 7
+	setvar VAR_LAST_TALKED, LOCALID_ATTENDANT_DOUBLES
 	return
 
 BattleFrontier_BattleTowerLobby_EventScript_TalkedToMultisAttendant:: @ 823F221
-	setvar VAR_LAST_TALKED, 8
+	setvar VAR_LAST_TALKED, LOCALID_ATTENDANT_MULTIS
 	return
 
 BattleFrontier_BattleTowerLobby_EventScript_TalkedToLinkMultisAttendant:: @ 823F227
-	setvar VAR_LAST_TALKED, 9
+	setvar VAR_LAST_TALKED, LOCALID_ATTENDANT_LINK_MULTIS
 	return
 
 BattleFrontier_BattleTowerLobby_EventScript_GetDoorXCoord:: @ 823F22D
@@ -786,19 +791,19 @@ BattleFrontier_BattleTowerLobby_EventScript_TryCableLink:: @ 823F2C5
 	setvar VAR_0x8005, 0
 	special TryBattleLinkup
 	waitstate
-	compare VAR_RESULT, 1
+	compare VAR_RESULT, LINKUP_SUCCESS
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_CableLinkSuccessful
-	compare VAR_RESULT, 2
+	compare VAR_RESULT, LINKUP_SOMEONE_NOT_READY
 	goto_if_eq CableClub_EventScript_AbortLinkSomeoneNotReady
-	compare VAR_RESULT, 3
+	compare VAR_RESULT, LINKUP_DIFF_SELECTIONS
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_AbortLinkDifferentSelections
-	compare VAR_RESULT, 4
+	compare VAR_RESULT, LINKUP_WRONG_NUM_PLAYERS
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_AbortLinkIncorrectNumberOfPlayers
-	compare VAR_RESULT, 5
+	compare VAR_RESULT, LINKUP_FAILED
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_CancelChallenge
-	compare VAR_RESULT, 6
+	compare VAR_RESULT, LINKUP_CONNECTION_ERROR
 	goto_if_eq CableClub_EventScript_AbortLinkConnectionError
-	compare VAR_RESULT, 11
+	compare VAR_RESULT, LINKUP_FAILED_BATTLE_TOWER
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_AbortLink
 	end
 
@@ -853,7 +858,7 @@ BattleFrontier_BattleTowerLobby_EventScript_CableLinkSuccessful:: @ 823F3AF
 	message BattleFrontier_BattleTowerLobby_Text_SaveGameBeforeShowingIn
 	waitmessage
 	tower_save CHALLENGE_STATUS_SAVING
-	special sub_80A08CC
+	special SaveForBattleTowerLink
 	waitstate
 	playse SE_SAVE
 	waitse
@@ -874,7 +879,7 @@ BattleFrontier_BattleTowerLobby_EventScript_TryWirelessLink:: @ 823F3E8
 BattleFrontier_BattleTowerLobby_EventScript_ChooseLeader:: @ 823F3F3
 	message CableClub_Text_ChooseGroupLeaderOfTwo
 	waitmessage
-	multichoice 16, 6, MULTI_LINK_LEADER, 0
+	multichoice 16, 6, MULTI_LINK_LEADER, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_TryJoinGroup
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_TryBecomeLeader
@@ -884,26 +889,26 @@ BattleFrontier_BattleTowerLobby_EventScript_ChooseLeader:: @ 823F3F3
 
 BattleFrontier_BattleTowerLobby_EventScript_TryBecomeLeader:: @ 823F430
 	call CableClub_EventScript_TryBecomeLinkLeader
-	compare VAR_RESULT, 1
+	compare VAR_RESULT, LINKUP_SUCCESS
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_WirelessLinkSuccessful
-	compare VAR_RESULT, 5
+	compare VAR_RESULT, LINKUP_FAILED
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_ChooseLeader
-	compare VAR_RESULT, 8
+	compare VAR_RESULT, LINKUP_RETRY_ROLE_ASSIGN
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_TryBecomeLeader
-	compare VAR_RESULT, 11
+	compare VAR_RESULT, LINKUP_FAILED_BATTLE_TOWER
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_AbortLink
 	release
 	return
 
 BattleFrontier_BattleTowerLobby_EventScript_TryJoinGroup:: @ 823F463
 	call CableClub_EventScript_TryJoinLinkGroup
-	compare VAR_RESULT, 1
+	compare VAR_RESULT, LINKUP_SUCCESS
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_WirelessLinkSuccessful
-	compare VAR_RESULT, 5
+	compare VAR_RESULT, LINKUP_FAILED
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_ChooseLeader
-	compare VAR_RESULT, 8
+	compare VAR_RESULT, LINKUP_RETRY_ROLE_ASSIGN
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_TryJoinGroup
-	compare VAR_RESULT, 11
+	compare VAR_RESULT, LINKUP_FAILED_BATTLE_TOWER
 	goto_if_eq BattleFrontier_BattleTowerLobby_EventScript_AbortLink
 	release
 	return
@@ -914,7 +919,7 @@ BattleFrontier_BattleTowerLobby_EventScript_WirelessLinkSuccessful:: @ 823F496
 	message BattleFrontier_BattleTowerLobby_Text_SaveGameBeforeShowingIn
 	waitmessage
 	tower_save CHALLENGE_STATUS_SAVING
-	special sub_80A08CC
+	special SaveForBattleTowerLink
 	waitstate
 	playse SE_SAVE
 	waitse
@@ -930,7 +935,7 @@ BattleFrontier_BattleTowerLobby_EventScript_RulesBoard:: @ 823F4BE
 BattleFrontier_BattleTowerLobby_EventScript_ReadRulesBoard:: @ 823F4CD
 	message BattleFrontier_BattleTowerLobby_Text_ReadWhichHeading
 	waitmessage
-	multichoice 17, 2, MULTI_BATTLE_TOWER_RULES, 0
+	multichoice 17, 2, MULTI_BATTLE_TOWER_RULES, FALSE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleTowerLobby_EventScript_RulesTower
 	case 1, BattleFrontier_BattleTowerLobby_EventScript_RulesMons

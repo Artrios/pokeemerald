@@ -16,7 +16,7 @@ EventScript_RepelWoreOff_AskAnother:
 	goto_if_eq EventScript_RepelWoreOff_End
 	removeitem ITEM_REPEL, 1
 	setvar VAR_REPEL_STEP_COUNT, 0x64
-	playse SE_TU_SAA
+	playse SE_REPEL
 	msgbox Text_UsedARepel, MSGBOX_SIGN
 	end
 	
@@ -29,7 +29,7 @@ EventScript_SuperRepelWoreOff_AskAnother:
 	goto_if_eq EventScript_RepelWoreOff_End
 	removeitem ITEM_SUPER_REPEL, 1
 	setvar VAR_REPEL_STEP_COUNT, 0xC8
-	playse SE_TU_SAA
+	playse SE_REPEL
 	msgbox Text_UsedASuperRepel, MSGBOX_SIGN
 	end
 	
@@ -42,7 +42,7 @@ EventScript_MaxRepelWoreOff_AskAnother:
 	goto_if_eq EventScript_RepelWoreOff_End
 	removeitem ITEM_MAX_REPEL, 1
 	setvar VAR_REPEL_STEP_COUNT, 0xFA
-	playse SE_TU_SAA
+	playse SE_REPEL
 	msgbox Text_UsedAMaxRepel, MSGBOX_SIGN
 	end
 	

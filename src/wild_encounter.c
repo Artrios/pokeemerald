@@ -2,6 +2,7 @@
 #include "wild_encounter.h"
 #include "pokemon.h"
 #include "metatile_behavior.h"
+#include "day_night.h"
 #include "fieldmap.h"
 #include "random.h"
 #include "field_player_avatar.h"
@@ -11,6 +12,7 @@
 #include "pokeblock.h"
 #include "battle_setup.h"
 #include "roamer.h"
+#include "rtc.h"
 #include "tv.h"
 #include "link.h"
 #include "script.h"
@@ -23,7 +25,6 @@
 #include "constants/items.h"
 #include "constants/layouts.h"
 #include "constants/maps.h"
-#include "constants/species.h"
 #include "constants/weather.h"
 
 extern const u8 EventScript_RepelWoreOff[];
@@ -36,12 +37,13 @@ static void FeebasSeedRng(u16 seed);
 static bool8 IsWildLevelAllowedByRepel(u8 level);
 static void ApplyFluteEncounterRateMod(u32 *encRate);
 static void ApplyCleanseTagEncounterRateMod(u32 *encRate);
-static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildMon, u8 type, u8 ability, u8 *monIndex);
+static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildMon, u8 type, u16 ability, u8 *monIndex);
 static bool8 IsAbilityAllowingEncounter(u8 level);
 
 // EWRAM vars
 EWRAM_DATA static u8 sWildEncountersDisabled = 0;
 EWRAM_DATA bool8 gIsFishingEncounter = 0;
+EWRAM_DATA bool8 gIsSurfingEncounter = 0;
 EWRAM_DATA static u32 sFeebasRngValue = 0;
 
 #include "data/wild_encounters.h"
@@ -112,7 +114,7 @@ static bool8 CheckFeebas(void)
         if (Random() % 100 > 49) // 50% chance of encountering Feebas
             return FALSE;
 
-        FeebasSeedRng(gSaveBlock1Ptr->easyChatPairs[0].unk2);
+        FeebasSeedRng(gSaveBlock1Ptr->dewfordTrends[0].rand);
         for (i = 0; i != NUM_FEEBAS_SPOTS;)
         {
             feebasSpots[i] = FeebasRandom() % 447;
@@ -188,13 +190,6 @@ static u8 ChooseWildMonIndex_WaterRock(void)
         return 4;
 }
 
-enum
-{
-    OLD_ROD,
-    GOOD_ROD,
-    SUPER_ROD
-};
-
 static u8 ChooseWildMonIndex_Fishing(u8 rod)
 {
     u8 wildMonIndex = 0;
@@ -257,7 +252,7 @@ static u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon)
     // check ability for max level mon
     if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
     {
-        u8 ability = GetMonAbility(&gPlayerParty[0]);
+        u16 ability = GetMonAbility(&gPlayerParty[0]);
         if (ability == ABILITY_HUSTLE || ability == ABILITY_VITAL_SPIRIT || ability == ABILITY_PRESSURE)
         {
             if (Random() % 2 == 0)
@@ -306,29 +301,27 @@ static u8 PickWildMonNature(void)
     u8 i;
     u8 j;
     struct Pokeblock *safariPokeblock;
-    u8 natures[25];
+    u8 natures[NUM_NATURES];
 
     if (GetSafariZoneFlag() == TRUE && Random() % 100 < 80)
     {
         safariPokeblock = SafariZoneGetActivePokeblock();
         if (safariPokeblock != NULL)
         {
-            for (i = 0; i < 25; i++)
+            for (i = 0; i < NUM_NATURES; i++)
                 natures[i] = i;
-            for (i = 0; i < 24; i++)
+            for (i = 0; i < NUM_NATURES - 1; i++)
             {
-                for (j = i + 1; j < 25; j++)
+                for (j = i + 1; j < NUM_NATURES; j++)
                 {
                     if (Random() & 1)
                     {
-                        u8 temp = natures[i];
-
-                        natures[i] = natures[j];
-                        natures[j] = temp;
+                        u8 temp;
+                        SWAP(natures[i], natures[j], temp);
                     }
                 }
             }
-            for (i = 0; i < 25; i++)
+            for (i = 0; i < NUM_NATURES; i++)
             {
                 if (PokeblockGetGain(natures[i], safariPokeblock) > 0)
                     return natures[i];
@@ -340,11 +333,11 @@ static u8 PickWildMonNature(void)
         && GetMonAbility(&gPlayerParty[0]) == ABILITY_SYNCHRONIZE
         && ((B_SYNCHRONIZE_NATURE >= GEN_8) || Random() % 2 == 0))
     {
-        return GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY) % 25;
+        return GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY) % NUM_NATURES;
     }
 
     // random nature
-    return Random() % 25;
+    return Random() % NUM_NATURES;
 }
 
 static void CreateWildMon(u16 species, u8 level)
@@ -398,39 +391,43 @@ enum
 
 static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 flags)
 {
+    u8 timeOfDay;
     u8 wildMonIndex = 0;
     u8 level;
+
+    RtcCalcLocalTime();
+    timeOfDay = GetCurrentTimeOfDay();
 
     switch (area)
     {
     case WILD_AREA_LAND:
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_ELECTRIC, ABILITY_STATIC, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_ELECTRIC, ABILITY_STATIC, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_ELECTRIC, ABILITY_LIGHTNING_ROD, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_ELECTRIC, ABILITY_LIGHTNING_ROD, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_FIRE, ABILITY_FLASH_FIRE, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_FIRE, ABILITY_FLASH_FIRE, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_GRASS, ABILITY_HARVEST, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_GRASS, ABILITY_HARVEST, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_WATER, ABILITY_STORM_DRAIN, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_WATER, ABILITY_STORM_DRAIN, &wildMonIndex))
             break;
 
         wildMonIndex = ChooseWildMonIndex_Land();
         break;
     case WILD_AREA_WATER:
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_ELECTRIC, ABILITY_STATIC, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_ELECTRIC, ABILITY_STATIC, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_ELECTRIC, ABILITY_LIGHTNING_ROD, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_ELECTRIC, ABILITY_LIGHTNING_ROD, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_FIRE, ABILITY_FLASH_FIRE, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_FIRE, ABILITY_FLASH_FIRE, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_GRASS, ABILITY_HARVEST, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_GRASS, ABILITY_HARVEST, &wildMonIndex))
             break;
-        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_WATER, ABILITY_STORM_DRAIN, &wildMonIndex))
+        if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon[timeOfDay], TYPE_WATER, ABILITY_STORM_DRAIN, &wildMonIndex))
             break;
 
         wildMonIndex = ChooseWildMonIndex_WaterRock();
@@ -440,23 +437,30 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
         break;
     }
 
-    level = ChooseWildMonLevel(&wildMonInfo->wildPokemon[wildMonIndex]);
+    level = ChooseWildMonLevel(&wildMonInfo->wildPokemon[timeOfDay][wildMonIndex]);
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(level))
         return FALSE;
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))
         return FALSE;
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
+    CreateWildMon(wildMonInfo->wildPokemon[timeOfDay][wildMonIndex].species, level);
     return TRUE;
 }
 
 static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 rod)
 {
-    u8 wildMonIndex = ChooseWildMonIndex_Fishing(rod);
-    u8 level = ChooseWildMonLevel(&wildMonInfo->wildPokemon[wildMonIndex]);
+    u8 timeOfDay;
+    u8 wildMonIndex;
+    u8 level;
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
-    return wildMonInfo->wildPokemon[wildMonIndex].species;
+    RtcCalcLocalTime();
+    timeOfDay = GetCurrentTimeOfDay();
+
+    wildMonIndex = ChooseWildMonIndex_Fishing(rod);
+    level = ChooseWildMonLevel(&wildMonInfo->wildPokemon[timeOfDay][wildMonIndex]);
+
+    CreateWildMon(wildMonInfo->wildPokemon[timeOfDay][wildMonIndex].species, level);
+    return wildMonInfo->wildPokemon[timeOfDay][wildMonIndex].species;
 }
 
 static bool8 SetUpMassOutbreakEncounter(u8 flags)
@@ -621,8 +625,7 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-					u8 doublechance = Random() % (int)(100 / 2);
-                    if (USE_BATTLE_DEBUG && !GetSafariZoneFlag() && GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS && doublechance == 0)
+                    if (TryDoDoubleWildBattle())
                     {
                         struct Pokemon mon1 = gEnemyParty[0];
                         TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_KEEN_EYE);
@@ -664,7 +667,18 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             {
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    BattleSetup_StartWildBattle();
+                    gIsSurfingEncounter = TRUE;
+                    if (TryDoDoubleWildBattle())
+                    {
+                        struct Pokemon mon1 = gEnemyParty[0];
+                        TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_KEEN_EYE);
+                        gEnemyParty[1] = mon1;
+                        BattleSetup_StartDoubleWildBattle();
+                    }
+                    else
+                    {
+                        BattleSetup_StartWildBattle();
+                    }
                     return TRUE;
                 }
 
@@ -812,8 +826,14 @@ void FishingWildEncounter(u8 rod)
 u16 GetLocalWildMon(bool8 *isWaterMon)
 {
     u16 headerId;
+    u8 timeOfDay;
+    u16 species;
+
     const struct WildPokemonInfo *landMonsInfo;
     const struct WildPokemonInfo *waterMonsInfo;
+
+    RtcCalcLocalTime();
+    timeOfDay = GetCurrentTimeOfDay();
 
     *isWaterMon = FALSE;
     headerId = GetCurrentMapWildMonHeaderId();
@@ -826,35 +846,39 @@ u16 GetLocalWildMon(bool8 *isWaterMon)
         return SPECIES_NONE;
     // Land Pokemon
     else if (landMonsInfo != NULL && waterMonsInfo == NULL)
-        return landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species;
+        return landMonsInfo->wildPokemon[timeOfDay][ChooseWildMonIndex_Land()].species;
     // Water Pokemon
     else if (landMonsInfo == NULL && waterMonsInfo != NULL)
     {
         *isWaterMon = TRUE;
-        return waterMonsInfo->wildPokemon[ChooseWildMonIndex_WaterRock()].species;
+        return waterMonsInfo->wildPokemon[timeOfDay][ChooseWildMonIndex_WaterRock()].species;
     }
     // Either land or water Pokemon
     if ((Random() % 100) < 80)
     {
-        return landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species;
+        return landMonsInfo->wildPokemon[timeOfDay][ChooseWildMonIndex_Land()].species;
     }
     else
     {
         *isWaterMon = TRUE;
-        return waterMonsInfo->wildPokemon[ChooseWildMonIndex_WaterRock()].species;
+        return waterMonsInfo->wildPokemon[timeOfDay][ChooseWildMonIndex_WaterRock()].species;
     }
 }
 
 u16 GetLocalWaterMon(void)
 {
     u16 headerId = GetCurrentMapWildMonHeaderId();
+    u8 timeOfDay;
+    
+    RtcCalcLocalTime();
+    timeOfDay = GetCurrentTimeOfDay();
 
     if (headerId != 0xFFFF)
     {
         const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
 
         if (waterMonsInfo)
-            return waterMonsInfo->wildPokemon[ChooseWildMonIndex_WaterRock()].species;
+            return waterMonsInfo->wildPokemon[timeOfDay][ChooseWildMonIndex_WaterRock()].species;
     }
     return SPECIES_NONE;
 }
@@ -908,7 +932,7 @@ static bool8 IsWildLevelAllowedByRepel(u8 wildLevel)
 
 static bool8 IsAbilityAllowingEncounter(u8 level)
 {
-    u8 ability;
+    u16 ability;
 
     if (GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
         return TRUE;
@@ -945,7 +969,7 @@ static bool8 TryGetRandomWildMonIndexByType(const struct WildPokemon *wildMon, u
     return TRUE;
 }
 
-static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildMon, u8 type, u8 ability, u8 *monIndex)
+static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildMon, u8 type, u16 ability, u8 *monIndex)
 {
     if (GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
         return FALSE;
@@ -969,4 +993,17 @@ static void ApplyCleanseTagEncounterRateMod(u32 *encRate)
 {
     if (GetMonData(&gPlayerParty[0], MON_DATA_HELD_ITEM) == ITEM_CLEANSE_TAG)
         *encRate = *encRate * 2 / 3;
+}
+
+bool8 TryDoDoubleWildBattle(void)
+{
+    if (GetSafariZoneFlag() || GetMonsStateToDoubles() != PLAYER_HAS_TWO_USABLE_MONS)
+        return FALSE;
+    else if (B_FLAG_FORCE_DOUBLE_WILD != 0 && FlagGet(B_FLAG_FORCE_DOUBLE_WILD))
+        return TRUE;
+    #if B_DOUBLE_WILD_CHANCE != 0
+    else if ((Random() % 100) + 1 < B_DOUBLE_WILD_CHANCE)
+        return TRUE;
+    #endif
+    return FALSE;
 }

@@ -19,6 +19,8 @@
 #include "text.h"
 #include "trainer_hill.h"
 #include "window.h"
+#include "constants/abilities.h"
+#include "constants/battle_dome.h"
 #include "constants/battle_string_ids.h"
 #include "constants/frontier_util.h"
 #include "constants/items.h"
@@ -26,6 +28,7 @@
 #include "constants/species.h"
 #include "constants/trainers.h"
 #include "constants/trainer_hill.h"
+#include "constants/weather.h"
 
 struct BattleWindowText
 {
@@ -49,7 +52,7 @@ static void ChooseTypeOfMoveUsedString(u8 *dst);
 static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst);
 
 // EWRAM vars
-static EWRAM_DATA u8 sBattlerAbilities[MAX_BATTLERS_COUNT] = {0};
+static EWRAM_DATA u16 sBattlerAbilities[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA struct BattleMsgData *gBattleMsgDataPtr = NULL;
 
 // const rom data
@@ -178,7 +181,7 @@ static const u8 sText_PkmnStayedAwakeUsing[] = _("{B_DEF_NAME_WITH_PREFIX} staye
 static const u8 sText_PkmnStoringEnergy[] = _("{B_ATK_NAME_WITH_PREFIX} is storing\nenergy!");
 static const u8 sText_PkmnUnleashedEnergy[] = _("{B_ATK_NAME_WITH_PREFIX} unleashed\nenergy!");
 static const u8 sText_PkmnFatigueConfusion[] = _("{B_ATK_NAME_WITH_PREFIX} became\nconfused due to fatigue!");
-static const u8 sText_PkmnPickedUpItem[] = _("{B_PLAYER_NAME} picked up\n¥{B_BUFF1}!\p");
+static const u8 sText_PlayerPickedUpMoney[] = _("{B_PLAYER_NAME} picked up\n¥{B_BUFF1}!\p");
 static const u8 sText_PkmnUnaffected[] = _("{B_DEF_NAME_WITH_PREFIX} is\nunaffected!");
 static const u8 sText_PkmnTransformedInto[] = _("{B_ATK_NAME_WITH_PREFIX} transformed\ninto {B_BUFF1}!");
 static const u8 sText_PkmnMadeSubstitute[] = _("{B_ATK_NAME_WITH_PREFIX} made\na Substitute!");
@@ -301,36 +304,36 @@ static const u8 sText_PkmnsXPreventsFlinching[] = _("{B_EFF_NAME_WITH_PREFIX}'s 
 static const u8 sText_PkmnsXPreventsYsZ[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY}\nprevents {B_DEF_NAME_WITH_PREFIX}'s\l{B_DEF_ABILITY} from working!");
 static const u8 sText_PkmnsXCuredItsYProblem[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncured its {B_BUFF1} problem!");
 static const u8 sText_PkmnsXHadNoEffectOnY[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nhad no effect on {B_EFF_NAME_WITH_PREFIX}!");
-static const u8 sText_StatSharply[] = _("sharply ");
+const u8 gText_StatSharply[] = _("sharply ");
 const u8 gText_StatRose[] = _("rose!");
 static const u8 sText_StatHarshly[] = _("harshly ");
 static const u8 sText_StatFell[] = _("fell!");
-static const u8 sText_PkmnsStatChanged[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
-const u8 gText_PkmnsStatChanged2[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
-static const u8 sText_UsingXTheYOfZN[] = _("Using {B_LAST_ITEM}, the {B_BUFF1}\nof {B_SCR_ACTIVE_NAME_WITH_PREFIX} {B_BUFF2}");
-static const u8 sText_PkmnsStatChanged3[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
-static const u8 sText_PkmnsStatChanged4[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+static const u8 sText_AttackersStatRose[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+const u8 gText_DefendersStatRose[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+static const u8 sText_UsingItemTheStatOfPkmnRose[] = _("Using {B_LAST_ITEM}, the {B_BUFF1}\nof {B_SCR_ACTIVE_NAME_WITH_PREFIX} {B_BUFF2}");
+static const u8 sText_AttackersStatFell[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
+static const u8 sText_DefendersStatFell[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
 static const u8 sText_StatsWontIncrease2[] = _("{B_ATK_NAME_WITH_PREFIX}'s stats won't\ngo any higher!");
 static const u8 sText_StatsWontDecrease2[] = _("{B_DEF_NAME_WITH_PREFIX}'s stats won't\ngo any lower!");
 static const u8 sText_CriticalHit[] = _("A critical hit!");
 static const u8 sText_OneHitKO[] = _("It's a one-hit KO!");
-static const u8 sText_123Poof[] = _("{PAUSE 32}1, {PAUSE 15}2, and{PAUSE 15}… {PAUSE 15}… {PAUSE 15}… {PAUSE 15}{PLAY_SE 0x0038}Poof!\p");
+static const u8 sText_123Poof[] = _("{PAUSE 32}1, {PAUSE 15}2, and{PAUSE 15}… {PAUSE 15}… {PAUSE 15}… {PAUSE 15}{PLAY_SE SE_BALL_BOUNCE_1}Poof!\p");
 static const u8 sText_AndEllipsis[] = _("And…\p");
 static const u8 sText_HMMovesCantBeForgotten[] = _("HM moves can't be\nforgotten now.\p");
 static const u8 sText_NotVeryEffective[] = _("It's not very effective…");
 static const u8 sText_SuperEffective[] = _("It's super effective!");
-static const u8 sText_GotAwaySafely[] = _("{PLAY_SE 0x0011}Got away safely!\p");
-static const u8 sText_PkmnFledUsingIts[] = _("{PLAY_SE 0x0011}{B_ATK_NAME_WITH_PREFIX} fled\nusing its {B_LAST_ITEM}!\p");
-static const u8 sText_PkmnFledUsing[] = _("{PLAY_SE 0x0011}{B_ATK_NAME_WITH_PREFIX} fled\nusing {B_ATK_ABILITY}!\p");
-static const u8 sText_WildPkmnFled[] = _("{PLAY_SE 0x0011}Wild {B_BUFF1} fled!");
+static const u8 sText_GotAwaySafely[] = _("{PLAY_SE SE_FLEE}Got away safely!\p");
+static const u8 sText_PkmnFledUsingIts[] = _("{PLAY_SE SE_FLEE}{B_ATK_NAME_WITH_PREFIX} fled\nusing its {B_LAST_ITEM}!\p");
+static const u8 sText_PkmnFledUsing[] = _("{PLAY_SE SE_FLEE}{B_ATK_NAME_WITH_PREFIX} fled\nusing {B_ATK_ABILITY}!\p");
+static const u8 sText_WildPkmnFled[] = _("{PLAY_SE SE_FLEE}Wild {B_BUFF1} fled!");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
 static const u8 sText_PlayerLostAgainstLinkTrainer[] = _("Player lost against\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_PlayerLostToTwo[] = _("Player lost to {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
 static const u8 sText_PlayerBattledToDrawLinkTrainer[] = _("Player battled to a draw against\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_PlayerBattledToDrawVsTwo[] = _("Player battled to a draw against\n{B_LINK_OPPONENT1_NAME} and {B_LINK_OPPONENT2_NAME}!");
-static const u8 sText_WildFled[] = _("{PLAY_SE 0x0011}{B_LINK_OPPONENT1_NAME} fled!");
-static const u8 sText_TwoWildFled[] = _("{PLAY_SE 0x0011}{B_LINK_OPPONENT1_NAME} and\n{B_LINK_OPPONENT2_NAME} fled!");
+static const u8 sText_WildFled[] = _("{PLAY_SE SE_FLEE}{B_LINK_OPPONENT1_NAME} fled!");
+static const u8 sText_TwoWildFled[] = _("{PLAY_SE SE_FLEE}{B_LINK_OPPONENT1_NAME} and\n{B_LINK_OPPONENT2_NAME} fled!");
 static const u8 sText_NoRunningFromTrainers[] = _("No! There's no running\nfrom a Trainer battle!\p");
 static const u8 sText_CantEscape[] = _("Can't escape!\p");
 static const u8 sText_DontLeaveBirch[] = _("Prof. Birch: Don't leave me like this!\p");
@@ -339,9 +342,9 @@ static const u8 sText_ButItFailed[] = _("But it failed!");
 static const u8 sText_ItHurtConfusion[] = _("It hurt itself in its\nconfusion!");
 static const u8 sText_MirrorMoveFailed[] = _("The Mirror Move failed!");
 static const u8 sText_StartedToRain[] = _("It started to rain!");
-static const u8 sText_DownpourStarted[] = _("A downpour started!");
+static const u8 sText_DownpourStarted[] = _("A downpour started!"); // corresponds to DownpourText in pokegold and pokecrystal and is used by Rain Dance in GSC
 static const u8 sText_RainContinues[] = _("Rain continues to fall.");
-static const u8 sText_DownpourContinues[] = _("The downpour continues.");
+static const u8 sText_DownpourContinues[] = _("The downpour continues."); // unused
 static const u8 sText_RainStopped[] = _("The rain stopped.");
 static const u8 sText_SandstormBrewed[] = _("A sandstorm brewed!");
 static const u8 sText_SandstormRages[] = _("The sandstorm rages.");
@@ -380,10 +383,10 @@ static const u8 sText_PkmnCuriousAboutX[] = _("{B_OPPONENT_MON1_NAME} is curious
 static const u8 sText_PkmnEnthralledByX[] = _("{B_OPPONENT_MON1_NAME} is enthralled by\nthe {B_BUFF1}!");
 static const u8 sText_PkmnIgnoredX[] = _("{B_OPPONENT_MON1_NAME} completely ignored\nthe {B_BUFF1}!");
 static const u8 sText_ThrewPokeblockAtPkmn[] = _("{B_PLAYER_NAME} threw a {POKEBLOCK}\nat the {B_OPPONENT_MON1_NAME}!");
-static const u8 sText_OutOfSafariBalls[] = _("{PLAY_SE 0x0049}Announcer: You're out of\nSafari Balls! Game over!\p");
+static const u8 sText_OutOfSafariBalls[] = _("{PLAY_SE SE_DING_DONG}Announcer: You're out of\nSafari Balls! Game over!\p");
 static const u8 sText_OpponentMon1Appeared[] = _("{B_OPPONENT_MON1_NAME} appeared!\p");
 static const u8 sText_WildPkmnAppeared[] = _("Wild {B_OPPONENT_MON1_NAME} appeared!\p");
-static const u8 sText_WildPkmnAppeared2[] = _("Wild {B_OPPONENT_MON1_NAME} appeared!\p");
+static const u8 sText_LegendaryPkmnAppeared[] = _("Wild {B_OPPONENT_MON1_NAME} appeared!\p");
 static const u8 sText_WildPkmnAppearedPause[] = _("Wild {B_OPPONENT_MON1_NAME} appeared!{PAUSE 127}");
 static const u8 sText_TwoWildPkmnAppeared[] = _("Wild {B_OPPONENT_MON1_NAME} and\n{B_OPPONENT_MON2_NAME} appeared!\p");
 static const u8 sText_Trainer1WantsToBattle[] = _("{B_TRAINER1_CLASS} {B_TRAINER1_NAME}\nwould like to battle!\p");
@@ -429,7 +432,7 @@ static const u8 sText_ExclamationMark5[] = _("!");
 static const u8 sText_Accuracy[] = _("accuracy");
 static const u8 sText_Evasiveness[] = _("evasiveness");
 
-const u8 * const gStatNamesTable[] =
+const u8 * const gStatNamesTable[NUM_BATTLE_STATS] =
 {
     gText_HP3, gText_Attack, gText_Defense,
     gText_Speed, gText_SpAtk, gText_SpDef,
@@ -442,11 +445,13 @@ static const u8 sText_PokeblockWasTooSweet[] = _("was too sweet!");
 static const u8 sText_PokeblockWasTooBitter[] = _("was too bitter!");
 static const u8 sText_PokeblockWasTooSour[] = _("was too sour!");
 
-const u8 * const gPokeblockWasTooXStringTable[] =
+const u8 * const gPokeblockWasTooXStringTable[FLAVOR_COUNT] =
 {
-    sText_PokeblockWasTooSpicy, sText_PokeblockWasTooDry,
-    sText_PokeblockWasTooSweet, sText_PokeblockWasTooBitter,
-    sText_PokeblockWasTooSour
+    [FLAVOR_SPICY]  = sText_PokeblockWasTooSpicy,
+    [FLAVOR_DRY]    = sText_PokeblockWasTooDry,
+    [FLAVOR_SWEET]  = sText_PokeblockWasTooSweet,
+    [FLAVOR_BITTER] = sText_PokeblockWasTooBitter,
+    [FLAVOR_SOUR]   = sText_PokeblockWasTooSour
 };
 
 static const u8 sText_PlayerUsedItem[] = _("{B_PLAYER_NAME} used\n{B_LAST_ITEM}!");
@@ -460,8 +465,8 @@ static const u8 sText_PkmnBrokeFree[] = _("Oh, no!\nThe Pokémon broke free!");
 static const u8 sText_ItAppearedCaught[] = _("Aww!\nIt appeared to be caught!");
 static const u8 sText_AarghAlmostHadIt[] = _("Aargh!\nAlmost had it!");
 static const u8 sText_ShootSoClose[] = _("Shoot!\nIt was so close, too!");
-static const u8 sText_GotchaPkmnCaught[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_KACHI22}\p");
-static const u8 sText_GotchaPkmnCaught2[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_KACHI22}{PAUSE 127}");
+static const u8 sText_GotchaPkmnCaught[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}\p");
+static const u8 sText_GotchaPkmnCaught2[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}{PAUSE 127}");
 static const u8 sText_GiveNicknameCaptured[] = _("Give a nickname to the\ncaptured {B_DEF_NAME}?");
 static const u8 sText_PkmnSentToPC[] = _("{B_DEF_NAME} was sent to\n{B_PC_CREATOR_NAME} PC.");
 static const u8 sText_Someones[] = _("someone's");
@@ -539,10 +544,10 @@ static const u8 sText_VanishedInstantly[] =_("{B_ATK_NAME_WITH_PREFIX} vanished\
 static const u8 sText_ProtectedTeam[] =_("{B_CURRENT_MOVE} protected\n{B_ATK_TEAM2} team!");
 static const u8 sText_SharedItsGuard[] =_("{B_ATK_NAME_WITH_PREFIX} shared its\nguard with the target!");
 static const u8 sText_SharedItsPower[] =_("{B_ATK_NAME_WITH_PREFIX} shared its\npower with the target!");
-static const u8 sText_SwapsDefAndSpDefOfAllPkmn[] =_("It created a bizarre area in which\nthe Defense and Sp.Def stats are swapped!");
+static const u8 sText_SwapsDefAndSpDefOfAllPkmn[] =_("It created a bizarre area in which the\nDefense and Sp.Def stats are swapped!");
 static const u8 sText_BecameNimble[] =_("{B_ATK_NAME_WITH_PREFIX} became nimble!");
 static const u8 sText_HurledIntoTheAir[] =_("{B_DEF_NAME_WITH_PREFIX} was hurled\ninto the air!");
-static const u8 sText_HeldItemsLoseEffects[] =_("It created a bizarra area in which\nPokémon's held items lose their effects!");
+static const u8 sText_HeldItemsLoseEffects[] =_("It created a bizarre area in which\nPokémon's held items lose their effects!");
 static const u8 sText_FellStraightDown[] =_("{B_DEF_NAME_WITH_PREFIX} fell\nstraight down!");
 static const u8 sText_TransformedIntoWaterType[] =_("{B_DEF_NAME_WITH_PREFIX} transformed\ninto the water type!");
 static const u8 sText_PkmnAcquiredSimple[] =_("{B_DEF_NAME_WITH_PREFIX} acquired\nSimple!");
@@ -554,7 +559,7 @@ static const u8 sText_TookPkmnIntoTheSky[] =_("{B_ATK_NAME_WITH_PREFIX} took\n{B
 static const u8 sText_FreedFromSkyDrop[] =_("{B_DEF_NAME_WITH_PREFIX} was freed\nfrom the Sky Drop!");
 static const u8 sText_PostponeTargetMove[] =_("{B_DEF_NAME_WITH_PREFIX}'s move\nwas postponed!");
 static const u8 sText_ReflectTargetsType[] =_("{B_ATK_NAME_WITH_PREFIX}'s type\nchanged to match the {B_DEF_NAME_WITH_PREFIX}'s!");
-static const u8 sText_TransferHeldItem[] =_("{B_DEF_NAME_WITH_PREFIX} recieved {B_LAST_ITEM}\nfrom {B_ATK_NAME_WITH_PREFIX}");
+static const u8 sText_TransferHeldItem[] =_("{B_DEF_NAME_WITH_PREFIX} received {B_LAST_ITEM}\nfrom {B_ATK_NAME_WITH_PREFIX}");
 static const u8 sText_EmbargoEnds[] = _("{B_ATK_NAME_WITH_PREFIX} can\nuse items again!");
 static const u8 sText_Electromagnetism[] = _("electromagnetism");
 static const u8 sText_BufferEnds[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}\nwore off!");
@@ -563,8 +568,8 @@ static const u8 sText_TelekinesisEnds[] = _("{B_ATK_NAME_WITH_PREFIX} was freed\
 static const u8 sText_TailwindEnds[] = _("{B_ATK_TEAM1} team's tailwind\n petered out!");
 static const u8 sText_LuckyChantEnds[] = _("{B_ATK_TEAM1} team's Lucky Chant\n wore off!");
 static const u8 sText_TrickRoomEnds[] = _("The twisted dimensions returned to\nnormal!");
-static const u8 sText_WonderRoomEnds[] = _("Wonder Room wore off, and\nDefense and Sp. Def stats returned to normal!");
-static const u8 sText_MagicRoomEnds[] = _("Magic Room wore off, and\nheld items' effects returned to normal!");
+static const u8 sText_WonderRoomEnds[] = _("Wonder Room wore off, and Defense\nand Sp. Def stats returned to normal!");
+static const u8 sText_MagicRoomEnds[] = _("Magic Room wore off, and held items'\neffects returned to normal!");
 static const u8 sText_MudSportEnds[] = _("The effects of Mud Sport have faded.");
 static const u8 sText_WaterSportEnds[] = _("The effects of Water Sport have faded.");
 static const u8 sText_GravityEnds[] = _("Gravity returned to normal!");
@@ -578,24 +583,24 @@ static const u8 sText_ElectricTerrainEnds[] = _("The electricity disappeared\nfr
 static const u8 sText_MistyTerrainEnds[] = _("The mist disappeared\nfrom the battlefield.");
 static const u8 sText_PsychicTerrainEnds[] = _("The weirdness disappeared\nfrom the battlefield.");
 static const u8 sText_GrassyTerrainEnds[] = _("The grass disappeared\nfrom the battlefield.");
-static const u8 sText_AngryPointActivates[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY} maxed\nits attack!");
+static const u8 sText_TargetsStatWasMaxedOut[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY} maxed\nits {B_BUFF1}!");
 static const u8 sText_PoisonHealHpUp[] = _("The poisoning healed {B_ATK_NAME_WITH_PREFIX}\na little bit!");
 static const u8 sText_BadDreamsDmg[] = _("{B_DEF_NAME_WITH_PREFIX} is tormented\nby {B_ATK_ABILITY}!");
-static const u8 sText_MoldBreakerEnters[] = _("{B_ATK_NAME_WITH_PREFIX} breaks the mold!");
-static const u8 sText_TeravoltEnters[] = _("{B_ATK_NAME_WITH_PREFIX} is radiating a bursting aura!");
-static const u8 sText_TurboblazeEnters[] = _("{B_ATK_NAME_WITH_PREFIX} is radiating\na blazing aura!");
-static const u8 sText_SlowStartEnters[] = _("{B_ATK_NAME_WITH_PREFIX} can't get it going!");
+static const u8 sText_MoldBreakerEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} breaks the mold!");
+static const u8 sText_TeravoltEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating \na bursting aura!");
+static const u8 sText_TurboblazeEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na blazing aura!");
+static const u8 sText_SlowStartEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} can't get it going!");
 static const u8 sText_SlowStartEnd[] = _("{B_ATK_NAME_WITH_PREFIX} finally got\nits act together!");
 static const u8 sText_SolarPowerHpDrop[] = _("The {B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY}\ntakes its toll!");
 static const u8 sText_AftermathDmg[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt!");
-static const u8 sText_AnticipationActivates[] = _("{B_ATK_NAME_WITH_PREFIX} shuddered\nin anticipation!");
-static const u8 sText_ForewarnActivates[] = _("{B_ATK_ABILITY} alerted {B_ATK_NAME_WITH_PREFIX}\nto the{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
+static const u8 sText_AnticipationActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} shuddered\nin anticipation!");
+static const u8 sText_ForewarnActivates[] = _("{B_SCR_ACTIVE_ABILITY} alerted {B_SCR_ACTIVE_NAME_WITH_PREFIX}\nto the {B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
 static const u8 sText_IceBodyHpGain[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY}\nhealed it a little bit!");
 static const u8 sText_SnowWarningHail[] = _("It started to hail!");
 static const u8 sText_FriskActivates[] = _("{B_ATK_NAME_WITH_PREFIX} frisked {B_DEF_NAME_WITH_PREFIX} and\nfound its {B_LAST_ITEM}!");
 static const u8 sText_UnnerveEnters[] = _("The opposing team is too nervous\nto eat Berries!");
 static const u8 sText_HarvestBerry[] = _("{B_ATK_NAME_WITH_PREFIX} harvested\nits {B_LAST_ITEM}!");
-static const u8 sText_MoxieAtkRise[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY} raised its Attack!");
+static const u8 sText_LastAbilityRaisedBuff1[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ABILITY}\nraised its {B_BUFF1}!");
 static const u8 sText_MagicBounceActivates[] = _("The {B_DEF_NAME_WITH_PREFIX} bounced the\n{B_ATK_NAME_WITH_PREFIX} back!");
 static const u8 sText_ProteanTypeChange[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY} transformed\nit into the {B_BUFF1} type!");
 static const u8 sText_SymbiosisItemPass[] = _("{B_ATK_NAME_WITH_PREFIX} passed its {B_LAST_ITEM}\nto {B_SCR_ACTIVE_NAME_WITH_PREFIX} through {B_ATK_ABILITY}!");
@@ -628,6 +633,7 @@ static const u8 sText_AssaultVestDoesntAllow[] = _("The effects of the {B_LAST_I
 static const u8 sText_GravityPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} can't use {B_CURRENT_MOVE}\nbecause of gravity!\p");
 static const u8 sText_HealBlockPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} was\nprevented from healing!\p");
 static const u8 sText_MegaEvoReacting[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ITEM} is \nreacting to {B_ATK_TRAINER_NAME}'s Mega Ring!");
+static const u8 sText_FerventWishReached[] = _("{B_ATK_TRAINER_NAME}'s fervent wish\nhas reached {B_ATK_NAME_WITH_PREFIX}!");
 static const u8 sText_MegaEvoEvolved[] = _("{B_ATK_NAME_WITH_PREFIX} has Mega\nEvolved into Mega {B_BUFF1}!");
 static const u8 sText_drastically[] = _("drastically ");
 static const u8 sText_severely[] = _("severely ");
@@ -670,9 +676,41 @@ static const u8 sText_PkmnAbsorbingPower[] = _("{B_ATK_NAME_WITH_PREFIX} is abso
 static const u8 sText_NoOneWillBeAbleToRun[] = _("No one will be able to run away\nduring the next turn!");
 static const u8 sText_DestinyKnotActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} fell in love\nfrom the {B_LAST_ITEM}!");
 static const u8 sText_CloakedInAFreezingLight[] = _("{B_ATK_NAME_WITH_PREFIX} became cloaked\nin a freezing light!");
+static const u8 sText_StatWasNotLowered[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\nwas not lowered!");
+static const u8 sText_AuraFlaredToLife[] = _("{B_DEF_NAME_WITH_PREFIX}'s aura flared to life!");
+static const u8 sText_AirLockActivates[] = _("The effects of weather\ndisappeared.");
+static const u8 sText_PressureActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is exerting its\npressure!");
+static const u8 sText_DarkAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na dark aura!");
+static const u8 sText_FairyAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na fairy aura!");
+static const u8 sText_AuraBreakActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} reversed all\nother POKéMON's auras!");
+static const u8 sText_ComatoseActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is drowsing!");
+static const u8 sText_ScreenCleanerActivates[] = _("All screens on the field were\ncleansed!");
+static const u8 sText_FetchedPokeBall[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} found\na {B_LAST_ITEM}!");
+static const u8 sText_BattlerAbilityRaisedStat[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nraised its {B_BUFF1}!");
+static const u8 sText_ASandstormKickedUp[] = _("A sandstorm kicked up!");
+static const u8 sText_PkmnsWillPerishIn3Turns[] = _("Both Pokémon will perish\nin three turns!");
+static const u8 sText_AbilityRaisedStatDrastically[] = _("{B_DEF_ABILITY} raised {B_DEF_NAME_WITH_PREFIX}'s\n{B_BUFF1} drastically!");
+static const u8 sText_AsOneEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} has two Abilities!");
+static const u8 sText_CuriousMedicineEnters[] = _("{B_EFF_NAME_WITH_PREFIX}'s\nstat changes were reset!");
+static const u8 sText_CanActFaster[] = _("{B_ATK_NAME_WITH_PREFIX} can act faster,\nthanks to {B_LAST_ITEM}!");
+static const u8 sText_MicleBerryActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} boosted the accuracy of its\nnext move using {B_LAST_ITEM}!");
+static const u8 sText_PkmnShookOffTheTaunt[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} shook off\nthe taunt!");
+static const u8 sText_PkmnGotOverItsInfatuation[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} got over\nits infatuation!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
+    [STRINGID_PKMNGOTOVERITSINFATUATION - 12] = sText_PkmnGotOverItsInfatuation,
+    [STRINGID_PKMNSHOOKOFFTHETAUNT - 12] = sText_PkmnShookOffTheTaunt,
+    [STRINGID_MICLEBERRYACTIVATES - 12] = sText_MicleBerryActivates,
+    [STRINGID_CANACTFASTERTHANKSTO - 12] = sText_CanActFaster,
+    [STRINGID_CURIOUSMEDICINEENTERS - 12] = sText_CuriousMedicineEnters,
+    [STRINGID_ASONEENTERS - 12] = sText_AsOneEnters,
+    [STRINGID_ABILITYRAISEDSTATDRASTICALLY - 12] = sText_AbilityRaisedStatDrastically,
+    [STRINGID_PKMNSWILLPERISHIN3TURNS - 12] = sText_PkmnsWillPerishIn3Turns,
+    [STRINGID_ASANDSTORMKICKEDUP - 12] = sText_ASandstormKickedUp,
+    [STRINGID_BATTLERABILITYRAISEDSTAT - 12] = sText_BattlerAbilityRaisedStat,
+    [STRINGID_FETCHEDPOKEBALL - 12] = sText_FetchedPokeBall,
+    [STRINGID_STATWASNOTLOWERED - 12] = sText_StatWasNotLowered,
     [STRINGID_CLOAKEDINAFREEZINGLIGHT - 12] = sText_CloakedInAFreezingLight,
     [STRINGID_DESTINYKNOTACTIVATES - 12] = sText_DestinyKnotActivates,
     [STRINGID_NOONEWILLBEABLETORUNAWAY - 12] = sText_NoOneWillBeAbleToRun,
@@ -812,7 +850,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNSTORINGENERGY - 12] = sText_PkmnStoringEnergy,
     [STRINGID_PKMNUNLEASHEDENERGY - 12] = sText_PkmnUnleashedEnergy,
     [STRINGID_PKMNFATIGUECONFUSION - 12] = sText_PkmnFatigueConfusion,
-    [STRINGID_PKMNPICKEDUPITEM - 12] = sText_PkmnPickedUpItem,
+    [STRINGID_PLAYERPICKEDUPMONEY - 12] = sText_PlayerPickedUpMoney,
     [STRINGID_PKMNUNAFFECTED - 12] = sText_PkmnUnaffected,
     [STRINGID_PKMNTRANSFORMEDINTO - 12] = sText_PkmnTransformedInto,
     [STRINGID_PKMNMADESUBSTITUTE - 12] = sText_PkmnMadeSubstitute,
@@ -898,14 +936,14 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNPREVENTSSTATLOSSWITH - 12] = sText_PkmnPreventsStatLossWith,
     [STRINGID_PKMNHURTSWITH - 12] = sText_PkmnHurtsWith,
     [STRINGID_PKMNTRACED - 12] = sText_PkmnTraced,
-    [STRINGID_STATSHARPLY - 12] = sText_StatSharply,
+    [STRINGID_STATSHARPLY - 12] = gText_StatSharply,
     [STRINGID_STATROSE - 12] = gText_StatRose,
     [STRINGID_STATHARSHLY - 12] = sText_StatHarshly,
     [STRINGID_STATFELL - 12] = sText_StatFell,
-    [STRINGID_PKMNSSTATCHANGED - 12] = sText_PkmnsStatChanged,
-    [STRINGID_PKMNSSTATCHANGED2 - 12] = gText_PkmnsStatChanged2,
-    [STRINGID_PKMNSSTATCHANGED3 - 12] = sText_PkmnsStatChanged3,
-    [STRINGID_PKMNSSTATCHANGED4 - 12] = sText_PkmnsStatChanged4,
+    [STRINGID_ATTACKERSSTATROSE - 12] = sText_AttackersStatRose,
+    [STRINGID_DEFENDERSSTATROSE - 12] = gText_DefendersStatRose,
+    [STRINGID_ATTACKERSSTATFELL - 12] = sText_AttackersStatFell,
+    [STRINGID_DEFENDERSSTATFELL - 12] = sText_DefendersStatFell,
     [STRINGID_CRITICALHIT - 12] = sText_CriticalHit,
     [STRINGID_ONEHITKO - 12] = sText_OneHitKO,
     [STRINGID_123POOF - 12] = sText_123Poof,
@@ -1014,7 +1052,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_SOOTHINGAROMA - 12] = sText_SoothingAroma,
     [STRINGID_ITEMSCANTBEUSEDNOW - 12] = sText_ItemsCantBeUsedNow,
     [STRINGID_FORXCOMMAYZ - 12] = sText_ForXCommaYZ,
-    [STRINGID_USINGXTHEYOFZN - 12] = sText_UsingXTheYOfZN,
+    [STRINGID_USINGITEMSTATOFPKMNROSE - 12] = sText_UsingItemTheStatOfPkmnRose,
     [STRINGID_PKMNUSEDXTOGETPUMPED - 12] = sText_PkmnUsedXToGetPumped,
     [STRINGID_PKMNSXMADEYUSELESS - 12] = sText_PkmnsXMadeYUseless,
     [STRINGID_PKMNTRAPPEDBYSANDTOMB - 12] = sText_PkmnTrappedBySandTomb,
@@ -1140,7 +1178,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PSYCHICTERRAINENDS - 12] = sText_PsychicTerrainEnds,
     [STRINGID_GRASSYTERRAINENDS - 12] = sText_GrassyTerrainEnds,
     [STRINGID_TARGETABILITYSTATRAISE - 12] = sText_TargetAbilityRaisedStat,
-    [STRINGID_ANGRYPOINTACTIVATES - 12] = sText_AngryPointActivates,
+    [STRINGID_TARGETSSTATWASMAXEDOUT - 12] = sText_TargetsStatWasMaxedOut,
     [STRINGID_ATTACKERABILITYSTATRAISE - 12] = sText_AttackerAbilityRaisedStat,
     [STRINGID_POISONHEALHPUP - 12] = sText_PoisonHealHpUp,
     [STRINGID_BADDREAMSDMG - 12] = sText_BadDreamsDmg,
@@ -1158,7 +1196,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FRISKACTIVATES - 12] = sText_FriskActivates,
     [STRINGID_UNNERVEENTERS - 12] = sText_UnnerveEnters,
     [STRINGID_HARVESTBERRY - 12] = sText_HarvestBerry,
-    [STRINGID_MOXIEATKRISE - 12] = sText_MoxieAtkRise,
+    [STRINGID_LASTABILITYRAISEDSTAT - 12] = sText_LastAbilityRaisedBuff1,
     [STRINGID_MAGICBOUNCEACTIVATES - 12] = sText_MagicBounceActivates,
     [STRINGID_PROTEANTYPECHANGE - 12] = sText_ProteanTypeChange,
     [STRINGID_SYMBIOSISITEMPASS - 12] = sText_SymbiosisItemPass,
@@ -1192,6 +1230,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_TERRAINBECOMESPSYCHIC - 12] = sText_TerrainBecomesPsychic,
     [STRINGID_TARGETELECTRIFIED - 12] = sText_TargetElectrified,
     [STRINGID_MEGAEVOREACTING - 12] = sText_MegaEvoReacting,
+    [STRINGID_FERVENTWISHREACHED - 12] = sText_FerventWishReached,
     [STRINGID_MEGAEVOEVOLVED - 12] = sText_MegaEvoEvolved,
     [STRINGID_DRASTICALLY - 12] = sText_drastically,
     [STRINGID_SEVERELY - 12] = sText_severely,
@@ -1209,6 +1248,14 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GRASSYTERRAINHEALS - 12] = sText_GrassyTerrainHeals,
     [STRINGID_ELECTRICTERRAINPREVENTS - 12] = sText_ElectricTerrainPreventsSleep,
     [STRINGID_PSYCHICTERRAINPREVENTS - 12] = sText_PsychicTerrainPreventsPriority,
+    [STRINGID_AURAFLAREDTOLIFE - 12] = sText_AuraFlaredToLife,
+    [STRINGID_AIRLOCKACTIVATES - 12] = sText_AirLockActivates,
+    [STRINGID_PRESSUREENTERS - 12] = sText_PressureActivates,
+    [STRINGID_DARKAURAENTERS - 12] = sText_DarkAuraActivates,
+    [STRINGID_FAIRYAURAENTERS - 12] = sText_FairyAuraActivates,
+    [STRINGID_AURABREAKENTERS - 12] = sText_AuraBreakActivates,
+    [STRINGID_COMATOSEENTERS - 12] = sText_ComatoseActivates,
+    [STRINGID_SCREENCLEANERENTERS - 12] = sText_ScreenCleanerActivates,
 };
 
 const u16 gTerrainStringIds[] =
@@ -1238,273 +1285,392 @@ const u16 gDmgHazardsStringIds[] =
 
 const u16 gSwitchInAbilityStringIds[] =
 {
-    STRINGID_MOLDBREAKERENTERS, STRINGID_TERAVOLTENTERS, STRINGID_TURBOBLAZEENTERS,
-    STRINGID_SLOWSTARTENTERS, STRINGID_UNNERVEENTERS, STRINGID_ANTICIPATIONACTIVATES,
-    STRINGID_FOREWARNACTIVATES
+    [B_MSG_SWITCHIN_MOLDBREAKER] = STRINGID_MOLDBREAKERENTERS,
+    [B_MSG_SWITCHIN_TERAVOLT] = STRINGID_TERAVOLTENTERS,
+    [B_MSG_SWITCHIN_TURBOBLAZE] = STRINGID_TURBOBLAZEENTERS,
+    [B_MSG_SWITCHIN_SLOWSTART] = STRINGID_SLOWSTARTENTERS,
+    [B_MSG_SWITCHIN_UNNERVE] = STRINGID_UNNERVEENTERS,
+    [B_MSG_SWITCHIN_ANTICIPATION] = STRINGID_ANTICIPATIONACTIVATES,
+    [B_MSG_SWITCHIN_FOREWARN] = STRINGID_FOREWARNACTIVATES,
+    [B_MSG_SWITCHIN_PRESSURE] = STRINGID_PRESSUREENTERS,
+    [B_MSG_SWITCHIN_DARKAURA] = STRINGID_DARKAURAENTERS,
+    [B_MSG_SWITCHIN_FAIRYAURA] = STRINGID_FAIRYAURAENTERS,
+    [B_MSG_SWITCHIN_AURABREAK] = STRINGID_AURABREAKENTERS,
+    [B_MSG_SWITCHIN_COMATOSE] = STRINGID_COMATOSEENTERS,
+    [B_MSG_SWITCHIN_SCREENCLEANER] = STRINGID_SCREENCLEANERENTERS,
+    [B_MSG_SWITCHIN_ASONE] = STRINGID_ASONEENTERS,
+    [B_MSG_SWITCHIN_CURIOUS_MEDICINE] = STRINGID_CURIOUSMEDICINEENTERS,
 };
 
 const u16 gMissStringIds[] =
 {
-    STRINGID_ATTACKMISSED, STRINGID_PKMNPROTECTEDITSELF,
-    STRINGID_PKMNAVOIDEDATTACK, STRINGID_AVOIDEDDAMAGE,
-    STRINGID_PKMNMAKESGROUNDMISS
+    [B_MSG_MISSED]      = STRINGID_ATTACKMISSED,
+    [B_MSG_PROTECTED]   = STRINGID_PKMNPROTECTEDITSELF,
+    [B_MSG_AVOIDED_ATK] = STRINGID_PKMNAVOIDEDATTACK,
+    [B_MSG_AVOIDED_DMG] = STRINGID_AVOIDEDDAMAGE,
+    [B_MSG_GROUND_MISS] = STRINGID_PKMNMAKESGROUNDMISS
 };
 
 const u16 gNoEscapeStringIds[] =
 {
-    STRINGID_CANTESCAPE, STRINGID_DONTLEAVEBIRCH, STRINGID_PREVENTSESCAPE,
-    STRINGID_CANTESCAPE2, STRINGID_ATTACKERCANTESCAPE
+    [B_MSG_CANT_ESCAPE]          = STRINGID_CANTESCAPE,
+    [B_MSG_DONT_LEAVE_BIRCH]     = STRINGID_DONTLEAVEBIRCH,
+    [B_MSG_PREVENTS_ESCAPE]      = STRINGID_PREVENTSESCAPE,
+    [B_MSG_CANT_ESCAPE_2]        = STRINGID_CANTESCAPE2,
+    [B_MSG_ATTACKER_CANT_ESCAPE] = STRINGID_ATTACKERCANTESCAPE
 };
 
 const u16 gMoveWeatherChangeStringIds[] =
 {
-    STRINGID_STARTEDTORAIN, STRINGID_DOWNPOURSTARTED, STRINGID_BUTITFAILED,
-    STRINGID_SANDSTORMBREWED, STRINGID_SUNLIGHTGOTBRIGHT, STRINGID_STARTEDHAIL
+    [B_MSG_STARTED_RAIN]      = STRINGID_STARTEDTORAIN,
+    [B_MSG_STARTED_DOWNPOUR]  = STRINGID_DOWNPOURSTARTED, // Unused
+    [B_MSG_WEATHER_FAILED]    = STRINGID_BUTITFAILED,
+    [B_MSG_STARTED_SANDSTORM] = STRINGID_SANDSTORMBREWED,
+    [B_MSG_STARTED_SUNLIGHT]  = STRINGID_SUNLIGHTGOTBRIGHT,
+    [B_MSG_STARTED_HAIL]      = STRINGID_STARTEDHAIL,
 };
 
 const u16 gSandStormHailContinuesStringIds[] =
 {
-    STRINGID_SANDSTORMRAGES, STRINGID_HAILCONTINUES
+    [B_MSG_SANDSTORM] = STRINGID_SANDSTORMRAGES,
+    [B_MSG_HAIL]      = STRINGID_HAILCONTINUES
 };
 
 const u16 gSandStormHailDmgStringIds[] =
 {
-    STRINGID_PKMNBUFFETEDBYSANDSTORM, STRINGID_PKMNPELTEDBYHAIL
+    [B_MSG_SANDSTORM] = STRINGID_PKMNBUFFETEDBYSANDSTORM,
+    [B_MSG_HAIL]      = STRINGID_PKMNPELTEDBYHAIL
 };
 
 const u16 gSandStormHailEndStringIds[] =
 {
-    STRINGID_SANDSTORMSUBSIDED, STRINGID_HAILSTOPPED
+    [B_MSG_SANDSTORM] = STRINGID_SANDSTORMSUBSIDED,
+    [B_MSG_HAIL]      = STRINGID_HAILSTOPPED
 };
 
 const u16 gRainContinuesStringIds[] =
 {
-    STRINGID_RAINCONTINUES, STRINGID_DOWNPOURCONTINUES, STRINGID_RAINSTOPPED
+    [B_MSG_RAIN_CONTINUES]     = STRINGID_RAINCONTINUES,
+    [B_MSG_DOWNPOUR_CONTINUES] = STRINGID_DOWNPOURCONTINUES,
+    [B_MSG_RAIN_STOPPED]       = STRINGID_RAINSTOPPED
 };
 
 const u16 gProtectLikeUsedStringIds[] =
 {
-    STRINGID_PKMNPROTECTEDITSELF2, STRINGID_PKMNBRACEDITSELF, STRINGID_BUTITFAILED, STRINGID_PROTECTEDTEAM,
+    [B_MSG_PROTECTED_ITSELF] = STRINGID_PKMNPROTECTEDITSELF2,
+    [B_MSG_BRACED_ITSELF]    = STRINGID_PKMNBRACEDITSELF,
+    [B_MSG_PROTECT_FAILED]   = STRINGID_BUTITFAILED,
+    [B_MSG_PROTECTED_TEAM]   = STRINGID_PROTECTEDTEAM,
 };
 
 const u16 gReflectLightScreenSafeguardStringIds[] =
 {
-    STRINGID_BUTITFAILED, STRINGID_PKMNRAISEDDEF, STRINGID_PKMNRAISEDDEFALITTLE,
-    STRINGID_PKMNRAISEDSPDEF, STRINGID_PKMNRAISEDSPDEFALITTLE, STRINGID_PKMNCOVEREDBYVEIL
+    [B_MSG_SIDE_STATUS_FAILED]     = STRINGID_BUTITFAILED,
+    [B_MSG_SET_REFLECT_SINGLE]     = STRINGID_PKMNRAISEDDEF,
+    [B_MSG_SET_REFLECT_DOUBLE]     = STRINGID_PKMNRAISEDDEFALITTLE,
+    [B_MSG_SET_LIGHTSCREEN_SINGLE] = STRINGID_PKMNRAISEDSPDEF,
+    [B_MSG_SET_LIGHTSCREEN_DOUBLE] = STRINGID_PKMNRAISEDSPDEFALITTLE,
+    [B_MSG_SET_SAFEGUARD]          = STRINGID_PKMNCOVEREDBYVEIL,
 };
 
 const u16 gLeechSeedStringIds[] =
 {
-    STRINGID_PKMNSEEDED, STRINGID_PKMNEVADEDATTACK,
-    STRINGID_ITDOESNTAFFECT, STRINGID_PKMNSAPPEDBYLEECHSEED, STRINGID_ITSUCKEDLIQUIDOOZE,
+    [B_MSG_LEECH_SEED_SET]   = STRINGID_PKMNSEEDED,
+    [B_MSG_LEECH_SEED_MISS]  = STRINGID_PKMNEVADEDATTACK,
+    [B_MSG_LEECH_SEED_FAIL]  = STRINGID_ITDOESNTAFFECT,
+    [B_MSG_LEECH_SEED_DRAIN] = STRINGID_PKMNSAPPEDBYLEECHSEED,
+    [B_MSG_LEECH_SEED_OOZE]  = STRINGID_ITSUCKEDLIQUIDOOZE,
 };
 
 const u16 gRestUsedStringIds[] =
 {
-    STRINGID_PKMNWENTTOSLEEP, STRINGID_PKMNSLEPTHEALTHY
+    [B_MSG_REST]          = STRINGID_PKMNWENTTOSLEEP,
+    [B_MSG_REST_STATUSED] = STRINGID_PKMNSLEPTHEALTHY
 };
 
 const u16 gUproarOverTurnStringIds[] =
 {
-    STRINGID_PKMNMAKINGUPROAR, STRINGID_PKMNCALMEDDOWN
+    [B_MSG_UPROAR_CONTINUES] = STRINGID_PKMNMAKINGUPROAR,
+    [B_MSG_UPROAR_ENDS]      = STRINGID_PKMNCALMEDDOWN
 };
 
 const u16 gStockpileUsedStringIds[] =
 {
-    STRINGID_PKMNSTOCKPILED, STRINGID_PKMNCANTSTOCKPILE,
+    [B_MSG_STOCKPILED]     = STRINGID_PKMNSTOCKPILED,
+    [B_MSG_CANT_STOCKPILE] = STRINGID_PKMNCANTSTOCKPILE,
 };
 
 const u16 gWokeUpStringIds[] =
 {
-    STRINGID_PKMNWOKEUP, STRINGID_PKMNWOKEUPINUPROAR
+    [B_MSG_WOKE_UP]        = STRINGID_PKMNWOKEUP,
+    [B_MSG_WOKE_UP_UPROAR] = STRINGID_PKMNWOKEUPINUPROAR
 };
 
 const u16 gSwallowFailStringIds[] =
 {
-    STRINGID_FAILEDTOSWALLOW, STRINGID_PKMNHPFULL
+    [B_MSG_SWALLOW_FAILED]  = STRINGID_FAILEDTOSWALLOW,
+    [B_MSG_SWALLOW_FULL_HP] = STRINGID_PKMNHPFULL
 };
 
 const u16 gUproarAwakeStringIds[] =
 {
-    STRINGID_PKMNCANTSLEEPINUPROAR2, STRINGID_UPROARKEPTPKMNAWAKE, STRINGID_PKMNSTAYEDAWAKEUSING
+    [B_MSG_CANT_SLEEP_UPROAR]  = STRINGID_PKMNCANTSLEEPINUPROAR2,
+    [B_MSG_UPROAR_KEPT_AWAKE]  = STRINGID_UPROARKEPTPKMNAWAKE,
+    [B_MSG_STAYED_AWAKE_USING] = STRINGID_PKMNSTAYEDAWAKEUSING,
 };
 
 const u16 gStatUpStringIds[] =
 {
-    STRINGID_PKMNSSTATCHANGED, STRINGID_PKMNSSTATCHANGED2, STRINGID_STATSWONTINCREASE,
-    STRINGID_EMPTYSTRING3, STRINGID_USINGXTHEYOFZN, STRINGID_PKMNUSEDXTOGETPUMPED
+    [B_MSG_ATTACKER_STAT_ROSE] = STRINGID_ATTACKERSSTATROSE,
+    [B_MSG_DEFENDER_STAT_ROSE] = STRINGID_DEFENDERSSTATROSE,
+    [B_MSG_STAT_WONT_INCREASE] = STRINGID_STATSWONTINCREASE,
+    [B_MSG_STAT_ROSE_EMPTY]    = STRINGID_EMPTYSTRING3,
+    [B_MSG_STAT_ROSE_ITEM]     = STRINGID_USINGITEMSTATOFPKMNROSE,
+    [B_MSG_USED_DIRE_HIT]     = STRINGID_PKMNUSEDXTOGETPUMPED,
 };
 
 const u16 gStatDownStringIds[] =
 {
-    STRINGID_PKMNSSTATCHANGED3, STRINGID_PKMNSSTATCHANGED4, STRINGID_STATSWONTDECREASE, STRINGID_EMPTYSTRING3
+    [B_MSG_ATTACKER_STAT_FELL] = STRINGID_ATTACKERSSTATFELL,
+    [B_MSG_DEFENDER_STAT_FELL] = STRINGID_DEFENDERSSTATFELL,
+    [B_MSG_STAT_WONT_DECREASE] = STRINGID_STATSWONTDECREASE,
+    [B_MSG_STAT_FELL_EMPTY]    = STRINGID_EMPTYSTRING3,
 };
 
+// Index read from sTWOTURN_STRINGID
 const u16 gFirstTurnOfTwoStringIds[] =
 {
-    STRINGID_PKMNWHIPPEDWHIRLWIND, STRINGID_PKMNTOOKSUNLIGHT, STRINGID_PKMNLOWEREDHEAD, STRINGID_PKMNISGLOWING,
-    STRINGID_PKMNFLEWHIGH, STRINGID_PKMNDUGHOLE, STRINGID_PKMNHIDUNDERWATER, STRINGID_PKMNSPRANGUP, STRINGID_VANISHEDINSTANTLY,
-    STRINGID_PKNMABSORBINGPOWER, STRINGID_CLOAKEDINAFREEZINGLIGHT
+    [B_MSG_TURN1_RAZOR_WIND]    = STRINGID_PKMNWHIPPEDWHIRLWIND,
+    [B_MSG_TURN1_SOLAR_BEAM]    = STRINGID_PKMNTOOKSUNLIGHT,
+    [B_MSG_TURN1_SKULL_BASH]    = STRINGID_PKMNLOWEREDHEAD,
+    [B_MSG_TURN1_SKY_ATTACK]    = STRINGID_PKMNISGLOWING,
+    [B_MSG_TURN1_FLY]           = STRINGID_PKMNFLEWHIGH,
+    [B_MSG_TURN1_DIG]           = STRINGID_PKMNDUGHOLE,
+    [B_MSG_TURN1_DIVE]          = STRINGID_PKMNHIDUNDERWATER,
+    [B_MSG_TURN1_BOUNCE]        = STRINGID_PKMNSPRANGUP,
+    [B_MSG_TURN1_PHANTOM_FORCE] = STRINGID_VANISHEDINSTANTLY,
+    [B_MSG_TURN1_GEOMANCY]      = STRINGID_PKNMABSORBINGPOWER,
+    [B_MSG_TURN1_FREEZE_SHOCK]  = STRINGID_CLOAKEDINAFREEZINGLIGHT,
 };
 
+// Index copied from move's index in gTrappingMoves
 const u16 gWrappedStringIds[] =
 {
-    STRINGID_PKMNSQUEEZEDBYBIND, STRINGID_PKMNWRAPPEDBY, STRINGID_PKMNTRAPPEDINVORTEX,
-    STRINGID_PKMNCLAMPED, STRINGID_PKMNTRAPPEDINVORTEX, STRINGID_PKMNTRAPPEDBYSANDTOMB,
-    STRINGID_INFESTATION,
+    STRINGID_PKMNSQUEEZEDBYBIND,   // MOVE_BIND
+    STRINGID_PKMNWRAPPEDBY,        // MOVE_WRAP
+    STRINGID_PKMNTRAPPEDINVORTEX,  // MOVE_FIRE_SPIN
+    STRINGID_PKMNCLAMPED,          // MOVE_CLAMP
+    STRINGID_PKMNTRAPPEDINVORTEX,  // MOVE_WHIRLPOOL
+    STRINGID_PKMNTRAPPEDBYSANDTOMB,// MOVE_SAND_TOMB
+    STRINGID_INFESTATION,          // MOVE_INFESTATION
 };
 
 const u16 gMistUsedStringIds[] =
 {
-    STRINGID_PKMNSHROUDEDINMIST, STRINGID_BUTITFAILED
+    [B_MSG_SET_MIST]    = STRINGID_PKMNSHROUDEDINMIST,
+    [B_MSG_MIST_FAILED] = STRINGID_BUTITFAILED
 };
 
 const u16 gFocusEnergyUsedStringIds[] =
 {
-    STRINGID_PKMNGETTINGPUMPED, STRINGID_BUTITFAILED
+    [B_MSG_GETTING_PUMPED]      = STRINGID_PKMNGETTINGPUMPED,
+    [B_MSG_FOCUS_ENERGY_FAILED] = STRINGID_BUTITFAILED
 };
 
 const u16 gTransformUsedStringIds[] =
 {
-    STRINGID_PKMNTRANSFORMEDINTO, STRINGID_BUTITFAILED
+    [B_MSG_TRANSFORMED]      = STRINGID_PKMNTRANSFORMEDINTO,
+    [B_MSG_TRANSFORM_FAILED] = STRINGID_BUTITFAILED
 };
 
-const u16 gSubsituteUsedStringIds[] =
+const u16 gSubstituteUsedStringIds[] =
 {
-    STRINGID_PKMNMADESUBSTITUTE, STRINGID_TOOWEAKFORSUBSTITUTE
+    [B_MSG_SET_SUBSTITUTE]    = STRINGID_PKMNMADESUBSTITUTE,
+    [B_MSG_SUBSTITUTE_FAILED] = STRINGID_TOOWEAKFORSUBSTITUTE
 };
 
 const u16 gGotPoisonedStringIds[] =
 {
-    STRINGID_PKMNWASPOISONED, STRINGID_PKMNPOISONEDBY
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASPOISONED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNPOISONEDBY
 };
 
 const u16 gGotParalyzedStringIds[] =
 {
-    STRINGID_PKMNWASPARALYZED, STRINGID_PKMNWASPARALYZEDBY
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASPARALYZED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNWASPARALYZEDBY
 };
 
 const u16 gFellAsleepStringIds[] =
 {
-    STRINGID_PKMNFELLASLEEP, STRINGID_PKMNMADESLEEP,
+    [B_MSG_STATUSED]            = STRINGID_PKMNFELLASLEEP,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNMADESLEEP,
 };
 
 const u16 gGotBurnedStringIds[] =
 {
-    STRINGID_PKMNWASBURNED, STRINGID_PKMNBURNEDBY
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASBURNED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNBURNEDBY
 };
 
 const u16 gGotFrozenStringIds[] =
 {
-    STRINGID_PKMNWASFROZEN, STRINGID_PKMNFROZENBY
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASFROZEN,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNFROZENBY
 };
 
 const u16 gGotDefrostedStringIds[] =
 {
-    STRINGID_PKMNWASDEFROSTED2, STRINGID_PKMNWASDEFROSTEDBY
+    [B_MSG_DEFROSTED]         = STRINGID_PKMNWASDEFROSTED2,
+    [B_MSG_DEFROSTED_BY_MOVE] = STRINGID_PKMNWASDEFROSTEDBY
 };
 
 const u16 gKOFailedStringIds[] =
 {
-    STRINGID_ATTACKMISSED, STRINGID_PKMNUNAFFECTED
+    [B_MSG_KO_MISS]       = STRINGID_ATTACKMISSED,
+    [B_MSG_KO_UNAFFECTED] = STRINGID_PKMNUNAFFECTED
 };
 
 const u16 gAttractUsedStringIds[] =
 {
-    STRINGID_PKMNFELLINLOVE, STRINGID_PKMNSXINFATUATEDY
+    [B_MSG_STATUSED]            = STRINGID_PKMNFELLINLOVE,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNSXINFATUATEDY
 };
 
-const u16 gLeechSeedDrainStringIds[] =
+const u16 gAbsorbDrainStringIds[] =
 {
-    STRINGID_PKMNENERGYDRAINED, STRINGID_ITSUCKEDLIQUIDOOZE
+    [B_MSG_ABSORB]      = STRINGID_PKMNENERGYDRAINED,
+    [B_MSG_ABSORB_OOZE] = STRINGID_ITSUCKEDLIQUIDOOZE
 };
 
 const u16 gSportsUsedStringIds[] =
 {
-    STRINGID_ELECTRICITYWEAKENED, STRINGID_FIREWEAKENED
+    [B_MSG_WEAKEN_ELECTRIC] = STRINGID_ELECTRICITYWEAKENED,
+    [B_MSG_WEAKEN_FIRE]     = STRINGID_FIREWEAKENED
 };
 
 const u16 gPartyStatusHealStringIds[] =
 {
-    STRINGID_BELLCHIMED, STRINGID_BELLCHIMED, STRINGID_BELLCHIMED, STRINGID_BELLCHIMED,
-    // interesting how there are four instances of the same string
-    STRINGID_SOOTHINGAROMA
+    [B_MSG_BELL]                     = STRINGID_BELLCHIMED,
+    [B_MSG_BELL_SOUNDPROOF_ATTACKER] = STRINGID_BELLCHIMED,
+    [B_MSG_BELL_SOUNDPROOF_PARTNER]  = STRINGID_BELLCHIMED,
+    [B_MSG_BELL_BOTH_SOUNDPROOF]     = STRINGID_BELLCHIMED,
+    [B_MSG_SOOTHING_AROMA]           = STRINGID_SOOTHINGAROMA
 };
 
 const u16 gFutureMoveUsedStringIds[] =
 {
-    STRINGID_PKMNFORESAWATTACK, STRINGID_PKMNCHOSEXASDESTINY
+    [B_MSG_FUTURE_SIGHT] = STRINGID_PKMNFORESAWATTACK,
+    [B_MSG_DOOM_DESIRE]  = STRINGID_PKMNCHOSEXASDESTINY
 };
 
 const u16 gBallEscapeStringIds[] =
 {
-    STRINGID_PKMNBROKEFREE, STRINGID_ITAPPEAREDCAUGHT, STRINGID_AARGHALMOSTHADIT, STRINGID_SHOOTSOCLOSE
+    [BALL_NO_SHAKES]     = STRINGID_PKMNBROKEFREE,
+    [BALL_1_SHAKE]       = STRINGID_ITAPPEAREDCAUGHT,
+    [BALL_2_SHAKES]      = STRINGID_AARGHALMOSTHADIT,
+    [BALL_3_SHAKES_FAIL] = STRINGID_SHOOTSOCLOSE
 };
 
-const u16 gWeatherContinuesStringIds[] =
+// Overworld weathers that don't have an associated battle weather default to "It is raining."
+const u16 gWeatherStartsStringIds[] =
 {
-    STRINGID_ITISRAINING, STRINGID_ITISRAINING, STRINGID_ITISRAINING,
-    STRINGID_ITISRAINING, STRINGID_ITISRAINING, STRINGID_ITISRAINING,
-    STRINGID_ITISRAINING, STRINGID_ITISRAINING, STRINGID_SANDSTORMISRAGING,
-    STRINGID_ITISRAINING, STRINGID_ITISRAINING, STRINGID_ITISRAINING,
-    STRINGID_SUNLIGHTSTRONG, STRINGID_ITISRAINING, STRINGID_ITISRAINING, STRINGID_ITISRAINING
+    [WEATHER_NONE]               = STRINGID_ITISRAINING,
+    [WEATHER_SUNNY_CLOUDS]       = STRINGID_ITISRAINING,
+    [WEATHER_SUNNY]              = STRINGID_ITISRAINING,
+    [WEATHER_RAIN]               = STRINGID_ITISRAINING,
+    [WEATHER_SNOW]               = STRINGID_ITISRAINING,
+    [WEATHER_RAIN_THUNDERSTORM]  = STRINGID_ITISRAINING,
+    [WEATHER_FOG_HORIZONTAL]     = STRINGID_ITISRAINING,
+    [WEATHER_VOLCANIC_ASH]       = STRINGID_ITISRAINING,
+    [WEATHER_SANDSTORM]          = STRINGID_SANDSTORMISRAGING,
+    [WEATHER_FOG_DIAGONAL]       = STRINGID_ITISRAINING,
+    [WEATHER_UNDERWATER]         = STRINGID_ITISRAINING,
+    [WEATHER_SHADE]              = STRINGID_ITISRAINING,
+    [WEATHER_DROUGHT]            = STRINGID_SUNLIGHTSTRONG,
+    [WEATHER_DOWNPOUR]           = STRINGID_ITISRAINING,
+    [WEATHER_UNDERWATER_BUBBLES] = STRINGID_ITISRAINING,
+    [WEATHER_ABNORMAL]           = STRINGID_ITISRAINING
 };
 
 const u16 gInobedientStringIds[] =
 {
-    STRINGID_PKMNLOAFING, STRINGID_PKMNWONTOBEY, STRINGID_PKMNTURNEDAWAY,
-    STRINGID_PKMNPRETENDNOTNOTICE, STRINGID_PKMNINCAPABLEOFPOWER
+    [B_MSG_LOAFING]            = STRINGID_PKMNLOAFING,
+    [B_MSG_WONT_OBEY]          = STRINGID_PKMNWONTOBEY,
+    [B_MSG_TURNED_AWAY]        = STRINGID_PKMNTURNEDAWAY,
+    [B_MSG_PRETEND_NOT_NOTICE] = STRINGID_PKMNPRETENDNOTNOTICE,
+    [B_MSG_INCAPABLE_OF_POWER] = STRINGID_PKMNINCAPABLEOFPOWER
 };
 
 const u16 gSafariGetNearStringIds[] =
 {
-    STRINGID_CREPTCLOSER, STRINGID_CANTGETCLOSER
+    [B_MSG_CREPT_CLOSER]    = STRINGID_CREPTCLOSER,
+    [B_MSG_CANT_GET_CLOSER] = STRINGID_CANTGETCLOSER
 };
 
 const u16 gSafariPokeblockResultStringIds[] =
 {
-    STRINGID_PKMNCURIOUSABOUTX, STRINGID_PKMNENTHRALLEDBYX, STRINGID_PKMNIGNOREDX
+    [B_MSG_MON_CURIOUS]    = STRINGID_PKMNCURIOUSABOUTX,
+    [B_MSG_MON_ENTHRALLED] = STRINGID_PKMNENTHRALLEDBYX,
+    [B_MSG_MON_IGNORED]    = STRINGID_PKMNIGNOREDX
 };
 
 const u16 gTrainerItemCuredStatusStringIds[] =
 {
-    STRINGID_PKMNSITEMSNAPPEDOUT, STRINGID_PKMNSITEMCUREDPARALYSIS, STRINGID_PKMNSITEMDEFROSTEDIT,
-    STRINGID_PKMNSITEMHEALEDBURN, STRINGID_PKMNSITEMCUREDPOISON, STRINGID_PKMNSITEMWOKEIT
+    [AI_HEAL_CONFUSION] = STRINGID_PKMNSITEMSNAPPEDOUT,
+    [AI_HEAL_PARALYSIS] = STRINGID_PKMNSITEMCUREDPARALYSIS,
+    [AI_HEAL_FREEZE]    = STRINGID_PKMNSITEMDEFROSTEDIT,
+    [AI_HEAL_BURN]      = STRINGID_PKMNSITEMHEALEDBURN,
+    [AI_HEAL_POISON]    = STRINGID_PKMNSITEMCUREDPOISON,
+    [AI_HEAL_SLEEP]     = STRINGID_PKMNSITEMWOKEIT
 };
 
 const u16 gBerryEffectStringIds[] =
 {
-    STRINGID_PKMNSITEMCUREDPROBLEM, STRINGID_PKMNSITEMNORMALIZEDSTATUS
+    [B_MSG_CURED_PROBLEM]     = STRINGID_PKMNSITEMCUREDPROBLEM,
+    [B_MSG_NORMALIZED_STATUS] = STRINGID_PKMNSITEMNORMALIZEDSTATUS
 };
 
 const u16 gBRNPreventionStringIds[] =
 {
-    STRINGID_PKMNSXPREVENTSBURNS, STRINGID_PKMNSXPREVENTSYSZ, STRINGID_PKMNSXHADNOEFFECTONY
+    [B_MSG_ABILITY_PREVENTS_MOVE_STATUS]    = STRINGID_PKMNSXPREVENTSBURNS,
+    [B_MSG_ABILITY_PREVENTS_ABILITY_STATUS] = STRINGID_PKMNSXPREVENTSYSZ,
+    [B_MSG_STATUS_HAD_NO_EFFECT]            = STRINGID_PKMNSXHADNOEFFECTONY
 };
 
 const u16 gPRLZPreventionStringIds[] =
 {
-    STRINGID_PKMNPREVENTSPARALYSISWITH, STRINGID_PKMNSXPREVENTSYSZ, STRINGID_PKMNSXHADNOEFFECTONY
+    [B_MSG_ABILITY_PREVENTS_MOVE_STATUS]    = STRINGID_PKMNPREVENTSPARALYSISWITH,
+    [B_MSG_ABILITY_PREVENTS_ABILITY_STATUS] = STRINGID_PKMNSXPREVENTSYSZ,
+    [B_MSG_STATUS_HAD_NO_EFFECT]            = STRINGID_PKMNSXHADNOEFFECTONY
 };
 
 const u16 gPSNPreventionStringIds[] =
 {
-    STRINGID_PKMNPREVENTSPOISONINGWITH, STRINGID_PKMNSXPREVENTSYSZ, STRINGID_PKMNSXHADNOEFFECTONY
+    [B_MSG_ABILITY_PREVENTS_MOVE_STATUS]    = STRINGID_PKMNPREVENTSPOISONINGWITH,
+    [B_MSG_ABILITY_PREVENTS_ABILITY_STATUS] = STRINGID_PKMNSXPREVENTSYSZ,
+    [B_MSG_STATUS_HAD_NO_EFFECT]            = STRINGID_PKMNSXHADNOEFFECTONY
 };
 
 const u16 gItemSwapStringIds[] =
 {
-    STRINGID_PKMNOBTAINEDX, STRINGID_PKMNOBTAINEDX2, STRINGID_PKMNOBTAINEDXYOBTAINEDZ
+    [B_MSG_ITEM_SWAP_TAKEN] = STRINGID_PKMNOBTAINEDX,
+    [B_MSG_ITEM_SWAP_GIVEN] = STRINGID_PKMNOBTAINEDX2,
+    [B_MSG_ITEM_SWAP_BOTH]  = STRINGID_PKMNOBTAINEDXYOBTAINEDZ
 };
 
 const u16 gFlashFireStringIds[] =
 {
-    STRINGID_PKMNRAISEDFIREPOWERWITH, STRINGID_PKMNSXMADEYINEFFECTIVE
+    [B_MSG_FLASH_FIRE_BOOST]    = STRINGID_PKMNRAISEDFIREPOWERWITH,
+    [B_MSG_FLASH_FIRE_NO_BOOST] = STRINGID_PKMNSXMADEYINEFFECTIVE
 };
 
 const u16 gCaughtMonStringIds[] =
 {
-    STRINGID_PKMNTRANSFERREDSOMEONESPC, STRINGID_PKMNTRANSFERREDLANETTESPC, STRINGID_PKMNBOXSOMEONESPCFULL, STRINGID_PKMNBOXLANETTESPCFULL,
+    [B_MSG_SENT_SOMEONES_PC]  = STRINGID_PKMNTRANSFERREDSOMEONESPC,
+    [B_MSG_SENT_LANETTES_PC]  = STRINGID_PKMNTRANSFERREDLANETTESPC,
+    [B_MSG_SOMEONES_BOX_FULL] = STRINGID_PKMNBOXSOMEONESPCFULL,
+    [B_MSG_LANETTES_BOX_FULL] = STRINGID_PKMNBOXLANETTESPCFULL,
 };
 
 const u16 gTrappingMoves[] =
@@ -1529,7 +1695,7 @@ const u8 gText_PkmnIsEvolving[] = _("What?\n{STR_VAR_1} is evolving!");
 const u8 gText_CongratsPkmnEvolved[] = _("Congratulations! Your {STR_VAR_1}\nevolved into {STR_VAR_2}!{WAIT_SE}\p");
 const u8 gText_PkmnStoppedEvolving[] = _("Huh? {STR_VAR_1}\nstopped evolving!\p");
 const u8 gText_EllipsisQuestionMark[] = _("……?\p");
-const u8 gText_WhatWillPkmnDo[] = _("What will\n{B_ACTIVE_NAME_WITH_PREFIX} do?");
+const u8 gText_WhatWillPkmnDo[] = _("What will\n{B_ACTIVE_NAME2} do?");
 const u8 gText_WhatWillPkmnDo2[] = _("What will\n{B_PLAYER_NAME} do?");
 const u8 gText_WhatWillWallyDo[] = _("What will\nWally do?");
 const u8 gText_LinkStandby[] = _("{PAUSE 16}Link standby…");
@@ -1547,14 +1713,15 @@ const u8 gText_BattleSwitchWhich3[] = _("{UP_ARROW}");
 const u8 gText_BattleSwitchWhich4[] = _("{ESCAPE 4}");
 const u8 gText_BattleSwitchWhich5[] = _("-");
 
-const u8 * const gStatNamesTable2[] =
+// Unused
+static const u8 * const sStatNamesTable2[] =
 {
     gText_HP3, gText_SpAtk, gText_Attack,
     gText_SpDef, gText_Defense, gText_Speed
 };
 
-const u8 gText_SafariBalls[] = _("{HIGHLIGHT DARK_GREY}Safari Balls");
-const u8 gText_SafariBallLeft[] = _("{HIGHLIGHT DARK_GREY}Left: $" "{HIGHLIGHT DARK_GREY}");
+const u8 gText_SafariBalls[] = _("{HIGHLIGHT DARK_GRAY}Safari Balls");
+const u8 gText_SafariBallLeft[] = _("{HIGHLIGHT DARK_GRAY}Left: $" "{HIGHLIGHT DARK_GRAY}");
 const u8 gText_Sleep[] = _("sleep");
 const u8 gText_Poison[] = _("poison");
 const u8 gText_Burn[] = _("burn");
@@ -1577,27 +1744,27 @@ const u8 gText_Draw[] = _("{HIGHLIGHT TRANSPARENT}Draw");
 static const u8 sText_SpaceIs[] = _(" is");
 static const u8 sText_ApostropheS[] = _("'s");
 
-static const u8 sATypeMove_Table[][17] =
+static const u8 sATypeMove_Table[][NUMBER_OF_MON_TYPES - 1] =
 {
-    _("a Normal move"),
-    _("a Fighting move"),
-    _("a Flying move"),
-    _("a Poison move"),
-    _("a Ground move"),
-    _("a Rock move"),
-    _("a Bug move"),
-    _("a Ghost move"),
-    _("a Steel move"),
-    _("a ??? move"),
-    _("a Fire move"),
-    _("a Water move"),
-    _("a Grass move"),
-    _("an Electric move"),
-    _("a Psychic move"),
-    _("an Ice move"),
-    _("a Dragon move"),
-    _("a Dark move"),
-	_("a Fairy move")
+    [TYPE_NORMAL]   = _("a Normal move"),
+    [TYPE_FIGHTING] = _("a Fighting move"),
+    [TYPE_FLYING]   = _("a Flying move"),
+    [TYPE_POISON]   = _("a Poison move"),
+    [TYPE_GROUND]   = _("a Ground move"),
+    [TYPE_ROCK]     = _("a Rock move"),
+    [TYPE_BUG]      = _("a Bug move"),
+    [TYPE_GHOST]    = _("a Ghost move"),
+    [TYPE_STEEL]    = _("a Steel move"),
+    [TYPE_MYSTERY]  = _("a ??? move"),
+    [TYPE_FIRE]     = _("a Fire move"),
+    [TYPE_WATER]    = _("a Water move"),
+    [TYPE_GRASS]    = _("a Grass move"),
+    [TYPE_ELECTRIC] = _("an Electric move"),
+    [TYPE_PSYCHIC]  = _("a Psychic move"),
+    [TYPE_ICE]      = _("an Ice move"),
+    [TYPE_DRAGON]   = _("a Dragon move"),
+    [TYPE_DARK]     = _("a Dark move"),
+    [TYPE_FAIRY]    = _("a Fairy move"),
 };
 
 const u8 gText_BattleTourney[] = _("Battle Tourney");
@@ -1606,16 +1773,16 @@ static const u8 sText_Round2[] = _("Round 2");
 static const u8 sText_Semifinal[] = _("Semifinal");
 static const u8 sText_Final[] = _("Final");
 
-const u8 *const gRoundsStringTable[] =
+const u8 *const gRoundsStringTable[DOME_ROUNDS_COUNT] =
 {
-    sText_Round1,
-    sText_Round2,
-    sText_Semifinal,
-    sText_Final
+    [DOME_ROUND1]    = sText_Round1,
+    [DOME_ROUND2]    = sText_Round2,
+    [DOME_SEMIFINAL] = sText_Semifinal,
+    [DOME_FINAL]     = sText_Final
 };
 
 const u8 gText_TheGreatNewHope[] = _("The great new hope!\p");
-const u8 gText_WillChampinshipDreamComeTrue[] = _("Will the championship dream come true?!\p");
+const u8 gText_WillChampionshipDreamComeTrue[] = _("Will the championship dream come true?!\p");
 const u8 gText_AFormerChampion[] = _("A former Champion!\p");
 const u8 gText_ThePreviousChampion[] = _("The previous Champion!\p");
 const u8 gText_TheUnbeatenChampion[] = _("The unbeaten Champion!\p");
@@ -1638,10 +1805,12 @@ static const u8 sText_PkmnGettingIntoPosition[] = _("{B_SCR_ACTIVE_NAME_WITH_PRE
 static const u8 sText_PkmnBeganGrowlingDeeply[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} began growling deeply!");
 static const u8 sText_PkmnEagerForMore[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is eager for more!");
 
-const u16 gStringIds_85CCF0A[] =
+const u16 gBattlePalaceFlavorTextTable[] =
 {
-    STRINGID_GLINTAPPEARSINEYE, STRINGID_PKMNGETTINGINTOPOSITION,
-    STRINGID_PKMNBEGANGROWLINGDEEPLY, STRINGID_PKMNEAGERFORMORE
+    [B_MSG_GLINT_IN_EYE]   = STRINGID_GLINTAPPEARSINEYE,
+    [B_MSG_GETTING_IN_POS] = STRINGID_PKMNGETTINGINTOPOSITION,
+    [B_MSG_GROWL_DEEPLY]   = STRINGID_PKMNBEGANGROWLINGDEEPLY,
+    [B_MSG_EAGER_FOR_MORE] = STRINGID_PKMNEAGERFORMORE,
 };
 
 static const u8 sText_RefIfNothingIsDecided[] = _("Referee: If nothing is decided in\n3 turns, we will go to judging!");
@@ -1649,9 +1818,9 @@ static const u8 sText_RefThatsIt[] = _("Referee: That's it! We will now go to\nj
 static const u8 sText_RefJudgeMind[] = _("Referee: Judging category 1, Mind!\nThe Pokémon showing the most guts!\p");
 static const u8 sText_RefJudgeSkill[] = _("Referee: Judging category 2, Skill!\nThe Pokémon using moves the best!\p");
 static const u8 sText_RefJudgeBody[] = _("Referee: Judging category 3, Body!\nThe Pokémon with the most vitality!\p");
-static const u8 sText_RefJudgement1[] = _("Referee: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_PLAYER_NAME}'s {B_PLAYER_MON1_NAME}!\p");
-static const u8 sText_RefJudgement2[] = _("Referee: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_TRAINER1_NAME}'s {B_OPPONENT_MON1_NAME}!\p");
-static const u8 sText_RefJudgement3[] = _("Referee: Judgment: 3 to 3!\nWe have a draw!\p");
+static const u8 sText_RefPlayerWon[] = _("Referee: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_PLAYER_NAME}'s {B_PLAYER_MON1_NAME}!\p");
+static const u8 sText_RefOpponentWon[] = _("Referee: Judgment: {B_BUFF1} to {B_BUFF2}!\nThe winner is {B_TRAINER1_NAME}'s {B_OPPONENT_MON1_NAME}!\p");
+static const u8 sText_RefDraw[] = _("Referee: Judgment: 3 to 3!\nWe have a draw!\p");
 static const u8 sText_DefeatedOpponentByReferee[] = _("{B_PLAYER_MON1_NAME} defeated the opponent\n{B_OPPONENT_MON1_NAME} in a Referee's decision!");
 static const u8 sText_LostToOpponentByReferee[] = _("{B_PLAYER_MON1_NAME} lost to the opponent\n{B_OPPONENT_MON1_NAME} in a Referee's decision!");
 static const u8 sText_TiedOpponentByReferee[] = _("{B_PLAYER_MON1_NAME} tied the opponent\n{B_OPPONENT_MON1_NAME} in a Referee's decision!");
@@ -1659,22 +1828,22 @@ static const u8 sText_RefCommenceBattle[] = _("Referee: {B_PLAYER_MON1_NAME} VS 
 
 const u8 * const gRefereeStringsTable[] =
 {
-    sText_RefIfNothingIsDecided,
-    sText_RefThatsIt,
-    sText_RefJudgeMind,
-    sText_RefJudgeSkill,
-    sText_RefJudgeBody,
-    sText_RefJudgement1,
-    sText_RefJudgement2,
-    sText_RefJudgement3,
-    sText_RefCommenceBattle,
+    [B_MSG_REF_NOTHING_IS_DECIDED] = sText_RefIfNothingIsDecided,
+    [B_MSG_REF_THATS_IT]           = sText_RefThatsIt,
+    [B_MSG_REF_JUDGE_MIND]         = sText_RefJudgeMind,
+    [B_MSG_REF_JUDGE_SKILL]        = sText_RefJudgeSkill,
+    [B_MSG_REF_JUDGE_BODY]         = sText_RefJudgeBody,
+    [B_MSG_REF_PLAYER_WON]         = sText_RefPlayerWon,
+    [B_MSG_REF_OPPONENT_WON]       = sText_RefOpponentWon,
+    [B_MSG_REF_DRAW]               = sText_RefDraw,
+    [B_MSG_REF_COMMENCE_BATTLE]    = sText_RefCommenceBattle,
 };
 
 static const u8 sText_QuestionForfeitMatch[] = _("Would you like to forfeit the match\nand quit now?");
 static const u8 sText_ForfeitedMatch[] = _("{B_PLAYER_NAME} forfeited the match!");
 static const u8 sText_Trainer1WinText[] = _("{B_TRAINER1_WIN_TEXT}");
 static const u8 sText_Trainer2WinText[] = _("{B_TRAINER2_WIN_TEXT}");
-static const u8 sText_Trainer1Fled[] = _( "{PLAY_SE 0x0011}{B_TRAINER1_CLASS} {B_TRAINER1_NAME} fled!");
+static const u8 sText_Trainer1Fled[] = _( "{PLAY_SE SE_FLEE}{B_TRAINER1_CLASS} {B_TRAINER1_NAME} fled!");
 static const u8 sText_PlayerLostAgainstTrainer1[] = _("Player lost against\n{B_TRAINER1_CLASS} {B_TRAINER1_NAME}!");
 static const u8 sText_PlayerBattledToDrawTrainer1[] = _("Player battled to a draw against\n{B_TRAINER1_CLASS} {B_TRAINER1_NAME}!");
 const u8 gText_RecordBattleToPass[] = _("Would you like to record your battle\non your Frontier Pass?");
@@ -1713,7 +1882,7 @@ static const u16 sGrammarMoveUsedTable[] =
     MOVE_FEATHER_DANCE, MOVE_TEETER_DANCE, MOVE_MUD_SPORT,
     MOVE_FAKE_TEARS, MOVE_WATER_SPORT, MOVE_CALM_MIND, 0,
 
-    MOVE_POUND, MOVE_SCRATCH, MOVE_VICE_GRIP,
+    MOVE_POUND, MOVE_SCRATCH, MOVE_VISE_GRIP,
     MOVE_WING_ATTACK, MOVE_FLY, MOVE_BIND, MOVE_SLAM,
     MOVE_HORN_ATTACK, MOVE_WRAP, MOVE_THRASH, MOVE_TAIL_WHIP,
     MOVE_LEER, MOVE_BITE, MOVE_GROWL, MOVE_ROAR,
@@ -2341,9 +2510,9 @@ void BufferStringBattle(u16 stringID)
     case STRINGID_INTROMSG: // first battle msg
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         {
-            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000))
+            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             {
-                if (gBattleTypeFlags & BATTLE_TYPE_x800000)
+                if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
                 {
                     stringPtr = sText_TwoTrainersWantToBattle;
                 }
@@ -2356,7 +2525,7 @@ void BufferStringBattle(u16 stringID)
                 }
                 else
                 {
-                    if (gTrainerBattleOpponent_A == TRAINER_OPPONENT_C00)
+                    if (gTrainerBattleOpponent_A == TRAINER_UNION_ROOM)
                         stringPtr = sText_Trainer1WantsToBattle;
                     else if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
                         stringPtr = sText_LinkTrainerWantsToBattlePause;
@@ -2379,7 +2548,7 @@ void BufferStringBattle(u16 stringID)
         else
         {
             if (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY)
-                stringPtr = sText_WildPkmnAppeared2;
+                stringPtr = sText_LegendaryPkmnAppeared;
             else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) // interesting, looks like they had something planned for wild double battles
                 stringPtr = sText_TwoWildPkmnAppeared;
             else if (gBattleTypeFlags & BATTLE_TYPE_WALLY_TUTORIAL)
@@ -2415,20 +2584,20 @@ void BufferStringBattle(u16 stringID)
                     stringPtr = sText_Trainer1SentOutTwoPkmn;
                 else if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
                     stringPtr = sText_TwoTrainersSentPkmn;
-                else if (gBattleTypeFlags & BATTLE_TYPE_x800000)
+                else if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
                     stringPtr = sText_TwoTrainersSentPkmn;
                 else if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
                     stringPtr = sText_TwoLinkTrainersSentOutPkmn;
-                else if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000))
+                else if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
                     stringPtr = sText_LinkTrainerSentOutTwoPkmn;
                 else
                     stringPtr = sText_Trainer1SentOutTwoPkmn;
             }
             else
             {
-                if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000)))
+                if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)))
                     stringPtr = sText_Trainer1SentOutPkmn;
-                else if (gTrainerBattleOpponent_A == TRAINER_OPPONENT_C00)
+                else if (gTrainerBattleOpponent_A == TRAINER_UNION_ROOM)
                     stringPtr = sText_Trainer1SentOutPkmn;
                 else
                     stringPtr = sText_LinkTrainerSentOutPkmn;
@@ -2449,7 +2618,7 @@ void BufferStringBattle(u16 stringID)
         }
         else
         {
-            if (gTrainerBattleOpponent_A == TRAINER_LINK_OPPONENT || gBattleTypeFlags & BATTLE_TYPE_x2000000)
+            if (gTrainerBattleOpponent_A == TRAINER_LINK_OPPONENT || gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
             {
                 if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
                     stringPtr = sText_LinkTrainer2WithdrewPkmn;
@@ -2476,9 +2645,9 @@ void BufferStringBattle(u16 stringID)
         }
         else
         {
-            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000))
+            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             {
-                if (gBattleTypeFlags & BATTLE_TYPE_x800000)
+                if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
                 {
                     if (gBattleScripting.battler == 1)
                         stringPtr = sText_Trainer1SentOutPkmn2;
@@ -2489,7 +2658,7 @@ void BufferStringBattle(u16 stringID)
                 {
                     if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
                         stringPtr = sText_LinkTrainerMultiSentOutPkmn;
-                    else if (gTrainerBattleOpponent_A == TRAINER_OPPONENT_C00)
+                    else if (gTrainerBattleOpponent_A == TRAINER_UNION_ROOM)
                         stringPtr = sText_Trainer1SentOutPkmn2;
                     else
                         stringPtr = sText_LinkTrainerSentOutPkmn2;
@@ -2543,7 +2712,7 @@ void BufferStringBattle(u16 stringID)
                 switch (gBattleTextBuff1[0])
                 {
                 case B_OUTCOME_WON:
-                    if (gBattleTypeFlags & BATTLE_TYPE_x800000)
+                    if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
                         stringPtr = sText_TwoInGameTrainersDefeated;
                     else
                         stringPtr = sText_TwoLinkTrainersDefeated;
@@ -2556,7 +2725,7 @@ void BufferStringBattle(u16 stringID)
                     break;
                 }
             }
-            else if (gTrainerBattleOpponent_A == TRAINER_OPPONENT_C00)
+            else if (gTrainerBattleOpponent_A == TRAINER_UNION_ROOM)
             {
                 switch (gBattleTextBuff1[0])
                 {
@@ -2624,8 +2793,7 @@ static const u8* TryGetStatusString(u8 *src)
     statusPtr = status;
     for (i = 0; i < 8; i++)
     {
-        if (*src == EOS)
-            break;
+        if (*src == EOS) break; // one line required to match -g
         *statusPtr = *src;
         src++;
         statusPtr++;
@@ -2689,7 +2857,7 @@ static const u8 *BattleStringGetOpponentNameByTrainerId(u16 trainerId, u8 *text,
         ConvertInternationalString(text, gBattleResources->secretBase->language);
         toCpy = text;
     }
-    else if (trainerId == TRAINER_OPPONENT_C00)
+    else if (trainerId == TRAINER_UNION_ROOM)
     {
         toCpy = gLinkPlayers[multiplayerId ^ BIT_SIDE].name;
     }
@@ -2794,8 +2962,8 @@ static const u8 *BattleStringGetOpponentClassByTrainerId(u16 trainerId)
 
     if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
         toCpy = gTrainerClassNames[GetSecretBaseTrainerClass()];
-    else if (trainerId == TRAINER_OPPONENT_C00)
-        toCpy = gTrainerClassNames[sub_8068BB0()];
+    else if (trainerId == TRAINER_UNION_ROOM)
+        toCpy = gTrainerClassNames[GetUnionRoomTrainerClass()];
     else if (trainerId == TRAINER_FRONTIER_BRAIN)
         toCpy = gTrainerClassNames[GetFrontierBrainTrainerClass()];
     else if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
@@ -2818,8 +2986,8 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
     u8 multiplayerId;
     s32 i;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_x2000000)
-        multiplayerId = gUnknown_0203C7B4;
+    if (gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
+        multiplayerId = gRecordedBattleMultiplayerId;
     else
         multiplayerId = GetMultiplayerId();
 
@@ -2919,6 +3087,18 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 GetBattlerNick(gBattlerTarget, text);
                 toCpy = text;
                 break;
+            case B_TXT_ACTIVE_NAME: // active name
+                GetBattlerNick(gActiveBattler, text);
+                toCpy = text;
+                break;
+            case B_TXT_ACTIVE_NAME2: // active battlerId name with prefix, no illusion
+                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                    GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
+                else
+                    GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
+                StringGetEnd10(text);
+                toCpy = text;
+                break;
             case B_TXT_EFF_NAME_WITH_PREFIX: // effect battlerId name with prefix
                 HANDLE_NICKNAME_STRING_CASE(gEffectBattler)
                 break;
@@ -2941,7 +3121,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                     toCpy = gMoveNames[gBattleMsgDataPtr->originallyUsedMove];
                 break;
             case B_TXT_LAST_ITEM: // last used item
-                if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000))
+                if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
                 {
                     if (gLastUsedItem == ITEM_ENIGMA_BERRY)
                     {
@@ -3216,7 +3396,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
             {
                 dst[dstID] = EXT_CTRL_CODE_BEGIN;
                 dstID++;
-                dst[dstID] = 9;
+                dst[dstID] = EXT_CTRL_CODE_PAUSE_UNTIL_PRESS;
                 dstID++;
             }
         }
@@ -3232,6 +3412,37 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
     dstID++;
 
     return dstID;
+}
+
+static void IllusionNickHack(u32 battlerId, u32 partyId, u8 *dst)
+{
+    s32 id, i;
+    // we know it's gEnemyParty
+    struct Pokemon *mon = &gEnemyParty[partyId], *partnerMon;
+
+    if (GetMonAbility(mon) == ABILITY_ILLUSION)
+    {
+        if (IsBattlerAlive(BATTLE_PARTNER(battlerId)))
+            partnerMon = &gEnemyParty[gBattlerPartyIndexes[BATTLE_PARTNER(battlerId)]];
+        else
+            partnerMon = mon;
+
+        // Find last alive non-egg pokemon.
+        for (i = PARTY_SIZE - 1; i >= 0; i--)
+        {
+            id = i;
+            if (GetMonData(&gEnemyParty[id], MON_DATA_SANITY_HAS_SPECIES)
+                && GetMonData(&gEnemyParty[id], MON_DATA_HP)
+                && &gEnemyParty[id] != mon
+                && &gEnemyParty[id] != partnerMon)
+            {
+                GetMonData(&gEnemyParty[id], MON_DATA_NICKNAME, dst);
+                return;
+            }
+        }
+    }
+
+    GetMonData(mon, MON_DATA_NICKNAME, dst);
 }
 
 static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
@@ -3306,6 +3517,12 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
             {
                 GetBattlerNick(src[srcID + 1], dst);
             }
+            else if (gBattleScripting.illusionNickHack) // for STRINGID_ENEMYABOUTTOSWITCHPKMN
+            {
+                gBattleScripting.illusionNickHack = 0;
+                IllusionNickHack(src[srcID + 1], src[srcID + 2], dst);
+                StringGetEnd10(dst);
+            }
             else
             {
                 if (GetBattlerSide(src[srcID + 1]) == B_SIDE_PLAYER)
@@ -3321,12 +3538,12 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
             srcID += 2;
             break;
         case B_BUFF_ABILITY: // ability names
-            StringAppend(dst, gAbilityNames[src[srcID + 1]]);
-            srcID += 2;
+            StringAppend(dst, gAbilityNames[T1_READ_16(&src[srcID + 1])]);
+            srcID += 3;
             break;
         case B_BUFF_ITEM: // item name
             hword = T1_READ_16(&src[srcID + 1]);
-            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000))
+            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             {
                 if (hword == ITEM_ENIGMA_BERRY)
                 {
@@ -3469,7 +3686,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
 
     if (printerTemplate.x == 0xFF)
     {
-        u32 width = sub_80397C4(gBattleScripting.windowsType, windowId);
+        u32 width = GetBattleWindowTemplatePixelWidth(gBattleScripting.windowsType, windowId);
         s32 alignX = GetStringCenterAlignXOffsetWithLetterSpacing(printerTemplate.fontId, printerTemplate.currentChar, width, printerTemplate.letterSpacing);
         printerTemplate.x = printerTemplate.currentX = alignX;
     }
@@ -3486,7 +3703,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
 
     if (windowId == 0 || windowId == 0x16)
     {
-        if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_x2000000))
+        if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             speed = 1;
         else if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
             speed = sRecordedBattleTextSpeeds[GetTextSpeedInRecordedBattle()];

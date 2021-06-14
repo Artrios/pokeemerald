@@ -2,11 +2,6 @@
 This is a branch of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly that is meant to act as somewhat of a demake of ORAS with as many of their mechanics as possible, but with Emerald's story.
 It uses the [**feature_update**](https://github.com/Artrios/pokeemerald/tree/feature_update) branch as a base.
 
-[![Build Status][travis-badge]][travis]
-
-[travis]: https://travis-ci.org/pret/pokeemerald
-[travis-badge]: https://travis-ci.org/pret/pokeemerald.svg?branch=master
-
 This is a decompilation of Pokémon Emerald.
 
 It builds the following ROM:
@@ -45,6 +40,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * [**Battle Engine Upgrade**](https://github.com/DizzyEggg/pokeemerald/tree/battle_engine_v2), [**Pokemon Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/pokemon_expansion) and [**Item Expansion**](https://github.com/DizzyEggg/pokeemerald/tree/item_expansion) (Credit: DizzyEgg)
 * Decapitalisation (Credit: Wyrserth and AsparagusEduardo)
 * Running indoors (Credit: TheXaman)
+* [**Day Night System**](https://github.com/Sierraffinity/pokeemerald/tree/daynight) (Credit: Sierraffinity)
 * Coloured nature stats
 * Fly to Routes
 * Lati@s soaring (from ORAS)

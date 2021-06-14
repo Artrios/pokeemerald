@@ -1229,7 +1229,7 @@ gTVTodaysRivalTrainerText06:: @ 082849AE
 	.string "Let's all keep moving forward\n"
 	.string "and ahead of our rivals!$"
 
-gTVDewfordTrendWatcherNetworkText00:: @ 08284A3E
+TrendWatcher_Text_Intro:: @ 08284A3E
 	.string "Dewford Trend-Watcher Network!\p"
 	.string "MC: Wassup?\n"
 	.string "We'll keep it real with the latest on\l"
@@ -1251,17 +1251,18 @@ gTVDewfordTrendWatcherNetworkText00:: @ 08284A3E
 	.string "MC: Uh, no. What we want to know is\n"
 	.string "what's the in thing of the moment…$"
 
-gTVDewfordTrendWatcherNetworkText01:: @ 08284C55
+@ Identical to below, may have been different in other languages
+TrendWatcher_Text_MaleTaughtMePhrase:: @ 08284C55
 	.string "Old man: {STR_VAR_1} {STR_VAR_2}\n"
 	.string "was what {STR_VAR_3} from Littleroot\l"
 	.string "taught me as being trendy…$"
 
-gTVDewfordTrendWatcherNetworkText02:: @ 08284C9B
+TrendWatcher_Text_FemaleTaughtMePhrase:: @ 08284C9B
 	.string "Old man: {STR_VAR_1} {STR_VAR_2}\n"
 	.string "was what {STR_VAR_3} from Littleroot\l"
 	.string "taught me as being trendy…$"
 
-gTVDewfordTrendWatcherNetworkText03:: @ 08284CE1
+TrendWatcher_Text_PhraseWasHopeless:: @ 08284CE1
 	.string "But it was utterly hopeless.\p"
 	.string "{STR_VAR_1} {STR_VAR_2} festival!\p"
 	.string "{STR_VAR_1} {STR_VAR_2} contest!\p"
@@ -1272,17 +1273,18 @@ gTVDewfordTrendWatcherNetworkText03:: @ 08284CE1
 	.string "MC: Uh, excuse me, compadre, I need\n"
 	.string "to hear about what's in now…$"
 
-gTVDewfordTrendWatcherNetworkText04:: @ 08284DB6
+@ Identical to below, may have been different in other languages
+TrendWatcher_Text_MaleTellMeBigger:: @ 08284DB6
 	.string "Old man: {STR_VAR_3}!\n"
 	.string "Please, tell me something bigger than\l"
 	.string "that {STR_VAR_1} {STR_VAR_2}!$"
 
-gTVDewfordTrendWatcherNetworkText05:: @ 08284DF5
+TrendWatcher_Text_FemaleTellMeBigger:: @ 08284DF5
 	.string "Old man: {STR_VAR_3}!\n"
 	.string "Please, tell me something bigger than\l"
 	.string "that {STR_VAR_1} {STR_VAR_2}!$"
 
-gTVDewfordTrendWatcherNetworkText06:: @ 08284E34
+TrendWatcher_Text_Outro:: @ 08284E34
 	.string "MC: …Uh… So, there you have it,\n"
 	.string "all you trendy, hep cats out there!\p"
 	.string "{STR_VAR_1} {STR_VAR_2}…uh…\n"
@@ -1736,7 +1738,7 @@ gTVTrainerFanClubText11:: @ 08286B4F
 	.string "Fans: {STR_VAR_2}!\p"
 	.string "Fans: {STR_VAR_3}!$"
 
-gTVCutiesText00:: @ 08286D8F
+TVSpotTheCuties_Text_Intro:: @ 08286D8F
 	.string "Spot the Cuties!\n"
 	.string "Pokémon in Ribbons!\p"
 	.string "Hello, my sweet viewers!\p"
@@ -1748,29 +1750,29 @@ gTVCutiesText00:: @ 08286D8F
 	.string "Today's featured pretty Pokémon\n"
 	.string "is {STR_VAR_1}'s {STR_VAR_2}.$"
 
-gTVCutiesText01:: @ 08286E9D
+TVSpotTheCuties_Text_RibbonsLow:: @ 08286E9D
 	.string "The number of Ribbons that\n"
 	.string "{STR_VAR_2} wears is {STR_VAR_3}.\p"
 	.string "It says a lot about how much\n"
 	.string "{STR_VAR_1} adores the Pokémon.$"
 
-gTVCutiesText02:: @ 08286EFC
+TVSpotTheCuties_Text_RibbonsMid:: @ 08286EFC
 	.string "{STR_VAR_2} wears an amazing\n"
 	.string "{STR_VAR_3} Ribbons!\p"
 	.string "It speaks volumes about {STR_VAR_1}'s\n"
 	.string "commitment to the Pokémon!$"
 
-gTVCutiesText03:: @ 08286F54
+TVSpotTheCuties_Text_RibbonsHigh:: @ 08286F54
 	.string "{STR_VAR_2} wears an incredible\n"
 	.string "{STR_VAR_3} Ribbons!\p"
 	.string "It shows you {STR_VAR_1}'s total\n"
 	.string "dedication as a collector!$"
 
-gTVCutiesText04:: @ 08286FAA
+TVSpotTheCuties_Text_RibbonIntro:: @ 08286FAA
 	.string "Let us take a closer look at the many\n"
 	.string "Ribbons worn by {STR_VAR_2}.$"
 
-gTVCutiesText05:: @ 08286FE4
+TVSpotTheCuties_Text_RibbonChampion:: @ 08286FE4
 	.string "The Champion Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it upon entering\n"
@@ -1780,7 +1782,7 @@ gTVCutiesText05:: @ 08286FE4
 	.string "{STR_VAR_2} and the Champ Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText06:: @ 082870A3
+TVSpotTheCuties_Text_RibbonCool:: @ 082870A3
 	.string "The Cool Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for winning\n"
@@ -1790,7 +1792,7 @@ gTVCutiesText06:: @ 082870A3
 	.string "{STR_VAR_2} and the Cool Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText07:: @ 0828715A
+TVSpotTheCuties_Text_RibbonBeauty:: @ 0828715A
 	.string "The Beauty Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for winning\n"
@@ -1800,7 +1802,7 @@ gTVCutiesText07:: @ 0828715A
 	.string "{STR_VAR_2} and the Beauty Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText08:: @ 08287215
+TVSpotTheCuties_Text_RibbonCute:: @ 08287215
 	.string "The Cute Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for winning\n"
@@ -1810,7 +1812,7 @@ gTVCutiesText08:: @ 08287215
 	.string "{STR_VAR_2} and the Cute Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText09:: @ 082872CC
+TVSpotTheCuties_Text_RibbonSmart:: @ 082872CC
 	.string "The Smart Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for winning\n"
@@ -1820,7 +1822,7 @@ gTVCutiesText09:: @ 082872CC
 	.string "{STR_VAR_2} and the Smart Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText10:: @ 08287387
+TVSpotTheCuties_Text_RibbonTough:: @ 08287387
 	.string "The Tough Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for winning\n"
@@ -1830,7 +1832,7 @@ gTVCutiesText10:: @ 08287387
 	.string "{STR_VAR_2} and the Tough Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText11:: @ 08287442
+TVSpotTheCuties_Text_RibbonWinning:: @ 08287442
 	.string "The Winning Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for its feats\n"
@@ -1840,7 +1842,7 @@ gTVCutiesText11:: @ 08287442
 	.string "{STR_VAR_2} and the Winning Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText12:: @ 08287508
+TVSpotTheCuties_Text_RibbonVictory:: @ 08287508
 	.string "The Victory Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for its feats\n"
@@ -1850,7 +1852,7 @@ gTVCutiesText12:: @ 08287508
 	.string "{STR_VAR_2} and the Victory Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText13:: @ 082875D9
+TVSpotTheCuties_Text_RibbonArtist:: @ 082875D9
 	.string "The Artist Ribbon is especially\n"
 	.string "fetching.\p"
 	.string "{STR_VAR_2} received it for being\n"
@@ -1860,7 +1862,7 @@ gTVCutiesText13:: @ 082875D9
 	.string "{STR_VAR_2} and the Artist Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText14:: @ 082876A1
+TVSpotTheCuties_Text_RibbonEffort:: @ 082876A1
 	.string "The Hard Worker Ribbon is\n"
 	.string "especially fetching.\p"
 	.string "{STR_VAR_2} received it for being\n"
@@ -1870,7 +1872,7 @@ gTVCutiesText14:: @ 082876A1
 	.string "{STR_VAR_2} and the Hard Worker Ribbon!\n"
 	.string "The combination is super effective!$"
 
-gTVCutiesText15:: @ 08287779
+TVSpotTheCuties_Text_Outro:: @ 08287779
 	.string "…Sigh…\p"
 	.string "Ribbons and Pokémon…\n"
 	.string "They go so wonderfully together!\p"
@@ -2250,7 +2252,7 @@ TVSecretBaseSecrets_Text_UsedPoster:: @ 08289011
 	.string "about the visitor's stares.$"
 
 TVSecretBaseSecrets_Text_UsedNoteMat:: @ 082890A4
-	.string "The visitor stepped on a NOTE Mat!\p"
+	.string "The visitor stepped on a Note Mat!\p"
 	.string "…Hmm…\n"
 	.string "The visitor composed a funny tune!$"
 
@@ -2436,7 +2438,7 @@ gTVSafariFanClubText10:: @ 08289D33
 	.string "and make the challenge yourself!\p"
 	.string "Until next time, cheerio!$"
 
-gTVContestLiveUpdatesText00:: @ 08289DD6
+ContestLiveUpdates_Text_Intro:: @ 08289DD6
 	.string "“Pokémon Contest Live Updates!”\p"
 	.string "MC: Thanks for joining us!\p"
 	.string "We're live from the just-ended\n"
@@ -2455,117 +2457,117 @@ gTVContestLiveUpdatesText00:: @ 08289DD6
 	.string "MC: Let's hear what the fans have\n"
 	.string "to say about this Contest.$"
 
-gTVContestLiveUpdatesText01:: @ 08289F53
+ContestLiveUpdates_Text_WonBothRounds:: @ 08289F53
 	.string "Spectator: The {STR_VAR_2} was tops in\n"
 	.string "both primary and secondary judging!\p"
 	.string "That {STR_VAR_2} will keep winning!$"
 
-gTVContestLiveUpdatesText02:: @ 08289FB0
+ContestLiveUpdates_Text_BetterRound2:: @ 08289FB0
 	.string "Spectator: The {STR_VAR_2} didn't do\n"
 	.string "well in the primary judging, but it\l"
 	.string "cleaned up in the secondary judging!\p"
 	.string "It was a miraculous comeback\n"
 	.string "for that {STR_VAR_2}. Yippee!$"
 
-gTVContestLiveUpdatesText03:: @ 0828A047
+ContestLiveUpdates_Text_EqualRounds:: @ 0828A047
 	.string "Spectator: The {STR_VAR_2} remained\n"
 	.string "consistent throughout both primary\l"
 	.string "and secondary judging.\p"
 	.string "{STR_VAR_3} and the {STR_VAR_2},\n"
 	.string "they're no ordinary combo!$"
 
-gTVContestLiveUpdatesText04:: @ 0828A0C6
+ContestLiveUpdates_Text_BetterRound1:: @ 0828A0C6
 	.string "Spectator: In terms of being {STR_VAR_1},\n"
 	.string "that {STR_VAR_2} was outstanding.\p"
 	.string "I hope it makes better appeals\n"
 	.string "next time, though.$"
 
-gTVContestLiveUpdatesText05:: @ 0828A132
+ContestLiveUpdates_Text_GotNervous:: @ 0828A132
 	.string "Spectator: When the {STR_VAR_2} got\n"
 	.string "nervous, I couldn't stop myself from\l"
 	.string "shouting encouragement.\p"
 	.string "I'd like to say this to that\n"
 	.string "{STR_VAR_2}, “Congratulations!”$"
 
-gTVContestLiveUpdatesText06:: @ 0828A1BE
+ContestLiveUpdates_Text_StartledFoes:: @ 0828A1BE
 	.string "Spectator: That {STR_VAR_2}'s appeal\n"
 	.string "startled even me!\p"
 	.string "{STR_VAR_2}, you were awesome!$"
 
-gTVContestLiveUpdatesText07:: @ 0828A202
+ContestLiveUpdates_Text_UsedCombo:: @ 0828A202
 	.string "Spectator: That {STR_VAR_2}'s combo\n"
 	.string "appeal was stunning!\p"
 	.string "It's shaken me to the core!$"
 
-gTVContestLiveUpdatesText08:: @ 0828A24E
+ContestLiveUpdates_Text_ExcitingAppeal:: @ 0828A24E
 	.string "Spectator: The winning {STR_VAR_2}'s\n"
 	.string "appeal got my heart pounding!$"
 
-gTVContestLiveUpdatesText09:: @ 0828A288
+ContestLiveUpdates_Text_WasCool:: @ 0828A288
 	.string "{STR_VAR_2}!\n"
 	.string "You were cool!$"
 
-gTVContestLiveUpdatesText10:: @ 0828A29B
+ContestLiveUpdates_Text_WasBeautiful:: @ 0828A29B
 	.string "{STR_VAR_2}!\n"
 	.string "You were beautiful!$"
 
-gTVContestLiveUpdatesText11:: @ 0828A2B3
+ContestLiveUpdates_Text_WasCute:: @ 0828A2B3
 	.string "{STR_VAR_2}!\n"
 	.string "You were cute!$"
 
-gTVContestLiveUpdatesText12:: @ 0828A2C6
+ContestLiveUpdates_Text_WasSmart:: @ 0828A2C6
 	.string "{STR_VAR_2}!\n"
 	.string "You were smart!$"
 
-gTVContestLiveUpdatesText13:: @ 0828A2DA
+ContestLiveUpdates_Text_WasTough:: @ 0828A2DA
 	.string "{STR_VAR_2}!\n"
 	.string "You were tough!$"
 
-gTVContestLiveUpdatesText14:: @ 0828A2EE
+ContestLiveUpdates_Text_VeryExcitingAppeal:: @ 0828A2EE
 	.string "Spectator: The winning {STR_VAR_2}'s\n"
 	.string "appeal still has my heart pounding!$"
 
-gTVContestLiveUpdatesText15:: @ 0828A32E
+ContestLiveUpdates_Text_VeryCool:: @ 0828A32E
 	.string "{STR_VAR_2}!\n"
 	.string "You're the last word in cool!$"
 
-gTVContestLiveUpdatesText16:: @ 0828A350
+ContestLiveUpdates_Text_VeryBeautiful:: @ 0828A350
 	.string "{STR_VAR_2}!\n"
 	.string "You're the most beautiful!$"
 
-gTVContestLiveUpdatesText17:: @ 0828A36F
+ContestLiveUpdates_Text_VeryCute:: @ 0828A36F
 	.string "{STR_VAR_2}!\n"
 	.string "You're simply the cutest!$"
 
-gTVContestLiveUpdatesText18:: @ 0828A38D
+ContestLiveUpdates_Text_VerySmart:: @ 0828A38D
 	.string "{STR_VAR_2}!\n"
 	.string "You're the smartest among the smart!$"
 
-gTVContestLiveUpdatesText19:: @ 0828A3B6
+ContestLiveUpdates_Text_VeryTough:: @ 0828A3B6
 	.string "{STR_VAR_2}!\n"
 	.string "You're the toughest of the tough!$"
 
-gTVContestLiveUpdatesText20:: @ 0828A3DC
+ContestLiveUpdates_Text_TookBreak:: @ 0828A3DC
 	.string "Spectator: Even when the {STR_VAR_2}\n"
 	.string "took a break from making appeals,\l"
 	.string "I couldn't take my eyes off it.\p"
 	.string "I'm captivated by that {STR_VAR_2}.$"
 
-gTVContestLiveUpdatesText21:: @ 0828A455
+ContestLiveUpdates_Text_GotStartled:: @ 0828A455
 	.string "Spectator: When the {STR_VAR_2} was\n"
 	.string "startled by another Pokémon's appeal,\l"
 	.string "I was close to tears.\p"
 	.string "{STR_VAR_2}, you were resilient!\n"
 	.string "Way to go!$"
 
-gTVContestLiveUpdatesText22:: @ 0828A4CF
+ContestLiveUpdates_Text_MoveWonderful:: @ 0828A4CF
 	.string "Spectator: Oh…\n"
 	.string "That {STR_VAR_2}'s {STR_VAR_3}!\l"
 	.string "{STR_VAR_2}'s {STR_VAR_3}!\l"
 	.string "{STR_VAR_2}'s {STR_VAR_3}!\l"
 	.string "How could it be so wonderful?$"
 
-gTVContestLiveUpdatesText23:: @ 0828A51C
+ContestLiveUpdates_Text_TalkAboutAnotherMon:: @ 0828A51C
 	.string "MC: Well, there you have it. This place\n"
 	.string "is full of the {STR_VAR_1}'s fans!\p"
 	.string "I should also mention that another\n"
@@ -2573,20 +2575,20 @@ gTVContestLiveUpdatesText23:: @ 0828A51C
 	.string "caught my eye.\p"
 	.string "{STR_VAR_2}'s {STR_VAR_3}…$"
 
-gTVContestLiveUpdatesText24:: @ 0828A5AC
+ContestLiveUpdates_Text_FailedToAppeal:: @ 0828A5AC
 	.string "It failed to make a single appeal during\n"
 	.string "secondary judging out of nervousness.\p"
 	.string "Next time, I would like to see this\n"
 	.string "{STR_VAR_1} make even one appeal.$"
 
-gTVContestLiveUpdatesText25:: @ 0828A638
+ContestLiveUpdates_Text_LastInBothRounds:: @ 0828A638
 	.string "It came dead last in both primary\n"
 	.string "and secondary judging.\p"
 	.string "I hope that {STR_VAR_1} will retrain this\n"
 	.string "{STR_VAR_2} and erase the shame of\l"
 	.string "this undisputed last-place finish.$"
 
-gTVContestLiveUpdatesText26:: @ 0828A6CF
+ContestLiveUpdates_Text_NotExcitingEnough:: @ 0828A6CF
 	.string "It failed to take advantage of\n"
 	.string "the audience's excitement and make\l"
 	.string "an appropriate appeal.\p"
@@ -2594,7 +2596,7 @@ gTVContestLiveUpdatesText26:: @ 0828A6CF
 	.string "a feel for the audience and whip their\l"
 	.string "excitement to a fever pitch next time.$"
 
-gTVContestLiveUpdatesText27:: @ 0828A797
+ContestLiveUpdates_Text_LostAfterWinningRound1:: @ 0828A797
 	.string "While finishing first in the primary\n"
 	.string "judging, its appeals in the secondary\l"
 	.string "judging failed to click.\p"
@@ -2603,14 +2605,14 @@ gTVContestLiveUpdatesText27:: @ 0828A797
 	.string "I'm sure {STR_VAR_1} is studying how to\n"
 	.string "make more effective appeals now.$"
 
-gTVContestLiveUpdatesText28:: @ 0828A86D
+ContestLiveUpdates_Text_NeverExciting:: @ 0828A86D
 	.string "The audience never got excited by its\n"
 	.string "appeals during the secondary judging.\p"
 	.string "We hope it will stop worrying about\n"
 	.string "other Pokémon and learn to pitch\l"
 	.string "its appeals to the audience more.$"
 
-gTVContestLiveUpdatesText29:: @ 0828A920
+ContestLiveUpdates_Text_LostBySmallMargin:: @ 0828A920
 	.string "It lost to {STR_VAR_1}'s {STR_VAR_2}\n"
 	.string "by only a small margin.\p"
 	.string "It must be heartbreaking to come\n"
@@ -2618,7 +2620,7 @@ gTVContestLiveUpdatesText29:: @ 0828A920
 	.string "I wouldn't be surprised if {STR_VAR_3}\n"
 	.string "were weeping over this outcome.$"
 
-gTVContestLiveUpdatesText30:: @ 0828A9CC
+ContestLiveUpdates_Text_RepeatedAppeals:: @ 0828A9CC
 	.string "It disappointed the Judge by\n"
 	.string "repeating the same appeals.\p"
 	.string "It's an unforgivable error in any\n"
@@ -2626,14 +2628,14 @@ gTVContestLiveUpdatesText30:: @ 0828A9CC
 	.string "{STR_VAR_1} should feel guilty for\n"
 	.string "this sorry showing.$"
 
-gTVContestLiveUpdatesText31:: @ 0828AA74
+ContestLiveUpdates_Text_ValiantEffortButLost:: @ 0828AA74
 	.string "{STR_VAR_1} turned in a valiant effort,\n"
 	.string "but…\p"
 	.string "It was all for naught, finishing last.\p"
 	.string "{STR_VAR_1} should learn from this loss\n"
 	.string "and put the knowledge to good use.$"
 
-gTVContestLiveUpdatesText32:: @ 0828AB01
+ContestLiveUpdates_Text_Outro:: @ 0828AB01
 	.string "I'd like to end this program with our\n"
 	.string "usual farewell to the winners.\p"
 	.string "This time, it's {STR_VAR_1} and\n"
@@ -2923,7 +2925,7 @@ gTVInSearchOfTrainersText08:: @ 0828C011
 	.string "That's all for today!\n"
 	.string "See you again on our next broadcast!$"
 
-gTVPokemonContestLiveUpdates2Text00:: @ 0828C137
+ContestLadyShow_Text_Intro:: @ 0828C137
 	.string "“Pokémon Contest LIVE UPDATES!”\p"
 	.string "MC: Sorry to interrupt the regular\n"
 	.string "programming, and thanks for joining us!\p"
@@ -2938,7 +2940,7 @@ gTVPokemonContestLiveUpdates2Text00:: @ 0828C137
 	.string "Spectators: ?!!!!\n"
 	.string "?!!!!$"
 
-gTVPokemonContestLiveUpdates2Text01:: @ 0828C28C
+ContestLadyShow_Text_Won:: @ 0828C28C
 	.string "MC: Excuse me!\n"
 	.string "Thanks for joining us on live TV!\p"
 	.string "May I congratulate you on your win?\p"
@@ -2957,7 +2959,7 @@ gTVPokemonContestLiveUpdates2Text01:: @ 0828C28C
 	.string "We did it!\l"
 	.string "Thank you!$"
 
-gTVPokemonContestLiveUpdates2Text02:: @ 0828C45B
+ContestLadyShow_Text_Lost:: @ 0828C45B
 	.string "MC: Excuse me!\n"
 	.string "Thanks for joining us on live TV!\p"
 	.string "You must be disappointed by that turn\n"
@@ -2977,7 +2979,7 @@ gTVPokemonContestLiveUpdates2Text02:: @ 0828C45B
 	.string "Uh… That's all the time we have today!\n"
 	.string "Thanks for tuning in!$"
 
-gTVPokemonContestLiveUpdates2Text03:: @ 0828C662
+ContestLadyShow_Text_LostBadly:: @ 0828C662
 	.string "MC: Excuse me!\n"
 	.string "Thanks for joining us on live TV!\p"
 	.string "How did your Contest appearance go?\p"

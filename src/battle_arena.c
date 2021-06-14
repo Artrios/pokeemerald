@@ -53,7 +53,7 @@ static const s8 sMindRatings[] =
     [MOVE_ICE_PUNCH] = 1,
     [MOVE_THUNDER_PUNCH] = 1,
     [MOVE_SCRATCH] = 1,
-    [MOVE_VICE_GRIP] = 1,
+    [MOVE_VISE_GRIP] = 1,
     [MOVE_GUILLOTINE] = 1,
     [MOVE_RAZOR_WIND] = 1,
     [MOVE_SWORDS_DANCE] = 0,
@@ -178,7 +178,7 @@ static const s8 sMindRatings[] =
     [MOVE_AMNESIA] = 0,
     [MOVE_KINESIS] = 0,
     [MOVE_SOFT_BOILED] = 0,
-    [MOVE_HI_JUMP_KICK] = 1,
+    [MOVE_HIGH_JUMP_KICK] = 1,
     [MOVE_GLARE] = 0,
     [MOVE_DREAM_EATER] = 1,
     [MOVE_POISON_GAS] = 0,
@@ -227,7 +227,7 @@ static const s8 sMindRatings[] =
     [MOVE_PROTECT] = -1,
     [MOVE_MACH_PUNCH] = 1,
     [MOVE_SCARY_FACE] = 0,
-    [MOVE_FAINT_ATTACK] = 1,
+    [MOVE_FEINT_ATTACK] = 1,
     [MOVE_SWEET_KISS] = 0,
     [MOVE_BELLY_DRUM] = 0,
     [MOVE_SLUDGE_BOMB] = 1,
@@ -307,7 +307,7 @@ static const s8 sMindRatings[] =
     [MOVE_MEMENTO] = 0,
     [MOVE_FACADE] = 1,
     [MOVE_FOCUS_PUNCH] = 1,
-    [MOVE_SMELLING_SALT] = 1,
+    [MOVE_SMELLING_SALTS] = 1,
     [MOVE_FOLLOW_ME] = 0,
     [MOVE_NATURE_POWER] = 0,
     [MOVE_CHARGE] = 0,
@@ -563,7 +563,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         }
         break;
     case 4:
-        PlaySE(SE_HANTEI1);
+        PlaySE(SE_ARENA_TIMEUP1);
         ShowJudgmentSprite(80, 40, ARENA_CATEGORY_MIND, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 40, ARENA_CATEGORY_MIND, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgement);
@@ -572,7 +572,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ret = 1;
         break;
     case 5:
-        PlaySE(SE_HANTEI1);
+        PlaySE(SE_ARENA_TIMEUP1);
         ShowJudgmentSprite(80, 56, ARENA_CATEGORY_SKILL, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 56, ARENA_CATEGORY_SKILL, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgement);
@@ -581,7 +581,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ret = 1;
         break;
     case 6:
-        PlaySE(SE_HANTEI1);
+        PlaySE(SE_ARENA_TIMEUP1);
         ShowJudgmentSprite(80, 72, ARENA_CATEGORY_BODY, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 72, ARENA_CATEGORY_BODY, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgement);
@@ -590,7 +590,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ret = 1;
         break;
     case 7:
-        PlaySE(SE_HANTEI2);
+        PlaySE(SE_ARENA_TIMEUP2);
         if (gBattleTextBuff1[0] > gBattleTextBuff2[0])
         {
             ret = 2;
@@ -774,7 +774,8 @@ void BattleArena_DeductMindPoints(u8 battler, u16 stringId)
     }
 }
 
-void sub_81A586C(u8 battler) // Unused.
+// Unused
+static void UpdateHPAtStart(u8 battler)
 {
     u16 *hpAtStart = gBattleStruct->arenaStartHp;
 

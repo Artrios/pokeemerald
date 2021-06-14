@@ -1,3 +1,5 @@
+.set LOCALID_ATTENDANT, 1
+
 BattleFrontier_BattleFactoryPreBattleRoom_MapScripts:: @ 8259ABA
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, BattleFrontier_BattleFactoryPreBattleRoom_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, BattleFrontier_BattleFactoryPreBattleRoom_OnWarp
@@ -11,8 +13,8 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_SetUpObjects:: @ 8259ACF
 	setvar VAR_TEMP_1, 1
 	compare VAR_0x8006, 1
 	goto_if_ne BattleFrontier_BattleFactoryPreBattleRoom_EventScript_TurnPlayerNorth
-	setobjectxy 1, 8, 7
-	turnobject 1, DIR_SOUTH
+	setobjectxy LOCALID_ATTENDANT, 8, 7
+	turnobject LOCALID_ATTENDANT, DIR_SOUTH
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_TurnPlayerNorth:: @ 8259AEA
 	turnobject OBJ_EVENT_ID_PLAYER, DIR_NORTH
 	end
@@ -25,7 +27,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterRoom:: @ 8259AF9
 	compare VAR_0x8006, 1
 	goto_if_eq BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReturnToRoomFromBattle
 	setvar VAR_TEMP_0, 1
-	applymovement 1, BattleFrontier_BattleFactoryPreBattleRoom_Movement_AttendantEnterRoom
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleFactoryPreBattleRoom_Movement_AttendantEnterRoom
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleFactoryPreBattleRoom_Movement_PlayerEnterRoom
 	waitmovement 0
 	compare VAR_0x8006, 2
@@ -60,21 +62,21 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReturnToRoomFromBattle:: @
 	factory_setopponentmons
 	factory_resethelditems
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_LetUsRestoreMons, MSGBOX_DEFAULT
-	playfanfare MUS_ME_ASA
+	playfanfare MUS_HEAL
 	waitfanfare
 	special HealPlayerParty
 	frontier_getbrainstatus
 	compare VAR_RESULT, FRONTIER_BRAIN_NOT_READY
 	goto_if_eq BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
-	playse SE_TOREEYE
+	playse SE_POKENAV_CALL
 	waitse
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_WaitFewMoments, MSGBOX_DEFAULT
 	closemessage
-	applymovement 1, BattleFrontier_BattleFactoryPreBattleRoom_Movement_AttendantMoveToReceiveCall
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleFactoryPreBattleRoom_Movement_AttendantMoveToReceiveCall
 	waitmovement 0
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_UnderstoodSirWillDo, MSGBOX_DEFAULT
 	closemessage
-	applymovement 1, BattleFrontier_BattleFactoryPreBattleRoom_Movement_AttendantReturnToPlayer
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleFactoryPreBattleRoom_Movement_AttendantReturnToPlayer
 	waitmovement 0
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_MessageFromHeadComeRightNow, MSGBOX_DEFAULT
 	closemessage
@@ -103,7 +105,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponentNoRecord
-	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, 1
+	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, TRUE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskSwapMon
 	case 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskRecordBattle
@@ -112,7 +114,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponent
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponentNoRecord:: @ 8259CC6
-	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, 1
+	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, TRUE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskSwapMon
 	case 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskPauseChallenge
@@ -122,7 +124,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponentNoRecor
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskRecordBattle:: @ 8259CFC
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_RecordLatestBattle
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponent
 	case 0, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_RecordBattle
@@ -142,7 +144,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskPauseChallenge:: @ 8259
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskRetireChallenge:: @ 8259D66
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_RetireFromChallenge
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponent
 	case 0, BattleFrontier_BattleFactoryBattleRoom_EventScript_WarpToLobbyLost
@@ -166,7 +168,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_SwapMons:: @ 8259DF2
 	fadescreen FADE_TO_BLACK
 	factory_swapmons
 	waitstate
-	compare VAR_RESULT, 1
+	compare VAR_RESULT, TRUE  @ Did player keep current pokemon
 	goto_if_eq BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom
 	factory_setswapped
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_YourSwapIsComplete, MSGBOX_DEFAULT
@@ -394,7 +396,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForHead:: @ 825A0B
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForHeadNoRecord
-	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, 1
+	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, TRUE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskSwapBeforeHead
 	case 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskRecordBattle
@@ -403,7 +405,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForHead:: @ 825A0B
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForHead
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForHeadNoRecord:: @ 825A110
-	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, 1
+	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, TRUE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskSwapBeforeHead
 	case 1, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskPauseChallenge
@@ -419,12 +421,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskSwapBeforeHead:: @ 825A
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_WalkToBattleRoomLv50:: @ 825A17C
-	applymovement 1, BattleFrontier_BattleFactoryPreBattleRoom_Movement_GuideWalkToBattleRoomLv50
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleFactoryPreBattleRoom_Movement_GuideWalkToBattleRoomLv50
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleFactoryPreBattleRoom_Movement_PlayerWalkToBattleRoomLv50
 	return
 
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_WalkToBattleRoomLvOpen:: @ 825A18B
-	applymovement 1, BattleFrontier_BattleFactoryPreBattleRoom_Movement_GuideWalkToBattleRoomLvOpen
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleFactoryPreBattleRoom_Movement_GuideWalkToBattleRoomLvOpen
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleFactoryPreBattleRoom_Movement_PlayerWalkToBattleRoomLvOpen
 	return
 

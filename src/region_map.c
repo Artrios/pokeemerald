@@ -9,7 +9,6 @@
 #include "trig.h"
 #include "constants/maps.h"
 #include "overworld.h"
-#include "constants/flags.h"
 #include "event_data.h"
 #include "secret_base.h"
 #include "string_util.h"
@@ -129,30 +128,34 @@ static const u8 sRegionMap_MapSectionLayout[] = INCBIN_U8("graphics/pokenav/regi
 
 static const u16 sRegionMap_SpecialPlaceLocations[][2] =
 {
-    {MAPSEC_UNDERWATER_TERRA_CAVE,     MAPSEC_ROUTE_105},
-    {MAPSEC_UNDERWATER_124,            MAPSEC_ROUTE_124},
-    {MAPSEC_UNDERWATER_UNK1,           MAPSEC_ROUTE_129},
-    {MAPSEC_UNDERWATER_125,            MAPSEC_ROUTE_126},
-    {MAPSEC_UNDERWATER_126,            MAPSEC_ROUTE_127},
-    {MAPSEC_UNDERWATER_127,            MAPSEC_ROUTE_128},
-    {MAPSEC_UNDERWATER_129,            MAPSEC_ROUTE_129},
-    {MAPSEC_UNDERWATER_SOOTOPOLIS,     MAPSEC_SOOTOPOLIS_CITY},
-    {MAPSEC_UNDERWATER_128,            MAPSEC_ROUTE_128},
-    {MAPSEC_AQUA_HIDEOUT,              MAPSEC_LILYCOVE_CITY},
-    {MAPSEC_AQUA_HIDEOUT_OLD,          MAPSEC_LILYCOVE_CITY},
-    {MAPSEC_MAGMA_HIDEOUT,             MAPSEC_ROUTE_112},
-    {MAPSEC_UNDERWATER_SEALED_CHAMBER, MAPSEC_ROUTE_134},
-    {MAPSEC_PETALBURG_WOODS,           MAPSEC_ROUTE_104},
-    {MAPSEC_JAGGED_PASS,               MAPSEC_ROUTE_112},
-    {MAPSEC_MT_PYRE,                   MAPSEC_ROUTE_122},
-    {MAPSEC_SKY_PILLAR,                MAPSEC_ROUTE_131},
-    {MAPSEC_MIRAGE_TOWER,              MAPSEC_ROUTE_111},
-    {MAPSEC_TRAINER_HILL,              MAPSEC_ROUTE_111},
-    {MAPSEC_DESERT_UNDERPASS,          MAPSEC_ROUTE_114},
-    {MAPSEC_ALTERING_CAVE,             MAPSEC_ROUTE_103},
-    {MAPSEC_ARTISAN_CAVE,              MAPSEC_ROUTE_103},
-    {MAPSEC_ABANDONED_SHIP,            MAPSEC_ROUTE_108},
-    {MAPSEC_NONE,                      MAPSEC_NONE}
+    {MAPSEC_UNDERWATER_105,             MAPSEC_ROUTE_105},
+    {MAPSEC_UNDERWATER_124,             MAPSEC_ROUTE_124},
+    #ifdef BUGFIX
+    {MAPSEC_UNDERWATER_125,             MAPSEC_ROUTE_125},
+    #else
+    {MAPSEC_UNDERWATER_125,             MAPSEC_ROUTE_129}, // BUG: Map will incorrectly display the name of Route 129 when diving on Route 125 (for Marine Cave only)
+    #endif
+    {MAPSEC_UNDERWATER_126,             MAPSEC_ROUTE_126},
+    {MAPSEC_UNDERWATER_127,             MAPSEC_ROUTE_127},
+    {MAPSEC_UNDERWATER_128,             MAPSEC_ROUTE_128},
+    {MAPSEC_UNDERWATER_129,             MAPSEC_ROUTE_129},
+    {MAPSEC_UNDERWATER_SOOTOPOLIS,      MAPSEC_SOOTOPOLIS_CITY},
+    {MAPSEC_UNDERWATER_SEAFLOOR_CAVERN, MAPSEC_ROUTE_128},
+    {MAPSEC_AQUA_HIDEOUT,               MAPSEC_LILYCOVE_CITY},
+    {MAPSEC_AQUA_HIDEOUT_OLD,           MAPSEC_LILYCOVE_CITY},
+    {MAPSEC_MAGMA_HIDEOUT,              MAPSEC_ROUTE_112},
+    {MAPSEC_UNDERWATER_SEALED_CHAMBER,  MAPSEC_ROUTE_134},
+    {MAPSEC_PETALBURG_WOODS,            MAPSEC_ROUTE_104},
+    {MAPSEC_JAGGED_PASS,                MAPSEC_ROUTE_112},
+    {MAPSEC_MT_PYRE,                    MAPSEC_ROUTE_122},
+    {MAPSEC_SKY_PILLAR,                 MAPSEC_ROUTE_131},
+    {MAPSEC_MIRAGE_TOWER,               MAPSEC_ROUTE_111},
+    {MAPSEC_TRAINER_HILL,               MAPSEC_ROUTE_111},
+    {MAPSEC_DESERT_UNDERPASS,           MAPSEC_ROUTE_114},
+    {MAPSEC_ALTERING_CAVE,              MAPSEC_ROUTE_103},
+    {MAPSEC_ARTISAN_CAVE,               MAPSEC_ROUTE_103},
+    {MAPSEC_ABANDONED_SHIP,             MAPSEC_ROUTE_108},
+    {MAPSEC_NONE,                       MAPSEC_NONE}
 };
 
 static const u16 sMarineCaveMapSecIds[] =
@@ -652,31 +655,31 @@ static u8 ProcessRegionMapInput_Full(void)
     input = MAP_INPUT_NONE;
     gRegionMap->cursorDeltaX = 0;
     gRegionMap->cursorDeltaY = 0;
-    if (gMain.heldKeys & DPAD_UP && gRegionMap->cursorPosY > MAPCURSOR_Y_MIN)
+    if (JOY_HELD(DPAD_UP) && gRegionMap->cursorPosY > MAPCURSOR_Y_MIN)
     {
         gRegionMap->cursorDeltaY = -1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.heldKeys & DPAD_DOWN && gRegionMap->cursorPosY < MAPCURSOR_Y_MAX)
+    if (JOY_HELD(DPAD_DOWN) && gRegionMap->cursorPosY < MAPCURSOR_Y_MAX)
     {
         gRegionMap->cursorDeltaY = +1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.heldKeys & DPAD_LEFT && gRegionMap->cursorPosX > MAPCURSOR_X_MIN)
+    if (JOY_HELD(DPAD_LEFT) && gRegionMap->cursorPosX > MAPCURSOR_X_MIN)
     {
         gRegionMap->cursorDeltaX = -1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.heldKeys & DPAD_RIGHT && gRegionMap->cursorPosX < MAPCURSOR_X_MAX)
+    if (JOY_HELD(DPAD_RIGHT) && gRegionMap->cursorPosX < MAPCURSOR_X_MAX)
     {
         gRegionMap->cursorDeltaX = +1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.newKeys & A_BUTTON)
+    if (JOY_NEW(A_BUTTON))
     {
         input = MAP_INPUT_A_BUTTON;
     }
-    else if (gMain.newKeys & B_BUTTON)
+    else if (JOY_NEW(B_BUTTON))
     {
         input = MAP_INPUT_B_BUTTON;
     }
@@ -731,31 +734,31 @@ static u8 ProcessRegionMapInput_Zoomed(void)
     input = MAP_INPUT_NONE;
     gRegionMap->zoomedCursorDeltaX = 0;
     gRegionMap->zoomedCursorDeltaY = 0;
-    if (gMain.heldKeys & DPAD_UP && gRegionMap->scrollY > -0x34)
+    if (JOY_HELD(DPAD_UP) && gRegionMap->scrollY > -0x34)
     {
         gRegionMap->zoomedCursorDeltaY = -1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.heldKeys & DPAD_DOWN && gRegionMap->scrollY < 0x3c)
+    if (JOY_HELD(DPAD_DOWN) && gRegionMap->scrollY < 0x3c)
     {
         gRegionMap->zoomedCursorDeltaY = +1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.heldKeys & DPAD_LEFT && gRegionMap->scrollX > -0x2c)
+    if (JOY_HELD(DPAD_LEFT) && gRegionMap->scrollX > -0x2c)
     {
         gRegionMap->zoomedCursorDeltaX = -1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.heldKeys & DPAD_RIGHT && gRegionMap->scrollX < 0xac)
+    if (JOY_HELD(DPAD_RIGHT) && gRegionMap->scrollX < 0xac)
     {
         gRegionMap->zoomedCursorDeltaX = +1;
         input = MAP_INPUT_MOVE_START;
     }
-    if (gMain.newKeys & A_BUTTON)
+    if (JOY_NEW(A_BUTTON))
     {
         input = MAP_INPUT_A_BUTTON;
     }
-    if (gMain.newKeys & B_BUTTON)
+    if (JOY_NEW(B_BUTTON))
     {
         input = MAP_INPUT_B_BUTTON;
     }
@@ -999,8 +1002,8 @@ void RegionMap_GetSectionCoordsFromCurrFieldPos(u16* mapSectionId, u16* cursorPo
         mapHeight = gMapHeader.mapLayout->height;
         x = gSaveBlock1Ptr->pos.x;
         y = gSaveBlock1Ptr->pos.y;
-        if (*mapSectionId == MAPSEC_UNDERWATER_128 || *mapSectionId == MAPSEC_UNDERWATER_MARINE_CAVE)
-            *playerIsInCave = TRUE;
+        if (gRegionMap->mapSecId == MAPSEC_UNDERWATER_SEAFLOOR_CAVERN || gRegionMap->mapSecId == MAPSEC_UNDERWATER_MARINE_CAVE)
+            gRegionMap->playerIsInCave = TRUE;
         break;
     case MAP_TYPE_UNDERGROUND:
     case MAP_TYPE_UNKNOWN:
@@ -1090,7 +1093,7 @@ void RegionMap_GetSectionCoordsFromCurrFieldPos(u16* mapSectionId, u16* cursorPo
             x = 0;
         break;
     case MAPSEC_ROUTE_126:
-    case MAPSEC_UNDERWATER_125:
+    case MAPSEC_UNDERWATER_126:
         x = 0;
         if (gSaveBlock1Ptr->pos.x > 32)
             x++;
@@ -1748,7 +1751,7 @@ void CB2_OpenFlyMap(void)
         break;
     case 1:
         ResetBgsAndClearDma3BusyFlags(0);
-        InitBgsFromTemplates(1, sFlyMapBgTemplates, 3);
+        InitBgsFromTemplates(1, sFlyMapBgTemplates, ARRAY_COUNT(sFlyMapBgTemplates));
         gMain.state++;
         break;
     case 2:
@@ -1758,7 +1761,7 @@ void CB2_OpenFlyMap(void)
         break;
     case 3:
         LoadUserWindowBorderGfx(0, 0x65, 0xd0);
-        clear_scheduled_bg_copies_to_vram();
+        ClearScheduledBgCopiesToVram();
         gMain.state++;
         break;
     case 4:
@@ -1792,7 +1795,7 @@ void CB2_OpenFlyMap(void)
         gMain.state++;
         break;
     case 9:
-        BlendPalettes(-1, 16, 0);
+        BlendPalettes(PALETTES_ALL, 16, 0);
         SetVBlankCallback(VBlankCB_FlyMap);
         gMain.state++;
         break;
@@ -1821,7 +1824,7 @@ static void CB2_FlyMap(void)
     sFlyMap->callback();
     AnimateSprites();
     BuildOamBuffer();
-    do_scheduled_bg_tilemap_copies_to_vram();
+    DoScheduledBgTilemapCopiesToVram();
 }
 
 static void SetFlyMapCallback(void callback(void))
@@ -2007,7 +2010,7 @@ static void CB_FadeInFlyMap(void)
     switch (sFlyMap->state)
     {
     case 0:
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 16, 0, RGB_BLACK);
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
         sFlyMap->state++;
         break;
     case 1:
@@ -2053,53 +2056,53 @@ static void CB_ExitFlyMap(void)
 {
     switch (sFlyMap->state)
     {
-        case 0:
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-            sFlyMap->state++;
-            break;
-        case 1:
-            if (!UpdatePaletteFade())
+    case 0:
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        sFlyMap->state++;
+        break;
+    case 1:
+        if (!UpdatePaletteFade())
+        {
+            FreeRegionMapIconResources();
+            if (sFlyMap->choseFlyLocation)
             {
-                FreeRegionMapIconResources();
-                if (sFlyMap->choseFlyLocation)
+                switch (sFlyMap->regionMap.mapSecId)
                 {
-                    switch (sFlyMap->regionMap.mapSecId)
-                    {
-                        case MAPSEC_SOUTHERN_ISLAND:
-                            SetWarpDestinationToHealLocation(HEAL_LOCATION_SOUTHERN_ISLAND_EXTERIOR);
-                            break;
-                        case MAPSEC_BATTLE_FRONTIER:
-                            SetWarpDestinationToHealLocation(HEAL_LOCATION_BATTLE_FRONTIER_OUTSIDE_EAST);
-                            break;
-                        case MAPSEC_LITTLEROOT_TOWN:
-                            SetWarpDestinationToHealLocation(gSaveBlock2Ptr->playerGender == MALE ? HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE : HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE);
-                            break;
-                        case MAPSEC_EVER_GRANDE_CITY:
-                            SetWarpDestinationToHealLocation(FlagGet(FLAG_LANDMARK_POKEMON_LEAGUE) && sFlyMap->regionMap.posWithinMapSec == 0 ? HEAL_LOCATION_EVER_GRANDE_CITY_POKEMON_LEAGUE : HEAL_LOCATION_EVER_GRANDE_CITY);
-                            break;
-						case MAPSEC_MT_CHIMNEY:
-							SetWarpDestinationToHealLocation(HEAL_LOCATION_MT_CHIMNEY);
-							break;
-                        default:
-                            if (sMapHealLocations[sFlyMap->regionMap.mapSecId][2] != 0)
-                                SetWarpDestinationToHealLocation(sMapHealLocations[sFlyMap->regionMap.mapSecId][2]);
-                            else
-                                SetWarpDestinationToMapWarp(sMapHealLocations[sFlyMap->regionMap.mapSecId][0], sMapHealLocations[sFlyMap->regionMap.mapSecId][1], -1);
-                            break;
-                    }
-                    ReturnToFieldFromFlyMapSelect();
+                case MAPSEC_SOUTHERN_ISLAND:
+                    SetWarpDestinationToHealLocation(HEAL_LOCATION_SOUTHERN_ISLAND_EXTERIOR);
+                    break;
+                case MAPSEC_BATTLE_FRONTIER:
+                    SetWarpDestinationToHealLocation(HEAL_LOCATION_BATTLE_FRONTIER_OUTSIDE_EAST);
+                    break;
+                case MAPSEC_LITTLEROOT_TOWN:
+                    SetWarpDestinationToHealLocation(gSaveBlock2Ptr->playerGender == MALE ? HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE : HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE);
+                    break;
+                case MAPSEC_EVER_GRANDE_CITY:
+                    SetWarpDestinationToHealLocation(FlagGet(FLAG_LANDMARK_POKEMON_LEAGUE) && sFlyMap->regionMap.posWithinMapSec == 0 ? HEAL_LOCATION_EVER_GRANDE_CITY_POKEMON_LEAGUE : HEAL_LOCATION_EVER_GRANDE_CITY);
+                    break;
+                case MAPSEC_MT_CHIMNEY:
+                    SetWarpDestinationToHealLocation(HEAL_LOCATION_MT_CHIMNEY);
+                    break;
+                default:
+                    if (sMapHealLocations[sFlyMap->regionMap.mapSecId][2] != 0)
+                        SetWarpDestinationToHealLocation(sMapHealLocations[sFlyMap->regionMap.mapSecId][2]);
+                    else
+                        SetWarpDestinationToMapWarp(sMapHealLocations[sFlyMap->regionMap.mapSecId][0], sMapHealLocations[sFlyMap->regionMap.mapSecId][1], -1);
+                    break;
                 }
-                else
-                {
-                    SetMainCallback2(CB2_ReturnToPartyMenuFromFlyMap);
-                }
-                if (sFlyMap != NULL)
-                {
-                    free(sFlyMap);
-                    sFlyMap = NULL;
-                }
-                FreeAllWindowBuffers();
+                ReturnToFieldFromFlyMapSelect();
             }
-            break;
+            else
+            {
+                SetMainCallback2(CB2_ReturnToPartyMenuFromFlyMap);
+            }
+            if (sFlyMap != NULL)
+            {
+                free(sFlyMap);
+                sFlyMap = NULL;
+            }
+            FreeAllWindowBuffers();
+        }
+        break;
     }
 }

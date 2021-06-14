@@ -23,6 +23,7 @@
 #define ABILITYEFFECT_TRACE1                     0xC
 #define ABILITYEFFECT_TRACE2                     0xD
 #define ABILITYEFFECT_MOVE_END_OTHER             0xE
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN          0xFE
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
 
 #define ITEMEFFECT_ON_SWITCH_IN                 0x0
@@ -45,6 +46,19 @@ struct TypePower
 
 extern const struct TypePower gNaturalGiftTable[];
 
+void HandleAction_UseMove(void);
+void HandleAction_Switch(void);
+void HandleAction_UseItem(void);
+void HandleAction_Run(void);
+void HandleAction_WatchesCarefully(void);
+void HandleAction_SafariZoneBallThrow(void);
+void HandleAction_ThrowPokeblock(void);
+void HandleAction_GoNear(void);
+void HandleAction_SafariZoneRun(void);
+void HandleAction_WallyBallThrow(void);
+void HandleAction_TryFinish(void);
+void HandleAction_NothingIsFainted(void);
+void HandleAction_ActionFinished(void);
 u8 GetBattlerForBattleScript(u8 caseId);
 void PressurePPLose(u8 target, u8 attacker, u16 move);
 void PressurePPLoseOnUsingPerishSong(u8 attacker);
@@ -52,13 +66,13 @@ void PressurePPLoseOnUsingImprison(u8 attacker);
 void MarkAllBattlersForControllerExec(void); // unused
 bool32 IsBattlerMarkedForControllerExec(u8 battlerId);
 void MarkBattlerForControllerExec(u8 battlerId);
-void sub_803F850(u8 arg0);
+void MarkBattlerReceivedLinkData(u8 arg0);
 void CancelMultiTurnMoves(u8 battlerId);
 bool8 WasUnableToUseMove(u8 battlerId);
 void PrepareStringBattle(u16 stringId, u8 battlerId);
 void ResetSentPokesToOpponentValue(void);
-void sub_803F9EC(u8 battlerId);
-void sub_803FA70(u8 battlerId);
+void OpponentSwitchInResetSentPokesToOpponentValue(u8 battlerId);
+void UpdateSentPokesToOpponentValue(u8 battlerId);
 void BattleScriptPush(const u8* bsPtr);
 void BattleScriptPushCursor(void);
 void BattleScriptPop(void);
@@ -77,7 +91,7 @@ u8 AtkCanceller_UnableToUseMove2(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 u8 TryWeatherFormChange(u8 battlerId);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
-u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u8 ability, u8 special, u16 moveArg);
+u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
 u32 GetBattlerAbility(u8 battlerId);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);
 u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
@@ -102,10 +116,11 @@ u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, u16 move);
 u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
-u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u8 abilityDef);
+u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef);
 u16 GetTypeModifier(u8 atkType, u8 defType);
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
+u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4);
 bool32 CanMegaEvolve(u8 battlerId);
 void UndoMegaEvolution(u32 monId);
 void UndoFormChange(u32 monId, u32 side);
@@ -114,5 +129,23 @@ bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
 struct Pokemon *GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+bool8 ShouldGetStatBadgeBoost(u16 flagId, u8 battlerId);
+u8 GetBattleMoveSplit(u32 moveId);
+bool32 TestMoveFlags(u16 move, u32 flag);
+struct Pokemon *GetBattlerPartyData(u8 battlerId);
+bool32 CanFling(u8 battlerId);
+bool32 IsTelekinesisBannedSpecies(u16 species);
+bool32 IsHealBlockPreventingMove(u32 battler, u32 move);
+bool32 IsThawingMove(u8 battlerId, u16 move);
+bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
+
+// ability checks
+bool32 IsRolePlayBannedAbilityAtk(u16 ability);
+bool32 IsRolePlayBannedAbility(u16 ability);
+bool32 IsSkillSwapBannedAbility(u16 ability);
+bool32 IsWorrySeedBannedAbility(u16 ability);
+bool32 IsGastroAcidBannedAbility(u16 ability);
+bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 
 #endif // GUARD_BATTLE_UTIL_H

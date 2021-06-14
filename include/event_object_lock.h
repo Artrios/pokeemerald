@@ -1,13 +1,13 @@
 #ifndef GUARD_EVENT_OBJECT_LOCK_H
 #define GUARD_EVENT_OBJECT_LOCK_H
 
-bool8 sub_80983C4(void);
+bool8 IsFreezePlayerFinished(void);
 void ScriptFreezeObjectEvents(void);
-bool8 sub_809847C(void);
+bool8 IsFreezeSelectedObjectAndPlayerFinished(void);
 void LockSelectedObjectEvent(void);
-void sub_8098630(void);
-bool8 sub_8098734(void);
+void FreezeForApproachingTrainers(void);
+bool8 IsFreezeObjectAndPlayerFinished(void);
 void ScriptUnfreezeObjectEvents(void);
-void sub_8098524(void);
+void UnionRoom_UnlockPlayerAndChatPartner(void);
 
 #endif // GUARD_EVENT_OBJECT_LOCK_H

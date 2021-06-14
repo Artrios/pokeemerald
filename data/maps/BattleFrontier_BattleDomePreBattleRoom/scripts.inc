@@ -1,3 +1,5 @@
+.set LOCALID_ATTENDANT, 1
+
 BattleFrontier_BattleDomePreBattleRoom_MapScripts:: @ 824B1F9
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, BattleFrontier_BattleDomePreBattleRoom_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, BattleFrontier_BattleDomePreBattleRoom_OnWarp
@@ -31,7 +33,7 @@ BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRound:: @ 824B
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRoundNoRecord
-	multichoice 16, 0, MULTI_TOURNEY_WITH_RECORD, 1
+	multichoice 16, 0, MULTI_TOURNEY_WITH_RECORD, TRUE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleDomePreBattleRoom_EventScript_ShowOpponentInfo
 	case 1, BattleFrontier_BattleDomePreBattleRoom_EventScript_ShowTourneyTree
@@ -42,7 +44,7 @@ BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRound:: @ 824B
 	case MULTI_B_PRESSED, BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRound
 
 BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRoundNoRecord:: @ 824B2C1
-	multichoice 16, 2, MULTI_TOURNEY_NO_RECORD, 1
+	multichoice 16, 2, MULTI_TOURNEY_NO_RECORD, TRUE
 	switch VAR_RESULT
 	case 0, BattleFrontier_BattleDomePreBattleRoom_EventScript_ShowOpponentInfo
 	case 1, BattleFrontier_BattleDomePreBattleRoom_EventScript_ShowTourneyTree
@@ -54,7 +56,7 @@ BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRoundNoRecord:
 BattleFrontier_BattleDomePreBattleRoom_EventScript_AskRecordBattle:: @ 824B30D
 	message BattleFrontier_BattleDomePreBattleRoom_Text_RecordLastMatch
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRound
 	case 0, BattleFrontier_BattleDomePreBattleRoom_EventScript_RecordBattle
@@ -74,7 +76,7 @@ BattleFrontier_BattleDomePreBattleRoom_EventScript_AskPauseChallenge:: @ 824B349
 BattleFrontier_BattleDomePreBattleRoom_EventScript_AskRetireChallenge:: @ 824B377
 	message BattleFrontier_BattleDomePreBattleRoom_Text_RetireYourChallenge
 	waitmessage
-	multichoicedefault 20, 8, MULTI_YESNO, 1, 0
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleDomePreBattleRoom_EventScript_AskReadyForNextRound
 	case 0, BattleFrontier_BattleDomePreBattleRoom_EventScript_RetireChallenge
@@ -151,7 +153,7 @@ BattleFrontier_BattleDomePreBattleRoom_EventScript_ContinueChallenge:: @ 824B46D
 	dome_setopponent
 	msgbox BattleFrontier_BattleDomePreBattleRoom_Text_RightThisWay, MSGBOX_DEFAULT
 	closemessage
-	applymovement 1, BattleFrontier_BattleDomePreBattleRoom_Movement_AttendantMoveAside
+	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleDomePreBattleRoom_Movement_AttendantMoveAside
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleDomePreBattleRoom_Movement_PlayerWalkToDoor
 	waitmovement 0
@@ -222,7 +224,7 @@ BattleFrontier_BattleDomePreBattleRoom_EventScript_ReturnFromBattle:: @ 824B5C7
 	msgbox BattleFrontier_BattleDomePreBattleRoom_Text_RestoreMonsToFullHealth, MSGBOX_DEFAULT
 	special LoadPlayerParty
 	frontier_setpartyorder FRONTIER_PARTY_SIZE
-	playfanfare MUS_ME_ASA
+	playfanfare MUS_HEAL
 	waitfanfare
 	special HealPlayerParty
 	call BattleFrontier_BattleDomePreBattleRoom_EventScript_RoundCompleteMessage
