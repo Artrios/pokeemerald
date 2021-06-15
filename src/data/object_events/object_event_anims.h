@@ -795,7 +795,7 @@ static const union AnimCmd sAnim_HoOhStayStill[] =
     ANIMCMD_JUMP(0),
 };
 
-const union AnimCmd gObjectEventImageAnim_MegaStoneSparkle[] =
+const union AnimCmd sAnim_MegaStoneSparkle[] =
 {
     ANIMCMD_FRAME(0, 8),
     ANIMCMD_FRAME(1, 8),
@@ -804,27 +804,27 @@ const union AnimCmd gObjectEventImageAnim_MegaStoneSparkle[] =
     ANIMCMD_JUMP(0),
 };
 
-const union AnimCmd *const gObjectEventImageAnimTable_MegaStoneSparkle[] = {
-    gObjectEventImageAnim_FaceSouth,
-    gObjectEventImageAnim_FaceNorth,
-    gObjectEventImageAnim_FaceWest,
-    gObjectEventImageAnim_FaceEast,
-    gObjectEventImageAnim_MegaStoneSparkle,
-    gObjectEventImageAnim_GoNorth,
-    gObjectEventImageAnim_GoWest,
-    gObjectEventImageAnim_GoEast,
-    gObjectEventImageAnim_GoFastSouth,
-    gObjectEventImageAnim_GoFastNorth,
-    gObjectEventImageAnim_GoFastWest,
-    gObjectEventImageAnim_GoFastEast,
-    gObjectEventImageAnim_GoFasterSouth,
-    gObjectEventImageAnim_GoFasterNorth,
-    gObjectEventImageAnim_GoFasterWest,
-    gObjectEventImageAnim_GoFasterEast,
-    gObjectEventImageAnim_GoFastestSouth,
-    gObjectEventImageAnim_GoFastestNorth,
-    gObjectEventImageAnim_GoFastestWest,
-    gObjectEventImageAnim_GoFastestEast,
+const union AnimCmd *const sAnimTable_MegaStoneSparkle[] = {
+    sAnim_FaceSouth,
+    sAnim_FaceNorth,
+    sAnim_FaceWest,
+    sAnim_FaceEast,
+    sAnim_MegaStoneSparkle,
+    sAnim_GoNorth,
+    sAnim_GoWest,
+    sAnim_GoEast,
+    sAnim_GoFastSouth,
+    sAnim_GoFastNorth,
+    sAnim_GoFastWest,
+    sAnim_GoFastEast,
+    sAnim_GoFasterSouth,
+    sAnim_GoFasterNorth,
+    sAnim_GoFasterWest,
+    sAnim_GoFasterEast,
+    sAnim_GoFastestSouth,
+    sAnim_GoFastestNorth,
+    sAnim_GoFastestWest,
+    sAnim_GoFastestEast,
 };
 
 static const union AnimCmd *const sAnimTable_Inanimate[] = {
@@ -1206,7 +1206,7 @@ static const struct StepAnimTable sStepAnimTables[] = {
         .animPos = {1, 3, 0, 2},
     },
     {
-        .anims = gObjectEventImageAnimTable_MegaStoneSparkle,
+        .anims = sAnimTable_MegaStoneSparkle,
         .animPos = {1, 3, 0, 2},
     },
     {},

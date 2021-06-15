@@ -686,7 +686,7 @@ Route110_EventScript_ItemManectite:: @ 82912F0
 	finditem ITEM_MANECTITE
 	end
 
-Verdanturf_EventScript_ItemMawilite:: @ 82912F0
+Route117_EventScript_ItemMawilite:: @ 82912F0
 	finditem ITEM_MAWILITE
 	end
 

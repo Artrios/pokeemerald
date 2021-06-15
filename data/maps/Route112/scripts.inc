@@ -132,11 +132,11 @@ Route112_EventScript_RivalScene:: @ 81EF9CB
 	end
 
 Route112_EventScript_PlayMayMusic:: @ 81EF7E1
-	playbgm MUS_GIRL_SUP, 1
+	playbgm MUS_ENCOUNTER_MAY, 1
 	return
 
 Route112_EventScript_PlayBrendanMusic:: @ 81EF7E6
-	playbgm MUS_BOY_SUP, 1
+	playbgm MUS_ENCOUNTER_BRENDAN, 1
 	return
 
 Route112_EventScript_RivalApproachPlayer1:: @ 81EF94E

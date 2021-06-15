@@ -1111,7 +1111,7 @@ static const struct TrainerMonNoItemCustomMoves sParty_Mary[] = {
     .iv = 255,
     .lvl = 26,
     .species = SPECIES_DELCATTY,
-    .moves = {MOVE_FAINT_ATTACK, MOVE_SHOCK_WAVE, MOVE_NONE, MOVE_NONE}
+    .moves = {MOVE_FEINT_ATTACK, MOVE_SHOCK_WAVE, MOVE_NONE, MOVE_NONE}
     }
 };
 
@@ -3219,7 +3219,7 @@ static const struct TrainerMonItemCustomMoves sParty_Sidney[] = {
     .lvl = 50,
     .species = SPECIES_SHIFTRY,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_FAKE_OUT, MOVE_FAINT_ATTACK, MOVE_EXTRASENSORY, MOVE_LEAF_BLADE}
+    .moves = {MOVE_FAKE_OUT, MOVE_FEINT_ATTACK, MOVE_EXTRASENSORY, MOVE_LEAF_BLADE}
     },
     {
     .iv = 250,
@@ -3257,7 +3257,7 @@ static const struct TrainerMonItemCustomMoves sParty_Phoebe[] = {
     .lvl = 51,
     .species = SPECIES_BANETTE,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_SHADOW_BALL, MOVE_SPITE, MOVE_WILL_O_WISP, MOVE_FAINT_ATTACK}
+    .moves = {MOVE_SHADOW_BALL, MOVE_SPITE, MOVE_WILL_O_WISP, MOVE_FEINT_ATTACK}
     },
     {
     .iv = 250,
@@ -6752,7 +6752,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallyVR1[] = {
     .lvl = 46,
     .species = SPECIES_DELCATTY,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_SING, MOVE_ASSIST, MOVE_CHARM, MOVE_FAINT_ATTACK}
+    .moves = {MOVE_SING, MOVE_ASSIST, MOVE_CHARM, MOVE_FEINT_ATTACK}
     },
     {
     .iv = 150,
@@ -7603,16 +7603,11 @@ static const struct TrainerMonNoItemDefaultMoves sParty_GruntSeafloorCavern5[] =
     }
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_GruntUnused[] = {
+static const struct TrainerMonNoItemDefaultMoves sParty_GruntSouthernisland[] = {
     {
     .iv = 0,
-    .lvl = 31,
-    .species = SPECIES_WAILMER,
-    },
-    {
-    .iv = 0,
-    .lvl = 31,
-    .species = SPECIES_ZUBAT,
+    .lvl = 29,
+    .species = SPECIES_KOFFING,
     }
 };
 
@@ -12439,3 +12434,18 @@ static const struct TrainerMonNoItemDefaultMoves sParty_MayLinkPlaceholder[] = {
     }
 };
 
+static const struct TrainerMonNoItemDefaultMoves sParty_Courtney[] = {
+    {
+    .iv = 0,
+    .lvl = 31,
+    .species = SPECIES_CAMERUPT,
+    }
+};
+
+static const struct TrainerMonNoItemDefaultMoves sParty_Steven_SouthernIsland[] = {
+    {
+    .iv = 0,
+    .lvl = 35,
+    .species = SPECIES_METANG,
+    }
+};

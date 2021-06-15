@@ -884,7 +884,7 @@ const u32 gTMHMLearnsets[][4] =
 
 	[SPECIES_BONSLY] = { 1280378408, 95393, 184696898, 69 },
 
-	[SPECIES_MIMEJR] = { 1975225900, 50427395, 735069312, 65 },
+	[SPECIES_MIME_JR] = { 1975225900, 50427395, 735069312, 65 },
 
 	[SPECIES_HAPPINY] = { 876316256, 151204937, 197149824, 65 },
 
@@ -1626,13 +1626,13 @@ const u32 gTMHMLearnsets[][4] =
 
     [SPECIES_MELMETAL] = TMHM_LEARNSET(0),
 
-    [SPECIES_BURMY_SANDY] = { 66048, 0, 0, 0 },
+    [SPECIES_BURMY_SANDY_CLOAK] = { 66048, 0, 0, 0 },
 
-    [SPECIES_BURMY_TRASH] = { 66048, 0, 0, 0 },
+    [SPECIES_BURMY_TRASH_CLOAK] = { 66048, 0, 0, 0 },
 
-    [SPECIES_WORMADAM_SANDY]= { 1041975072, 95393, 189849760, 65 },
+    [SPECIES_WORMADAM_SANDY_CLOAK]= { 1041975072, 95393, 189849760, 65 },
 
-    [SPECIES_WORMADAM_TRASH]= { 874202912, 95233, 458254496, 65 },
+    [SPECIES_WORMADAM_TRASH_CLOAK]= { 874202912, 95233, 458254496, 65 },
 
     [SPECIES_ROTOM_HEAT]  = { 630425120, 570512387, 188761728, 73 },
 
@@ -1648,234 +1648,71 @@ const u32 gTMHMLearnsets[][4] =
 
     [SPECIES_KYUREM_WHITE]= { 874509923, 18551939, 453640492, 5569 },
 
-    [SPECIES_MEOWSTIC_F]= { 1016841772, 35862019, 725632168, 217 },
+    [SPECIES_MEOWSTIC_FEMALE]= { 1016841772, 35862019, 725632168, 217 },
 
-    [SPECIES_ALOLAN_RATTATA] = TMHM_LEARNSET(0),
+    [SPECIES_RATTATA_ALOLAN] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_RATICATE]= TMHM_LEARNSET(0),
+    [SPECIES_RATICATE_ALOLAN]= TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_RAICHU]      = TMHM_LEARNSET(0),
+    [SPECIES_RAICHU_ALOLAN]      = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_SANDSHREW]   = TMHM_LEARNSET(0),
+    [SPECIES_SANDSHREW_ALOLAN]   = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_SANDSLASH]   = TMHM_LEARNSET(0),
+    [SPECIES_SANDSLASH_ALOLAN]   = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_VULPIX]   = TMHM_LEARNSET(0),
+    [SPECIES_VULPIX_ALOLAN]   = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_NINETALES]   = TMHM_LEARNSET(0),
+    [SPECIES_NINETALES_ALOLAN]   = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_DIGLETT]     = TMHM_LEARNSET(0),
+    [SPECIES_DIGLETT_ALOLAN]     = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_DUGTRIO]     = TMHM_LEARNSET(0),
+    [SPECIES_DUGTRIO_ALOLAN]     = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_MEOWTH]      = TMHM_LEARNSET(0),
+    [SPECIES_MEOWTH_ALOLAN]      = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_PERSIAN]      = TMHM_LEARNSET(0),
+    [SPECIES_PERSIAN_ALOLAN]      = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_GEODUDE]     = TMHM_LEARNSET(0),
+    [SPECIES_GEODUDE_ALOLAN]     = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_GRAVELER]     = TMHM_LEARNSET(0),
+    [SPECIES_GRAVELER_ALOLAN]     = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_GOLEM]     = TMHM_LEARNSET(0),
+    [SPECIES_GOLEM_ALOLAN]     = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_GRIMER]      = TMHM_LEARNSET(0),
+    [SPECIES_GRIMER_ALOLAN]      = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_MUK]      = TMHM_LEARNSET(0),
+    [SPECIES_MUK_ALOLAN]      = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_EXEGGUTOR]   = TMHM_LEARNSET(0),
+    [SPECIES_EXEGGUTOR_ALOLAN]   = TMHM_LEARNSET(0),
 
-    [SPECIES_ALOLAN_MAROWAK]     = TMHM_LEARNSET(0),
+    [SPECIES_MAROWAK_ALOLAN]     = TMHM_LEARNSET(0),
 
-    [SPECIES_SINISTEA_ANTIQUE]  = TMHM_LEARNSET(TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM30_SHADOW_BALL)),
+	[SPECIES_SINISTEA_ANTIQUE] = TMHM_LEARNSET(0),
 
-    [SPECIES_POLTEAGEIST_ANTIQUE]  = TMHM_LEARNSET(TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM33_REFLECT)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM30_SHADOW_BALL)),
+	[SPECIES_POLTEAGEIST_ANTIQUE] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_RUBY_CREAM]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_RUBY_CREAM] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_MATCHA_CREAM]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_MATCHA_CREAM] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_MINT_CREAM]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_MINT_CREAM] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_LEMON_CREAM]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_LEMON_CREAM] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_SALTED_CREAM]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_SALTED_CREAM] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_RUBY_SWIRL]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_RUBY_SWIRL] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_CARAMEL_SWIRL]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_CARAMEL_SWIRL] = TMHM_LEARNSET(0),
 
-    [SPECIES_ALCREMIE_RAINBOW_SWIRL]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM22_SOLARBEAM)),
+	[SPECIES_ALCREMIE_RAINBOW_SWIRL] = TMHM_LEARNSET(0),
 
-    [SPECIES_INDEEDEE_FEMALE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM33_REFLECT)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM30_SHADOW_BALL)),
+	[SPECIES_INDEEDEE_FEMALE] = TMHM_LEARNSET(0),
 
-    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-                                            | TMHM(TM45_ATTRACT)
-                                            | TMHM(TM31_BRICK_BREAK)
-                                            | TMHM(TM08_BULK_UP)
-                                            | TMHM(TM28_DIG)
-                                            | TMHM(HM08_DIVE)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM01_FOCUS_PUNCH)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM18_RAIN_DANCE)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(HM06_ROCK_SMASH)
-                                            | TMHM(TM39_ROCK_TOMB)
-                                            | TMHM(TM12_TAUNT)
-                                            | TMHM(HM07_WATERFALL)),
+	[SPECIES_URSHIFU_RAPID_STRIKE_STYLE] = TMHM_LEARNSET(0),
 
-    [SPECIES_ZARUDE_DADA] = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-                                            | TMHM(TM08_BULK_UP)
-                                            | TMHM(TM09_BULLET_SEED)
-                                            | TMHM(TM28_DIG)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM23_IRON_TAIL)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM39_ROCK_TOMB)
-                                            | TMHM(TM22_SOLARBEAM)
-                                            | TMHM(TM11_SUNNY_DAY)
-                                            | TMHM(TM12_TAUNT)
-                                            | TMHM(TM46_THIEF)),
+	[SPECIES_ZARUDE_DADA] = TMHM_LEARNSET(0),
 
-    [SPECIES_CALYREX_ICE_RIDER]  = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-                                            | TMHM(TM09_BULLET_SEED)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM07_HAIL)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM13_ICE_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM33_REFLECT)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM48_SKILL_SWAP)
-                                            | TMHM(TM22_SOLARBEAM)
-                                            | TMHM(TM11_SUNNY_DAY)
-                                            | TMHM(TM12_TAUNT)
-                                            | TMHM(TM41_TORMENT)),
+	[SPECIES_CALYREX_ICE_RIDER] = TMHM_LEARNSET(0),
 
-    [SPECIES_CALYREX_SHADOW_RIDER]  = TMHM_LEARNSET(TMHM(TM09_BULLET_SEED)
-                                            | TMHM(TM04_CALM_MIND)
-                                            | TMHM(TM42_FACADE)
-                                            | TMHM(TM19_GIGA_DRAIN)
-                                            | TMHM(TM15_HYPER_BEAM)
-                                            | TMHM(TM16_LIGHT_SCREEN)
-                                            | TMHM(TM17_PROTECT)
-                                            | TMHM(TM29_PSYCHIC)
-                                            | TMHM(TM33_REFLECT)
-                                            | TMHM(TM44_REST)
-                                            | TMHM(TM20_SAFEGUARD)
-                                            | TMHM(TM30_SHADOW_BALL)
-                                            | TMHM(TM48_SKILL_SWAP)
-                                            | TMHM(TM22_SOLARBEAM)
-                                            | TMHM(TM11_SUNNY_DAY)
-                                            | TMHM(TM12_TAUNT)),
+	[SPECIES_CALYREX_SHADOW_RIDER] = TMHM_LEARNSET(0),
 };

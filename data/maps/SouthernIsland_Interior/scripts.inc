@@ -189,7 +189,7 @@ SouthernIsland_Interior_TriggerScript_EnterMain::
 	delay 90
 	addobject 5
 	addobject 4
-	playbgm MUS_MGM0, 0
+	playbgm MUS_ENCOUNTER_MAGMA, 0
 	delay 65
 	applymovement 4, SouthernIsland_Interior_Movement_Magma
 	applymovement 5, SouthernIsland_Interior_Movement_Magma
@@ -278,7 +278,7 @@ SouthernIsland_Interior_EventScript_LatiasQuestion:: @ 8242AD0
 SouthernIsland_Interior_EventScript_ChoseLatias::
 	setvar VAR_TEMP_1, SPECIES_LATIAS
 	bufferspeciesname 0, SPECIES_LATIAS
-	playfanfare MUS_FANFA4
+	playfanfare MUS_OBTAIN_ITEM
 	msgbox Text_ReceivedLatias, MSGBOX_DEFAULT
 	waitfanfare
 	givemon SPECIES_LATIAS, 30, ITEM_LATIASITE
@@ -307,7 +307,7 @@ SouthernIsland_Interior_EventScript_LatiosQuestion:: @ 8242AD0
 SouthernIsland_Interior_EventScript_ChoseLatios::
 	setvar VAR_TEMP_1, SPECIES_LATIOS
 	bufferspeciesname 0, SPECIES_LATIOS
-	playfanfare MUS_FANFA4
+	playfanfare MUS_OBTAIN_ITEM
 	msgbox Text_ReceivedLatios, MSGBOX_DEFAULT
 	waitfanfare
 	givemon SPECIES_LATIOS, 30, ITEM_LATIOSITE

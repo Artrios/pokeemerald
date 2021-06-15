@@ -19,6 +19,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Wallace is a Gym Leader again (sorry Juan) and Steven's the Champion
 * Changed regi sprites to their doll sprites (they look more accurate!)
 * Animated Mega Stone overworld sprite
+* Day/Night system
 
 ### Changes (WIP)
 * Southern Island Event (works well enough for now)
@@ -28,7 +29,6 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Incorparate Primal Kyogre/Groudon & Mega Rayquaza
 * Receive Eon Flute
 * Increase bag storage for TMs
-* Day/Night system
 * Change Team Leader and Admin sprites
 * Change Trainer teams
 * Add all currently missing TMs/Mega Stones
