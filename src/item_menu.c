@@ -710,6 +710,10 @@ bool8 SetupBagMenu(void)
     case 13:
         BagMenu_PrintPocketNames(gPocketNamesStringsTable[gBagPositionStruct.pocket], 0);
         BagMenu_CopyPocketNameToWindow(0);
+        DrawPocketIndicatorSquare(0, FALSE);
+        DrawPocketIndicatorSquare(5, FALSE);
+        DrawPocketIndicatorSquare(6, FALSE);
+        DrawPocketIndicatorSquare(7, FALSE);
         DrawPocketIndicatorSquare(gBagPositionStruct.pocket, TRUE);
         gMain.state++;
         break;
