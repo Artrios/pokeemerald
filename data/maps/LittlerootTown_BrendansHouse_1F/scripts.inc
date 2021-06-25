@@ -398,6 +398,8 @@ PlayersHouse_1F_Text_RunningShoesManual: @ 81F7F66
 	.string "Running Shoes.\p"
 	.string "“Press the B Button to run while\n"
 	.string "wearing your Running Shoes.\p"
+	.string "Tap the L Button if you just want to\n"
+	.string "keep on running!”\p"
 	.string "“Lace up your Running Shoes and hit\n"
 	.string "the road running!”$"
 

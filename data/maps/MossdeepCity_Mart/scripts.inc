@@ -29,6 +29,36 @@ MossdeepCity_Mart_EventScript_Sailor:: @ 8222408
 	msgbox MossdeepCity_Mart_Text_NetAndDiveBallsRare, MSGBOX_NPC
 	end
 
+MossdeepCity_Mart_EventScript_WomanTM60:: @ 8211125
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_TM60, MossdeepCity_Mart_ReceivedQuash
+	msgbox MossdeepCity_Mart_Text_WantATM, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq MossdeepCity_Mart_EventScript_Yes
+	compare VAR_RESULT, NO
+	goto_if_eq MossdeepCity_Mart_EventScript_No
+	end
+
+MossdeepCity_Mart_EventScript_Yes::
+	giveitem ITEM_TM60
+	compare VAR_RESULT, FALSE
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_TM60
+	goto MossdeepCity_Mart_ReceivedQuash
+	release
+	end
+
+MauvilleCity_Mart_ReceivedQuash::
+	msgbox MossdeepCity_Mart_Text_Sweetie, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Mart_EventScript_No::
+	msgbox MauvilleCity_Mart_Text_Oh, MSGBOX_DEFAULT
+	release
+	end
+
 MossdeepCity_Mart_Text_ReviveIsFantastic: @ 8222411
 	.string "Revive is fantastic!\p"
 	.string "Give it to a fainted Pokémon,\n"
@@ -49,3 +79,15 @@ MossdeepCity_Mart_Text_NetAndDiveBallsRare: @ 82224FA
 	.string "A Dive Ball works best on Pokémon\n"
 	.string "at the bottom of the sea.$"
 
+MossdeepCity_Mart_Text_WantATM:
+	.string "Hey, you!\n"
+	.string "Quick question! Do you want a TM?$"
+
+MossdeepCity_Mart_Text_Sweetie:
+	.string "That's the TM that my sweetie\n"
+	.string "gave me when I proposed.\p"
+	.string "But I'm not a Trainer, so I don't\n"
+	.string "know how to use TMs. Hahaha!$"
+
+MauvilleCity_Mart_Text_Oh:
+	.string "Oh...$"

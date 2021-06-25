@@ -175,6 +175,23 @@ Route123_EventScript_RematchFernando:: @ 81F6407
 	msgbox Route123_Text_FernandoPostRematch, MSGBOX_AUTOCLOSE
 	end
 
+Route123_EventScript_Girl:: @ 8211125
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_TM99, Route123_ReceivedDazzlingGleam
+	msgbox Route123_Text_HeyHey, MSGBOX_DEFAULT
+	giveitem ITEM_TM99
+	compare VAR_RESULT, FALSE
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_TM99
+	release
+	end
+
+Route123_ReceivedDazzlingGleam::
+	msgbox Route123_Text_NoFairyGym, MSGBOX_DEFAULT
+	release
+	end
+
 Route123_Text_LoveGrassMonsHaveAny: @ 81F641E
 	.string "I love Grass-type Pokémon!\p"
 	.string "Do you have any Grass-type Pokémon?$"
@@ -201,3 +218,16 @@ Route123_Text_RouteSignMtPyre: @ 81F6529
 Route123_Text_BerryMastersHouse: @ 81F6557
 	.string "Berry Master's House$"
 
+Route123_Text_HeyHey:
+	.string "Hey, hey!\p"
+	.string "Fairy types are sure-enough\n"
+	.string "cute, but they can be strong,\l"
+	.string "too!\p"
+	.string "I bet you already knew that, eh?$"
+
+Route123_Text_NoFairyGym:
+	.string "There's no Fairy-type Gym in\n"
+	.string "Hoenn, eh?\p"
+	.string "Maybe I'll sure-enough go ahead\n"
+	.string "and make one! Before Miss\l"
+	.string "Valerie even gets here!"

@@ -95,10 +95,8 @@
 #define FLAG_SET_WALL_CLOCK                      0x51
 #define FLAG_RESCUED_BIRCH                       0x52
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS           0x53
-
-#define FLAG_UNUSED_0x054                    0x54  // Unused Flag
-#define FLAG_UNUSED_0x055                    0x55  // Unused Flag
-
+#define FLAG_RECEIVED_TM56                   0x54
+#define FLAG_RECEIVED_TM60                   0x55 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly
 #define FLAG_MET_RIVAL_MOM                   0x57
 #define FLAG_BIRCH_AIDE_MET                  0x58
@@ -113,13 +111,11 @@
 #define FLAG_MET_TEAM_AQUA_HARBOR            0x61
 #define FLAG_TV_EXPLAINED                    0x62
 #define FLAG_MAUVILLE_GYM_BARRIERS_STATE     0x63
-#define FLAG_MOSSDEEP_GYM_SWITCH_1           0x64 // Leftover from the RS version of Mossdeep Gym, functionally unused
-#define FLAG_MOSSDEEP_GYM_SWITCH_2           0x65 //
-#define FLAG_MOSSDEEP_GYM_SWITCH_3           0x66 //
+#define FLAG_RECEIVED_TM85                   0x64 // Leftover from the RS version of Mossdeep Gym, functionally unused
+#define FLAG_RECEIVED_TM88                   0x65 //
+#define FLAG_RECEIVED_TM99                   0x66 //
 #define FLAG_MOSSDEEP_GYM_SWITCH_4           0x67 //
-
-#define FLAG_UNUSED_0x068                    0x68  // Unused Flag
-
+#define FLAG_RECEIVED_TM56                   0x68
 #define FLAG_OCEANIC_MUSEUM_MET_REPORTER     0x69
 #define FLAG_RECEIVED_HM04                   0x6A
 #define FLAG_RECEIVED_HM06                   0x6B
@@ -252,9 +248,7 @@
 #define FLAG_RECEIVED_TM36                   0xE6
 #define FLAG_RECEIVED_TM05                   0xE7
 #define FLAG_RECEIVED_TM19                   0xE8
-
-#define FLAG_UNUSED_0x0E9                    0xE9 // Unused Flag
-
+#define FLAG_RECEIVED_TM77                   0xE9
 #define FLAG_RECEIVED_TM44                   0xEA
 #define FLAG_RECEIVED_TM45                   0xEB
 #define FLAG_RECEIVED_GLASS_ORNAMENT         0xEC
@@ -1180,14 +1174,14 @@
 #define FLAG_ITEM_ROUTE_104_POTION                                  0x46F
 #define FLAG_ITEM_GRANITE_CAVE_TM_65                                0x470
 #define FLAG_ITEM_ROUTE_103_PP_UP                                   0x471
-#define FLAG_UNUSED_0x472                                           0x472 // Unused Flag
+#define FLAG_ITEM_SAFARI_ZONE_NORTH_TM_53                           0x472
 #define FLAG_ITEM_ROUTE_108_STAR_PIECE                              0x473
 #define FLAG_ITEM_ROUTE_109_POTION                                  0x474
 #define FLAG_ITEM_ROUTE_110_ELIXIR                                  0x475
 #define FLAG_ITEM_ROUTE_111_ELIXIR                                  0x476
 #define FLAG_ITEM_ROUTE_113_HYPER_POTION                            0x477
 #define FLAG_ITEM_ROUTE_115_HEAL_POWDER                             0x478
-#define FLAG_UNUSED_0x479                                           0x479 // Unused Flag
+#define FLAG_ITEM_SEAFLOOR_CAVERN_ROOM_7_TM_55                      0x479
 #define FLAG_ITEM_ROUTE_116_POTION                                  0x47A
 #define FLAG_ITEM_ROUTE_119_ELIXIR_2                                0x47B
 #define FLAG_ITEM_ROUTE_120_REVIVE                                  0x47C
@@ -1240,18 +1234,18 @@
 #define FLAG_ITEM_VENUSAURITE                                       0x4AA
 #define FLAG_ITEM_GENGARITE                                         0x4AB
 #define FLAG_ITEM_BLASTOISINITE                                     0x4AC
-#define FLAG_UNUSED_0x4AD                                           0x4AD // Unused Flag
-#define FLAG_UNUSED_0x4AE                                           0x4AE // Unused Flag
-#define FLAG_UNUSED_0x4AF                                           0x4AF // Unused Flag
-#define FLAG_UNUSED_0x4B0                                           0x4B0 // Unused Flag
-#define FLAG_UNUSED_0x4B1                                           0x4B1 // Unused Flag
-#define FLAG_UNUSED_0x4B2                                           0x4B2 // Unused Flag
-#define FLAG_UNUSED_0x4B3                                           0x4B3 // Unused Flag
-#define FLAG_UNUSED_0x4B4                                           0x4B4 // Unused Flag
-#define FLAG_UNUSED_0x4B5                                           0x4B5 // Unused Flag
-#define FLAG_UNUSED_0x4B6                                           0x4B6 // Unused Flag
-#define FLAG_UNUSED_0x4B7                                           0x4B7 // Unused Flag
-#define FLAG_UNUSED_0x4B8                                           0x4B8 // Unused Flag
+#define FLAG_ITEM_SKYPILLAR_4F_TM_64                                0x4AD
+#define FLAG_ITEM_JAGGEDPASS_TM_69                                  0x4AE
+#define FLAG_ITEM_SHOALCAVE_INNERROOM_TM79                          0x4AF
+#define FLAG_ITEM_ROUTE134_TM80                                     0x4B0
+#define FLAG_ITEM_VICTORYROAD_BF2_TM81                              0x4B1
+#define FLAG_ITEM_FORTREECITY_TM86                                  0x4B2
+#define FLAG_ITEM_SAFARIZONE_SOUTHEAST_TM93                         0x4B3
+#define FLAG_ITEM_AQUAHIDEOUT_TM97                                  0x4B4
+#define FLAG_ITEM_ALARIANITE                                        0x4B5
+#define FLAG_ITEM_GYARADOSITE                                       0x4B6
+#define FLAG_ITEM_SLOWBRONITE                                       0x4B7
+#define FLAG_ITEM_GARDEVOIRITE                                      0x4B8 // Unused Flag
 #define FLAG_UNUSED_0x4B9                                           0x4B9 // Unused Flag
 #define FLAG_UNUSED_0x4BA                                           0x4BA // Unused Flag
 #define FLAG_UNUSED_0x4BB                                           0x4BB // Unused Flag

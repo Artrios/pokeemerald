@@ -298,6 +298,10 @@ Route134_EventScript_ItemCarbos:: @ 829109A
 	finditem ITEM_CARBOS
 	end
 
+Route134_EventScript_ItemTM80:: @ 829109A
+	finditem ITEM_TM80
+	end
+
 Route134_EventScript_ItemStarPiece:: @ 82910A7
 	finditem ITEM_STAR_PIECE
 	end
@@ -470,6 +474,10 @@ SafariZone_North_EventScript_ItemCalcium:: @ 82912C9
 	finditem ITEM_CALCIUM
 	end
 
+SafariZone_North_EventScript_ItemTM53:: @ 82912BC
+	finditem ITEM_TM53
+	end
+
 SafariZone_Southwest_EventScript_ItemMaxRevive:: @ 82912D6
 	finditem ITEM_MAX_REVIVE
 	end
@@ -480,6 +488,10 @@ SafariZone_Northeast_EventScript_ItemNugget:: @ 82912E3
 
 SafariZone_Southeast_EventScript_ItemBigPearl:: @ 82912F0
 	finditem ITEM_BIG_PEARL
+	end
+
+SafariZone_Southeast_EventScript_ItemTM93:: @ 82912F0
+	finditem ITEM_TM93
 	end
 
 MtPyre_2F_EventScript_ItemUltraBall:: @ 82912FD
@@ -530,6 +542,10 @@ AquaHideout_B2F_EventScript_ItemMasterBall:: @ 829138C
 	finditem ITEM_MASTER_BALL      // Unused
 	end
 
+AquaHideout_B2F_EventScript_ItemTM97:: @ 829138C
+	finditem ITEM_TM97
+	end
+
 Route119_EventScript_ItemNugget:: @ 8291399
 	finditem ITEM_NUGGET
 	end
@@ -550,6 +566,10 @@ ShoalCave_LowTideInnerRoom_EventScript_ItemRareCandy:: @ 82913CD
 	finditem ITEM_RARE_CANDY
 	end
 
+ShoalCave_LowTideInnerRoom_EventScript_ItemTM79:: @ 82913CD
+	finditem ITEM_TM79
+	end
+
 ShoalCave_LowTideStairsRoom_EventScript_ItemIceHeal:: @ 82913DA
 	finditem ITEM_ICE_HEAL
 	end
@@ -564,6 +584,14 @@ ShoalCave_LowTideIceRoom_EventScript_ItemNeverMeltIce:: @ 82913F4
 
 SeafloorCavern_Room9_EventScript_ItemTM26:: @ 8291401
 	finditem ITEM_TM26
+	end
+
+SeafloorCavern_Room7_EventScript_ItemTM55:: @ 8291401
+	finditem ITEM_TM55
+	end
+
+SkyPillar_4F_EventScript_ItemTM64:: @ 82913E7
+	finditem ITEM_TM64
 	end
 
 Route110_TrickHousePuzzle1_EventScript_ItemOrangeMail:: @ 829140E
@@ -620,6 +648,10 @@ VictoryRoad_B1F_EventScript_ItemFullRestore:: @ 82914AA
 
 VictoryRoad_B2F_EventScript_ItemFullHeal:: @ 82914B7
 	finditem ITEM_FULL_HEAL
+	end
+
+VictoryRoad_B2F_EventScript_ItemTM81:: @ 82914B7
+	finditem ITEM_TM81
 	end
 
 ArtisanCave_B1F_EventScript_ItemHPUp:: @ 82914C4
@@ -710,6 +742,10 @@ Route123_EventScript_ItemAbomasite:: @ 82912F0
 	finditem ITEM_ABOMASITE
 	end
 
+Route123_EventScript_ItemGyaradosite:: @ 82912F0
+	finditem ITEM_GYARADOSITE
+	end
+
 MeteorFalls_EventScript_ItemAerodactylite:: @ 82912F0
 	finditem ITEM_AERODACTYLITE
 	end
@@ -774,6 +810,10 @@ JaggedPass_EventScript_ItemTM43:: @ 82912F0
 	finditem ITEM_TM43
 	end
 
+JaggedPass_EventScript_ItemTM69:: @ 82912F0
+	finditem ITEM_TM69
+	end
+
 MtChimney_EventScript_ItemTM59:: @ 82912F0
 	finditem ITEM_TM59
 	end
@@ -788,4 +828,8 @@ Route119_EventScript_ItemTM62:: @ 82912F0
 
 GraniteCave_EventScript_ItemTM65:: @ 82912F0
 	finditem ITEM_TM65
+	end
+
+FortreeCity_EventScript_ItemTM86:: @ 82912F0
+	finditem ITEM_TM86
 	end

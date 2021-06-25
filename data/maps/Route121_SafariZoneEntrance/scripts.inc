@@ -135,3 +135,34 @@ Route121_SafariZoneEntrance_EventScript_TrainerTipSign:: @ 822BD21
 	msgbox Route121_SafariZoneEntrance_Text_TrainerTip, MSGBOX_SIGN
 	end
 
+Route121_SafariZoneEntrance_EventScript_Man:: @ 8211125
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_TM85, Route121_SafariZoneEntrance_ReceivedDreamEater
+	msgbox Route121_SafariZoneEntranceText_ThatLook, MSGBOX_DEFAULT
+	giveitem ITEM_TM85
+	compare VAR_RESULT, FALSE
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_TM85
+	goto Route121_SafariZoneEntrance_ReceivedDreamEater
+	release
+	end
+
+Route121_SafariZoneEntrance_ReceivedDreamEater::
+	msgbox Route121_SafariZoneEntrance_Text_DreamEater, MSGBOX_DEFAULT
+	release
+	end
+
+Route121_SafariZoneEntranceText_ThatLook:
+	.string "That look in your eyes...\p"
+	.string "And the aura floating around\n"
+	.string "you... You're one of a kind aren't\l"
+	.string "you?\p"
+	.string "You make all kinds of mischief,\n"
+	.string "right? If so, you'll realy like\l"
+	.string "this!$"
+
+Route121_SafariZoneEntrance_Text_DreamEater
+	.string "Maybe it's 'cause I was so naughty\n"
+	.string "in the past, but lately I don't\l"
+	.string "feel refreshed when I wake up.$"

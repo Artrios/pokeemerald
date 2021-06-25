@@ -41,8 +41,24 @@ VerdanturfTown_WandasHouse_EventScript_WandasBoyfriend:: @ 8202913
 VerdanturfTown_WandasHouse_EventScript_Wanda:: @ 820291C
 	lock
 	faceplayer
+	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_CheckGardevoirite
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WandaDontWorry
 	goto_if_set FLAG_DEFEATED_WALLY_MAUVILLE, VerdanturfTown_WandasHouse_EventScript_MeetWanda
+	msgbox VerdanturfTown_WandasHouse_Text_DontWorryAboutWally, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_WandasHouse_EventScript_CheckGardevoirite::
+	goto_if_set FLAG_ITEM_GARDEVOIRITE, VerdanturfTown_WandasHouse_ReceivedGardevoirite
+	msgbox VerdanturfTown_WandasHouse_Text_BeenAges, MSGBOX_DEFAULT
+	giveitem ITEM_GARDEVOIRITE
+	compare VAR_RESULT, FALSE
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_ITEM_GARDEVOIRITE
+	release
+	end
+
+VerdanturfTown_WandasHouse_ReceivedGardevoirite::
 	msgbox VerdanturfTown_WandasHouse_Text_DontWorryAboutWally, MSGBOX_DEFAULT
 	release
 	end
@@ -166,3 +182,14 @@ VerdanturfTown_WandasHouse_Text_WallyWasInEverGrande: @ 8202FDB
 	.string "His parents in Petalburg would be\n"
 	.string "astonished to hear that!$"
 
+VerdanturfTown_WandasHouse_Text_BeenAges:
+	.string "Why, it feels like it's been ages\n"
+	.string "since we saw you last!\p"
+	.string "What wonderful timing! I was\n"
+	.string "thinking that I wanted to give\l"
+	.string "this to you...$"
+
+VerdanturfTown_WandasHouse_Text_ThankYou:
+	.string "I didn't really thank you\n"
+	.string "properly when you helped smash\l"
+	.string "those rocks in the tunnel.$"

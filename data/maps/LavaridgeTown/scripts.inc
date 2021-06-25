@@ -292,6 +292,37 @@ LavaridgeTown_EventScript_HerbShopSign:: @ 81EA7B7
 	msgbox LavaridgeTown_Text_HerbShopSign, MSGBOX_SIGN
 	end
 
+LavaridgeTown_EventScript_BlackBelt:: @ 8211125
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_TM75, LavaridgeTown_ReceivedSwordsDance
+	msgbox LavaridgeTown_Text_DanceAndSoul, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq LavaridgeTown_EventScript_Yes
+	compare VAR_RESULT, NO
+	goto_if_eq LavaridgeTown_EventScript_No
+	end
+
+LavaridgeTown_EventScript_No::
+	msgbox LavaridgeTown_Text_SoSad, MSGBOX_DEFAULT
+	giveitem ITEM_TM75
+	compare VAR_RESULT, FALSE
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_TM75
+	goto LavaridgeTown_ReceivedSwordsDance
+	release
+	end
+
+LavaridgeTown_ReceivedSwordsDance::
+	msgbox LavaridgeTown_Text_SuhwordsDance, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_EventScript_Yes::
+	msgbox LavaridgeTown_Text_GoodKid, MSGBOX_DEFAULT
+	release
+	end
+
 LavaridgeTown_Text_MayNiceBadgesTakeThis: @ 81EA7C0
 	.string "May: {PLAYER}{KUN}! Long time no see!\p"
 	.string "Oh? While I visited the hot springs,\n"
@@ -423,3 +454,20 @@ LavaridgeTown_Text_HerbShopSign: @ 81EB1CB
 	.string "Pokémon Herb Shop\n"
 	.string "“Bitter taste--better cure!”$"
 
+LavaridgeTown_Text_DanceAndSoul:
+	.string "Dance and soul make power!\p"
+	.string "Soul is way of karate for me!\p"
+	.string "You understand, yes?$"
+
+LavaridgeTown_Text_GoodKid:
+	.string "OK! OK!\n"
+	.string "You good kid!"
+
+LavaridgeTown_Text_SoSad:
+	.string "Oh..."
+	.string "I so sad and wretched...\p"
+	.string "You take this and you understand\n"
+	.string "way of karate of me, fool Trainer!$"
+
+LavaridgeTown_Text_SuhwordsDance:
+	.string "Suh-words Dance!$"

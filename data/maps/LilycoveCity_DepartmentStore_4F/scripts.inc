@@ -32,6 +32,9 @@ LilycoveCity_DepartmentStore_4F_Pokemart_AttackTMs: @ 821FE20
 	.2byte ITEM_TM52
 	.2byte ITEM_TM68
 	.2byte ITEM_TM71
+	.2byte ITEM_TM83
+	.2byte ITEM_TM87
+	.2byte ITEM_TM95
 	.2byte ITEM_NONE
 	release
 	end
