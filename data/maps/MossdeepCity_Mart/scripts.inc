@@ -55,7 +55,7 @@ MauvilleCity_Mart_ReceivedQuash::
 	end
 
 MossdeepCity_Mart_EventScript_No::
-	msgbox MauvilleCity_Mart_Text_Oh, MSGBOX_DEFAULT
+	msgbox MauvilleCity_Mart_Text_ISee, MSGBOX_DEFAULT
 	release
 	end
 
@@ -89,5 +89,6 @@ MossdeepCity_Mart_Text_Sweetie:
 	.string "But I'm not a Trainer, so I don't\n"
 	.string "know how to use TMs. Hahaha!$"
 
-MauvilleCity_Mart_Text_Oh:
-	.string "Oh...$"
+MauvilleCity_Mart_Text_ISee:
+	.string "I see.\n"
+	.string "If you want to get it, let me know.$"
