@@ -513,7 +513,7 @@ MtPyre_Summit_Text_Grunt4PostBattle: @ 82327D8
 MtPyre_Summit_Text_ArchieWeGotTheOrbLetsGo: @ 823281A
 	.string "Archie: Team Magma's Maxie got ahead\n"
 	.string "of us, but we also got what we wanted.\p"
-	.string "The Red Orb preserved at Mt. Pyre…\n"
+	.string "The Blue Orb preserved at Mt. Pyre…\n"
 	.string "I, Archie, now have it in my possession!\p"
 	.string "Fufufu… Now we can bring our ultimate\n"
 	.string "objective to fruition!\p"
@@ -532,7 +532,7 @@ MtPyre_Summit_Text_BothOrbsTakenMagmaLeftThis: @ 823290E
 	.string "… … … … … …\n"
 	.string "… … … … … …\p"
 	.string "Oh, yes. Was it Team Magma who came\n"
-	.string "and took the Blue Orb first?\p"
+	.string "and took the Red Orb first?\p"
 	.string "Well, in their haste, they left this\n"
 	.string "behind.\p"
 	.string "I couldn't imagine what exactly it\n"

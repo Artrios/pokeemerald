@@ -19,7 +19,7 @@ MagmaHideout_4F_EventScript_Maxie:: @ 823A560
 	playse SE_M_DETECT
 	dofieldeffectsparkle 18, 42, 0
 	waitfieldeffect FLDEFF_SPARKLE
-	setvar VAR_RESULT, 1
+	setvar VAR_RESULT, 0
 	playfanfare MUS_AWAKEN_LEGEND
 	playse SE_ORB
 	special DoOrbEffect
@@ -192,9 +192,9 @@ MagmaHideout_4F_Text_MaxieAwakenGroudon: @ 823A9F4
 	.string "Maxie: Groudon…\p"
 	.string "Nothing could awaken you from your\n"
 	.string "sleep bathed in magma…\p"
-	.string "This Blue Orb is what you sought.\n"
+	.string "This Red Orb is what you sought.\n"
 	.string "Wasn't it?\p"
-	.string "I have brought you the Blue Orb.\n"
+	.string "I have brought you the Red Orb.\n"
 	.string "Let its shine awaken you!\p"
 	.string "And show me…\n"
 	.string "Show me the full extent of your power!$"
@@ -202,7 +202,7 @@ MagmaHideout_4F_Text_MaxieAwakenGroudon: @ 823A9F4
 MagmaHideout_4F_Text_MaxieGroudonWhatsWrong: @ 823AADA
 	.string "Maxie: Groudon!\n"
 	.string "What's wrong?\p"
-	.string "Wasn't the Blue Orb the key?\p"
+	.string "Wasn't the Red Orb the key?\p"
 	.string "Groudon!\n"
 	.string "Where have you gone…$"
 

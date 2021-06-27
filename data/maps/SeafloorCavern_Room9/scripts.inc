@@ -47,7 +47,7 @@ SeafloorCavern_Room9_EventScript_ArchieAwakenKyogre:: @ 8234DC9
 	dofieldeffectsparkle 16, 42, 0
 	waitfieldeffect FLDEFF_SPARKLE
 	closemessage
-	setvar VAR_RESULT, 0
+	setvar VAR_RESULT, 1
 	playfanfare MUS_AWAKEN_LEGEND
 	playse SE_ORB
 	special DoOrbEffect
@@ -256,16 +256,16 @@ SeafloorCavern_Room9_Text_ArchieWithThisRedOrb: @ 82351E5
 	.string "you are truly gifted.\p"
 	.string "But!\n"
 	.string "I have this in my possession!\p"
-	.string "With this Red Orb, I can make Kyogre…$"
+	.string "With this Blue Orb, I can make Kyogre…$"
 
 SeafloorCavern_Room9_Text_RedOrbShinesByItself: @ 8235279
-	.string "The Red Orb suddenly began shining\n"
+	.string "The Blue Orb suddenly began shining\n"
 	.string "by itself!$"
 
 SeafloorCavern_Room9_Text_ArchieWhereDidKyogreGo: @ 82352A7
 	.string "Archie: What?!\p"
 	.string "I didn't do anything.\n"
-	.string "Why did the Red Orb…\p"
+	.string "Why did the Blue Orb…\p"
 	.string "Where did Kyogre go?$"
 
 SeafloorCavern_Room9_Text_ArchieAMessageFromOutside: @ 82352F6
