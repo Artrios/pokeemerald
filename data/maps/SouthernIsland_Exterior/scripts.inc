@@ -1,4 +1,4 @@
-.set LOCALID_SAILOR, 1
+﻿.set LOCALID_SAILOR, 1
 .set LOCALID_SS_TIDAL, 2
 
 SouthernIsland_Exterior_MapScripts:: @ 82429C8
@@ -169,7 +169,7 @@ SouthernIsland_Exterior_Text_StevenArrives1::
 
 SouthernIsland_Exterior_Text_StevenArrives2::
 	.string "I once heard an odd fable.\p"
-	.string "It was said that the two Pok�mon that\n"
+	.string "It was said that the two Pokémon that\n"
 	.string "live on this island guard some secret\l"
 	.string "about that great form of Evolution:\l"
 	.string "Mega Evolution.\p"

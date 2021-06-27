@@ -162,7 +162,7 @@ Route121_SafariZoneEntranceText_ThatLook:
 	.string "right? If so, you'll realy like\l"
 	.string "this!$"
 
-Route121_SafariZoneEntrance_Text_DreamEater
+Route121_SafariZoneEntrance_Text_DreamEater:
 	.string "Maybe it's 'cause I was so naughty\n"
 	.string "in the past, but lately I don't\l"
 	.string "feel refreshed when I wake up.$"

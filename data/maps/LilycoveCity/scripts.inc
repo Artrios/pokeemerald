@@ -450,7 +450,7 @@ LilycoveCity_EventScript_YouHaveOne:
 	compare VAR_RESULT, FALSE
 	goto_if_eq Common_EventScript_ShowBagIsFull
 	setflag FLAG_ITEM_ALARIANITE
-	LilycoveCity_Text_Yeah
+	msgbox LilycoveCity_Text_Yeah, MSGBOX_DEFAULT
 	release
 	end
 
