@@ -49,7 +49,7 @@ MossdeepCity_Mart_EventScript_Yes::
 	release
 	end
 
-MauvilleCity_Mart_ReceivedQuash::
+MossdeepCity_Mart_ReceivedQuash::
 	msgbox MossdeepCity_Mart_Text_Sweetie, MSGBOX_DEFAULT
 	release
 	end

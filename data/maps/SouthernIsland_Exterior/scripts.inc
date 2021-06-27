@@ -1,4 +1,4 @@
-﻿.set LOCALID_SAILOR, 1
+.set LOCALID_SAILOR, 1
 .set LOCALID_SS_TIDAL, 2
 
 SouthernIsland_Exterior_MapScripts:: @ 82429C8

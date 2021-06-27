@@ -43,7 +43,7 @@ PacifidlogTown_House4_EventScript_Man:: @ 8211125
 	end
 
 PacifidlogTown_House4_ReceivedFling::
-	msgbox LavaridgeTown_Text_Unova, MSGBOX_DEFAULT
+	msgbox PacifidlogTown_Text_Unova, MSGBOX_DEFAULT
 	release
 	end
 

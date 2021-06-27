@@ -445,7 +445,7 @@ LilycoveCity_ReceivedAlarianite::
 	end
 
 LilycoveCity_EventScript_YouHaveOne:
-	msgbox Text_EventScript_YouHaveOne, MSGBOX_SIGN
+	msgbox LilycoveCity_Text_EventScript_YouHaveOne, MSGBOX_SIGN
 	giveitem ITEM_ALTARIANITE
 	compare VAR_RESULT, FALSE
 	goto_if_eq Common_EventScript_ShowBagIsFull

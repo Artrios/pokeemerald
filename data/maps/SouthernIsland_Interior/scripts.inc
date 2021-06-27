@@ -492,7 +492,7 @@ SouthernIsland_Interior_Text_Steven0::
 	.string "Isn't its brilliance like that of a\l"
 	.string "Dawn Stone?\p"
 	.string "It is as fantastic as a Steel-type\n"
-	.string "Pokémon...$"
+	.string "PokÃ©mon...$"
 
 SouthernIsland_Interior_Text_Steven1::
 	.string "Hm?\p"
@@ -522,7 +522,7 @@ SouthernIsland_Interior_Text_Magma0::
 SouthernIsland_Interior_Text_Magma1::
 	.string "Courtney: Yes.\p"
 	.string "For the time being...get away from me.\p"
-	.string "The Pokémon behind you...\p"
+	.string "The PokÃ©mon behind you...\p"
 	.string "Their Mega Stones...\p"
 	.string "No more...no less.\p"
 	.string "That is what...\p"
@@ -553,7 +553,7 @@ SouthernIsland_Interior_Text_Steven5::
 	.string "Good work, {PLAYER}{KUN}.\p"
 	.string "You performed spectacularly.\p"
 	.string "We were able to protect both these\n"
-	.string "wondrous Pokémon and their Mega Stones,\l"
+	.string "wondrous PokÃ©mon and their Mega Stones,\l"
 	.string "thanks to you.$"
 
 SouthernIsland_Interior_Text_Steven6::
@@ -588,7 +588,7 @@ SouthernIsland_Interior_Text_Return1::
 SouthernIsland_Interior_Text_Return2::
 	.string "With the Mega Bracelet that I just\n"
 	.string "gave you and the Mega Stone that a\l"
-	.string "Pokémon may hold, your Pokémon will be\l"
+	.string "PokÃ©mon may hold, your PokÃ©mon will be\l"
 	.string "able to achieve a powerful boost, quite\l"
 	.string "unlike any usual form of Evolution...\l"
 	.string "but only if you are bound by great\l"
@@ -603,7 +603,7 @@ SouthernIsland_Interior_Text_Return2::
 	.string "What is a Mega Stone?\n"
 	.string "What is a Key Stone?\p"
 	.string "The process by which bonds between\n"
-	.string "Pokémon and people manifest in tangible\l"
+	.string "PokÃ©mon and people manifest in tangible\l"
 	.string "power... How do we explain that?\p"
 	.string "I hope the Mega Bracelet I just gave\n"
 	.string "you might bring us one step closer to\l"
