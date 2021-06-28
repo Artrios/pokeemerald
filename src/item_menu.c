@@ -226,6 +226,8 @@ static const struct ListMenuTemplate sItemListMenu =
 static const u8 sMenuText_ByName[] = _("Name");
 static const u8 sMenuText_ByType[] = _("Type");
 static const u8 sMenuText_ByAmount[] = _("Amount");
+static const u8 sMenuText_ByNumber[] = _("Number");
+static const u8 sText_NothingToSort[] = _("There's nothing to sort!");
 static const struct MenuAction sItemMenuActions[] = {
     [ITEMMENUACTION_USE] =          {gMenuText_Use, ItemMenu_UseOutOfBattle},
     [ITEMMENUACTION_TOSS] =         {gMenuText_Toss, ItemMenu_Toss},
@@ -1198,35 +1200,59 @@ void Task_BagMenu_HandleInput(u8 taskId)
                             BagMenu_SwapItems(taskId);
                         }
                     }
-                    return;
                 }
-                break;
-        }
-
-        listPosition = ListMenu_ProcessInput(data[0]);
-        ListMenuGetScrollAndRow(data[0], scrollPos, cursorPos);
-        switch (listPosition)
-        {
-            case LIST_NOTHING_CHOSEN:
-                break;
-            case LIST_CANCEL:
-                if (gBagPositionStruct.location == ITEMMENULOCATION_BERRY_BLENDER_CRUSH)
+                else if (JOY_NEW(START_BUTTON))
                 {
-                    PlaySE(SE_FAILURE);
-                    break;
+                    if ((gBagMenu->numItemStacks[gBagPositionStruct.pocket] - 1) <= 1) //can't sort with 0 or 1 item in bag
+                    {
+                        static const u8 sText_NothingToSort[] = _("There's nothing to sort!");
+                        PlaySE(SE_FAILURE);
+                        DisplayItemMessage(taskId, 1, sText_NothingToSort, sub_81AD350);
+                        break;
+                    }
+
+                    data[1] = GetItemListPosition(gBagPositionStruct.pocket);
+                    data[2] = BagGetQuantityByPocketPosition(gBagPositionStruct.pocket + 1, data[1]);
+                    if (gBagPositionStruct.cursorPosition[gBagPositionStruct.pocket] == gBagMenu->numItemStacks[gBagPositionStruct.pocket] - 1)
+                        break;
+                    else
+                        gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPositionStruct.pocket + 1, data[1]);
+
+                    PlaySE(SE_SELECT);
+                    BagDestroyPocketScrollArrowPair();
+                    BagMenu_PrintCursor_(data[0], 2);
+                    ListMenuGetScrollAndRow(data[0], scrollPos, cursorPos);
+                    gTasks[taskId].func = Task_LoadBagSortOptions;
                 }
-                PlaySE(SE_SELECT);
-                gSpecialVar_ItemId = ITEM_NONE;
-                gTasks[taskId].func = Task_FadeAndCloseBagMenu;
-                break;
-            default: // A_BUTTON
-                PlaySE(SE_SELECT);
-                BagDestroyPocketScrollArrowPair();
-                BagMenu_PrintCursor_(data[0], 2);
-                data[1] = listPosition;
-                data[2] = BagGetQuantityByPocketPosition(gBagPositionStruct.pocket + 1, listPosition);
-                gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPositionStruct.pocket + 1, listPosition);
-                gUnknown_08614054[gBagPositionStruct.location](taskId);
+                else
+                {
+                    listPosition = ListMenu_ProcessInput(data[0]);
+                    ListMenuGetScrollAndRow(data[0], scrollPos, cursorPos);
+                    switch (listPosition)
+                    {
+                    case LIST_NOTHING_CHOSEN:
+                        break;
+                    case LIST_CANCEL:
+                        if (gBagPositionStruct.location == ITEMMENULOCATION_BERRY_BLENDER_CRUSH)
+                        {
+                            PlaySE(SE_FAILURE);
+                            break;
+                        }
+                        PlaySE(SE_SELECT);
+                        gSpecialVar_ItemId = ITEM_NONE;
+                        gTasks[taskId].func = Task_FadeAndCloseBagMenu;
+                        break;
+                    default: // A_BUTTON
+                        PlaySE(SE_SELECT);
+                        BagDestroyPocketScrollArrowPair();
+                        BagMenu_PrintCursor_(data[0], 2);
+                        data[1] = listPosition;
+                        data[2] = BagGetQuantityByPocketPosition(gBagPositionStruct.pocket + 1, listPosition);
+                        gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPositionStruct.pocket + 1, listPosition);
+                        gUnknown_08614054[gBagPositionStruct.location](taskId);
+                        break;
+                    }
+                }
                 break;
         }
     }
@@ -1368,7 +1394,7 @@ void sub_81AC23C(u8 a)
 static void DrawPocketIndicatorSquare(u8 x, bool8 isCurrentPocket)
 {
     if (!isCurrentPocket)
-        FillBgTilemapBufferRect_Palette0(2, 0x1017, x + 5, 3, 1, 1);
+        FillBgTilemapBufferRect_Palette0(2, 0x1017, x + 4, 3, 1, 1);
     else
         FillBgTilemapBufferRect_Palette0(2, 0x102B, x + 4, 3, 1, 1);
     ScheduleBgCopyTilemapToVram(2);

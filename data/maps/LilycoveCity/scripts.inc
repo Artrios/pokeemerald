@@ -428,7 +428,7 @@ LilycoveCity_EventScript_DontKnowAboutBerryBlender:: @ 81E3058
 LilycoveCity_EventScript_CheckSpecies::
 	lock
 	faceplayer
-	goto_if_set FLAG_ITEM_ALTARIANITE, LilycoveCity_ReceivedAlarianite
+	goto_if_set FLAG_ITEM_ALTARIANITE, LilycoveCity_ReceivedAltarianite
 	msgbox LilycoveCity_Text_Alatria, MSGBOX_DEFAULT	
 	special ChoosePartyMon
 	waitstate
@@ -439,7 +439,7 @@ LilycoveCity_EventScript_CheckSpecies::
 	release
 	end
 
-LilycoveCity_ReceivedAlarianite::
+LilycoveCity_ReceivedAltarianite::
 	msgbox LilycoveCity_Text_EventScript_HoldDiscussions, MSGBOX_DEFAULT
 	release
 	end
@@ -449,7 +449,7 @@ LilycoveCity_EventScript_YouHaveOne:
 	giveitem ITEM_ALTARIANITE
 	compare VAR_RESULT, FALSE
 	goto_if_eq Common_EventScript_ShowBagIsFull
-	setflag FLAG_ITEM_ALARIANITE
+	setflag FLAG_ITEM_ALTARIANITE
 	msgbox LilycoveCity_Text_Yeah, MSGBOX_DEFAULT
 	release
 	end
