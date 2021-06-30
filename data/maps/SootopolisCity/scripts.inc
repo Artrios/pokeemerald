@@ -960,7 +960,7 @@ SootopolisCity_EventScript_Steven:: @ 81E6166
 	goto_if_eq SootopolisCity_EventScript_StevenHelpedWallace
 	compare VAR_SOOTOPOLIS_CITY_STATE, 4
 	goto_if_eq SootopolisCity_EventScript_GoToSkyPillar
-	goto_if_set FLAG_RECEIVED_HM07, SootopolisCity_EventScript_GoToGym
+	goto_if_set FLAG_RECEIVED_EON_FLUTE, SootopolisCity_EventScript_GoToGym
 	goto_if_set FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE, SootopolisCity_EventScript_GiveWaterfall
 	msgbox SootopolisCity_Text_SoThatsRayquaza, MSGBOX_DEFAULT
 	releaseall
@@ -1367,7 +1367,7 @@ SootopolisCity_EventScript_Wallace:: @ 81E6446
 	faceplayer
 	compare VAR_SOOTOPOLIS_CITY_STATE, 4
 	goto_if_eq SootopolisCity_EventScript_GoToSkyPillar
-	goto_if_set FLAG_RECEIVED_HM07, SootopolisCity_EventScript_GoToGym
+	goto_if_set FLAG_RECEIVED_EON_FLUTE, SootopolisCity_EventScript_GoToGym
 	goto_if_set FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE, SootopolisCity_EventScript_GiveWaterfall
 	msgbox SootopolisCity_Text_AquaMagmaDidntMeanHarm, MSGBOX_DEFAULT
 	release
@@ -1375,7 +1375,7 @@ SootopolisCity_EventScript_Wallace:: @ 81E6446
 
 SootopolisCity_EventScript_GiveWaterfall:: @ 81E646F
 	msgbox SootopolisCity_Text_ThankYouForHelpAcceptThis, MSGBOX_DEFAULT
-	giveitem ITEM_EONFLUTE
+	giveitem ITEM_EON_FLUTE
 	setflag FLAG_RECEIVED_EON_FLUTE
 	goto_if_set FLAG_EON_LATI, SootopolisCity_EventScript_EonLatias
 	msgbox SootopolisCity_Text_ExplainWaterfallGoToGym, MSGBOX_DEFAULT
@@ -1402,16 +1402,16 @@ SootopolisCity_EventScript_EonLatias::
 	end
 
 SootopolisCity_EventScript_WallaceMoveFromGym:: @ 81E64B2
-	applymovement LOCALID_WALLACE, SootopolisCity_Movement_WallaceMoveFromGym
+	applymovement LOCALID_STEVEN, SootopolisCity_Movement_WallaceMoveFromGym
 	waitmovement 0
-	copyobjectxytoperm LOCALID_WALLACE
+	copyobjectxytoperm LOCALID_STEVEN
 	setvar VAR_SOOTOPOLIS_WALLACE_STATE, 1
 	return
 
 SootopolisCity_EventScript_WallaceMoveFromGymWest:: @ 81E64C5
-	applymovement LOCALID_WALLACE, SootopolisCity_Movement_WallaceMoveFromGymWest
+	applymovement LOCALID_STEVEN, SootopolisCity_Movement_WallaceMoveFromGymWest
 	waitmovement 0
-	copyobjectxytoperm LOCALID_WALLACE
+	copyobjectxytoperm LOCALID_STEVEN
 	setvar VAR_SOOTOPOLIS_WALLACE_STATE, 2
 	return
 
@@ -1790,7 +1790,7 @@ SootopolisCity_Text_ThankYouForHelpAcceptThis: @ 81E7ACF
 	.string "The sky over Sootopolis has\n"
 	.string "returned to normal.\p"
 	.string "I imagine that many changes are\n"
-	.string "happening now all acorss Hoenn.\p"
+	.string "happening now all across Hoenn.\p"
 	.string "I hope you will be able to\n"
 	.string "travel this world and see its\l"
 	.string "richness with you own eyes-\l"
@@ -1816,7 +1816,7 @@ SootopolisCity_Text_ExplainWaterfallGoToGym: @ 81E7B86
 	.string "between you and your Latios.\p"
 	.string "No matter how far you may be from\n"
 	.string "one another, play that flute and\l"
-	.string "Latias will surely fly straight to\l"
+	.string "Latios will surely fly straight to\l"
 	.string "you.\p"
 	.string "Then it can take to the sky, soaring\n"
 	.string "above the land with you astride its\l"
@@ -1844,6 +1844,5 @@ SootopolisCity_Text_ExplainEonLatias:
 	.string "step through that door.$"
 
 SootopolisCity_Text_DazzledByMentor: @ 81E7CBC
-	.string "Wallace: I'm sure that you will be\n"
-	.string "dazzled by my mentor's breathtakingly\l"
-	.string "elegant battle style.$"
+	.string "When you're all set to go,\n"
+	.string "step through that door.$"
