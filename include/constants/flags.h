@@ -111,10 +111,10 @@
 #define FLAG_MET_TEAM_AQUA_HARBOR            0x61
 #define FLAG_TV_EXPLAINED                    0x62
 #define FLAG_MAUVILLE_GYM_BARRIERS_STATE     0x63
-#define FLAG_RECEIVED_TM85                   0x64 // Leftover from the RS version of Mossdeep Gym, functionally unused
-#define FLAG_RECEIVED_TM88                   0x65 //
-#define FLAG_RECEIVED_TM99                   0x66 //
-#define FLAG_RECEIVED_TM75                   0x67 //
+#define FLAG_RECEIVED_TM85                   0x64
+#define FLAG_RECEIVED_TM88                   0x65
+#define FLAG_RECEIVED_TM99                   0x66
+#define FLAG_RECEIVED_TM75                   0x67 
 #define FLAG_RECEIVED_TM56                   0x68
 #define FLAG_OCEANIC_MUSEUM_MET_REPORTER     0x69
 #define FLAG_RECEIVED_HM04                   0x6A
@@ -124,7 +124,7 @@
 #define FLAG_RECEIVED_HM02                   0x6E
 #define FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT  0x6F
 #define FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE  0x70
-#define FLAG_UNUSED_RS_LEGENDARY_BATTLE_DONE 0x71 // Unused Flag. Used in R/S to indicate whether player defeated or caught Groudon/Kyogre in Cave of Origin.
+#define FLAG_RECEIVED_EON_FLUTE              0x71
 #define FLAG_SCOTT_CALL_BATTLE_FRONTIER      0x72 // Used in order to activate a phone call from Scott, inviting the player to the SS Tidal.
 #define FLAG_RECEIVED_METEORITE              0x73
 #define FLAG_ADVENTURE_STARTED               0x74 // RECEIVED Pokédex.

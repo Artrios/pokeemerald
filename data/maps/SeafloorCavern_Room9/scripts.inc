@@ -290,7 +290,7 @@ SeafloorCavern_Room9_Text_ArchieWhatRainingTooHard: @ 823532B
 
 SeafloorCavern_Room9_Text_ArchieWhyDidKyogreDisappear: @ 823546F
 	.string "Archie: There's something wrong…\p"
-	.string "The Red Orb is supposed to awaken\n"
+	.string "The Blue Orb is supposed to awaken\n"
 	.string "and control Kyogre…\p"
 	.string "But… Why?\n"
 	.string "Why did Kyogre disappear?\p"
@@ -310,7 +310,7 @@ SeafloorCavern_Room9_Text_ArchieDontGetAllHighAndMighty: @ 82355C2
 	.string "Don't get all high and mighty with me!\p"
 	.string "Wasn't it you, Team Magma, that\n"
 	.string "infuriated Groudon?\p"
-	.string "So long as I have this Red Orb,\n"
+	.string "So long as I have this Blue Orb,\n"
 	.string "I should be able to control Kyogre…\p"
 	.string "I should be able to control it…$"
 

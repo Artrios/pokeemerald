@@ -348,6 +348,7 @@ SouthernIsland_Interior_EventScript_RecievedLatias::
 	bufferspeciesname 0, SPECIES_LATIAS
 	msgbox SouthernIsland_Interior_Text_Return2, MSGBOX_DEFAULT
 	clearflag FLAG_HIDE_ROUTE_118_STEVEN2
+	setflag FLAG_EON_LATI
 	warp MAP_ROUTE118, 255, 43, 11
 	end
 

@@ -120,11 +120,11 @@ SootopolisCity_Gym_1F_EventScript_JuanDefeated:: @ 8224F82
 	end
 
 SootopolisCity_Gym_1F_EventScript_GiveWaterPulse:: @ 8224FD4
-	giveitem ITEM_TM03
+	giveitem ITEM_HM05
 	compare VAR_RESULT, FALSE
 	goto_if_eq Common_EventScript_BagIsFull
 	msgbox SootopolisCity_Gym_1F_Text_ExplainWaterPulse, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_TM03
+	setflag FLAG_RECEIVED_HM07
 	return
 
 SootopolisCity_Gym_1F_EventScript_GiveWaterPulse2:: @ 8224FF7
@@ -201,16 +201,16 @@ SootopolisCity_Gym_1F_Text_GymGuidePostVictory: @ 82251AF
 	.string "set for the Pokémon League challenge!$"
 
 SootopolisCity_Gym_1F_Text_JuanIntro: @ 8225268
-	.string "Allow me to formally introduce\n"
-	.string "myself.\p"
+	.string "Welcome {PLAYER}, allow me to\n"
+	.string "formally introduce myself.\p"
 	.string "I am Wallace.\n"
 	.string "The Gym Leader of Sootopolis.\p"
 	.string "There's something about you...\n"
 	.string "A difference in your demeanor.\p"
 	.string "I think I sense that in you.\p"
-	.string "What happened inside the Cave Of\n"
-	.string "Origin, and what you did, I will likely\l"
-	.string "learn through our upcoming battle.\p"
+	.string "Thanks to your help, Sootopolis…\n"
+	.string "No, all of Hoenn was saved.\p"
+	.string "On behalf of the people, I thank you.\p"
 	.string "Now, show me. Show me the power you\n"
 	.string "wield with your Pokémon.\p"
 	.string "And I, in turn, shall present you with\n"
@@ -245,10 +245,11 @@ SootopolisCity_Gym_1F_Text_ExplainRainBadgeTakeThis: @ 82255BE
 	.string "battle we shared, take this…$"
 
 SootopolisCity_Gym_1F_Text_ExplainWaterPulse: @ 82256C1
-	.string "The TM I handed you contains\n"
-	.string "Water Pulse.\p"
-	.string "In use, it will occasionally confuse\n"
-	.string "the target with ultrasonic waves.$"
+	.string "That Hidden Machine contains\n"
+	.string "Waterfall.\p"
+	.string "A Pokémon that has learned that HM\n"
+	.string "move can force its way up\l"
+	.string "waterfalls.$"
 
 SootopolisCity_Gym_1F_Text_RegisteredJuan: @ 822574D
 	.string "Registered Gym Leader Wallace\n"
