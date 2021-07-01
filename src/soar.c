@@ -164,6 +164,7 @@ static s32 sPlayerPosZ;
 static u8 sPlayerYaw;
 static u8 sPlayerPitch;
 static u16 sPrevMapSection;
+static u16 sStartMapSection;
 
 static u8 sEonSpriteId;
 static u8 sShadowSpriteId;
@@ -201,6 +202,7 @@ void CB2_InitSoar(void)
 			bool8 inCave;
 			ClearDialogWindowAndFrame(0, 1);
 			RegionMap_GetSectionCoordsFromCurrFieldPos(&sPrevMapSection, &cursorX, &cursorY, &inCave);
+			sStartMapSection = sPrevMapSection;
 			sPrevMapSection = 0xD5;
 
 			sPlayerPosX = Q_8_7(cursorX * 8, 0);
@@ -505,9 +507,9 @@ static const u8 sText_LandHere[] = _("Would you like to land here?");
 
 static void ExitSoar(void)
 {
-	PlaySE(SE_PC_OFF);
 	BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
-	SetMainCallback2(CB2_FadeOut);
+	sPrevMapSection = sStartMapSection;
+	SetMainCallback2(WarpCB2);
 }
 
 // movement limits
