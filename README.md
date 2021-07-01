@@ -45,6 +45,7 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Fly to Routes
 * Lati@s soaring (from ORAS)
 * Reusable TMs
+* TMs can only be bought once (Credit: Lunos)
 * Pokemarts sell based on No. of badges
 * EVs capped to 252
 * BW repel system (Credit: DizzyEgg)
