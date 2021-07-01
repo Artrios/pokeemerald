@@ -7,8 +7,7 @@ gTileset_General:: @ 83DF704
 	.4byte gTilesetPalettes_General
 	.4byte gMetatiles_General
 	.4byte gMetatileAttributes_General
-	.4byte InitTilesetAnim_General
-	.4byte gTilesetPalOverrides_General
+	.4byte NULL
 
 	.align 2
 gTileset_Petalburg:: @ 83DF71C
@@ -19,8 +18,7 @@ gTileset_Petalburg:: @ 83DF71C
 	.4byte gTilesetPalettes_Petalburg
 	.4byte gMetatiles_Petalburg
 	.4byte gMetatileAttributes_Petalburg
-	.4byte InitTilesetAnim_Petalburg
-	.4byte gTilesetPalOverrides_Petalburg
+	.4byte NULL
 
 	.align 2
 gTileset_Rustboro:: @ 83DF734
