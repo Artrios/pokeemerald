@@ -3255,5 +3255,5 @@ static const u8 sUltranecroziumZDesc[] = _(
 
 static const u8 sEonFluteDesc[] = _(
     "A flute that can\n"
-    "summon LATIAS or\n"
-    "LATIOS.");
+    "summon Latias or\n"
+    "Latios.");

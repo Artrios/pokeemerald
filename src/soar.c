@@ -173,7 +173,7 @@ static u8 sShadowSpriteId;
 #define IPART(n) ((n) >> 8)
 #define FPART(n) ((n) & 0xFFFF)
 
-static const u8 sEonFluteUseMessage[] = _("{PLAYER} used the EON FLUTE.{PAUSE_UNTIL_PRESS}");
+static const u8 sEonFluteUseMessage[] = _("{PLAYER} used the Eon Flute.{PAUSE_UNTIL_PRESS}");
 
 void CB2_InitSoar(void)
 {
