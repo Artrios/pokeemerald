@@ -55,7 +55,7 @@ MauvilleCity_Mart_EventScript_Man:: @ 8211125
 MauvilleCity_Mart_EventScript_Woman:: @ 8211125
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_TM56, MauvilleCity_Mart_ReceivedSkyDrop
+	goto_if_set FLAG_RECEIVED_TM58, MauvilleCity_Mart_ReceivedSkyDrop
 	msgbox MauvilleCity_Mart_Text_DoYouLikeScaryRides, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq MauvilleCity_Mart_EventScript_Yes
@@ -68,7 +68,7 @@ MauvilleCity_Mart_EventScript_Yes::
 	giveitem ITEM_TM56
 	compare VAR_RESULT, FALSE
 	goto_if_eq Common_EventScript_ShowBagIsFull
-	setflag FLAG_RECEIVED_TM56
+	setflag FLAG_RECEIVED_TM58
 	goto MauvilleCity_Mart_ReceivedSkyDrop
 	release
 	end

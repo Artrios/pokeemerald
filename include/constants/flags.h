@@ -115,7 +115,7 @@
 #define FLAG_RECEIVED_TM88                   0x65
 #define FLAG_RECEIVED_TM99                   0x66
 #define FLAG_RECEIVED_TM75                   0x67 
-#define FLAG_RECEIVED_TM56                   0x68
+#define FLAG_RECEIVED_TM58                   0x68
 #define FLAG_OCEANIC_MUSEUM_MET_REPORTER     0x69
 #define FLAG_RECEIVED_HM04                   0x6A
 #define FLAG_RECEIVED_HM06                   0x6B
