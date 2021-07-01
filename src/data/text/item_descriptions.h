@@ -1831,7 +1831,7 @@ static const u8 sTM59Desc[] = _(
     "foe is holding.");
 
 static const u8 sTM60Desc[] = _(
-    "Auppresses the foe\n"
+    "Suppresses the foe\n"
     "and makes its move\n"
     "go last.");
 
