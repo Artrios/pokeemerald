@@ -19,20 +19,19 @@ To set up the repository, see [INSTALL.md](INSTALL.md).
 * Wallace is a Gym Leader again (sorry Juan) and Steven's the Champion
 * Changed regi sprites to their doll sprites (they look more accurate!)
 * Animated Mega Stone overworld sprite
-* Day/Night system
+* Removed TMs from pickup table
+* Receive Eon Flute
 
 ### Changes (WIP)
 * Southern Island Event (works well enough for now)
 * Put TMs in correct place
+* Put Mega Stones in correct place
 
 ### Changes (Planned)
 * Incorparate Primal Kyogre/Groudon & Mega Rayquaza
-* Receive Eon Flute
 * Increase bag storage for TMs
 * Change Team Leader and Admin sprites
-* Change Trainer teams
-* Add all currently missing TMs/Mega Stones
-* Can only buy TMs once
+* Update Trainer teams to ORAS
 * Change Battle Frontier Pokemon
 * Receive both bikes
 
