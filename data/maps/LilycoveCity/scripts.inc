@@ -459,7 +459,7 @@ LilycoveCity_Text_Alatria:
 	.string "Trainers hold passionate discussions\l"
 	.string "every day.\p"
 	.string "To commemorate our first meeting,\n"
-	.string "how about a contest quiz?"
+	.string "how about a contest quiz?\p"
 	.string "What Pokémon does Winona the Gym\n"
 	.string "Leader always have with her?\l"
 	.string "Try and show me!$"
@@ -479,7 +479,7 @@ LilycoveCity_Text_YouDontHaveOne:
 LilycoveCity_Text_EventScript_HoldDiscussions:
 	.string "This is where fans of Spectacular\n"
 	.string "Trainers hold passionate discussions\l"
-	.string "every day.\p"
+	.string "every day.$"
 
 LilycoveCity_Text_MayShoppingLetsBattle: @ 81E3061
 	.string "May: Oh, hey?\n"
