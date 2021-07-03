@@ -402,6 +402,10 @@ MeteorFalls_B1F_2R_EventScript_ItemTM02:: @ 82911DF
 	finditem ITEM_TM02
 	end
 
+MeteorFalls_B1F_2R_EventScript_ItemSalamencite:: @ 82911DF
+	finditem ITEM_SALAMENCITE
+	end
+
 NewMauville_Inside_EventScript_ItemUltraBall:: @ 82911EC
 	finditem ITEM_ULTRA_BALL
 	end
@@ -832,4 +836,12 @@ GraniteCave_EventScript_ItemTM65:: @ 82912F0
 
 FortreeCity_EventScript_ItemTM86:: @ 82912F0
 	finditem ITEM_TM86
+	end
+
+SouthernIsland_Interior_EventScript_ItemLatiasite:: @ 82912F0
+	finditem ITEM_LATIASITE
+	end
+
+SouthernIsland_Interior_EventScript_ItemLatiosite:: @ 82912F0
+	finditem ITEM_LATIOSITE
 	end

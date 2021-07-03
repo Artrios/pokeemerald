@@ -508,6 +508,20 @@ SootopolisCity_Movement_GroudonIdle: @ 81E5BF7
 @ If not at PokeCenter, assumed to have arrived via Dive
 SootopolisCity_EventScript_StartRayquazaScene:: @ 81E5BFE
 	lockall
+	clearflag FLAG_ITEM_VENUSAURITE
+	clearflag FLAG_ITEM_CHARIZARD_X
+	clearflag FLAG_ITEM_CHARIZARD_Y
+	clearflag FLAG_ITEM_BLASTOISINITE
+	clearflag FLAG_ITEM_KANGASKHANITE
+	clearflag FLAG_ITEM_AERODACTYLITE
+	clearflag FLAG_ITEM_MEWTWONITE_X
+	clearflag FLAG_ITEM_MEWTWONITE_Y
+	clearflag FLAG_ITEM_AMPHAROSITE
+	clearflag FLAG_ITEM_SCIZORITE
+	clearflag FLAG_ITEM_HOUNDOOMINITE
+	clearflag FLAG_ITEM_TYRANITARITE
+	clearflag FLAG_ITEM_ABOMASITE
+	clearflag FLAG_ITEM_SALAMENCITE
 	special StorePlayerCoordsInVars
 	compare VAR_0x8004, 43
 	goto_if_ne SootopolisCity_EventScript_RayquazaSceneFromDive
