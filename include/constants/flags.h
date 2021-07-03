@@ -163,7 +163,7 @@
 #define FLAG_MR_BRINEY_SAILING_INTRO         0x93
 #define FLAG_DOCK_REJECTED_DEVON_GOODS       0x94
 #define FLAG_DELIVERED_DEVON_GOODS           0x95
-#define FLAG_RECEIVED_CONTEST_PASS           0x96 // Unused, leftover from R/S
+#define FLAG_CAUGHT_ROAMER                   0x96
 #define FLAG_RECEIVED_CASTFORM               0x97
 #define FLAG_RECEIVED_SUPER_ROD              0x98
 #define FLAG_RUSTBORO_NPC_TRADE_COMPLETED    0x99
@@ -1242,12 +1242,12 @@
 #define FLAG_ITEM_FORTREECITY_TM86                                  0x4B2
 #define FLAG_ITEM_SAFARIZONE_SOUTHEAST_TM93                         0x4B3
 #define FLAG_ITEM_AQUAHIDEOUT_TM97                                  0x4B4
-#define FLAG_ITEM_ALTARIANITE                                        0x4B5
+#define FLAG_ITEM_ALTARIANITE                                       0x4B5
 #define FLAG_ITEM_GYARADOSITE                                       0x4B6
 #define FLAG_ITEM_SLOWBRONITE                                       0x4B7
-#define FLAG_ITEM_GARDEVOIRITE                                      0x4B8 // Unused Flag
-#define FLAG_UNUSED_0x4B9                                           0x4B9 // Unused Flag
-#define FLAG_UNUSED_0x4BA                                           0x4BA // Unused Flag
+#define FLAG_ITEM_GARDEVOIRITE                                      0x4B8
+#define FLAG_ITEM_LATIASITE                                         0x4B9
+#define FLAG_ITEM_LATIOSITE                                         0x4BA
 #define FLAG_UNUSED_0x4BB                                           0x4BB // Unused Flag
 #define FLAG_UNUSED_0x4BC                                           0x4BC // Unused Flag
 #define FLAG_UNUSED_0x4BD                                           0x4BD // Unused Flag

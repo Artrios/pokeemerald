@@ -205,7 +205,7 @@ SootopolisCity_Gym_1F_Text_JuanIntro: @ 8225268
 	.string "formally introduce myself.\p"
 	.string "I am Wallace.\n"
 	.string "The Gym Leader of Sootopolis.\p"
-	.string "There's something about you...\n"
+	.string "There's something about you…\n"
 	.string "A difference in your demeanor.\p"
 	.string "I think I sense that in you.\p"
 	.string "Thanks to your help, Sootopolis…\n"
