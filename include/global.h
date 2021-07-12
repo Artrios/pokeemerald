@@ -308,7 +308,7 @@ struct BattleTowerEReaderTrainer
     /*0x10*/ u16 greeting[EASY_CHAT_BATTLE_WORDS_COUNT];
     /*0x1C*/ u16 farewellPlayerLost[EASY_CHAT_BATTLE_WORDS_COUNT];
     /*0x28*/ u16 farewellPlayerWon[EASY_CHAT_BATTLE_WORDS_COUNT];
-    /*0x34*/ struct BattleTowerPokemon party[FRONTIER_PARTY_SIZE];
+    /*0x34*/ struct BattleTowerPokemon party[6];
     /*0xB8*/ u32 checksum;
 };
 

@@ -2039,7 +2039,7 @@ void DoSpecialTrainerBattle(void)
         break;
     case SPECIAL_BATTLE_EREADER:
         ZeroEnemyPartyMons();
-        for (i = 0; i < 3; i++)
+        for (i = 0; i < 6; i++)
             CreateBattleTowerMon(&gEnemyParty[i], &gSaveBlock2Ptr->frontier.ereaderTrainer.party[i]);
         gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_EREADER_TRAINER;
         gTrainerBattleOpponent_A = 0;
