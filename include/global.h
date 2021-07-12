@@ -265,8 +265,7 @@ struct BattleTowerPokemon
     u32 speedIV:5;
     u32 spAttackIV:5;
     u32 spDefenseIV:5;
-    u32 gap:1;
-    u32 abilityNum:1;
+    u32 abilityNum:2;
     u32 personality;
     u8 nickname[POKEMON_NAME_LENGTH + 1];
     u8 friendship;
