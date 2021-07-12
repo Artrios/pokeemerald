@@ -2229,7 +2229,8 @@ bool8 ScrCmd_checkmoneventlegal(struct ScriptContext *ctx)
 // See GetSavedRamScriptIfValid, which is NULL if ValidateReceivedWonderCard returns FALSE
 bool8 ScrCmd_gotoram(struct ScriptContext *ctx)
 {
-    const u8* script = GetSavedRamScriptIfValid();
+    struct RamScriptData* scriptData = &gSaveBlock1Ptr->ramScript.data;
+    const u8* script = scriptData->script;
 
     if (script)
     {
