@@ -4965,12 +4965,12 @@ static void ReturnFromBattleToOverworld(void)
             SetRoamerInactive();
 
         if (gBattleOutcome == B_OUTCOME_CAUGHT) {
-            FlagSet(FLAG_CAUGHT_ROAMER)
-            if (FlagGet(FLAG_EON_LATI) {
-                FlagClear(FLAG_ITEM_LATIOSITE)
+            FlagSet(FLAG_CAUGHT_ROAMER);
+            if (FlagGet(FLAG_EON_LATI)) {
+                FlagClear(FLAG_ITEM_LATIOSITE);
             }
             else {
-                FlagClear(FLAG_ITEM_LATIASITE)
+                FlagClear(FLAG_ITEM_LATIASITE);
             }
         
         }

@@ -509,8 +509,8 @@ SootopolisCity_Movement_GroudonIdle: @ 81E5BF7
 SootopolisCity_EventScript_StartRayquazaScene:: @ 81E5BFE
 	lockall
 	clearflag FLAG_ITEM_VENUSAURITE
-	clearflag FLAG_ITEM_CHARIZARD_X
-	clearflag FLAG_ITEM_CHARIZARD_Y
+	clearflag FLAG_ITEM_CHARIZARDITE_X
+	clearflag FLAG_ITEM_CHARIZARDITE_Y
 	clearflag FLAG_ITEM_BLASTOISINITE
 	clearflag FLAG_ITEM_KANGASKHANITE
 	clearflag FLAG_ITEM_AERODACTYLITE
