@@ -1248,8 +1248,8 @@
 #define FLAG_ITEM_GARDEVOIRITE                                      0x4B8
 #define FLAG_ITEM_LATIASITE                                         0x4B9
 #define FLAG_ITEM_LATIOSITE                                         0x4BA
-#define FLAG_ITEM_SALAMENCITE                                       0x4BB // Unused Flag
-#define FLAG_UNUSED_0x4BC                                           0x4BC // Unused Flag
+#define FLAG_ITEM_SALAMENCITE                                       0x4BB
+#define FLAG_ITEM_PIDGEOTITE                                        0x4BC
 #define FLAG_UNUSED_0x4BD                                           0x4BD // Unused Flag
 #define FLAG_UNUSED_0x4BE                                           0x4BE // Unused Flag
 #define FLAG_UNUSED_0x4BF                                           0x4BF // Unused Flag

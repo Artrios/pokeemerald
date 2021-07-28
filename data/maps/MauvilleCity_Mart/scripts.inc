@@ -65,7 +65,7 @@ MauvilleCity_Mart_EventScript_Woman:: @ 8211125
 
 MauvilleCity_Mart_EventScript_Yes::
 	msgbox MauvilleCity_Mart_Text_YouCool, MSGBOX_DEFAULT
-	giveitem ITEM_TM56
+	giveitem ITEM_TM58
 	compare VAR_RESULT, FALSE
 	goto_if_eq Common_EventScript_ShowBagIsFull
 	setflag FLAG_RECEIVED_TM58

@@ -522,6 +522,7 @@ SootopolisCity_EventScript_StartRayquazaScene:: @ 81E5BFE
 	clearflag FLAG_ITEM_TYRANITARITE
 	clearflag FLAG_ITEM_ABOMASITE
 	clearflag FLAG_ITEM_SALAMENCITE
+	clearflag FLAG_ITEM_PIDGEOTITE
 	special StorePlayerCoordsInVars
 	compare VAR_0x8004, 43
 	goto_if_ne SootopolisCity_EventScript_RayquazaSceneFromDive

@@ -287,5 +287,6 @@ EventScript_ResetAllMapFlags:: @ 82715DE
 	setflag FLAG_ITEM_TYRANITARITE
 	setflag FLAG_ITEM_ABOMASITE
 	setflag FLAG_ITEM_SALAMENCITE
+	setflag FLAG_ITEM_PIDGEOTITE
 	call EventScript_ResetAllBerries
 	end

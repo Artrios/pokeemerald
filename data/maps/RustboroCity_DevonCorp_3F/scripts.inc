@@ -175,8 +175,20 @@ RustboroCity_DevonCorp_3F_EventScript_GiveExpShare:: @ 8212595
 	end
 
 RustboroCity_DevonCorp_3F_EventScript_MrStoneAfterFavor:: @ 82125CC
+	goto_if_unset FLAG_ITEM_PIDGEOTITE, RustboroCity_DevonCorp_3F_EventScript_Pidgeotite
 	msgbox RustboroCity_DevonCorp_3F_Text_NotFamiliarWithTrends, MSGBOX_DEFAULT
 	closemessage
+	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
+	waitmovement 0
+	release
+	end
+
+RustboroCity_DevonCorp_3F_EventScript_Pidgeotite::
+	msgbox RustboroCity_DevonCorp_3F_Text_IHeard, MSGBOX_DEFAULT
+	giveitem ITEM_PIDGEOTITE
+	msgbox RustboroCity_DevonCorp_3F_Text_MyFavourite, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_ITEM_PIDGEOTITE
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
 	release
@@ -308,3 +320,12 @@ RustboroCity_DevonCorp_3F_Text_RareRocksDisplay: @ 8212EE9
 	.string "It's a collection of rare rocks and\n"
 	.string "stones assembled by the President.$"
 
+RustboroCity_DevonCorp_3F_Text_IHeard:
+	.string "Mr. Stone: {PLAYER}{KUN}!\n"
+	.string "I heard from Steven that you were\l"
+	.string "a great help in Sootopolis, and so\l"
+	.string "I'd like you to have this.$"
+
+RustboroCity_DevonCorp_3F_Text_MyFavourite:
+	.string "That's my favourite stone. I'm sure"
+	.string "you'll make good use of it.$"
