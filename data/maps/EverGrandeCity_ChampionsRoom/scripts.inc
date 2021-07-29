@@ -53,6 +53,7 @@ EverGrandeCity_ChampionsRoom_EventScript_Defeated:: @ 8228A61
 	setmetatile 6, 1, METATILE_EliteFour_OpenDoorChampion_Frame, 0
 	setmetatile 6, 2, METATILE_EliteFour_OpenDoorChampion_Opening, 0
 	special DrawWholeMapView
+	goto_if_unset FLAG_IS_CHAMPION, EverGrandeCity_ChampionsRoom_EventScript_FirstDefeat
 	msgbox EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	closemessage
 	playse SE_DOOR
@@ -69,6 +70,27 @@ EverGrandeCity_ChampionsRoom_EventScript_Defeated:: @ 8228A61
 	compare VAR_RESULT, FEMALE
 	goto_if_eq EverGrandeCity_ChampionsRoom_EventScript_BrendanAdvice
 	end
+
+EverGrandeCity_ChampionsRoom_EventScript_FirstDefeat:: @ 8228A61
+	msgbox EverGrandeCity_ChampionsRoom_Text_GiveMetagrossite, MSGBOX_DEFAULT
+	giveitem ITEM_METAGROSSITE
+	msgbox EverGrandeCity_ChampionsRoom_Text_FirstPostBattleSpeech, MSGBOX_DEFAULT
+	closemessage
+	playse SE_DOOR
+	checkplayergender
+	compare VAR_RESULT, MALE
+	call_if_eq EverGrandeCity_ChampionsRoom_EventScript_PlayMayMusic
+	compare VAR_RESULT, FEMALE
+	call_if_eq EverGrandeCity_ChampionsRoom_EventScript_PlayBrendanMusic
+	addobject LOCALID_RIVAL
+	call EverGrandeCity_ChampionsRoom_EventScript_RivalApproachPlayer
+	checkplayergender
+	compare VAR_RESULT, MALE
+	goto_if_eq EverGrandeCity_ChampionsRoom_EventScript_MayAdvice
+	compare VAR_RESULT, FEMALE
+	goto_if_eq EverGrandeCity_ChampionsRoom_EventScript_BrendanAdvice
+	end
+
 
 EverGrandeCity_ChampionsRoom_EventScript_PlayMayMusic:: @ 8228ABC
 	playbgm MUS_ENCOUNTER_MAY, FALSE
@@ -255,6 +277,23 @@ EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech: @ 8228F66
 	.string "those feelings with all their might...\p"
 	.string "They came together as one, and created\n"
 	.string "an even greater power.\p"
+	.string "And thus, you were able to grasp\n"
+	.string "victory today!\p"
+	.string "You are rightfully the Hoenn region's\n"
+	.string "new...$"
+
+EverGrandeCity_ChampionsRoom_Text_GiveMetagrossite:
+	.string "Steven: Congratulations!\p"
+	.string "The feelings you have for your\n"
+	.string "Pokémon...\p"
+	.string "And the POKéMON that responded to\n"
+	.string "those feelings with all their might...\p"
+	.string "They came together as one, and created\n"
+	.string "an even greater power.\p"
+	.string "I have something I'd like to give to\n"
+	.string "you in thanks for all you've done.$"
+
+EverGrandeCity_ChampionsRoom_Text_FirstPostBattleSpeech: @ 8228F66
 	.string "And thus, you were able to grasp\n"
 	.string "victory today!\p"
 	.string "You are rightfully the Hoenn region's\n"
