@@ -1461,10 +1461,19 @@ SootopolisCity_EventScript_Maxie:: @ 81E64F2
 
 SootopolisCity_EventScript_MaxieRayquaza:: @ 81E6509
 	msgbox SootopolisCity_Text_AfterAllOurScheming, MSGBOX_DEFAULT
+	call_if_unset FLAG_ITEM_CAMERUPTITE, SootopolisCity_EventScript_MaxieCameruptite
 	setflag FLAG_MET_MAXIE_SOOTOPOLIS
 	goto_if_set FLAG_MET_ARCHIE_SOOTOPOLIS, SootopolisCity_EventScript_MaxieArchieLeave
 	releaseall
 	end
+
+SootopolisCity_EventScript_MaxieCameruptite::
+	faceplayer
+	msgbox SootopolisCity_Text_Cameruptite, MSGBOX_DEFAULT
+	giveitem ITEM_CAMERUPTITE
+	setflag FLAG_ITEM_CAMERUPTITE
+	applymovement VAR_LAST_TALKED, Common_Movement_FaceDown
+	return
 
 SootopolisCity_EventScript_Archie:: @ 81E651F
 	lockall
@@ -1477,10 +1486,19 @@ SootopolisCity_EventScript_Archie:: @ 81E651F
 
 SootopolisCity_EventScript_ArchieRayquaza:: @ 81E6536
 	msgbox SootopolisCity_Text_TryingMeaninglessToPokemon, MSGBOX_DEFAULT
+	call_if_unset FLAG_ITEM_SHARPEDONITE, SootopolisCity_EventScript_ArchieSharpedonite
 	setflag FLAG_MET_ARCHIE_SOOTOPOLIS
 	goto_if_set FLAG_MET_MAXIE_SOOTOPOLIS, SootopolisCity_EventScript_MaxieArchieLeave
 	releaseall
 	end
+
+SootopolisCity_EventScript_ArchieSharpedonite::
+	faceplayer
+	msgbox SootopolisCity_Text_Sharpedonite, MSGBOX_DEFAULT
+	giveitem ITEM_SHARPEDONITE
+	setflag FLAG_ITEM_SHARPEDONITE
+	applymovement VAR_LAST_TALKED, Common_Movement_FaceDown
+	return
 
 SootopolisCity_EventScript_MaxieArchieLeave:: @ 81E654C
 	setflag FLAG_HIDE_SOOTOPOLIS_CITY_MAXIE
@@ -1861,3 +1879,13 @@ SootopolisCity_Text_ExplainEonLatias:
 SootopolisCity_Text_DazzledByMentor: @ 81E7CBC
 	.string "When you're all set to go,\n"
 	.string "step through that door.$"
+
+SootopolisCity_Text_Cameruptite:
+	.string "Thank you for correcting my\n"
+	.string "foolish mistake. Here, it's not\l"
+	.string "much but please take this.$"
+
+SootopolisCity_Text_Sharpedonite:
+	.string "I must apologise for what I've done\n"
+	.string "and what you went through to fix it.\l"
+	.string "Please, take this as thanks.$"
