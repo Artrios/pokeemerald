@@ -24340,19 +24340,20 @@ General_MegaEvolution:
 	call MegaEvolutionParticles
 	call MegaEvolutionParticles
 	waitforvisualfinish
+	clearmonbg ANIM_ATK_PARTNER
+	blendoff
 	playsewithpan SE_M_SOLAR_BEAM, SOUND_PAN_ATTACKER
 	createsprite gMegaStoneSpriteTemplate, ANIM_ATTACKER, 41, 0, 0, 0, 0
 	delay 20
 	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 0, 16, RGB_WHITEALPHA
-	waitforvisualfinish
+	delay 40
 	createvisualtask AnimTask_TransformMon, 2, 0, 1
+	delay 50
 	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 16, 0, RGB_WHITEALPHA
 	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
 	waitforvisualfinish
 	createsprite gMegaSymbolSpriteTemplate ANIM_ATTACKER, 2
 	waitforvisualfinish
-	clearmonbg ANIM_ATK_PARTNER
-	blendoff
 	end
 
 MegaEvolutionParticles:
