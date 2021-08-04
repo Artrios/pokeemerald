@@ -46,6 +46,7 @@ LatiEventEnd::
 	removeobject 22
 	release
 	setvar VAR_ROUTE118_STATE, 4
+	clearflag FLAG_LANDMARK_SOUTHERN_ISLAND
 	end
 
 Route118_EventScript_GoodRodFisherman:: @ 81F3E14
@@ -145,6 +146,7 @@ Route118_EventScript_StevenTrigger:: @ 81F3EE4
 	msgbox Route118_Text_StevenLatias2, MSGBOX_DEFAULT
 	clearflag FLAG_HIDE_SOUTHERN_ISLAND_EON_STONE
 	clearflag FLAG_HIDE_SOUTHERN_ISLAND_UNCHOSEN_EON_DUO_MON
+	setflag FLAG_SOUTHERNISLAND_SHIP
 	warp MAP_SOUTHERN_ISLAND_EXTERIOR, 255, 15, 20
 	end
 
@@ -155,13 +157,13 @@ Route118_EventScript_StevenExit0:: @ 81F3F28
 	return
 
 Route118_EventScript_StevenExit1:: @ 81F3F3A
-	applymovement OBJ_EVENT_ID_PLAYER, Route118_Movement_PlayerWatchStevenExit
+	applymovement OBJ_EVENT_ID_PLAYER, Route118_Movement_TurnToStevenLeft
 	applymovement LOCALID_STEVEN, Route118_Movement_StevenExit1
 	waitmovement 0
 	return
 
 Route118_EventScript_StevenExit2:: @ 81F3F4C
-	applymovement OBJ_EVENT_ID_PLAYER, Route118_Movement_PlayerWatchStevenExit
+	applymovement OBJ_EVENT_ID_PLAYER, Route118_Movement_TurnToStevenLeft
 	applymovement LOCALID_STEVEN, Route118_Movement_StevenExit2
 	waitmovement 0
 	return
@@ -189,6 +191,11 @@ Route118_Movement_PlayerTurnsLeft::
 Route118_Movement_PlayerWatchStevenExit: @ 81F3F5E
 	delay_16
 	walk_in_place_fastest_right
+	step_end
+
+Route118_Movement_TurnToStevenLeft: @ 81F3F5E
+	delay_16
+	walk_in_place_fastest_left
 	step_end
 
 Route118_Movement_StevenApproachLedge0: @ 81F3F61
@@ -311,8 +318,8 @@ Route118_Text_StevenQuestions: @ 81F40BE
 	.string "favorites, that's fine.\p"
 	.string "Perhaps you find it more fun to raise\n"
 	.string "all sorts of Pokémon.\p"
-	.string "As a Trainer of Pokémon,\n"
-	.string "what do you think?\p"
+	.string "As a Trainer of Pokémon, what do you\n"
+	.string "think?\p"
 	.string "Of course, it's not any of my business.\p"
 	.string "It would be nice if we were to meet\n"
 	.string "again somewhere.$"

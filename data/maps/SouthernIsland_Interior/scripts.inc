@@ -334,12 +334,12 @@ SouthernIsland_Interior_EventScript_SendLatiasPC::
 	compare VAR_RESULT, NO
 	goto_if_eq SouthernIsland_Interior_EventScript_RecievedLatias
 	call Common_EventScript_NameReceivedBoxMon
+	call Common_EventScript_TransferredToPC
+	closemessage
 	goto SouthernIsland_Interior_EventScript_RecievedLatias
 	end
 
 SouthernIsland_Interior_EventScript_RecievedLatias::
-	call Common_EventScript_TransferredToPC
-	closemessage
 	applymovement 3, SouthernIsland_Interior_Movement_StevenMove1
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, SouthernIsland_Interior_Movement_PlayerTurnsRight
@@ -368,12 +368,12 @@ SouthernIsland_Interior_EventScript_SendLatiosPC::
 	compare VAR_RESULT, NO
 	goto_if_eq SouthernIsland_Interior_EventScript_RecievedLatios
 	call Common_EventScript_NameReceivedBoxMon
+	call Common_EventScript_TransferredToPC
+	closemessage
 	goto SouthernIsland_Interior_EventScript_RecievedLatios
 	end
 
 SouthernIsland_Interior_EventScript_RecievedLatios::
-	call Common_EventScript_TransferredToPC
-	closemessage
 	applymovement 3, SouthernIsland_Interior_Movement_StevenMove2
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, SouthernIsland_Interior_Movement_PlayerTurnsLeft
@@ -469,10 +469,11 @@ SouthernIsland_Interior_Movement_PlayerTurnsRight::
 	step_end
 
 Script_PlayerLostTheFight::
-	msgbox Text_PlayerLostTheFight, MSGBOX_DEFAULT
-	closemessage
-	release
-	end
+	fadescreen FADE_TO_BLACK
+	setvar VAR_ROUTE118_STATE, 0
+	clearflag FLAG_HIDE_ROUTE_118_STEVEN
+	special SetCB2WhiteOut
+	waitstate
 
 Enemy1DefeatText::
 	.string "F.$"
