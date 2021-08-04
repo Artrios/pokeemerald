@@ -1223,8 +1223,8 @@
 #define FLAG_ITEM_ABOMASITE                                         0x49F
 #define FLAG_ITEM_AERODACTYLITE                                     0x4A0
 #define FLAG_ITEM_AMPHAROSITE                                       0x4A1
-#define FLAG_ITEM_CHARZARDITE_X                                     0x4A2
-#define FLAG_ITEM_CHARZARDITE_Y                                     0x4A3
+#define FLAG_ITEM_CHARIZARDITE_X                                    0x4A2
+#define FLAG_ITEM_CHARIZARDITE_Y                                    0x4A3
 #define FLAG_ITEM_HOUNDOOMINITE                                     0x4A4
 #define FLAG_ITEM_KANGASKHANITE                                     0x4A5
 #define FLAG_ITEM_MEWTWONITE_X                                      0x4A6
