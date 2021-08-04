@@ -838,6 +838,18 @@ FortreeCity_EventScript_ItemTM86:: @ 82912F0
 	finditem ITEM_TM86
 	end
 
+FortreeCity_EventScript_Garchompite:: @ 82912F0
+	finditem ITEM_GARCHOMPITE
+	end
+
+MauvilleCity_EventScript_Lopunnite:: @ 82912F0
+	finditem ITEM_LOPUNNITE
+	end
+
+BattleFrontier_EventScript_Audinite:: @ 82912F0
+	finditem ITEM_AUDINITE
+	end
+
 SouthernIsland_Interior_EventScript_ItemLatiasite:: @ 82912F0
 	finditem ITEM_LATIASITE
 	end
