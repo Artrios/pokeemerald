@@ -422,7 +422,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
 
 static u8 GetTrainerHillUnkVal(void)
 {
-    return (gSaveBlock1Ptr->trainerHill.unused + 1) % 256;
+    //return (gSaveBlock1Ptr->trainerHill.unused + 1) % 256;
 }
 
 static bool32 ValidateTrainerChecksum(struct EReaderTrainerHillTrainer * hillTrainer)
@@ -482,7 +482,7 @@ static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerHillSet * hillSe
 
     memset(hillTag, 0, SECTOR_SIZE);
     hillTag->numTrainers = hillSet->numTrainers;
-    hillTag->unused1 = GetTrainerHillUnkVal();
+    //hillTag->unused1 = GetTrainerHillUnkVal();
     hillTag->numFloors = (hillSet->numTrainers + 1) / TRAINER_HILL_TRAINERS_PER_FLOOR;
 
     for (i = 0; i < hillSet->numTrainers; i++)

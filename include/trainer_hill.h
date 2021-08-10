@@ -49,7 +49,7 @@ struct TrHillFloor
 struct TrHillTag
 {
     u8 numTrainers;
-    u8 unused1;
+    //u8 unused1;
     u8 numFloors;
     u32 checksum;
     struct TrHillFloor floors[0];
