@@ -499,6 +499,31 @@ Route119_EventScript_ScottWonAtFortreeGymCall:: @ 81F49EC
 	releaseall
 	end
 
+Route119_EventScript_AcroBikeGuy:: @ 81F476B
+	call_if_set FLAG_MACHBIKE, EventScript_BothBikes
+	goto_if_set FLAG_ACROBIKE, Route119_EventScript_AlwaysFly
+	msgbox Route119_Text_NiceJump, MSGBOX_NPC
+	setflag FLAG_ACROBIKE
+	end
+
+EventScript_BothBikes::
+	setflag FLAG_BOTHBIKES
+	return
+
+Route119_EventScript_AlwaysFly::
+	msgbox Route119_Text_AlwaysFly, MSGBOX_NPC
+	end
+
+Route119_Text_NiceJump:
+	.string "Nice Jump!\p"
+	.string "So you can do that kind of stuff with\n"
+	.string "a Bike, too.$"
+
+Route119_Text_AlwaysFly:
+	.string "I always use my Pokémon to fly around,\n"
+	.string "but riding a Bike looks like fun, too!\l"
+	.string "Maybe I should get one for myself.$"
+
 Route119_Text_MayIntro: @ 81F49FD
 	.string "May: {PLAYER}{KUN}!\n"
 	.string "Where were you? I was looking for you!\p"

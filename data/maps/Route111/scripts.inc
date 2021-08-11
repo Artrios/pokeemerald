@@ -594,6 +594,29 @@ Route111_EventScript_TrainerHillSign:: @ 81F146C
 	msgbox Route111_Text_TrainerHillSign, MSGBOX_SIGN
 	end
 
+Route111_EventScript_MachBikeGirl:: @ 81F476B
+	call_if_set FLAG_ACROBIKE, EventScript_BothBikes
+	goto_if_set FLAG_MACHBIKE, Route119_EventScript_GoodShape
+	msgbox Route111_Text_How, MSGBOX_NPC
+	setflag FLAG_MACHBIKE
+	end
+
+Route119_EventScript_GoodShape::
+	msgbox Route111_Text_GoodShape, MSGBOX_NPC
+	end
+
+Route111_Text_How:
+	.string "How did you manage to climb your way\n"
+	.string "up here? Did you use a strange power\l"
+	.string "like me, I wonder?\p"
+	.string "...You rode a Mach Bike up here?\n"
+	.string "It wasn't some strange power?\l"
+	.string "Do you think I could ride one, too?$"
+
+Route111_Text_GoodShape:
+	.string "I'm in pretty good shape, so maybe I'll\n"
+	.string "try riding one of those Mach Bikes, too.$"
+
 Route111_Text_BattleOurFamily: @ 81F1475
 	.string "Hello! I take it you're a traveler.\p"
 	.string "How's this? What do you say to taking\n"
