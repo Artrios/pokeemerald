@@ -357,7 +357,7 @@ MauvilleCity_BikeShop_Text_Jumps: @ 820F898
 	.string "Want to read a different page?$"
 
 MauvilleCity_BikeShop_Text_ItsYou: @ 820F898
-	.string "Oh, it's you!\n"
+	.string "Rydel: Oh, it's you!\n"
 	.string "I've been waiting for you!\p"
 	.string "Many people have come to my shop,\n"
 	.string "saying they saw you riding a Rydel's\l"
@@ -368,6 +368,6 @@ MauvilleCity_BikeShop_Text_ItsYou: @ 820F898
 	.string "I'll give you another Bike!$"
 
 MauvilleCity_BikeShop_Text_MayTheWind: @ 820F898
-	.string "May the wind always be at your back\n"
-	.string "on your adventure!$"
+	.string "Rydel: May the wind always be at your\n"
+	.string "back on your adventure!$"
 
