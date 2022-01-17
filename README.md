@@ -1,3 +1,5 @@
+## This branch is outdated, please use [**Emerald_DX2**](https://github.com/Artrios/pokeemerald/tree/Emerald_DX2)
+
 # About this branch
 This is a branch of the [**pokeemerald**](https://travis-ci.org/pret/pokeemerald) dissasembly that is meant to act as somewhat of a demake of ORAS with as many of their mechanics as possible, but with Emerald's story.
 It uses the [**feature_update**](https://github.com/Artrios/pokeemerald/tree/feature_update) branch as a base.
