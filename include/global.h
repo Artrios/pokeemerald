@@ -566,6 +566,7 @@ struct SaveBlock2
               struct ItemSlot bagPocket_MegaStones[BAG_MEGASTONES_COUNT];
     /*0x848*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     /*0xF2C*/ bool8 autoRun;
+              u32 uniqueID;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

@@ -1764,6 +1764,7 @@ ALIGNED(4) const u8 gText_PickOKCancel[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Ok {B_
 ALIGNED(4) const u8 gText_GlobalTradeStation[] = _("Global Trade Station");
 ALIGNED(4) const u8 gText_PokemonWillBeSent[] = _("{STR_VAR_1} will be deposited.");
 ALIGNED(4) const u8 gText_ChooseGTSPokemon[] = _("Please choose the Pokémon you want.");
+ALIGNED(4) const u8 gText_ChooseGTSPokemonLevel[] = _("Please choose the level.");
 const u8 gText_PlayersBattleResults[] = _("{PLAYER}'s battle results");
 const u8 gText_TotalRecordWLD[] = _("Total record W:{STR_VAR_1} L:{STR_VAR_2} D:{STR_VAR_3}");
 const u8 gText_WinLoseDraw[] = _("{CLEAR_TO 0x53}Win{CLEAR_TO 0x80}Lose{CLEAR_TO 0xB0}Draw");
@@ -1876,5 +1877,27 @@ const u8 gText_Special[] = _("Special");
 
 //Global Trade Station
 const u8 gText_SearchPokemon[] = _("Search Pokémon");
-
-
+const u8 gText_AnyLevel[] = _("Any");
+const u8 gText_UnderLevel10[] = _("Lv. 9 and under");
+const u8 gText_AboveLevel10[] = _("Lv. 10 and up");
+const u8 gText_AboveLevel20[] = _("Lv. 20 and up");
+const u8 gText_AboveLevel30[] = _("Lv. 30 and up");
+const u8 gText_AboveLevel40[] = _("Lv. 40 and up");
+const u8 gText_AboveLevel50[] = _("Lv. 50 and up");
+const u8 gText_AboveLevel60[] = _("Lv. 60 and up");
+const u8 gText_AboveLevel70[] = _("Lv. 70 and up");
+const u8 gText_AboveLevel80[] = _("Lv. 80 and up");
+const u8 gText_AboveLevel90[] = _("Lv. 90 and up");
+const u8 gText_Level1to10[] = _("Lv. 1 to 10");
+const u8 gText_Level11to20[] = _("Lv. 11 to 20");
+const u8 gText_Level21to30[] = _("Lv. 21 to 30");
+const u8 gText_Level31to40[] = _("Lv. 31 to 40");
+const u8 gText_Level41to50[] = _("Lv. 41 to 50");
+const u8 gText_Level51to60[] = _("Lv. 51 to 60");
+const u8 gText_Level61to70[] = _("Lv. 61 to 70");
+const u8 gText_Level71to80[] = _("Lv. 71 to 80");
+const u8 gText_Level81to90[] = _("Lv. 81 to 90");
+const u8 gText_Level91to100[] = _("Lv. 91 to 100");
+const u8 gText_ConfirmOffer[] = _("Offer {STR_VAR_1} for {STR_VAR_2}?");
+const u8 gText_OfferPokemon[] = _("{STR_VAR_1} will be put on offer.");
+const u8 gText_ByeByeVar2[] = _("Bye-bye, {STR_VAR_1}!");

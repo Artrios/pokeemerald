@@ -99,6 +99,7 @@ extern struct ScrollArrowsTemplate gTempScrollArrowTemplate;
 extern struct ListMenuTemplate gMultiuseListMenuTemplate;
 
 s32 DoMysteryGiftListMenu(const struct WindowTemplate *windowTemplate, const struct ListMenuTemplate *listMenuTemplate, u8 drawMode, u16 tileNum, u16 palNum);
+s32 DoGTSListMenu(const struct WindowTemplate *windowTemplate, const struct ListMenuTemplate *listMenuTemplate, u8 drawMode, u16 tileNum, u16 palNum);
 u8 ListMenuInit(struct ListMenuTemplate *listMenuTemplate, u16 scrollOffset, u16 selectedRow);
 u8 ListMenuInitInRect(struct ListMenuTemplate *listMenuTemplate, struct ListMenuWindowRect *rect, u16 scrollOffset, u16 selectedRow);
 s32 ListMenu_ProcessInput(u8 listTaskId);

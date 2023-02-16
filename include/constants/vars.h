@@ -269,7 +269,7 @@
 #define VAR_DEXNAV_SPECIES                   0x40FA // Registered dexnav species
 #define VAR_DEXNAV_STEP_COUNTER              0x40FB // steps for finding hidden pokemon
 #define VAR_DOME_TRAINER                     0x40FC // Counter for eReader Dome Trainers
-#define VAR_UNUSED_0x40FD                    0x40FD // Unused Var
+#define VAR_DEPOSIT_SPECIES                  0x40FD // Species of pokemon deposited to GTS, for detecting Shelmet/Karrablast evolution
 #define VAR_UNUSED_0x40FE                    0x40FE // Unused Var
 #define VAR_UNUSED_0x40FF                    0x40FF // Unused Var
 

@@ -2,6 +2,7 @@
 #include "main.h"
 #include "text.h"
 #include "task.h"
+#include "data.h"
 #include "malloc.h"
 #include "gpu_regs.h"
 #include "scanline_effect.h"
@@ -31,25 +32,44 @@
 #include "link_rfu.h"
 #include "overworld.h"
 #include "party_menu.h"
+#include "pokedex.h"
 #include "wonder_news.h"
 #include "constants/cable_club.h"
 #include "constants/party_menu.h"
 #include "field_weather.h"
 #include "constants/rgb.h"
 #include "field_screen_effect.h"
+#include "trade.h"
 
 #define LIST_MENU_TILE_NUM 10
 #define LIST_MENU_PAL_NUM 224
+
+#define LETTER_IN_RANGE_UPPER(letter, range) \
+    ((letter) >= sLetterSearchRanges[range][0]                                  \
+  && (letter) < sLetterSearchRanges[range][0] + sLetterSearchRanges[range][1])  \
+
+#define LETTER_IN_RANGE_LOWER(letter, range) \
+    ((letter) >= sLetterSearchRanges[range][2]                                  \
+  && (letter) < sLetterSearchRanges[range][2] + sLetterSearchRanges[range][3])  \
+
 
 static void LoadMysteryGiftTextboxBorder(u8 bgId);
 static void CreateGlobalTradeStationTask(void);
 static void RecreateGlobalTradeStationTask(void);
 static void Task_GlobalTradeStation(u8 taskId);
+static void CreatePokedexListGTS();
+static void ClearMonListEntryGTS(u8 x, u8 y);
+static u16 GetNextPositionGTS(u8, u16, u16, u16);
 
 EWRAM_DATA static u8 sDownArrowCounterAndYCoordIdx[8] = {};
+EWRAM_DATA struct GTSPokedexView *sGTSPokedexView = NULL;
 
 static const u16 sTextboxBorder_Pal[] = INCBIN_U16("graphics/interface/mystery_gift_textbox_border.gbapal");
 static const u32 sTextboxBorder_Gfx[] = INCBIN_U32("graphics/interface/mystery_gift_textbox_border.4bpp.lz");
+
+// const rom data
+//#include "data/pokemon/pokedex_orders.h"
+extern const u16 gPokedexOrder_Alphabetical[];
 
 struct GlobalTradeStationTaskData
 {
@@ -128,6 +148,14 @@ static const struct WindowTemplate sMainWindows[] = {
         .height = 5,
         .paletteNum = 13,
         .baseBlock = 0x004f
+    }, {
+        .bg = 0,
+        .tilemapLeft = 18,
+        .tilemapTop = 2,
+        .width = 12,
+        .height = 12,
+        .paletteNum = 12,
+        .baseBlock = 0x00e5
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -160,6 +188,36 @@ static const struct WindowTemplate sWindowTemplate_GiftSelect = {
     .height = 4,
     .paletteNum = 12,
     .baseBlock = 0x00e5
+};
+
+static const struct WindowTemplate sWindowTemplate_ABCSelect = {
+    .bg = 0,
+    .tilemapLeft = 13,
+    .tilemapTop = 3,
+    .width = 4,
+    .height = 10,
+    .paletteNum = 12,
+    .baseBlock = 0x00e5
+};
+
+static const struct WindowTemplate sWindowTemplate_LevelSelect = {
+    .bg = 0,
+    .tilemapLeft = 17,
+    .tilemapTop = 3,
+    .width = 12,
+    .height = 10,
+    .paletteNum = 12,
+    .baseBlock = 0x00e5
+};
+
+static const struct WindowTemplate sWindowTemplate_PokemonSelect = {
+    .bg = 0,
+    .tilemapLeft = 19,
+    .tilemapTop = 3,
+    .width = 10,
+    .height = 10,
+    .paletteNum = 12,
+    .baseBlock = 0x0155
 };
 
 static const struct WindowTemplate sWindowTemplate_ThreeOptions = {
@@ -221,6 +279,49 @@ static const struct ListMenuItem sListMenuItems_SearchDeposit[] = {
 static const struct ListMenuItem sListMenuItems_SearchWithdraw[] = {
     { gText_SearchPokemon,  0 },
     { gText_WithdrawPokemon,                1 },
+    { gText_Exit3,                LIST_CANCEL }
+};
+
+static const struct ListMenuItem sListMenuItems_ABC[] = {
+    { gText_DexSearchAlphaABC,  0 },
+    { gText_DexSearchAlphaDEF,  1 },
+    { gText_DexSearchAlphaGHI,  2 },
+    { gText_DexSearchAlphaJKL,  3 },
+    { gText_DexSearchAlphaMNO,  4 },
+    { gText_DexSearchAlphaPQR,  5 },
+    { gText_DexSearchAlphaSTU,  6 },
+    { gText_DexSearchAlphaVWX,  7 },
+    { gText_DexSearchAlphaYZ,   8 },
+    { gText_Exit3,                LIST_CANCEL }
+};
+
+static const struct ListMenuItem sListMenuItems_Levels[] = {
+    { gText_AnyLevel,  0 },
+    { gText_UnderLevel10,  1 },
+    { gText_AboveLevel10,  2 },
+    { gText_AboveLevel20,  3 },
+    { gText_AboveLevel30,  4 },
+    { gText_AboveLevel40,  5 },
+    { gText_AboveLevel50,  6 },
+    { gText_AboveLevel60,  7 },
+    { gText_AboveLevel70,  8 },
+    { gText_AboveLevel80,  9 },
+    { gText_AboveLevel90, 10 },
+    { gText_Exit3,                LIST_CANCEL }
+};
+
+static const struct ListMenuItem sListMenuItems_LevelsWanted[] = {
+    { gText_AnyLevel,  0 },
+    { gText_Level1to10,  1 },
+    { gText_Level11to20,  2 },
+    { gText_Level21to30,  3 },
+    { gText_Level31to40,  4 },
+    { gText_Level41to50,  5 },
+    { gText_Level51to60,  6 },
+    { gText_Level61to70,  7 },
+    { gText_Level71to80,  8 },
+    { gText_Level81to90,  9 },
+    { gText_Level91to100, 10 },
     { gText_Exit3,                LIST_CANCEL }
 };
 
@@ -311,6 +412,69 @@ static const struct ListMenuTemplate sListMenu_ReceiveToss = {
     .cursorKind = 0
 };
 
+static const struct ListMenuTemplate sListMenu_ABCMenu = {
+    .items = sListMenuItems_ABC,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+    .itemPrintFunc = NULL,
+    .totalItems = 9,
+    .maxShowed = 5,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = FONT_NORMAL,
+    .cursorKind = 0
+};
+
+static const struct ListMenuTemplate sListMenu_Levels = {
+    .items = sListMenuItems_Levels,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+    .itemPrintFunc = NULL,
+    .totalItems = 11,
+    .maxShowed = 5,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = FONT_NORMAL,
+    .cursorKind = 0
+};
+
+static const struct ListMenuTemplate sListMenu_LevelsWanted = {
+    .items = sListMenuItems_LevelsWanted,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+    .itemPrintFunc = NULL,
+    .totalItems = 11,
+    .maxShowed = 5,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = FONT_NORMAL,
+    .cursorKind = 0
+};
+
 static const struct ListMenuTemplate sListMenu_ReceiveSend = {
     .items = sListMenuItems_ReceiveSend,
     .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
@@ -363,6 +527,532 @@ static const u8 *const sUnusedMenuTexts[] = {
 ALIGNED(2) static const u8 sTextColors_TopMenu[]      = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,     TEXT_COLOR_DARK_GRAY };
 ALIGNED(2) static const u8 sTextColors_TopMenu_Copy[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,     TEXT_COLOR_DARK_GRAY };
 ALIGNED(2) static const u8 sGTS_Ereader_TextColor_2[]  = { TEXT_COLOR_WHITE,       TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY };
+
+// For scrolling search parameter
+#define MAX_SEARCH_PARAM_ON_SCREEN   6
+#define MAX_SEARCH_PARAM_CURSOR_POS  (MAX_SEARCH_PARAM_ON_SCREEN - 1)
+#define LIST_SCROLL_STEP         16
+
+// By scroll speed. Last element of each unused
+static const u8 sScrollMonIncrements[] = {4, 8, 16, 32, 32};
+static const u8 sScrollTimers[] = {8, 4, 2, 1, 1};
+static const u8 sText_TenDashes[] = _("----------");
+
+struct SearchOptionText
+{
+    const u8 *title;
+};
+
+enum
+{
+    NAME_ABC = 1,
+    NAME_DEF,
+    NAME_GHI,
+    NAME_JKL,
+    NAME_MNO,
+    NAME_PQR,
+    NAME_STU,
+    NAME_VWX,
+    NAME_YZ,
+};
+
+// First character in range followed by number of characters in range for upper and lowercase
+static const u8 sLetterSearchRanges[][4] =
+{
+    {}, // Name not specified, shouldn't be reached
+    [NAME_ABC] = {CHAR_A, 3, CHAR_a, 3},
+    [NAME_DEF] = {CHAR_D, 3, CHAR_d, 3},
+    [NAME_GHI] = {CHAR_G, 3, CHAR_g, 3},
+    [NAME_JKL] = {CHAR_J, 3, CHAR_j, 3},
+    [NAME_MNO] = {CHAR_M, 3, CHAR_m, 3},
+    [NAME_PQR] = {CHAR_P, 3, CHAR_p, 3},
+    [NAME_STU] = {CHAR_S, 3, CHAR_s, 3},
+    [NAME_VWX] = {CHAR_V, 3, CHAR_v, 3},
+    [NAME_YZ]  = {CHAR_Y, 2, CHAR_y, 2},
+};
+
+static const struct SearchOptionText sDexSearchNameOptions[] =
+{
+    [NAME_ABC] = {gText_DexSearchAlphaABC},
+    [NAME_DEF] = {gText_DexSearchAlphaDEF},
+    [NAME_GHI] = {gText_DexSearchAlphaGHI},
+    [NAME_JKL] = {gText_DexSearchAlphaJKL},
+    [NAME_MNO] = {gText_DexSearchAlphaMNO},
+    [NAME_PQR] = {gText_DexSearchAlphaPQR},
+    [NAME_STU] = {gText_DexSearchAlphaSTU},
+    [NAME_VWX] = {gText_DexSearchAlphaVWX},
+    [NAME_YZ]  = {gText_DexSearchAlphaYZ},
+    {},
+};
+
+static void PrintSearchText(const u8 *str, u32 x, u32 y)
+{
+    u8 color[3];
+
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_DYNAMIC_COLOR_6;
+    color[2] = TEXT_COLOR_DARK_GRAY;
+    AddTextPrinterParameterized4(0, FONT_NORMAL, x, y, 0, 0, color, TEXT_SKIP_DRAW, str);
+}
+
+static void PrintArrow(u32 x, u32 y)
+{
+    u8 color[3];
+
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_DYNAMIC_COLOR_6;
+    color[2] = TEXT_COLOR_DARK_GRAY;
+    AddTextPrinterParameterized4(0, FONT_NORMAL, x, y, 0, 0, color, TEXT_SKIP_DRAW, gText_SelectorArrow);
+}
+
+static int DoPokedexSearchGTS(u8 abcGroup)
+{
+    u16 species;
+    u16 i;
+    u16 resultsCount;
+
+    CreatePokedexListGTS();
+
+
+    for (i = 0, resultsCount = 0; i < NATIONAL_DEX_COUNT; i++)
+    {
+        if (sGTSPokedexView->pokedexList[i].seen)
+        {
+            sGTSPokedexView->pokedexList[resultsCount] = sGTSPokedexView->pokedexList[i];
+            resultsCount++;
+        }
+    }
+    sGTSPokedexView->pokemonListCount = resultsCount;
+
+    // Search by name
+    if (abcGroup != 0xFF)
+    {
+        for (i = 0, resultsCount = 0; i < sGTSPokedexView->pokemonListCount; i++)
+        {
+            u8 firstLetter;
+
+            species = NationalPokedexNumToSpecies(sGTSPokedexView->pokedexList[i].dexNum);
+            firstLetter = gSpeciesNames[species][0];
+            if (LETTER_IN_RANGE_UPPER(firstLetter, abcGroup) || LETTER_IN_RANGE_LOWER(firstLetter, abcGroup))
+            {
+                sGTSPokedexView->pokedexList[resultsCount] = sGTSPokedexView->pokedexList[i];
+                resultsCount++;
+            }
+        }
+        sGTSPokedexView->pokemonListCount = resultsCount;
+    }
+
+    if (sGTSPokedexView->pokemonListCount != 0)
+    {
+        for (i = sGTSPokedexView->pokemonListCount; i < NATIONAL_DEX_COUNT; i++)
+        {
+            sGTSPokedexView->pokedexList[i].dexNum = 0xFFFF;
+            sGTSPokedexView->pokedexList[i].seen = FALSE;
+            sGTSPokedexView->pokedexList[i].owned = FALSE;
+        }
+    }
+
+    return resultsCount;
+}
+
+static void ResetPokedexViewGTS(struct GTSPokedexView *pokedexView)
+{
+    u16 i;
+
+    for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+    {
+        pokedexView->pokedexList[i].dexNum = 0xFFFF;
+        pokedexView->pokedexList[i].seen = FALSE;
+        pokedexView->pokedexList[i].owned = FALSE;
+    }
+    pokedexView->pokedexList[NATIONAL_DEX_COUNT].dexNum = 0;
+    pokedexView->pokedexList[NATIONAL_DEX_COUNT].seen = FALSE;
+    pokedexView->pokedexList[NATIONAL_DEX_COUNT].owned = FALSE;
+    pokedexView->pokemonListCount = 0;
+    pokedexView->selectedPokemon = 0;
+    pokedexView->offerPokemon = 0;
+    pokedexView->dexMode = DEX_MODE_HOENN;
+    pokedexView->windowid = DEX_MODE_HOENN;
+    pokedexView->dexOrder = 0;
+    pokedexView->dexOrderBackup = 0;
+    pokedexView->seenCount = 0;
+    pokedexView->ownCount = 0;
+    //for (i = 0; i < 4; i++)
+    //    pokedexView->monSpriteIds[i] = 0xFFFF;
+    pokedexView->cursorRelPos = 0;
+    pokedexView->atTop = 0;
+    pokedexView->atBottom = 0;
+    pokedexView->initialVOffset = 0;
+    pokedexView->scrollTimer = 0;
+    pokedexView->scrollDirection = 0;
+    pokedexView->listVOffset = 0;
+    pokedexView->listMovingVOffset = 0;
+    pokedexView->scrollMonIncrement = 0;
+    pokedexView->maxScrollTimer = 0;
+    pokedexView->scrollSpeed = 0;
+    pokedexView->currentPage = 0;
+    pokedexView->currentPageBackup = 0;
+    pokedexView->isSearchResults = FALSE;
+    pokedexView->selectedScreen = 0;
+    pokedexView->screenSwitchState = 0;
+    pokedexView->menuIsOpen = 0;
+    pokedexView->menuCursorPos = 0;
+    pokedexView->menuY = 0;
+}
+
+static void CreatePokedexListGTS()
+{
+    //u32 vars[3]; //I have no idea why three regular variables are stored in an array, but whatever.
+    u32 temp_dexCount;
+    u32 temp_isHoennDex;
+    u32 temp_dexNum;
+    s32 i;
+
+    sGTSPokedexView->pokemonListCount = 0;
+
+
+    temp_dexCount = NATIONAL_DEX_COUNT;
+    temp_isHoennDex = FALSE;
+
+    //sGTSPokedexView->pokemonListCount = 0;
+    //if(sGTSPokedexView->pokemonListCount==0)
+    //    PlayFanfare(MUS_OBTAIN_ITEM);
+    
+    for (i = 0; i < 905; i++)
+    {
+        temp_dexNum = gPokedexOrder_Alphabetical[i];
+
+        if (temp_dexNum <= NATIONAL_DEX_COUNT && (!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN))
+        {
+            sGTSPokedexView->pokedexList[sGTSPokedexView->pokemonListCount].dexNum = temp_dexNum;
+            sGTSPokedexView->pokedexList[sGTSPokedexView->pokemonListCount].seen = TRUE;
+            sGTSPokedexView->pokedexList[sGTSPokedexView->pokemonListCount].owned = GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT);
+            //if(sGTSPokedexView->pokemonListCount==0)
+              //  PlayFanfare(MUS_OBTAIN_ITEM);
+            sGTSPokedexView->pokemonListCount++;
+        }
+    }
+
+    //if(sGTSPokedexView->pokedexList[0].dexNum==0xC002)
+    //    PlayFanfare(MUS_OBTAIN_ITEM);
+
+    for (i = sGTSPokedexView->pokemonListCount; i < NATIONAL_DEX_COUNT; i++)
+    {
+        sGTSPokedexView->pokedexList[i].dexNum = 0xFFFF;
+        sGTSPokedexView->pokedexList[i].seen = FALSE;
+        sGTSPokedexView->pokedexList[i].owned = FALSE;
+    }
+
+//    if(gPokedexOrder_Alphabetical[1]==63)
+//        PlayFanfare(MUS_OBTAIN_ITEM);
+
+//    if(sGTSPokedexView->pokedexList[1].dexNum==0xC002)
+//        PlayFanfare(MUS_OBTAIN_ITEM);
+
+}
+
+static void PrintMonDexNumAndNameGTS(u8 windowId, u8 fontId, const u8 *str, u8 left, u8 top)
+{
+    u8 color[3];
+
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_COLOR_DARK_GRAY;
+    color[2] = TEXT_COLOR_LIGHT_GRAY;
+    AddTextPrinterParameterized4(windowId, fontId, left * 8, (top * 8) + 1, 0, 0, color, TEXT_SKIP_DRAW, str);
+    //AddTextPrinterParameterized4(windowId, fontId, 1, 1, 0, 0, color, TEXT_SKIP_DRAW, str);
+}
+
+static void PrintMonDexArrowGTS(u8 windowId, u8 fontId, u8 left, u8 top)
+{
+    u8 color[3];
+
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_COLOR_DARK_GRAY;
+    color[2] = TEXT_COLOR_LIGHT_GRAY;
+    AddTextPrinterParameterized4(windowId, fontId, left * 8, (top * 8) + 1, 0, 0, color, TEXT_SKIP_DRAW, gText_SelectorArrow);
+}
+
+static void ClearMonListArrowGTS(u8 x, u8 y)
+{
+    FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), x * 8, y * 8, 8, 16);
+    //FillWindowPixelRect(0, PIXEL_FILL(0), 0, 0, 0x60, 16);
+}
+
+static u8 CreateMonNameGTS(u16 num, u8 left, u8 top)
+{
+    const u8 *str;
+
+    //if(num>0x1000)
+    //    PlayFanfare(MUS_OBTAIN_ITEM);
+
+    num = NationalPokedexNumToSpecies(num);
+    
+    if (num)
+        str = gSpeciesNames[num];
+    else
+        str = sText_TenDashes;
+    PrintMonDexNumAndNameGTS(sGTSPokedexView->windowid, FONT_NORMAL, str, left, top);
+    return StringLength(str);
+}
+
+// u16 ignored is passed but never used
+static void CreateMonListEntryGTS(u8 position, u16 b)
+{
+    s16 entryNum;
+    u16 i;
+    u16 vOffset;
+
+
+    switch (position)
+    {
+    case 0: // Initial
+    default:
+        entryNum = b;
+        sGTSPokedexView->cursorRelPos = 0;
+        PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos);
+        for (i = 0; i <= 4; i++)
+        {
+            if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+            {
+                ClearMonListEntryGTS(1, i * 2);
+            }
+            else
+            {
+                ClearMonListEntryGTS(1, i * 2);
+                //if(sGTSPokedexView->pokedexList[0].dexNum==0)
+                //    PlayFanfare(MUS_OBTAIN_ITEM);
+                CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, i * 2);
+            }
+            entryNum++;
+        }
+        break;
+    case 1: // Up
+        entryNum = b - 1;/*
+        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+        {
+            ClearMonListEntryGTS(1, sGTSPokedexView->listVOffset * 2);
+        }
+        else
+        {
+            ClearMonListEntryGTS(1, sGTSPokedexView->listVOffset * 2);
+            if (sGTSPokedexView->pokedexList[entryNum].seen)
+            {
+                CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, sGTSPokedexView->listVOffset * 2);
+            }
+            else
+            {
+                CreateMonNameGTS(0, 1, sGTSPokedexView->listVOffset * 2);
+            }
+        }
+        if (sGTSPokedexView->listVOffset > 0)
+            sGTSPokedexView->listVOffset--;
+        else
+            sGTSPokedexView->listVOffset = LIST_SCROLL_STEP - 1;*/
+        if(sGTSPokedexView->cursorRelPos == 1 && sGTSPokedexView->atTop !=1){
+            for (i = 0; i <= 4; i++)
+            {
+                if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                }
+                else
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    //if(sGTSPokedexView->pokedexList[0].dexNum==0)
+                    //    PlayFanfare(MUS_OBTAIN_ITEM);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, i * 2);
+                }
+                entryNum++;
+            }
+        }
+        else{
+            ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+            sGTSPokedexView->cursorRelPos--;
+            PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+        }
+        break;
+    case 2: // Down
+        entryNum = b - 3;
+        /*entryNum = b + 5;
+        vOffset = sGTSPokedexView->listVOffset + 5;
+        if (vOffset >= LIST_SCROLL_STEP)
+            vOffset -= LIST_SCROLL_STEP;
+        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+            ClearMonListEntryGTS(1, vOffset * 2);
+        else
+        {
+            ClearMonListEntryGTS(1, 8);
+            if (sGTSPokedexView->pokedexList[entryNum].seen)
+            {
+                CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, 8);
+            }
+            else
+            {
+                CreateMonNameGTS(0, 1, 8);
+            }
+        }
+        if (sGTSPokedexView->listVOffset < LIST_SCROLL_STEP - 1)
+            sGTSPokedexView->listVOffset++;
+        else
+            sGTSPokedexView->listVOffset = 0;
+        break;*/
+        if(sGTSPokedexView->cursorRelPos == 3 && sGTSPokedexView->atBottom !=1){
+            for (i = 0; i <= 4; i++)
+            {
+                if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                }
+                else
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    //if(sGTSPokedexView->pokedexList[0].dexNum==0)
+                    //    PlayFanfare(MUS_OBTAIN_ITEM);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, i * 2);
+                }
+                entryNum++;
+            }
+        }
+        else{
+            ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+            sGTSPokedexView->cursorRelPos++;
+            PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+
+        }
+        break;
+    }
+    CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+}
+
+static bool8 UpdateDexListScroll(u8 direction, u8 monMoveIncrement, u8 scrollTimerMax)
+{
+    u16 i;
+    u8 step;
+
+    if (sGTSPokedexView->scrollTimer)
+    {
+        sGTSPokedexView->scrollTimer--;
+        switch (direction)
+        {
+        case 1: // Up
+            step = LIST_SCROLL_STEP * (scrollTimerMax - sGTSPokedexView->scrollTimer) / scrollTimerMax;
+            SetGpuReg(REG_OFFSET_BG2VOFS, sGTSPokedexView->initialVOffset + sGTSPokedexView->listMovingVOffset * LIST_SCROLL_STEP - step);
+            break;
+        case 2: // Down
+            step = LIST_SCROLL_STEP * (scrollTimerMax - sGTSPokedexView->scrollTimer) / scrollTimerMax;
+            SetGpuReg(REG_OFFSET_BG2VOFS, sGTSPokedexView->initialVOffset + sGTSPokedexView->listMovingVOffset * LIST_SCROLL_STEP + step);
+            break;
+        }
+        return FALSE;
+    }
+    else
+    {
+        SetGpuReg(REG_OFFSET_BG2VOFS, sGTSPokedexView->initialVOffset + sGTSPokedexView->listVOffset * LIST_SCROLL_STEP);
+        return TRUE;
+    }
+}
+
+// u16 ignored is passed but never used
+static u16 TryDoPokedexScrollGTS(u16 selectedMon)
+{
+    u8 scrollTimer;
+    u8 scrollMonIncrement;
+    u8 i;
+    u16 startingPos;
+    u8 scrollDir = 0;
+
+    if (JOY_NEW(DPAD_UP) && (sGTSPokedexView->cursorRelPos != 0))
+    {
+        scrollDir = 1;
+        selectedMon = GetNextPositionGTS(1, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
+        CreateMonListEntryGTS(1, selectedMon);
+        if(selectedMon == 1)
+            sGTSPokedexView->atTop=1;
+        if(sGTSPokedexView->atBottom == 1 && sGTSPokedexView->cursorRelPos == 1)
+            sGTSPokedexView->atBottom = 0;
+        //CreateMonListEntryGTS(1, selectedMon);
+        PlaySE(SE_DEX_SCROLL);
+    }
+    else if (JOY_NEW(DPAD_DOWN) && (selectedMon < sGTSPokedexView->pokemonListCount - 1))
+    {
+        scrollDir = 2;
+        selectedMon = GetNextPositionGTS(0, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
+        if(selectedMon == sGTSPokedexView->pokemonListCount - 1)
+            sGTSPokedexView->atBottom=1;
+        if(sGTSPokedexView->atTop == 1 && sGTSPokedexView->cursorRelPos == 3)
+            sGTSPokedexView->atTop = 0;
+        CreateMonListEntryGTS(2, selectedMon);
+        PlaySE(SE_DEX_SCROLL);
+    }
+    else if (JOY_NEW(DPAD_LEFT) && (selectedMon > 0))
+    {
+        startingPos = selectedMon;
+
+        for (i = 0; i < 7; i++)
+            selectedMon = GetNextPositionGTS(1, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
+        PlaySE(SE_DEX_PAGE);
+    }
+    else if (JOY_NEW(DPAD_RIGHT) && (selectedMon < sGTSPokedexView->pokemonListCount - 1))
+    {
+        startingPos = selectedMon;
+        for (i = 0; i < 7; i++)
+            selectedMon = GetNextPositionGTS(0, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
+        PlaySE(SE_DEX_PAGE);
+    }
+
+    if (scrollDir == 0)
+    {
+        // Left/right input just snaps up/down, no scrolling
+        sGTSPokedexView->scrollSpeed = 0;
+        return selectedMon;
+    }
+
+    scrollMonIncrement = sScrollMonIncrements[1];
+    scrollTimer = sScrollTimers[1];
+    sGTSPokedexView->scrollTimer = scrollTimer;
+    sGTSPokedexView->maxScrollTimer = scrollTimer;
+    sGTSPokedexView->scrollMonIncrement = scrollMonIncrement;
+    sGTSPokedexView->scrollDirection = scrollDir;
+    UpdateDexListScroll(sGTSPokedexView->scrollDirection, sGTSPokedexView->scrollMonIncrement, sGTSPokedexView->maxScrollTimer);
+    //if (sGTSPokedexView->scrollSpeed < 12)
+    //    sGTSPokedexView->scrollSpeed++;
+    return selectedMon;
+}
+
+static void ClearMonListEntryGTS(u8 x, u8 y)
+{
+    FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), x * 8, y * 8, 0x60, 16);
+    //FillWindowPixelRect(0, PIXEL_FILL(0), 0, 0, 0x60, 16);
+}
+
+static u16 GetNextPositionGTS(u8 direction, u16 position, u16 min, u16 max)
+{
+    switch (direction)
+    {
+    case 1: // Up/Left
+        if (position > min)
+            position--;
+        break;
+    case 0: // Down/Right
+        if (position < max)
+            position++;
+        break;
+    case 3: // Up/Left with loop (unused)
+        if (position > min)
+            position--;
+        else
+            position = max;
+        break;
+    case 2: // Down/Right with loop (unused)
+        if (position < max)
+            position++;
+        else
+            position = min;
+        break;
+    }
+    return position;
+}
+
 
 static void VBlankCB_MysteryGiftEReader(void)
 {
@@ -464,6 +1154,7 @@ void CB2_ReturnToGlobalTradeStation(void)
 {
     if (HandleGlobalTradeStationSetup())
     {
+        gSpecialVar_0x8004 = GetCursorSelectionMonId();
         SetMainCallback2(CB2_GlobalTradeStation);
         RecreateGlobalTradeStationTask();
     }
@@ -576,7 +1267,7 @@ bool32 PrintGTSMenuMessage(u8 *textState, const u8 *str)
     case 2:
         DrawDownArrow(1, DOWN_ARROW_X, DOWN_ARROW_Y, 1, TRUE, &sDownArrowCounterAndYCoordIdx[0], &sDownArrowCounterAndYCoordIdx[1]);
         *textState = 0;
-        ClearTextWindow();
+        //ClearTextWindow();
         return TRUE;
     case 0xFF:
         *textState = 2;
@@ -1069,7 +1760,11 @@ static bool32 PrintServerResultMessage(u8 * state, u16 * timer, bool8 sourceIsFr
 enum {
     GTS_STATE_TO_MAIN_MENU,
     GTS_STATE_MAIN_MENU,
+    GTS_STATE_SEEK_SETUP,
+    GTS_STATE_SEEKING,
     GTS_STATE_SEARCH_POKEMON,
+    GTS_STATE_SEARCH_POKEMON_LIST,
+    GTS_STATE_SEARCH_POKEMON_LEVEL_LIST,
     GTS_STATE_START_SEARCH,
     GTS_STATE_SUCCESSFUL_SEARCH,
     GTS_STATE_UNSUCCESSFUL_SEARCH,
@@ -1078,6 +1773,11 @@ enum {
     GTS_STATE_DEPOSIT_POKEMON,
     GTS_STATE_PICK_WANTED_POKEMON,
     GTS_STATE_DEPOSITING_POKEMON,
+    GTS_STATE_POKEMON_LIST,
+    GTS_STATE_POKEMON_LEVEL_LIST,
+    GTS_STATE_RETURN_POKEMON_LIST,
+    GTS_STATE_CONFIRM_OFFER,
+    GTS_STATE_WAIT,
     GTS_STATE_WITHDRAW_POKEMON,
     GTS_STATE_CLIENT_LINK_START,
     GTS_STATE_CLIENT_LINK_WAIT,
@@ -1132,6 +1832,8 @@ static void CreateGlobalTradeStationTask(void)
     data->unused3 = 0;
     data->msgId = 0;
     data->clientMsg = AllocZeroed(CLIENT_MAX_MSG_SIZE);
+    sGTSPokedexView = AllocZeroed(sizeof(struct GTSPokedexView));
+    ResetPokedexViewGTS(sGTSPokedexView);
 }
 
 static void RecreateGlobalTradeStationTask(void)
@@ -1150,6 +1852,16 @@ static void RecreateGlobalTradeStationTask(void)
     data->unused3 = 0;
     data->msgId = 0;
     data->clientMsg = AllocZeroed(CLIENT_MAX_MSG_SIZE);
+    sGTSPokedexView = AllocZeroed(sizeof(struct GTSPokedexView));
+    ResetPokedexViewGTS(sGTSPokedexView);
+    sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect);
+    FillWindowPixelBuffer(sGTSPokedexView->windowid, 0x11);
+    //FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 8, 16);
+    //AddTextPrinterParameterized4(sGTSPokedexView->windowid, FONT_NORMAL, 0, 1, 0, 0, sGTS_Ereader_TextColor_2, 0, gStringVar4);
+    DrawTextBorderOuter(sGTSPokedexView->windowid, 0x001, 0x0F);
+    CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_MAP);
+    CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+    PutWindowTilemap(sGTSPokedexView->windowid);
 }
 
 
@@ -1166,50 +1878,101 @@ static void Task_GlobalTradeStation(u8 taskId)
         break;
     case GTS_STATE_MAIN_MENU:
         // Main Mystery Gift menu, player can select Wonder Cards or News (or exit)
-        switch (GlobalTradeStation_HandleThreeOptionMenu(&data->textState, &data->var, 0))
+        switch (GlobalTradeStation_HandleThreeOptionMenu(&data->textState, &data->var, VarGet(VAR_DEPOSIT_SPECIES)>0))
         {
         case 0: // "Search Pokemon"
             data->searchPokemon = 0;
-            data->state = GTS_STATE_SEARCH_POKEMON;
+            data->state = GTS_STATE_SEEK_SETUP;
             PlaySE(SE_SELECT);
+            //ClearStdWindowAndFrame(0, TRUE);
+            //ClearStdWindowAndFrame(1, TRUE);
+            //ClearStdWindowAndFrame(2, TRUE);
+            //ResetPokedexViewGTS(sGTSPokedexView);
+            //RemoveWindow(2);
+            //sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect);
+            //FillWindowPixelBuffer(sGTSPokedexView->windowid, 0x11);
+            //DrawTextBorderOuter(sGTSPokedexView->windowid, 0x001, 0x0F);
+            //CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_MAP);
+            //CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+            //PutWindowTilemap(sGTSPokedexView->windowid);
             break;
         case 1: // "Deposit Pokemon"
             //data->isWonderNews = TRUE;
             //if (data->depositPokemon == 0)
-            data->state = GTS_STATE_DEPOSIT_POKEMON;
-            PlaySE(SE_SELECT);
-            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+            if(VarGet(VAR_DEPOSIT_SPECIES)>0)
+                data->state = GTS_STATE_WITHDRAW_POKEMON;
+            else
+                data->state = GTS_STATE_DEPOSIT_POKEMON;
+
             //FadeScreen(FADE_TO_BLACK, 0);
             //else
             //    data->state = GTS_STATE_WITHDRAW_POKEMON;
+            PlaySE(SE_SELECT);
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
             break;
         case LIST_CANCEL:
             data->state = GTS_STATE_EXIT;
             break;
         }
         break;
-    case GTS_STATE_SEARCH_POKEMON:
-    {
-        // Player doesn't have any Wonder Card/News
-        // Start prompt to ask where to read one from
-        if (!data->isWonderNews)
+    case GTS_STATE_SEEK_SETUP:
+        sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect);
+        FillWindowPixelBuffer(sGTSPokedexView->windowid, 0x11);
+        DrawTextBorderOuter(sGTSPokedexView->windowid, 0x001, 0x0F);
+        CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_MAP);
+        CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+        PutWindowTilemap(sGTSPokedexView->windowid);
+        data->state = GTS_STATE_SEEKING;
+        break;
+    case GTS_STATE_SEEKING:
+        sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_ABCSelect, &sListMenu_ABCMenu, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+        if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemon))
         {
-            if (PrintGTSMenuMessage(&data->textState, gText_DontHaveCardNewOneInput))
-            {
-                data->state = GTS_STATE_SOURCE_PROMPT;
-                PrintGTSTopMenu(FALSE, TRUE);
-            }
-        }
-        else
-        {
-            if (PrintGTSMenuMessage(&data->textState, gText_DontHaveNewsNewOneInput))
-            {
-                data->state = GTS_STATE_SOURCE_PROMPT;
-                PrintGTSTopMenu(FALSE, TRUE);
-            }
+            data->state = GTS_STATE_SEARCH_POKEMON;
+            PrintGTSTopMenu(FALSE, TRUE);
         }
         break;
-    }
+    case GTS_STATE_SEARCH_POKEMON:
+        input = DoPokedexSearchGTS(sGTSPokedexView->dexMode+1); //Gets alphabetical list of ABC option selected
+        if(sGTSPokedexView->pokemonListCount != 0){
+            CreateMonListEntryGTS(0, 0);
+            data->state = GTS_STATE_SEARCH_POKEMON_LIST;
+        }
+        break;
+    case GTS_STATE_SEARCH_POKEMON_LIST:
+        sGTSPokedexView->selectedPokemon = TryDoPokedexScrollGTS(sGTSPokedexView->selectedPokemon);
+        if (JOY_NEW(A_BUTTON))
+        {
+            data->state = GTS_STATE_SEARCH_POKEMON_LEVEL_LIST;
+            FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 80, 80);
+            CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+            //ClearStdWindowAndFrame(3, FALSE);
+            ClearStdWindowAndFrame(sGTSPokedexView->windowid, FALSE);
+        }
+        if (JOY_NEW(B_BUTTON))
+        {
+            data->state = GTS_STATE_MAIN_MENU;
+            FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 80, 80);
+            CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+            //RemoveWindow(0);
+        }
+        break;
+    case GTS_STATE_SEARCH_POKEMON_LEVEL_LIST:
+       sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_LevelSelect, &sListMenu_Levels, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+        if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemonLevel))
+        {
+            //GetMonData(mon, MON_DATA_NICKNAME, name);
+            StringCopy_Nickname(gStringVar1, gPlayerParty[sGTSPokedexView->offerPokemon].box.nickname);
+            StringCopy(gStringVar2, gSpeciesNames[sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum]);
+            sGTSPokedexView->cursorRelPos = 0;
+            sGTSPokedexView->atTop = 1;
+            sGTSPokedexView->atBottom = 0;
+            sGTSPokedexView->selectedPokemon = 0;
+            sGTSPokedexView->pokemonListCount = 0;
+            data->state = GTS_STATE_CONFIRM_OFFER;
+            //RemoveWindow(sGTSPokedexView->windowid);
+        }
+        break;
     case GTS_STATE_DEPOSIT_POKEMON:
         if (!gPaletteFade.active)
         {
@@ -1229,18 +1992,94 @@ static void Task_GlobalTradeStation(u8 taskId)
             data->state = GTS_STATE_MAIN_MENU;
             break;
         }
+        sGTSPokedexView->offerPokemon = gSpecialVar_0x8004;//gSpecialVar_0x8004;
+        //PrintSearchText(sDexSearchNameOptions[searchParamId].title, 0x2D, 0x11);
+        sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_ABCSelect, &sListMenu_ABCMenu, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
         if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemon))
-            {
-                data->state = GTS_STATE_DEPOSITING_POKEMON;
-                PrintGTSTopMenu(FALSE, TRUE);
-            }
+        {
+            data->state = GTS_STATE_DEPOSITING_POKEMON;
+            PrintGTSTopMenu(FALSE, TRUE);
+        }
         break;
     case GTS_STATE_DEPOSITING_POKEMON:
-        if (PrintGTSMenuMessage(&data->textState, gText_PokemonWillBeSent))
-            {
-                data->state = GTS_STATE_SOURCE_PROMPT;
-                PrintGTSTopMenu(FALSE, TRUE);
-            }
+        input = DoPokedexSearchGTS(sGTSPokedexView->dexMode+1); //Gets alphabetical list of ABC option selected
+        //sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect);
+        //CopyWindowToVram(sGTSPokedexView->windowid, 3);
+        //CreatePokedexListGTS();
+        if(sGTSPokedexView->pokemonListCount != 0){
+            CreateMonListEntryGTS(0, 0);
+            data->state = GTS_STATE_POKEMON_LIST;
+        }
+        //if (PrintGTSMenuMessage(&data->textState, gText_PokemonWillBeSent))
+        //{
+        //    data->state = GTS_STATE_SOURCE_PROMPT;
+        //    PrintGTSTopMenu(FALSE, TRUE);
+        //}
+        break;
+    case GTS_STATE_POKEMON_LIST:
+        sGTSPokedexView->selectedPokemon = TryDoPokedexScrollGTS(sGTSPokedexView->selectedPokemon);
+        if (JOY_NEW(A_BUTTON))
+        {
+            data->state = GTS_STATE_POKEMON_LEVEL_LIST;
+            FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 80, 80);
+            CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+            //ClearStdWindowAndFrame(3, FALSE);
+            ClearStdWindowAndFrame(sGTSPokedexView->windowid, FALSE);
+        }
+        if (JOY_NEW(B_BUTTON))
+        {
+            data->state = GTS_STATE_RETURN_POKEMON_LIST;
+            FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 80, 80);
+            CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
+            //RemoveWindow(0);
+        }
+        break;
+    case GTS_STATE_POKEMON_LEVEL_LIST:
+        sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_LevelSelect, &sListMenu_LevelsWanted, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+        if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemonLevel))
+        {
+            //GetMonData(mon, MON_DATA_NICKNAME, name);
+            StringCopy_Nickname(gStringVar1, gPlayerParty[sGTSPokedexView->offerPokemon].box.nickname);
+            StringCopy(gStringVar2, gSpeciesNames[sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum]);
+            sGTSPokedexView->cursorRelPos = 0;
+            sGTSPokedexView->atTop = 1;
+            sGTSPokedexView->atBottom = 0;
+            sGTSPokedexView->selectedPokemon = 0;
+            sGTSPokedexView->pokemonListCount = 0;
+            data->state = GTS_STATE_CONFIRM_OFFER;
+            //RemoveWindow(sGTSPokedexView->windowid);
+        }
+        break;
+    case GTS_STATE_RETURN_POKEMON_LIST:
+        sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_ABCSelect, &sListMenu_ABCMenu, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+        if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemon))
+        {
+            sGTSPokedexView->cursorRelPos = 0;
+            sGTSPokedexView->atTop = 1;
+            sGTSPokedexView->atBottom = 0;
+            sGTSPokedexView->selectedPokemon = 0;
+            sGTSPokedexView->pokemonListCount = 0;
+            data->state = GTS_STATE_DEPOSITING_POKEMON;
+            //RemoveWindow(sGTSPokedexView->windowid);
+        }
+        break;    
+    case GTS_STATE_CONFIRM_OFFER:
+        input = DoGTSYesNo(&data->textState, &data->var, FALSE, gText_ConfirmOffer);
+        switch (input)
+        {
+        case 0: // Yes
+            DoGTSDepositScene();
+            data->state = GTS_STATE_WAIT;
+            break;
+        case 1: // No
+        case MENU_B_PRESSED:
+            MysteryGiftClient_SetParam(TRUE);
+            MysteryGiftClient_AdvanceState();
+            data->state = GTS_STATE_CLIENT_COMMUNICATING;
+            break;
+        }
+        break;
+    case GTS_STATE_WAIT:
         break;
     case GTS_STATE_WITHDRAW_POKEMON:
         // Choose where to access the Wonder Card/News from

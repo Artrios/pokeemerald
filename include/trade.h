@@ -19,5 +19,7 @@ void InitTradeSequenceBgGpuRegs(void);
 void LinkTradeDrawWindow(void);
 void LoadTradeAnimGfx(void);
 void DrawTextOnTradeWindow(u8, const u8 *, u8);
+void DoGTSDepositScene(void);
+void DoInGameTradeScene(void);
 
 #endif //GUARD_TRADE_H

@@ -1540,7 +1540,7 @@
 #define FLAG_SHINY_CREATION                             (SYSTEM_FLAGS + 0xA9) //Force shiny pokemon creation
 #define FLAG_SYS_DETECTOR_MODE                          (SYSTEM_FLAGS + 0xAA) // allow player to find hidden mons
 #define FLAG_SYS_DEXNAV_GET                             (SYSTEM_FLAGS + 0xAB) // dexnav shows in start menu
-#define FLAG_UNUSED_0x90C                           (SYSTEM_FLAGS + 0xAC) // Unused Flag
+#define FLAG_UNUSED_0x90C                               (SYSTEM_FLAGS + 0xAC) // Unused Flag
 #define FLAG_UNUSED_0x90D                           (SYSTEM_FLAGS + 0xAD) // Unused Flag
 #define FLAG_UNUSED_0x90E                           (SYSTEM_FLAGS + 0xAE) // Unused Flag
 #define FLAG_UNUSED_0x90F                           (SYSTEM_FLAGS + 0xAF) // Unused Flag
