@@ -17,6 +17,7 @@
 #include "sound.h"
 #include "sprite.h"
 #include "task.h"
+#include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
@@ -26,9 +27,11 @@
 
 #define STATE_END 0xFF
 
-#define TAG_CABLE_CAR 1
-#define TAG_DOOR      2
-#define TAG_CABLE     3
+enum {
+    TAG_CABLE_CAR = 1,
+    TAG_DOOR,
+    TAG_CABLE,
+};
 
 struct CableCar
 {
@@ -61,8 +64,8 @@ struct CableCar
     u16 *groundTilemap;
     u16 *treesTilemap;
     u16 *bgMountainsTilemap;
-    const u16 *pylonHookTilemapEntries;
-    u8 *pylonStemTilemap;
+    const u16 *pylonTopTilemap;
+    u16 *pylonPoleTilemap;
 };
 
 static EWRAM_DATA struct CableCar *sCableCar = NULL;
@@ -128,24 +131,11 @@ static const struct BgTemplate sBgTemplates[4] = {
     },
 };
 
-static const u8 sGround_Tilemap[] = INCBIN_U8("graphics/cable_car/ground.bin.lz");
-static const u8 sTrees_Tilemap[] = INCBIN_U8("graphics/cable_car/trees.bin.lz");
-static const u8 sBgMountains_Tilemap[] = INCBIN_U8("graphics/cable_car/bg_mountains.bin.lz");
-
-static const u16 sPylonHook_TilemapEntries[] = {
-    0x3000,
-    0x3001,
-    0x3002,
-    0x3003,
-    0x3004,
-    0x3005,
-    0x3006,
-    0x3007,
-    0x3008,
-    0x3009,
-};
-
-static const u8 sPylonStems_Tilemap[] = INCBIN_U8("graphics/cable_car/pylons.bin.lz");
+static const u16 sGround_Tilemap[] = INCBIN_U16("graphics/cable_car/ground.bin.lz");
+static const u16 sTrees_Tilemap[] = INCBIN_U16("graphics/cable_car/trees.bin.lz");
+static const u16 sBgMountains_Tilemap[] = INCBIN_U16("graphics/cable_car/bg_mountains.bin.lz");
+static const u16 sPylonTop_Tilemap[] = INCBIN_U16("graphics/cable_car/pylon_top.bin");
+static const u16 sPylonPole_Tilemap[] = INCBIN_U16("graphics/cable_car/pylon_pole.bin.lz");
 
 static const struct CompressedSpriteSheet sSpriteSheets[] = {
     { gCableCar_Gfx,      0x800, TAG_CABLE_CAR },
@@ -201,7 +191,7 @@ static const struct OamData sOam_Cable =
     .paletteNum = 0,
 };
 
-static const struct SpriteTemplate sSpriteTemplate_CableCar[] =
+static const struct SpriteTemplate sSpriteTemplates_CableCar[] =
 {
     {
         .tileTag = TAG_CABLE_CAR,
@@ -223,7 +213,8 @@ static const struct SpriteTemplate sSpriteTemplate_CableCar[] =
     },
 };
 
-static const struct SpriteTemplate sSpriteTemplate_Cable = {
+static const struct SpriteTemplate sSpriteTemplate_Cable =
+{
     .tileTag = TAG_CABLE,
     .paletteTag = TAG_CABLE_CAR,
     .oam = &sOam_Cable,
@@ -244,9 +235,9 @@ static void Task_LoadCableCar(u8 taskId)
 
 void CableCar(void)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     CreateTask(Task_LoadCableCar, 1);
-    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB(0, 0, 0));
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
 }
 
 static void CB2_LoadCableCar(void)
@@ -297,15 +288,15 @@ static void CB2_LoadCableCar(void)
         sCableCar->groundTilemap = malloc_and_decompress(sGround_Tilemap, &sizeOut);
         sCableCar->treesTilemap = malloc_and_decompress(sTrees_Tilemap, &sizeOut);
         sCableCar->bgMountainsTilemap = malloc_and_decompress(sBgMountains_Tilemap, &sizeOut);
-        sCableCar->pylonStemTilemap = malloc_and_decompress(sPylonStems_Tilemap, &sizeOut);
-        sCableCar->pylonHookTilemapEntries = sPylonHook_TilemapEntries;
+        sCableCar->pylonPoleTilemap = malloc_and_decompress(sPylonPole_Tilemap, &sizeOut);
+        sCableCar->pylonTopTilemap = sPylonTop_Tilemap;
         DecompressAndCopyTileDataToVram(0, gCableCarBg_Gfx, 0, 0, 0);
         gMain.state++;
         break;
     case 3:
         if (!FreeTempTileDataBuffersIfPossible())
         {
-            LoadPalette(gCableCarBg_Pal, 0, 0x80);
+            LoadPalette(gCableCarBg_Pal, BG_PLTT_ID(0), 4 * PLTT_SIZE_4BPP);
             gMain.state++;
         }
         break;
@@ -333,8 +324,8 @@ static void CB2_LoadCableCar(void)
     case 6:
         CopyToBgTilemapBufferRect_ChangePalette(1, sCableCar->treesTilemap, 0, 17, 32, 15, 17);
         CopyToBgTilemapBufferRect_ChangePalette(2, sCableCar->bgMountainsTilemap, 0, 0, 30, 20, 17);
-        CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonHookTilemapEntries, 0, 0, 5, 2, 17);
-        CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonStemTilemap, 0, 2, 2, 20, 17);
+        CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonTopTilemap, 0, 0, 5, 2, 17);
+        CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonPoleTilemap, 0, 2, 2, 20, 17);
         gMain.state++;
         break;
     case 7:
@@ -350,7 +341,7 @@ static void CB2_LoadCableCar(void)
         gMain.state++;
         break;
     case 8:
-        BeginNormalPaletteFade(PALETTES_ALL, 3, 16, 0, RGB(0, 0, 0));
+        BeginNormalPaletteFade(PALETTES_ALL, 3, 16, 0, RGB_BLACK);
         FadeInNewBGM(MUS_CABLE_CAR, 1);
         SetBgRegs(TRUE);
         gMain.state++;
@@ -402,8 +393,8 @@ static void CB2_EndCableCar(void)
     UnsetBgTilemapBuffer(2);
     UnsetBgTilemapBuffer(3);
     ResetBgsAndClearDma3BusyFlags(0);
-    sCableCar->pylonHookTilemapEntries = NULL;
-    FREE_AND_SET_NULL(sCableCar->pylonStemTilemap);
+    sCableCar->pylonTopTilemap = NULL;
+    FREE_AND_SET_NULL(sCableCar->pylonPoleTilemap);
     FREE_AND_SET_NULL(sCableCar->bgMountainsTilemap);
     FREE_AND_SET_NULL(sCableCar->treesTilemap);
     FREE_AND_SET_NULL(sCableCar->groundTilemap);
@@ -468,7 +459,7 @@ static void Task_CableCar(u8 taskId)
         if (sCableCar->timer == 570)
         {
             sCableCar->state = 3;
-            BeginNormalPaletteFade(PALETTES_ALL, 3, 0, 16, RGB(0, 0, 0));
+            BeginNormalPaletteFade(PALETTES_ALL, 3, 0, 16, RGB_BLACK);
             FadeOutBGM(4);
         }
         break;
@@ -512,8 +503,8 @@ static void Task_AnimateBgGoingUp(u8 taskId)
             FillBgTilemapBufferRect(3, 0, 2, 0, 1, 2, 17);
             break;
         case 16:
-            CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonHookTilemapEntries, 0, 0, 5,  2, 17);
-            CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonStemTilemap, 0, 2, 2, 30, 17);
+            CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonTopTilemap, 0, 0, 5,  2, 17);
+            CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonPoleTilemap, 0, 2, 2, 30, 17);
             sCableCar->bg3VerticalOffset = 64;
             break;
         }
@@ -540,7 +531,7 @@ static void Task_AnimateBgGoingDown(u8 taskId)
         switch (sCableCar->bg3HorizontalOffset)
         {
         case 176:
-            CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonStemTilemap, 0, 2, 2, 30, 17);
+            CopyToBgTilemapBufferRect_ChangePalette(3, sCableCar->pylonPoleTilemap, 0, 2, 2, 30, 17);
             break;
         case 16:
             FillBgTilemapBufferRect(3, 0, 2,  0, 3,  2, 17);
@@ -548,14 +539,14 @@ static void Task_AnimateBgGoingDown(u8 taskId)
             sCableCar->bg3VerticalOffset = 192;
             break;
         case 32:
-            FillBgTilemapBufferRect(3, sCableCar->pylonHookTilemapEntries[2], 2, 0, 1, 1, 17);
-            FillBgTilemapBufferRect(3, sCableCar->pylonHookTilemapEntries[3], 3, 0, 1, 1, 17);
-            FillBgTilemapBufferRect(3, sCableCar->pylonHookTilemapEntries[7], 2, 1, 1, 1, 17);
-            FillBgTilemapBufferRect(3, sCableCar->pylonHookTilemapEntries[8], 3, 1, 1, 1, 17);
+            FillBgTilemapBufferRect(3, sCableCar->pylonTopTilemap[2], 2, 0, 1, 1, 17);
+            FillBgTilemapBufferRect(3, sCableCar->pylonTopTilemap[3], 3, 0, 1, 1, 17);
+            FillBgTilemapBufferRect(3, sCableCar->pylonTopTilemap[7], 2, 1, 1, 1, 17);
+            FillBgTilemapBufferRect(3, sCableCar->pylonTopTilemap[8], 3, 1, 1, 1, 17);
             break;
         case 40:
-            FillBgTilemapBufferRect(3, sCableCar->pylonHookTilemapEntries[4], 4, 0, 1, 1, 17);
-            FillBgTilemapBufferRect(3, sCableCar->pylonHookTilemapEntries[9], 4, 1, 1, 1, 17);
+            FillBgTilemapBufferRect(3, sCableCar->pylonTopTilemap[4], 4, 0, 1, 1, 17);
+            FillBgTilemapBufferRect(3, sCableCar->pylonTopTilemap[9], 4, 1, 1, 1, 17);
             break;
         }
     }
@@ -596,13 +587,13 @@ static void SpriteCB_CableCar(struct Sprite *sprite)
     {
         if (!GOING_DOWN)
         {
-            sprite->pos1.x = sprite->sXPos - (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
-            sprite->pos1.y = sprite->sYPos - (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->x = sprite->sXPos - (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->y = sprite->sYPos - (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
         }
         else
         {
-            sprite->pos1.x = sprite->sXPos + (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
-            sprite->pos1.y = sprite->sYPos + (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->x = sprite->sXPos + (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->y = sprite->sYPos + (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
         }
     }
 }
@@ -617,20 +608,20 @@ static void SpriteCB_Player(struct Sprite *sprite)
         // Move along with cable car
         if (!GOING_DOWN)
         {
-            sprite->pos1.x = sprite->sXPos - (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
-            sprite->pos1.y = sprite->sYPos - (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->x = sprite->sXPos - (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->y = sprite->sYPos - (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
         }
         else
         {
-            sprite->pos1.x = sprite->sXPos + (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
-            sprite->pos1.y = sprite->sYPos + (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->x = sprite->sXPos + (u8)(0.14f * S16TOPOSFLOAT(sCableCar->timer));
+            sprite->y = sprite->sYPos + (u8)(0.067f * S16TOPOSFLOAT(sCableCar->timer));
         }
 
         // Bounce up and down
         switch (sprite->sState)
         {
         case 0:
-            sprite->pos2.y = 17;
+            sprite->y2 = 17;
             if (sprite->sTimer++ > 9)
             {
                 sprite->sTimer = 0;
@@ -638,7 +629,7 @@ static void SpriteCB_Player(struct Sprite *sprite)
             }
             break;
         default:
-            sprite->pos2.y = 16;
+            sprite->y2 = 16;
             if (sprite->sTimer++ > 9)
             {
                 sprite->sTimer = 0;
@@ -660,8 +651,8 @@ static void SpriteCB_HikerGoingUp(struct Sprite *sprite)
 {
     if (sprite->sTimer == 0)
     {
-        sprite->pos1.x += 2 * sprite->centerToCornerVecX;
-        sprite->pos1.y += 16 + sprite->centerToCornerVecY;
+        sprite->x += 2 * sprite->centerToCornerVecX;
+        sprite->y += 16 + sprite->centerToCornerVecY;
     }
 
     if (++sprite->sTimer >= sprite->sDelay)
@@ -669,22 +660,22 @@ static void SpriteCB_HikerGoingUp(struct Sprite *sprite)
         switch (sprite->sSameDir)
         {
         case FALSE:
-            sprite->pos1.x++;
+            sprite->x++;
             if ((sprite->sTimer % 4) == 0)
-                sprite->pos1.y++;
+                sprite->y++;
             break;
         case TRUE:
             // Hiker moves slower if travelling with the Cable Car
             if ((sprite->sTimer % 2) != 0)
             {
-                sprite->pos1.x++;
-                if ((sprite->pos1.x % 4) == 0)
-                    sprite->pos1.y++;
+                sprite->x++;
+                if ((sprite->x % 4) == 0)
+                    sprite->y++;
             }
             break;
         }
 
-        if (sprite->pos1.y > DISPLAY_HEIGHT)
+        if (sprite->y > DISPLAY_HEIGHT)
             DestroySprite(sprite);
     }
 }
@@ -692,29 +683,29 @@ static void SpriteCB_HikerGoingUp(struct Sprite *sprite)
 static void SpriteCB_HikerGoingDown(struct Sprite *sprite)
 {
     if (sprite->sTimer == 0)
-        sprite->pos1.y += 16 + sprite->centerToCornerVecY;
+        sprite->y += 16 + sprite->centerToCornerVecY;
 
     if (++sprite->sTimer >= sprite->sDelay)
     {
         switch (sprite->sSameDir)
         {
         case FALSE:
-            sprite->pos1.x--;
+            sprite->x--;
             if ((sprite->sTimer % 4) == 0)
-                sprite->pos1.y--;
+                sprite->y--;
             break;
         case TRUE:
             // Hiker moves slower if travelling with the Cable Car
             if ((sprite->sTimer % 2) != 0)
             {
-                sprite->pos1.x--;
-                if ((sprite->pos1.x % 4) == 0)
-                    sprite->pos1.y--;
+                sprite->x--;
+                if ((sprite->x % 4) == 0)
+                    sprite->y--;
             }
             break;
         }
 
-        if (sprite->pos1.y < 80)
+        if (sprite->y < 80)
             DestroySprite(sprite);
     }
 }
@@ -825,24 +816,24 @@ static void CreateCableCarSprites(void)
         case FALSE:
         default:
             // Create player sprite
-            spriteId = AddPseudoObjectEvent(playerGraphicsIds[gSaveBlock2Ptr->playerGender], SpriteCB_Player, 200, 73, 102);
+            spriteId = CreateObjectGraphicsSprite(playerGraphicsIds[gSaveBlock2Ptr->playerGender], SpriteCB_Player, 200, 73, 102);
             if (spriteId != MAX_SPRITES)
             {
                 gSprites[spriteId].oam.priority = 2;
-                gSprites[spriteId].pos2.x = 8;
-                gSprites[spriteId].pos2.y = 16;
+                gSprites[spriteId].x2 = 8;
+                gSprites[spriteId].y2 = 16;
                 gSprites[spriteId].sXPos = 200;
                 gSprites[spriteId].sYPos = 73;
             }
             // Create car sprite
-            spriteId = CreateSprite(&sSpriteTemplate_CableCar[0], 176, 43, 0x67);
-            gSprites[spriteId].pos2.x = gSprites[spriteId].pos2.y = 32;
+            spriteId = CreateSprite(&sSpriteTemplates_CableCar[0], 176, 43, 0x67);
+            gSprites[spriteId].x2 = gSprites[spriteId].y2 = 32;
             gSprites[spriteId].sXPos = 176;
             gSprites[spriteId].sYPos = 43;
             // Create door sprite
-            spriteId = CreateSprite(&sSpriteTemplate_CableCar[1], 200, 99, 0x65);
-            gSprites[spriteId].pos2.x = 8;
-            gSprites[spriteId].pos2.y = 4;
+            spriteId = CreateSprite(&sSpriteTemplates_CableCar[1], 200, 99, 0x65);
+            gSprites[spriteId].x2 = 8;
+            gSprites[spriteId].y2 = 4;
             gSprites[spriteId].sXPos = 200;
             gSprites[spriteId].sYPos = 99;
             // Init weather
@@ -853,24 +844,24 @@ static void CreateCableCarSprites(void)
         case TRUE:
             CopyToBgTilemapBufferRect_ChangePalette(0, sCableCar->groundTilemap + 0x24, 24, 26, 12, 3, 17);
             // Create player sprite
-            spriteId = AddPseudoObjectEvent(playerGraphicsIds[gSaveBlock2Ptr->playerGender], SpriteCB_Player, 128, 39, 102);
+            spriteId = CreateObjectGraphicsSprite(playerGraphicsIds[gSaveBlock2Ptr->playerGender], SpriteCB_Player, 128, 39, 102);
             if (spriteId != MAX_SPRITES)
             {
                 gSprites[spriteId].oam.priority = 2;
-                gSprites[spriteId].pos2.x = 8;
-                gSprites[spriteId].pos2.y = 16;
+                gSprites[spriteId].x2 = 8;
+                gSprites[spriteId].y2 = 16;
                 gSprites[spriteId].sXPos = 128;
                 gSprites[spriteId].sYPos = 39;
             }
             // Create car sprite
-            spriteId = CreateSprite(&sSpriteTemplate_CableCar[0], 104, 9, 0x67);
-            gSprites[spriteId].pos2.x = gSprites[spriteId].pos2.y = 32;
+            spriteId = CreateSprite(&sSpriteTemplates_CableCar[0], 104, 9, 0x67);
+            gSprites[spriteId].x2 = gSprites[spriteId].y2 = 32;
             gSprites[spriteId].sXPos = 104;
             gSprites[spriteId].sYPos = 9;
             // Create door sprite
-            spriteId = CreateSprite(&sSpriteTemplate_CableCar[1], 128, 65, 0x65);
-            gSprites[spriteId].pos2.x = 8;
-            gSprites[spriteId].pos2.y = 4;
+            spriteId = CreateSprite(&sSpriteTemplates_CableCar[1], 128, 65, 0x65);
+            gSprites[spriteId].x2 = 8;
+            gSprites[spriteId].y2 = 4;
             gSprites[spriteId].sXPos = 128;
             gSprites[spriteId].sYPos = 65;
             // Init weather
@@ -882,35 +873,33 @@ static void CreateCableCarSprites(void)
     for (i = 0; i < 9; i++)
     {
         spriteId = CreateSprite(&sSpriteTemplate_Cable, 16 * i + 96, 8 * i - 8, 0x68);
-        gSprites[spriteId].pos2.x = 8;
-        gSprites[spriteId].pos2.y = 8;
+        gSprites[spriteId].x2 = 8;
+        gSprites[spriteId].y2 = 8;
     }
 
     // 1/64 chance for an NPC to appear hiking on the ground below the Cable Car
     if ((rval % 64) == 0)
     {
         // Unclear if this was intentional, but the - 1 in the below ARRAY_COUNT means the Zigzagoon is never used
-        spriteId = AddPseudoObjectEvent(hikerGraphicsIds[rval % (ARRAY_COUNT(hikerGraphicsIds) - 1)], hikerCallbacks[GOING_DOWN], hikerCoords[GOING_DOWN][0], hikerCoords[GOING_DOWN][1], 106);
+        spriteId = CreateObjectGraphicsSprite(hikerGraphicsIds[rval % (ARRAY_COUNT(hikerGraphicsIds) - 1)], hikerCallbacks[GOING_DOWN], hikerCoords[GOING_DOWN][0], hikerCoords[GOING_DOWN][1], 106);
         if (spriteId != MAX_SPRITES)
         {
             gSprites[spriteId].oam.priority = 2;
-            gSprites[spriteId].pos2.x = -gSprites[spriteId].centerToCornerVecX;
-            gSprites[spriteId].pos2.y = -gSprites[spriteId].centerToCornerVecY;
-            
+            gSprites[spriteId].x2 = -gSprites[spriteId].centerToCornerVecX;
+            gSprites[spriteId].y2 = -gSprites[spriteId].centerToCornerVecY;
+
             // Randomly choose which direction the NPC is going
             if (!GOING_DOWN)
             {
                 if (rval % 2)
                 {
-                    // Do walking west anim
-                    StartSpriteAnim(&gSprites[spriteId], 6);
+                    StartSpriteAnim(&gSprites[spriteId], ANIM_STD_GO_WEST);
                     gSprites[spriteId].sSameDir = TRUE;
-                    gSprites[spriteId].pos1.y += 2;
+                    gSprites[spriteId].y += 2;
                 }
                 else
                 {
-                    // Do walking east anim
-                    StartSpriteAnim(&gSprites[spriteId], 7);
+                    StartSpriteAnim(&gSprites[spriteId], ANIM_STD_GO_EAST);
                     gSprites[spriteId].sSameDir = FALSE;
                 }
             }
@@ -918,15 +907,13 @@ static void CreateCableCarSprites(void)
             {
                 if (rval % 2)
                 {
-                    // Do walking east anim
-                    StartSpriteAnim(&gSprites[spriteId], 7);
+                    StartSpriteAnim(&gSprites[spriteId], ANIM_STD_GO_EAST);
                     gSprites[spriteId].sSameDir = TRUE;
-                    gSprites[spriteId].pos1.y += 2;
+                    gSprites[spriteId].y += 2;
                 }
                 else
                 {
-                    // Do walking west anim
-                    StartSpriteAnim(&gSprites[spriteId], 6);
+                    StartSpriteAnim(&gSprites[spriteId], ANIM_STD_GO_WEST);
                     gSprites[spriteId].sSameDir = FALSE;
                 }
             }
@@ -1024,7 +1011,7 @@ static void DrawNextGroundSegmentGoingDown(void)
     sCableCar->groundSegmentXStart = (sCableCar->groundSegmentXStart + 2) % 32;
     sCableCar->groundTileIdx += 2;
     sGroundSegmentY_Down = sCableCar->groundSegmentYStart;
-    
+
     // Draw next segment
     for (i = 0; i < ARRAY_COUNT(sCableCar->groundTileBuffer); i++)
     {

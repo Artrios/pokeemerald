@@ -8,6 +8,14 @@
 #define POKENEWS_BLENDMASTER  4
 #define NUM_POKENEWS_TYPES    4 // Excludes NONE
 
+#define POKENEWS_STATE_INACTIVE 0
+#define POKENEWS_STATE_UPCOMING 1
+#define POKENEWS_STATE_ACTIVE   2
+
+// Number of days to count down until the news event occurs.
+// Nothing is aired on TV the first day
+#define POKENEWS_COUNTDOWN 4
+
 // TV shows are categorized as being in one of 3 groups
 // - TVGROUP_NORMAL, TV shows that can appear without Record Mixing
 // - TVGROUP_RECORD_MIX, TV shows that can only appear via Record Mixing
@@ -35,7 +43,7 @@
 
 // TVGROUP_RECORD_MIX
 #define TVGROUP_RECORD_MIX_START                    21
-#define TVSHOW_POKEMON_TODAY_CAUGHT                 21 
+#define TVSHOW_POKEMON_TODAY_CAUGHT                 21
 #define TVSHOW_SMART_SHOPPER                        22
 #define TVSHOW_POKEMON_TODAY_FAILED                 23
 #define TVSHOW_FISHING_ADVICE                       24
@@ -66,6 +74,7 @@
 // for TV shows from TVGROUP_NORMAL. The remainder are for TV
 // shows from TVGROUP_RECORD_MIX.
 #define NUM_NORMAL_TVSHOW_SLOTS 5
+#define TV_SHOWS_COUNT (NUM_NORMAL_TVSHOW_SLOTS + 20)
 
 #define PLAYERS_HOUSE_TV_NONE  0
 #define PLAYERS_HOUSE_TV_LATI  1
@@ -161,7 +170,7 @@
 
 #define NUM_SECRET_BASE_FLAGS  32  // by definition, bitfield of 2 u16s
 
-// TV Show states for Pokemon Contest Live Updates
+// TV Show states for Pokémon Contest Live Updates
 #define CONTESTLIVE_STATE_INTRO                 0
 #define CONTESTLIVE_STATE_WON_BOTH_ROUNDS       1
 #define CONTESTLIVE_STATE_BETTER_ROUND2         2
@@ -249,6 +258,38 @@
 #define CONTESTLADYLIVE_STATE_LOST       2
 #define CONTESTLADYLIVE_STATE_LOST_BADLY 3
 
+// TV Show states for Smart Shopper
+#define SMARTSHOPPER_STATE_INTRO           0
+#define SMARTSHOPPER_STATE_CLERK_NORMAL    1
+#define SMARTSHOPPER_STATE_RAND_COMMENT_1  2
+#define SMARTSHOPPER_STATE_RAND_COMMENT_2  3
+#define SMARTSHOPPER_STATE_RAND_COMMENT_3  4
+#define SMARTSHOPPER_STATE_RAND_COMMENT_4  5
+#define SMARTSHOPPER_STATE_SECOND_ITEM     6
+#define SMARTSHOPPER_STATE_THIRD_ITEM      7
+#define SMARTSHOPPER_STATE_DURING_SALE     8
+#define SMARTSHOPPER_STATE_OUTRO_NORMAL    9
+#define SMARTSHOPPER_STATE_IS_VIP         10
+#define SMARTSHOPPER_STATE_CLERK_MAX      11
+#define SMARTSHOPPER_STATE_OUTRO_MAX      12
+
 #define SMARTSHOPPER_NUM_ITEMS 3
+
+// TV Show states for Bravo Trainer's Battle Tower interview
+#define BRAVOTOWER_STATE_INTRO                 0
+#define BRAVOTOWER_STATE_NEW_RECORD            1
+#define BRAVOTOWER_STATE_LOST                  2
+#define BRAVOTOWER_STATE_WON                   3
+#define BRAVOTOWER_STATE_LOST_FINAL            4
+#define BRAVOTOWER_STATE_SATISFIED             5
+#define BRAVOTOWER_STATE_UNSATISFIED           6
+#define BRAVOTOWER_STATE_UNUSED_1              7
+#define BRAVOTOWER_STATE_UNUSED_2              8
+#define BRAVOTOWER_STATE_UNUSED_3              9
+#define BRAVOTOWER_STATE_UNUSED_4             10
+#define BRAVOTOWER_STATE_RESPONSE             11
+#define BRAVOTOWER_STATE_RESPONSE_SATISFIED   12
+#define BRAVOTOWER_STATE_RESPONSE_UNSATISFIED 13
+#define BRAVOTOWER_STATE_OUTRO                14
 
 #endif //GUARD_CONSTANTS_TV_H

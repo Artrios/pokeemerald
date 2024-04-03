@@ -63,12 +63,12 @@ enum {
 
 struct CreditsData
 {
-    u16 monToShow[NUM_MON_SLIDES]; // List of Pokemon species ids that will show during the credits
+    u16 monToShow[NUM_MON_SLIDES]; // List of Pokémon species ids that will show during the credits
     u16 imgCounter; //how many mon images have been shown
     u16 nextImgPos; //if the next image spawns left/center/right
     u16 currShownMon; //index into monToShow
-    u16 numMonToShow; //number of pokemon to show, always NUM_MON_SLIDES after determine function
-    u16 caughtMonIds[NATIONAL_DEX_COUNT]; //temporary location to hold a condensed array of all caught pokemon
+    u16 numMonToShow; //number of Pokémon to show, always NUM_MON_SLIDES after determine function
+    u16 caughtMonIds[NATIONAL_DEX_COUNT]; //temporary location to hold a condensed array of all caught Pokémon
     u16 numCaughtMon; //count of filled spaces in caughtMonIds
     u16 unused[7];
 };
@@ -80,7 +80,7 @@ struct CreditsEntry
     const u8 *text;
 };
 
-static EWRAM_DATA s16 sUnkVar = 0; // Never read, only set to 0
+static EWRAM_DATA s16 UNUSED sUnkVar = 0; // Never read, only set to 0
 static EWRAM_DATA u16 sSavedTaskId = 0;
 EWRAM_DATA bool8 gHasHallOfFameRecords = 0;
 static EWRAM_DATA bool8 sUsedSpeedUp = 0; // Never read
@@ -183,7 +183,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .bg = 0,
         .tilemapLeft = 0,
         .tilemapTop = 9,
-        .width = 30,
+        .width = DISPLAY_TILE_WIDTH,
         .height = 12,
         .paletteNum = 8,
         .baseBlock = 1
@@ -286,7 +286,7 @@ static const struct OamData sOamData_MonBg =
     .y = DISPLAY_HEIGHT,
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
-    .mosaic = 0,
+    .mosaic = FALSE,
     .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(64x64),
     .x = 0,
@@ -365,11 +365,11 @@ static void InitCreditsBgsAndWindows(void)
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBackgroundTemplates, ARRAY_COUNT(sBackgroundTemplates));
     SetBgTilemapBuffer(0, AllocZeroed(BG_SCREEN_SIZE));
-    LoadPalette(sCredits_Pal, 0x80, 64);
+    LoadPalette(sCredits_Pal, BG_PLTT_ID(8), 2 * PLTT_SIZE_4BPP);
     InitWindows(sWindowTemplates);
     DeactivateAllTextPrinters();
     PutWindowTilemap(0);
-    CopyWindowToVram(0, 3);
+    CopyWindowToVram(0, COPYWIN_FULL);
     ShowBg(0);
 }
 
@@ -400,8 +400,8 @@ static void PrintCreditsText(const u8 *string, u8 y, bool8 isTitle)
         color[2] = TEXT_COLOR_DARK_GRAY;
     }
 
-    x = GetStringCenterAlignXOffsetWithLetterSpacing(1, string, DISPLAY_WIDTH, 1);
-    AddTextPrinterParameterized4(0, 1, x, y, 1, 0, color, -1, string);
+    x = GetStringCenterAlignXOffsetWithLetterSpacing(FONT_NORMAL, string, DISPLAY_WIDTH, 1);
+    AddTextPrinterParameterized4(0, FONT_NORMAL, x, y, 1, 0, color, TEXT_SKIP_DRAW, string);
 }
 
 #define tMainTaskId data[1]
@@ -547,9 +547,9 @@ static void Task_LoadShowMons(u8 taskId)
         ResetAllPicSprites();
         FreeAllSpritePalettes();
         gReservedSpritePaletteCount = 8;
-        LZ77UnCompVram(gBirchHelpGfx, (void *)VRAM);
+        LZ77UnCompVram(gBirchBagGrass_Gfx, (void *)VRAM);
         LZ77UnCompVram(gBirchGrassTilemap, (void *)(BG_SCREEN_ADDR(7)));
-        LoadPalette(gBirchBagGrassPal[0] + 1, 1, 31 * 2);
+        LoadPalette(gBirchBagGrass_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(2 * 16 - 1));
 
         for (i = 0; i < MON_PIC_SIZE; i++)
             gDecompressionBuffer[i] = 0x11;
@@ -624,7 +624,7 @@ static void Task_CreditsTheEnd3(u8 taskId)
 {
     ResetGpuAndVram();
     ResetPaletteFade();
-    LoadTheEndScreen(0, 0x3800, 0);
+    LoadTheEndScreen(0, 0x3800, BG_PLTT_ID(0));
     ResetSpriteData();
     FreeAllSpritePalettes();
     BeginNormalPaletteFade(PALETTES_ALL, 8, 16, 0, RGB_BLACK);
@@ -759,9 +759,9 @@ static void Task_UpdatePage(u8 taskId)
                 for (i = 0; i < ENTRIES_PER_PAGE; i++)
                     PrintCreditsText(
                         sCreditsEntryPointerTable[gTasks[taskId].tCurrentPage][i]->text,
-                         5 + i * 16, 
+                         5 + i * 16,
                          sCreditsEntryPointerTable[gTasks[taskId].tCurrentPage][i]->isTitle);
-                CopyWindowToVram(0, 2);
+                CopyWindowToVram(0, COPYWIN_GFX);
 
                 gTasks[taskId].tCurrentPage++;
                 gTasks[taskId].tState++;
@@ -811,7 +811,7 @@ static void Task_UpdatePage(u8 taskId)
         {
             // Still more Credits pages to show, return to state 2 to print
             FillWindowPixelBuffer(0, PIXEL_FILL(0));
-            CopyWindowToVram(0, 2);
+            CopyWindowToVram(0, COPYWIN_GFX);
             gTasks[taskId].tState = 2;
         }
         return;
@@ -911,9 +911,9 @@ static void Task_ShowMons(u8 taskId)
     case 2:
         if (sCreditsData->imgCounter == NUM_MON_SLIDES || gTasks[gTasks[taskId].tMainTaskId].func != Task_CreditsMain)
             break;
-        spriteId = CreateCreditsMonSprite(sCreditsData->monToShow[sCreditsData->currShownMon], 
-                                    sMonSpritePos[sCreditsData->nextImgPos][0], 
-                                    sMonSpritePos[sCreditsData->nextImgPos][1], 
+        spriteId = CreateCreditsMonSprite(sCreditsData->monToShow[sCreditsData->currShownMon],
+                                    sMonSpritePos[sCreditsData->nextImgPos][0],
+                                    sMonSpritePos[sCreditsData->nextImgPos][1],
                                     sCreditsData->nextImgPos);
         if (sCreditsData->currShownMon < sCreditsData->numMonToShow - 1)
         {
@@ -1103,10 +1103,10 @@ static void SetBikeScene(u8 scene, u8 taskId)
     case SCENE_OCEAN_MORNING:
         gSprites[gTasks[taskId].tPlayerSpriteId].invisible = FALSE;
         gSprites[gTasks[taskId].tRivalSpriteId].invisible = FALSE;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.x = DISPLAY_WIDTH + 32;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.x = DISPLAY_WIDTH + 32;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.y = 46;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.y = 46;
+        gSprites[gTasks[taskId].tPlayerSpriteId].x = DISPLAY_WIDTH + 32;
+        gSprites[gTasks[taskId].tRivalSpriteId].x = DISPLAY_WIDTH + 32;
+        gSprites[gTasks[taskId].tPlayerSpriteId].y = 46;
+        gSprites[gTasks[taskId].tRivalSpriteId].y = 46;
         gSprites[gTasks[taskId].tPlayerSpriteId].data[0] = 0;
         gSprites[gTasks[taskId].tRivalSpriteId].data[0] = 0;
         gTasks[taskId].tTaskId_BgScenery = CreateBicycleBgAnimationTask(0, 0x2000, 0x20, 8);
@@ -1114,10 +1114,10 @@ static void SetBikeScene(u8 scene, u8 taskId)
     case SCENE_OCEAN_SUNSET:
         gSprites[gTasks[taskId].tPlayerSpriteId].invisible = FALSE;
         gSprites[gTasks[taskId].tRivalSpriteId].invisible = FALSE;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.x = 120;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.x = DISPLAY_WIDTH + 32;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.y = 46;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.y = 46;
+        gSprites[gTasks[taskId].tPlayerSpriteId].x = 120;
+        gSprites[gTasks[taskId].tRivalSpriteId].x = DISPLAY_WIDTH + 32;
+        gSprites[gTasks[taskId].tPlayerSpriteId].y = 46;
+        gSprites[gTasks[taskId].tRivalSpriteId].y = 46;
         gSprites[gTasks[taskId].tPlayerSpriteId].data[0] = 0;
         gSprites[gTasks[taskId].tRivalSpriteId].data[0] = 0;
         gTasks[taskId].tTaskId_BgScenery = CreateBicycleBgAnimationTask(0, 0x2000, 0x20, 8);
@@ -1125,10 +1125,10 @@ static void SetBikeScene(u8 scene, u8 taskId)
     case SCENE_FOREST_RIVAL_ARRIVE:
         gSprites[gTasks[taskId].tPlayerSpriteId].invisible = FALSE;
         gSprites[gTasks[taskId].tRivalSpriteId].invisible = FALSE;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.x = 120;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.x = DISPLAY_WIDTH + 32;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.y = 46;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.y = 46;
+        gSprites[gTasks[taskId].tPlayerSpriteId].x = 120;
+        gSprites[gTasks[taskId].tRivalSpriteId].x = DISPLAY_WIDTH + 32;
+        gSprites[gTasks[taskId].tPlayerSpriteId].y = 46;
+        gSprites[gTasks[taskId].tRivalSpriteId].y = 46;
         gSprites[gTasks[taskId].tPlayerSpriteId].data[0] = 0;
         gSprites[gTasks[taskId].tRivalSpriteId].data[0] = 0;
         gTasks[taskId].tTaskId_BgScenery = CreateBicycleBgAnimationTask(1, 0x2000, 0x200, 8);
@@ -1136,10 +1136,10 @@ static void SetBikeScene(u8 scene, u8 taskId)
     case SCENE_FOREST_CATCH_RIVAL:
         gSprites[gTasks[taskId].tPlayerSpriteId].invisible = FALSE;
         gSprites[gTasks[taskId].tRivalSpriteId].invisible = FALSE;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.x = 120;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.x = -32;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.y = 46;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.y = 46;
+        gSprites[gTasks[taskId].tPlayerSpriteId].x = 120;
+        gSprites[gTasks[taskId].tRivalSpriteId].x = -32;
+        gSprites[gTasks[taskId].tPlayerSpriteId].y = 46;
+        gSprites[gTasks[taskId].tRivalSpriteId].y = 46;
         gSprites[gTasks[taskId].tPlayerSpriteId].data[0] = 0;
         gSprites[gTasks[taskId].tRivalSpriteId].data[0] = 0;
         gTasks[taskId].tTaskId_BgScenery = CreateBicycleBgAnimationTask(1, 0x2000, 0x200, 8);
@@ -1147,10 +1147,10 @@ static void SetBikeScene(u8 scene, u8 taskId)
     case SCENE_CITY_NIGHT:
         gSprites[gTasks[taskId].tPlayerSpriteId].invisible = FALSE;
         gSprites[gTasks[taskId].tRivalSpriteId].invisible = FALSE;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.x = 88;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.x = 152;
-        gSprites[gTasks[taskId].tPlayerSpriteId].pos1.y = 46;
-        gSprites[gTasks[taskId].tRivalSpriteId].pos1.y = 46;
+        gSprites[gTasks[taskId].tPlayerSpriteId].x = 88;
+        gSprites[gTasks[taskId].tRivalSpriteId].x = 152;
+        gSprites[gTasks[taskId].tPlayerSpriteId].y = 46;
+        gSprites[gTasks[taskId].tRivalSpriteId].y = 46;
         gSprites[gTasks[taskId].tPlayerSpriteId].data[0] = 0;
         gSprites[gTasks[taskId].tRivalSpriteId].data[0] = 0;
         gTasks[taskId].tTaskId_BgScenery = CreateBicycleBgAnimationTask(2, 0x2000, 0x200, 8);
@@ -1285,18 +1285,18 @@ static void ResetCreditsTasks(u8 taskId)
     gIntroCredits_MovingSceneryState = INTROCRED_SCENERY_DESTROY;
 }
 
-static void LoadTheEndScreen(u16 arg0, u16 arg1, u16 palOffset)
+static void LoadTheEndScreen(u16 tileOffsetLoad, u16 tileOffsetWrite, u16 palOffset)
 {
     u16 baseTile;
     u16 i;
 
-    LZ77UnCompVram(sCreditsCopyrightEnd_Gfx, (void *)(VRAM + arg0));
+    LZ77UnCompVram(sCreditsCopyrightEnd_Gfx, (void *)(VRAM + tileOffsetLoad));
     LoadPalette(gIntroCopyright_Pal, palOffset, sizeof(gIntroCopyright_Pal));
 
     baseTile = (palOffset / 16) << 12;
 
     for (i = 0; i < 32 * 32; i++)
-        ((u16 *) (VRAM + arg1))[i] = baseTile + 1;
+        ((u16 *) (VRAM + tileOffsetWrite))[i] = baseTile + 1;
 }
 
 static u16 GetLetterMapTile(u8 baseTiles)
@@ -1359,8 +1359,8 @@ static void SpriteCB_Player(struct Sprite *sprite)
         break;
     case 1:
         StartSpriteAnimIfDifferent(sprite, 1);
-        if (sprite->pos1.x > -32)
-            sprite->pos1.x--;
+        if (sprite->x > -32)
+            sprite->x--;
         break;
     case 2:
         StartSpriteAnimIfDifferent(sprite, 2);
@@ -1370,13 +1370,13 @@ static void SpriteCB_Player(struct Sprite *sprite)
         break;
     case 4:
         StartSpriteAnimIfDifferent(sprite, 0);
-        if (sprite->pos1.x > 120)
-            sprite->pos1.x--;
+        if (sprite->x > DISPLAY_WIDTH / 2)
+            sprite->x--;
         break;
     case 5:
         StartSpriteAnimIfDifferent(sprite, 0);
-        if (sprite->pos1.x > -32)
-            sprite->pos1.x--;
+        if (sprite->x > -32)
+            sprite->x--;
         break;
     }
 }
@@ -1392,28 +1392,28 @@ static void SpriteCB_Rival(struct Sprite *sprite)
     switch (sprite->sState)
     {
     case 0:
-        sprite->pos2.y = 0;
+        sprite->y2 = 0;
         StartSpriteAnimIfDifferent(sprite, 0);
         break;
     case 1:
-        if (sprite->pos1.x > 200)
+        if (sprite->x > 200)
             StartSpriteAnimIfDifferent(sprite, 1);
         else
             StartSpriteAnimIfDifferent(sprite, 2);
-        if (sprite->pos1.x > -32)
-            sprite->pos1.x -= 2;
-        sprite->pos2.y = -gIntroCredits_MovingSceneryVOffset;
+        if (sprite->x > -32)
+            sprite->x -= 2;
+        sprite->y2 = -gIntroCredits_MovingSceneryVOffset;
         break;
     case 2:
         sprite->data[7]++;
         StartSpriteAnimIfDifferent(sprite, 0);
         if ((sprite->data[7] & 3) == 0)
-            sprite->pos1.x++;
+            sprite->x++;
         break;
     case 3:
         StartSpriteAnimIfDifferent(sprite, 0);
-        if (sprite->pos1.x > -32)
-            sprite->pos1.x--;
+        if (sprite->x > -32)
+            sprite->x--;
         break;
     }
 }
@@ -1455,15 +1455,15 @@ static void SpriteCB_CreditsMon(struct Sprite *sprite)
         {
         case POS_LEFT + 1:
             if ((sprite->data[7] & 3) == 0)
-                sprite->pos1.y++;
-            sprite->pos1.x -= 2;
+                sprite->y++;
+            sprite->x -= 2;
             break;
         case POS_CENTER + 1:
             break;
         case POS_RIGHT + 1:
             if ((sprite->data[7] & 3) == 0)
-                sprite->pos1.y++;
-            sprite->pos1.x += 2;
+                sprite->y++;
+            sprite->x += 2;
             break;
         }
         break;
@@ -1522,7 +1522,7 @@ static u8 CreateCreditsMonSprite(u16 nationalDexNum, s16 x, s16 y, u16 position)
     gSprites[monSpriteId].callback = SpriteCB_CreditsMon;
     gSprites[monSpriteId].sSpriteId = monSpriteId;
 
-    bgSpriteId = CreateSprite(&sSpriteTemplate_CreditsMonBg, gSprites[monSpriteId].pos1.x, gSprites[monSpriteId].pos1.y, 1);
+    bgSpriteId = CreateSprite(&sSpriteTemplate_CreditsMonBg, gSprites[monSpriteId].x, gSprites[monSpriteId].y, 1);
     gSprites[bgSpriteId].sMonSpriteId = monSpriteId;
 
     StartSpriteAnimIfDifferent(&gSprites[bgSpriteId], position);
@@ -1532,7 +1532,7 @@ static u8 CreateCreditsMonSprite(u16 nationalDexNum, s16 x, s16 y, u16 position)
 
 static void SpriteCB_CreditsMonBg(struct Sprite *sprite)
 {
-    if (gSprites[sprite->sMonSpriteId].data[0] == 10 
+    if (gSprites[sprite->sMonSpriteId].data[0] == 10
      || gIntroCredits_MovingSceneryState != INTROCRED_SCENERY_NORMAL)
     {
         DestroySprite(sprite);
@@ -1544,8 +1544,8 @@ static void SpriteCB_CreditsMonBg(struct Sprite *sprite)
     sprite->oam.objMode = gSprites[sprite->sMonSpriteId].oam.objMode;
     sprite->oam.affineMode = gSprites[sprite->sMonSpriteId].oam.affineMode;
     sprite->oam.matrixNum = gSprites[sprite->sMonSpriteId].oam.matrixNum;
-    sprite->pos1.x = gSprites[sprite->sMonSpriteId].pos1.x;
-    sprite->pos1.y = gSprites[sprite->sMonSpriteId].pos1.y;
+    sprite->x = gSprites[sprite->sMonSpriteId].x;
+    sprite->y = gSprites[sprite->sMonSpriteId].y;
 }
 
 static void DeterminePokemonToShow(void)
@@ -1554,9 +1554,9 @@ static void DeterminePokemonToShow(void)
     u16 page;
     u16 dexNum;
     u16 j;
-    
-    // Go through the Pokedex, and anything that has gotten caught we put into our massive array.
-    // This basically packs all of the caught pokemon into the front of the array
+
+    // Go through the Pokédex, and anything that has gotten caught we put into our massive array.
+    // This basically packs all of the caught Pokémon into the front of the array
     for (dexNum = 1, j = 0; dexNum < NATIONAL_DEX_COUNT; dexNum++)
     {
         if (GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT))
@@ -1570,21 +1570,21 @@ static void DeterminePokemonToShow(void)
     for (dexNum = j; dexNum < NATIONAL_DEX_COUNT; dexNum++)
         sCreditsData->caughtMonIds[dexNum] = NATIONAL_DEX_NONE;
 
-    // Cap the number of pokemon we care about to NUM_MON_SLIDES, the max we show in the credits scene (-1 for the starter)
+    // Cap the number of Pokémon we care about to NUM_MON_SLIDES, the max we show in the credits scene (-1 for the starter)
     sCreditsData->numCaughtMon = j;
     if (sCreditsData->numCaughtMon < NUM_MON_SLIDES)
         sCreditsData->numMonToShow = j;
     else
         sCreditsData->numMonToShow = NUM_MON_SLIDES;
 
-    // Loop through our list of caught pokemon and select randomly from it to fill the images to show
+    // Loop through our list of caught Pokémon and select randomly from it to fill the images to show
     j = 0;
     do
     {
         // Select a random mon, insert into array
         page = Random() % sCreditsData->numCaughtMon;
         sCreditsData->monToShow[j] = sCreditsData->caughtMonIds[page];
-        
+
         // Remove the select mon from the array, and condense array entries
         j++;
         sCreditsData->caughtMonIds[page] = 0;
@@ -1598,7 +1598,7 @@ static void DeterminePokemonToShow(void)
     }
     while (sCreditsData->numCaughtMon != 0 && j < NUM_MON_SLIDES);
 
-    // If we don't have enough pokemon in the dex to fill everything, copy the selected mon into the end of the array, so it loops
+    // If we don't have enough Pokémon in the dex to fill everything, copy the selected mon into the end of the array, so it loops
     if (sCreditsData->numMonToShow < NUM_MON_SLIDES)
     {
         for (j = sCreditsData->numMonToShow, page = 0; j < NUM_MON_SLIDES; j++)
@@ -1609,7 +1609,7 @@ static void DeterminePokemonToShow(void)
             if (page == sCreditsData->numMonToShow)
                 page = 0;
         }
-        // Ensure the last pokemon is our starter
+        // Ensure the last Pokémon is our starter
         sCreditsData->monToShow[NUM_MON_SLIDES - 1] = starter;
     }
     else
@@ -1617,7 +1617,7 @@ static void DeterminePokemonToShow(void)
         // Check to see if our starter has already appeared in this list, break if it has
         for (dexNum = 0; sCreditsData->monToShow[dexNum] != starter && dexNum < NUM_MON_SLIDES; dexNum++);
 
-        // If it has, swap it with the last pokemon, to ensure our starter is the last image
+        // If it has, swap it with the last Pokémon, to ensure our starter is the last image
         if (dexNum < sCreditsData->numMonToShow - 1)
         {
             sCreditsData->monToShow[dexNum] = sCreditsData->monToShow[NUM_MON_SLIDES-1];
@@ -1625,7 +1625,7 @@ static void DeterminePokemonToShow(void)
         }
         else
         {
-            // Ensure the last pokemon is our starter
+            // Ensure the last Pokémon is our starter
             sCreditsData->monToShow[NUM_MON_SLIDES - 1] = starter;
         }
     }

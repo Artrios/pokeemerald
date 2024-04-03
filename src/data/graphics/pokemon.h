@@ -845,12 +845,12 @@ const u32 gMonShinyPalette_Starmie[] = INCBIN_U32("graphics/pokemon/starmie/shin
 const u8 gMonIcon_Starmie[] = INCBIN_U8("graphics/pokemon/starmie/icon.4bpp");
 const u8 gMonFootprint_Starmie[] = INCBIN_U8("graphics/pokemon/starmie/footprint.1bpp");
 
-const u32 gMonStillFrontPic_Mrmime[] = INCBIN_U32("graphics/pokemon/mr_mime/front.4bpp.lz");
-const u32 gMonPalette_Mrmime[] = INCBIN_U32("graphics/pokemon/mr_mime/normal.gbapal.lz");
-const u32 gMonBackPic_Mrmime[] = INCBIN_U32("graphics/pokemon/mr_mime/back.4bpp.lz");
-const u32 gMonShinyPalette_Mrmime[] = INCBIN_U32("graphics/pokemon/mr_mime/shiny.gbapal.lz");
-const u8 gMonIcon_Mrmime[] = INCBIN_U8("graphics/pokemon/mr_mime/icon.4bpp");
-const u8 gMonFootprint_Mrmime[] = INCBIN_U8("graphics/pokemon/mr_mime/footprint.1bpp");
+const u32 gMonStillFrontPic_MrMime[] = INCBIN_U32("graphics/pokemon/mr_mime/front.4bpp.lz");
+const u32 gMonPalette_MrMime[] = INCBIN_U32("graphics/pokemon/mr_mime/normal.gbapal.lz");
+const u32 gMonBackPic_MrMime[] = INCBIN_U32("graphics/pokemon/mr_mime/back.4bpp.lz");
+const u32 gMonShinyPalette_MrMime[] = INCBIN_U32("graphics/pokemon/mr_mime/shiny.gbapal.lz");
+const u8 gMonIcon_MrMime[] = INCBIN_U8("graphics/pokemon/mr_mime/icon.4bpp");
+const u8 gMonFootprint_MrMime[] = INCBIN_U8("graphics/pokemon/mr_mime/footprint.1bpp");
 
 const u32 gMonStillFrontPic_Scyther[] = INCBIN_U32("graphics/pokemon/scyther/front.4bpp.lz");
 const u32 gMonPalette_Scyther[] = INCBIN_U32("graphics/pokemon/scyther/normal.gbapal.lz");
@@ -2696,12 +2696,12 @@ const u32 gMonBackPic_Deoxys[] = INCBIN_U32("graphics/pokemon/deoxys/back.4bpp.l
 const u32 gMonShinyPalette_Deoxys[] = INCBIN_U32("graphics/pokemon/deoxys/shiny.gbapal.lz");
 const u8 gMonIcon_Deoxys[] = INCBIN_U8("graphics/pokemon/deoxys/icon.4bpp");
 const u8 gMonIcon_DeoxysSpeed[] = INCBIN_U8("graphics/pokemon/deoxys/icon_speed.4bpp");
-const u8 gMonIcon_DeoxysSpeedWide[] = INCBIN_U8("graphics/unused/deoxys_speed_icon_wide.4bpp");
+const u8 gMonIcon_DeoxysSpeedWide[] = INCBIN_U8("graphics/pokemon/deoxys/icon_speed_wide.4bpp"); // Unused
 
 // Probably the leftover space from the other Deoxys forms
 static const u8 sEmpty[0x6800] = {0};
 
-const u16 gUnknown_D437F8[] = INCBIN_U16("graphics/unknown/unknown_D437F8.bin");
+const u16 gMonUnusedGarbage[] = INCBIN_U16("graphics/pokemon/unused_garbage.bin");
 
 const u8 gMonFootprint_Deoxys[] = INCBIN_U8("graphics/pokemon/deoxys/footprint.1bpp");
 

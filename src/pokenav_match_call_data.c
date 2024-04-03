@@ -164,7 +164,7 @@ static const match_call_text_data_t sMrStoneTextScripts[] = {
     { MatchCall_Text_MrStone2,  FLAG_ENABLE_MR_STONE_POKENAV,        0xFFFF },
     { MatchCall_Text_MrStone3,  FLAG_DELIVERED_STEVEN_LETTER,        0xFFFF },
     { MatchCall_Text_MrStone4,  FLAG_RECEIVED_EXP_SHARE,             0xFFFF },
-    { MatchCall_Text_MrStone5,  FLAG_RECEIVED_HM04,                  0xFFFF },
+    { MatchCall_Text_MrStone5,  FLAG_RECEIVED_HM_STRENGTH,           0xFFFF },
     { MatchCall_Text_MrStone6,  FLAG_DEFEATED_PETALBURG_GYM,         0xFFFF },
     { MatchCall_Text_MrStone7,  FLAG_RECEIVED_CASTFORM,              0xFFFF },
     { MatchCall_Text_MrStone8,  FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT, 0xFFFF },
@@ -260,7 +260,7 @@ static const match_call_text_data_t sMayTextScripts[] = {
     { MatchCall_Text_May2,  FLAG_DEFEATED_DEWFORD_GYM,           0xFFFF },
     { MatchCall_Text_May3,  FLAG_DELIVERED_DEVON_GOODS,          0xFFFF },
     { MatchCall_Text_May4,  FLAG_HIDE_MAUVILLE_CITY_WALLY,       0xFFFF },
-    { MatchCall_Text_May5,  FLAG_RECEIVED_HM04,                  0xFFFF },
+    { MatchCall_Text_May5,  FLAG_RECEIVED_HM_STRENGTH,           0xFFFF },
     { MatchCall_Text_May6,  FLAG_DEFEATED_LAVARIDGE_GYM,         0xFFFF },
     { MatchCall_Text_May7,  FLAG_DEFEATED_PETALBURG_GYM,         0xFFFF },
     { MatchCall_Text_May8,  FLAG_RECEIVED_CASTFORM,              0xFFFF },
@@ -289,7 +289,7 @@ static const match_call_text_data_t sBrendanTextScripts[] = {
     { MatchCall_Text_Brendan2,  FLAG_DEFEATED_DEWFORD_GYM,           0xFFFF },
     { MatchCall_Text_Brendan3,  FLAG_DELIVERED_DEVON_GOODS,          0xFFFF },
     { MatchCall_Text_Brendan4,  FLAG_HIDE_MAUVILLE_CITY_WALLY,       0xFFFF },
-    { MatchCall_Text_Brendan5,  FLAG_RECEIVED_HM04,                  0xFFFF },
+    { MatchCall_Text_Brendan5,  FLAG_RECEIVED_HM_STRENGTH,           0xFFFF },
     { MatchCall_Text_Brendan6,  FLAG_DEFEATED_LAVARIDGE_GYM,         0xFFFF },
     { MatchCall_Text_Brendan7,  FLAG_DEFEATED_PETALBURG_GYM,         0xFFFF },
     { MatchCall_Text_Brendan8,  FLAG_RECEIVED_CASTFORM,              0xFFFF },
@@ -324,7 +324,7 @@ static const match_call_text_data_t sWallyTextScripts[] = {
     { NULL,                  0xFFFF,                              0xFFFF }
 };
 
-const struct MatchCallLocationOverride sWallyLocationData[] = {
+static const struct MatchCallLocationOverride sWallyLocationData[] = {
     { FLAG_HIDE_MAUVILLE_CITY_WALLY,          MAPSEC_VERDANTURF_TOWN },
     { FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT,    MAPSEC_NONE },
     { FLAG_HIDE_VICTORY_ROAD_ENTRANCE_WALLY,  MAPSEC_VICTORY_ROAD },
@@ -336,7 +336,7 @@ static const struct MatchCallWally sWallyMatchCallHeader =
     .type = MC_TYPE_WALLY,
     .mapSec = 0,
     .flag = FLAG_ENABLE_WALLY_MATCH_CALL,
-    .rematchTableIdx = REMATCH_WALLY_3,
+    .rematchTableIdx = REMATCH_WALLY_VR,
     .desc = gText_WallyMatchCallDesc,
     .textData = sWallyTextScripts,
     .locationData = sWallyLocationData
@@ -658,38 +658,38 @@ static void (*const sMatchCall_GetNameAndDescFunctions[])(match_call_t, const u8
 };
 
 static const struct MatchCallCheckPageOverride sCheckPageOverrides[] = {
-    { 
-        .idx = MC_HEADER_STEVEN,  
-        .facilityClass = FACILITY_CLASS_STEVEN,  
-        .flag = 0xFFFF,                     
-        .flavorTexts = { 
-            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy, 
-            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon, 
-            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_BeforeMeteorFallsBattle, 
-            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_BeforeMeteorFallsBattle 
-        } 
+    {
+        .idx = MC_HEADER_STEVEN,
+        .facilityClass = FACILITY_CLASS_STEVEN,
+        .flag = 0xFFFF,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy,
+            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon,
+            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_BeforeMeteorFallsBattle,
+            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_BeforeMeteorFallsBattle
+        }
     },
-    { 
-        .idx = MC_HEADER_STEVEN,  
-        .facilityClass = FACILITY_CLASS_STEVEN,  
-        .flag = FLAG_DEFEATED_MOSSDEEP_GYM, 
-        .flavorTexts = { 
-            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy, 
-            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon, 
-            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_AfterMeteorFallsBattle, 
-            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_AfterMeteorFallsBattle 
-        } 
+    {
+        .idx = MC_HEADER_STEVEN,
+        .facilityClass = FACILITY_CLASS_STEVEN,
+        .flag = FLAG_DEFEATED_MOSSDEEP_GYM,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy,
+            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon,
+            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_AfterMeteorFallsBattle,
+            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_AfterMeteorFallsBattle
+        }
     },
-    { 
-        .idx = MC_HEADER_BRENDAN, 
-        .facilityClass = FACILITY_CLASS_BRENDAN, 
-        .flag = 0xFFFF,                     
+    {
+        .idx = MC_HEADER_BRENDAN,
+        .facilityClass = FACILITY_CLASS_BRENDAN,
+        .flag = 0xFFFF,
         .flavorTexts = MCFLAVOR(Brendan)
     },
-    { 
-        .idx = MC_HEADER_MAY,     
-        .facilityClass = FACILITY_CLASS_MAY,     
-        .flag = 0xFFFF,                     
+    {
+        .idx = MC_HEADER_MAY,
+        .facilityClass = FACILITY_CLASS_MAY,
+        .flag = 0xFFFF,
         .flavorTexts = MCFLAVOR(May)
     }
 };
@@ -896,12 +896,12 @@ static bool32 MatchCall_HasCheckPage_Wally(match_call_t matchCall)
     return TRUE;
 }
 
-static bool32 MatchCall_HasCheckPage_Rival(match_call_t matchCall) 
+static bool32 MatchCall_HasCheckPage_Rival(match_call_t matchCall)
 {
     return FALSE;
 }
 
-static bool32 MatchCall_HasCheckPage_Birch(match_call_t matchCall) 
+static bool32 MatchCall_HasCheckPage_Birch(match_call_t matchCall)
 {
     return FALSE;
 }

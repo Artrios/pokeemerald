@@ -213,7 +213,7 @@ struct SoundInfo
     ExtVolPitFunc ExtVolPit;
     u8 gap2[16];
     struct SoundChannel chans[MAX_DIRECTSOUND_CHANNELS];
-    s8 pcmBuffer[PCM_DMA_BUF_SIZE * 2];
+    s8 ALIGNED(4) pcmBuffer[PCM_DMA_BUF_SIZE * 2];
 };
 
 struct SongHeader
@@ -313,6 +313,8 @@ struct MusicPlayerTrack
 
 #define MAX_MUSICPLAYER_TRACKS 16
 
+#define TRACKS_ALL 0xFFFF
+
 #define TEMPORARY_FADE  0x0001
 #define FADE_IN         0x0002
 #define FADE_VOL_MAX    64
@@ -347,7 +349,7 @@ struct MusicPlayer
 {
     struct MusicPlayerInfo *info;
     struct MusicPlayerTrack *track;
-    u8 unk_8;
+    u8 numTracks;
     u16 unk_A;
 };
 
@@ -421,7 +423,7 @@ void Clear64byte(void *addr);
 void SoundInit(struct SoundInfo *soundInfo);
 void MPlayExtender(struct CgbChannel *cgbChans);
 void m4aSoundMode(u32 mode);
-void MPlayOpen(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track, u8 a3);
+void MPlayOpen(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *tracks, u8 trackCount);
 void CgbSound(void);
 void CgbOscOff(u8);
 void CgbModVol(struct CgbChannel *chan);

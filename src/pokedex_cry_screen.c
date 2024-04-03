@@ -19,13 +19,15 @@
 //      .        .
 //    96   .  .  -96
 //         127
-//   
+//
 #define MIN_NEEDLE_POS  32
 #define MAX_NEEDLE_POS -32
 
 #define NEEDLE_MOVE_INCREMENT  5
 
 #define WAVEFORM_WINDOW_HEIGHT 56
+
+#define TAG_NEEDLE 0x2000
 
 struct PokedexCryMeterNeedle {
     s8 rotation;
@@ -202,8 +204,8 @@ static const struct OamData sOamData_CryMeterNeedle =
 
 static const struct SpriteTemplate sCryMeterNeedleSpriteTemplate =
 {
-    .tileTag = 0x2000,
-    .paletteTag = 0x2000,
+    .tileTag = TAG_NEEDLE,
+    .paletteTag = TAG_NEEDLE,
     .oam = &sOamData_CryMeterNeedle,
     .anims = sSpriteAnimTable_CryMeterNeedle,
     .images = NULL,
@@ -213,13 +215,13 @@ static const struct SpriteTemplate sCryMeterNeedleSpriteTemplate =
 
 static const struct SpriteSheet sCryMeterNeedleSpriteSheets[] =
 {
-    {sCryMeterNeedle_Gfx, 0x800, 0x2000},
+    {sCryMeterNeedle_Gfx, sizeof(sCryMeterNeedle_Gfx), TAG_NEEDLE},
     {}
 };
 
 static const struct SpritePalette sCryMeterNeedleSpritePalettes[] =
 {
-    {sCryMeterNeedle_Pal, 0x2000},
+    {sCryMeterNeedle_Pal, TAG_NEEDLE},
     {}
 };
 
@@ -234,7 +236,7 @@ bool8 LoadCryWaveformWindow(struct CryScreenWindow *window, u8 windowId)
         if (!sDexCryScreen)
         {
             sDexCryScreen = AllocZeroed(sizeof(*sDexCryScreen));
-            sCryWaveformWindowTiledata = (u8*)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
+            sCryWaveformWindowTiledata = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
         }
 
         sDexCryScreen->unk = window->unk0;
@@ -253,12 +255,12 @@ bool8 LoadCryWaveformWindow(struct CryScreenWindow *window, u8 windowId)
     case 1:
         for (i = 0; i < sDexCryScreen->playStartPos * 8; i++)
             DrawWaveformSegment(i, 0);
-        
+
         gDexCryScreenState++;
         break;
     case 2:
         DrawWaveformWindow(windowId);
-        LoadPalette(sCryScreenBg_Pal, window->paletteNo * 16, 32);
+        LoadPalette(sCryScreenBg_Pal, BG_PLTT_ID(window->paletteNo), PLTT_SIZE_4BPP);
         finished = TRUE;
         break;
     }
@@ -295,7 +297,7 @@ void UpdateCryWaveformWindow(u8 windowId)
         DrawWaveformFlatline();
         return;
     }
-    
+
     // Cry playing, buffer waveform
     if (sDexCryScreen->cryState == 1)
     {
@@ -345,7 +347,7 @@ void CryScreenPlayButton(u16 species)
 
 static void PlayCryScreenCry(u16 species)
 {
-    PlayCry2(species, 0, 125, 10);
+    PlayCry_NormalNoDucking(species, 0, CRY_VOLUME_RS, CRY_PRIORITY_NORMAL);
     sDexCryScreen->cryState = 1;
 }
 
@@ -360,7 +362,7 @@ static void BufferCryWaveformSegment(void)
     else
         baseBuffer = gSoundInfo.pcmBuffer + (gSoundInfo.pcmDmaPeriod + 1 - gPcmDmaCounter) * gSoundInfo.pcmSamplesPerVBlank;
 
-    buffer = baseBuffer + 0x630;
+    buffer = baseBuffer + PCM_DMA_BUF_SIZE;
     for (i = 0; i < ARRAY_COUNT(sDexCryScreen->cryWaveformBuffer); i++)
         sDexCryScreen->cryWaveformBuffer[i] = buffer[i * 2] * 2;
 }
@@ -432,7 +434,7 @@ static void DrawWaveformSegment(u8 position, u8 amplitude)
 
 static void DrawWaveformWindow(u8 windowId)
 {
-    CopyWindowToVram(windowId, 2);
+    CopyWindowToVram(windowId, COPYWIN_GFX);
 }
 
 // rsVertical is leftover from a very different version of this function in RS
@@ -443,7 +445,7 @@ static void ShiftWaveformOver(u8 windowId, s16 offset, bool8 rsVertical)
     if (!rsVertical)
     {
         u8 bg = GetWindowAttribute(windowId, WINDOW_BG);
-        ChangeBgX(bg, offset << 8, 0);
+        ChangeBgX(bg, offset << 8, BG_COORD_SET);
     }
 }
 
@@ -458,7 +460,7 @@ bool8 LoadCryMeter(struct CryScreenWindow *window, u8 windowId)
             sCryMeterNeedle = AllocZeroed(sizeof(*sCryMeterNeedle));
 
         CopyToWindowPixelBuffer(windowId, sCryMeter_Gfx, 0, 0);
-        LoadPalette(sCryMeter_Pal, window->paletteNo * 16, 32);
+        LoadPalette(sCryMeter_Pal, BG_PLTT_ID(window->paletteNo), PLTT_SIZE_4BPP);
         gDexCryScreenState++;
         break;
     case 1:
@@ -560,8 +562,8 @@ static void SpriteCB_CryMeterNeedle(struct Sprite *sprite)
     SetOamMatrix(0, matrix.a, matrix.b, matrix.c, matrix.d);
     x = gSineTable[((sCryMeterNeedle->rotation + 0x7F) & 0xFF)];
     y = gSineTable[((sCryMeterNeedle->rotation + 0x7F) & 0xFF) + 64];
-    sprite->pos2.x = x * 24 / 256;
-    sprite->pos2.y = y * 24 / 256;
+    sprite->x2 = x * 24 / 256;
+    sprite->y2 = y * 24 / 256;
 }
 
 static void SetCryMeterNeedleTarget(s8 offset)

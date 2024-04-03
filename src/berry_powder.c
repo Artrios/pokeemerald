@@ -4,6 +4,7 @@
 #include "event_data.h"
 #include "load_save.h"
 #include "menu.h"
+#include "palette.h"
 #include "string_util.h"
 #include "strings.h"
 #include "text.h"
@@ -14,8 +15,7 @@
 
 static EWRAM_DATA u8 sBerryPowderVendorWindowId = 0;
 
-// Unused
-static const struct BgTemplate sBerryPowderBgTemplates[] =
+static const struct BgTemplate UNUSED sBerryPowderBgTemplates[] =
 {
     {
         .bg = 0,
@@ -56,72 +56,71 @@ static const struct BgTemplate sBerryPowderBgTemplates[] =
 };
 
 // ? Part of the BG templates?
-static const u32 sUnknown[] = {0xFF, 0x00};
+static const u32 UNUSED sUnknown[] = {0xFF, 0x00};
 
-// Unused
-static const struct WindowTemplate sBerryPowderWindowTemplates[] =
+static const struct WindowTemplate UNUSED sBerryPowderWindowTemplates[] =
 {
     {
-        .bg = 0, 
-        .tilemapLeft = 1, 
-        .tilemapTop = 1, 
-        .width = 28, 
-        .height = 2, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 1,
+        .width = 28,
+        .height = 2,
+        .paletteNum = 13,
         .baseBlock = 19
     },
     {
-        .bg = 0, 
-        .tilemapLeft = 1, 
-        .tilemapTop = 5, 
-        .width = 28, 
-        .height = 14, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 5,
+        .width = 28,
+        .height = 14,
+        .paletteNum = 13,
         .baseBlock = 75
     },
     {
-        .bg = 0, 
-        .tilemapLeft = 1, 
-        .tilemapTop = 5, 
-        .width = 28, 
-        .height = 7, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 5,
+        .width = 28,
+        .height = 7,
+        .paletteNum = 13,
         .baseBlock = 75
     },
     {
-        .bg = 0, 
-        .tilemapLeft = 1, 
-        .tilemapTop = 8, 
-        .width = 19, 
-        .height = 3, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 8,
+        .width = 19,
+        .height = 3,
+        .paletteNum = 13,
         .baseBlock = 19
     },
     {
-        .bg = 0, 
-        .tilemapLeft = 22, 
-        .tilemapTop = 7, 
-        .width = 6, 
-        .height = 4, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 22,
+        .tilemapTop = 7,
+        .width = 6,
+        .height = 4,
+        .paletteNum = 13,
         .baseBlock = 76
     },
     {
-        .bg = 0, 
-        .tilemapLeft = 4, 
-        .tilemapTop = 6, 
-        .width = 22, 
-        .height = 5, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 4,
+        .tilemapTop = 6,
+        .width = 22,
+        .height = 5,
+        .paletteNum = 13,
         .baseBlock = 19
     },
     {
-        .bg = 0, 
-        .tilemapLeft = 5, 
-        .tilemapTop = 8, 
-        .width = 19, 
-        .height = 3, 
-        .paletteNum = 13, 
+        .bg = 0,
+        .tilemapLeft = 5,
+        .tilemapTop = 8,
+        .width = 19,
+        .height = 3,
+        .paletteNum = 13,
         .baseBlock = 19
     },
 };
@@ -176,7 +175,7 @@ bool8 GiveBerryPowder(u32 amountToAdd)
     }
 }
 
-static bool8 TakeBerryPowder_(u32 cost)
+static bool8 UNUSED TakeBerryPowder_(u32 cost)
 {
     u32 *powder = &gSaveBlock2Ptr->berryCrush.berryPowderAmount;
     if (!HasEnoughBerryPowder_(cost))
@@ -205,13 +204,13 @@ u32 GetBerryPowder(void)
 static void PrintBerryPowderAmount(u8 windowId, int amount, u8 x, u8 y, u8 speed)
 {
     ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_RIGHT_ALIGN, 5);
-    AddTextPrinterParameterized(windowId, 1, gStringVar1, x, y, speed, NULL);
+    AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar1, x, y, speed, NULL);
 }
 
 static void DrawPlayerPowderAmount(u8 windowId, u16 baseTileOffset, u8 paletteNum, u32 amount)
 {
     DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, baseTileOffset, paletteNum);
-    AddTextPrinterParameterized(windowId, 1, gText_Powder, 0, 1, TEXT_SPEED_FF, NULL);
+    AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_Powder, 0, 1, TEXT_SKIP_DRAW, NULL);
     PrintBerryPowderAmount(windowId, amount, 26, 17, 0);
 }
 
@@ -228,7 +227,7 @@ void DisplayBerryPowderVendorMenu(void)
     sBerryPowderVendorWindowId = AddWindow(&template);
     FillWindowPixelBuffer(sBerryPowderVendorWindowId, PIXEL_FILL(0));
     PutWindowTilemap(sBerryPowderVendorWindowId);
-    LoadUserWindowBorderGfx_(sBerryPowderVendorWindowId, 0x21D, 0xD0);
+    LoadUserWindowBorderGfx_(sBerryPowderVendorWindowId, 0x21D, BG_PLTT_ID(13));
     DrawPlayerPowderAmount(sBerryPowderVendorWindowId, 0x21D, 13, GetBerryPowder());
 }
 

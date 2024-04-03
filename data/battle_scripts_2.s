@@ -12,7 +12,7 @@
 	.section script_data, "aw", %progbits
 
 	.align 2
-gBattlescriptsForBallThrow:: @ 82DBD08
+gBattlescriptsForBallThrow::
 	.4byte BattleScript_BallThrow        @ ITEM_NONE
 	.4byte BattleScript_BallThrow        @ ITEM_MASTER_BALL
 	.4byte BattleScript_BallThrow        @ ITEM_ULTRA_BALL
@@ -28,7 +28,7 @@ gBattlescriptsForBallThrow:: @ 82DBD08
 	.4byte BattleScript_BallThrow        @ ITEM_PREMIER_BALL
 
 	.align 2
-gBattlescriptsForUsingItem:: @ 82DBD3C
+gBattlescriptsForUsingItem::
 	.4byte BattleScript_PlayerUsesItem
 	.4byte BattleScript_OpponentUsesHealItem        @ AI_ITEM_FULL_RESTORE
 	.4byte BattleScript_OpponentUsesHealItem        @ AI_ITEM_HEAL_HP
@@ -37,11 +37,11 @@ gBattlescriptsForUsingItem:: @ 82DBD3C
 	.4byte BattleScript_OpponentUsesGuardSpec       @ AI_ITEM_GUARD_SPEC
 
 	.align 2
-gBattlescriptsForRunningByItem:: @ 82DBD54
+gBattlescriptsForRunningByItem::
 	.4byte BattleScript_RunByUsingItem
 
 	.align 2
-gBattlescriptsForSafariActions:: @ 82DBD58
+gBattlescriptsForSafariActions::
 	.4byte BattleScript_ActionWatchesCarefully
 	.4byte BattleScript_ActionGetNear
 	.4byte BattleScript_ActionThrowPokeblock
@@ -65,7 +65,7 @@ BattleScript_SuccessBallThrow::
 	jumpifhalfword CMP_EQUAL, gLastUsedItem, ITEM_SAFARI_BALL, BattleScript_PrintCaughtMonInfo
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 BattleScript_PrintCaughtMonInfo::
-	printstring STRINGID_GOTCHAPKMNCAUGHT
+	printstring STRINGID_GOTCHAPKMNCAUGHTPLAYER
 	trysetcaughtmondexflags BattleScript_TryNicknameCaughtMon
 	printstring STRINGID_PKMNDATAADDEDTODEX
 	waitstate
@@ -87,7 +87,7 @@ BattleScript_SuccessBallThrowEnd::
 	finishturn
 
 BattleScript_WallyBallThrow::
-	printstring STRINGID_GOTCHAPKMNCAUGHT2
+	printstring STRINGID_GOTCHAPKMNCAUGHTWALLY
 	setbyte gBattleOutcome, B_OUTCOME_CAUGHT
 	finishturn
 

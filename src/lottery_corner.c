@@ -75,7 +75,7 @@ void PickLotteryCornerTicket(void)
                 }
             }
         }
-        else // pokemon are always arranged from populated spots first to unpopulated, so the moment a NONE species is found, that's the end of the list.
+        else // Pokémon are always arranged from populated spots first to unpopulated, so the moment a NONE species is found, that's the end of the list.
             break;
     }
 
@@ -113,7 +113,7 @@ void PickLotteryCornerTicket(void)
             gSpecialVar_0x8006 = 1;
             GetBoxMonData(&gPokemonStoragePtr->boxes[box][slot], MON_DATA_NICKNAME, gStringVar1);
         }
-        StringGetEnd10(gStringVar1);
+        StringGet_Nickname(gStringVar1);
     }
 }
 

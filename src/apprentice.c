@@ -23,9 +23,7 @@
 #include "task.h"
 #include "text.h"
 #include "constants/battle_frontier.h"
-#include "constants/easy_chat.h"
 #include "constants/items.h"
-#include "constants/pokemon.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/moves.h"
@@ -48,7 +46,7 @@
  * - Asking which move a mon should use, which they will ask at most 5 times
  * - Asking what held item to give to a mon, which they will ask at most 3 times (once for each mon)
  * - Asking what they should say when they win a battle, which will always be their final question before departing
- * 
+ *
  * ## After departing
  * After telling them what they should say when they win a battle they will leave the lobby for a final time
  * They will then be replaced by a new random Apprentice (they can repeat)
@@ -127,16 +125,16 @@ void BufferApprenticeChallengeText(u8 saveApprenticeId)
     for (i = 0; num != 0 && i < APPRENTICE_COUNT; num /= 10, i++)
         ;
 
-    StringCopy7(gStringVar1, gSaveBlock2Ptr->apprentices[saveApprenticeId].playerName);
+    StringCopy_PlayerName(gStringVar1, gSaveBlock2Ptr->apprentices[saveApprenticeId].playerName);
     ConvertInternationalString(gStringVar1, gSaveBlock2Ptr->apprentices[saveApprenticeId].language);
     ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->apprentices[saveApprenticeId].number, STR_CONV_MODE_RIGHT_ALIGN, i);
     challengeText = sApprenticeChallengeTexts[gSaveBlock2Ptr->apprentices[saveApprenticeId].id];
     StringExpandPlaceholders(gStringVar4, challengeText);
 }
 
-void Apprentice_EnableBothScriptContexts(void)
+void Apprentice_ScriptContext_Enable(void)
 {
-    EnableBothScriptContexts();
+    ScriptContext_Enable();
 }
 
 void ResetApprenticeStruct(struct Apprentice *apprentice)
@@ -274,7 +272,7 @@ static void SetRandomQuestionData(void)
 
     for (i = 0; i < ARRAY_COUNT(questionOrder); i++)
         questionOrder[i] = sQuestionPossibilities[i];
-    
+
     // Shuffle the questions an arbitrary 50 times
     for (i = 0; i < 50; i++)
     {
@@ -348,11 +346,10 @@ static u16 GetRandomAlternateMove(u8 monId)
     learnset = gLevelUpLearnsets[species];
     j = 0;
 
-    // Despite being open level, level up moves are only read up to level 60
     if (PLAYER_APPRENTICE.lvlMode == APPRENTICE_LVL_MODE_50)
-        level = 50;
+        level = FRONTIER_MAX_LEVEL_50;
     else // == APPRENTICE_LVL_MODE_OPEN
-        level = 60;
+        level = 60; // Despite being open level, level up moves are only read up to level 60
 
     for (j = 0; learnset[j] != LEVEL_UP_END; j++)
     {
@@ -466,7 +463,7 @@ static void GetLatestLearnedMoves(u16 species, u16 *moves)
     const u16 *learnset;
 
     if (PLAYER_APPRENTICE.lvlMode == APPRENTICE_LVL_MODE_50)
-        level = 50;
+        level = FRONTIER_MAX_LEVEL_50;
     else // == APPRENTICE_LVL_MODE_OPEN
         level = 60;
 
@@ -626,13 +623,16 @@ static void CreateApprenticeMenu(u8 menu)
     default:
         left = 0;
         top = 0;
+#ifdef UBFIX
+        return;
+#endif
         break;
     }
 
     pixelWidth = 0;
     for (i = 0; i < count; i++)
     {
-        s32 width = GetStringWidth(1, strings[i], 0);
+        s32 width = GetStringWidth(FONT_NORMAL, strings[i], 0);
         if (width > pixelWidth)
             pixelWidth = width;
     }
@@ -640,12 +640,12 @@ static void CreateApprenticeMenu(u8 menu)
     width = ConvertPixelWidthToTileWidth(pixelWidth);
     left = ScriptMenu_AdjustLeftCoordFromWidth(left, width);
     windowId = CreateAndShowWindow(left, top, width, count * 2);
-    SetStandardWindowBorderStyle(windowId, 0);
+    SetStandardWindowBorderStyle(windowId, FALSE);
 
     for (i = 0; i < count; i++)
-        AddTextPrinterParameterized(windowId, 1, strings[i], 8, (i * 16) + 1, TEXT_SPEED_FF, NULL);
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, strings[i], 8, (i * 16) + 1, TEXT_SKIP_DRAW, NULL);
 
-    InitMenuInUpperLeftCornerPlaySoundWhenAPressed(windowId, count, 0);
+    InitMenuInUpperLeftCornerNormal(windowId, count, 0);
     CreateChooseAnswerTask(TRUE, count, windowId);
 }
 
@@ -668,11 +668,12 @@ static void Task_ChooseAnswer(u8 taskId)
     case MENU_NOTHING_CHOSEN:
         return;
     case MENU_B_PRESSED:
+        // Only ever true. Answering Apprentice questions is required.
         if (tNoBButton)
             return;
 
         PlaySE(SE_SELECT);
-        gSpecialVar_Result = 0x7F;
+        gSpecialVar_Result = MULTI_B_PRESSED;
         break;
     default:
         gSpecialVar_Result = input;
@@ -681,7 +682,7 @@ static void Task_ChooseAnswer(u8 taskId)
 
     RemoveAndHideWindow(tWindowId);
     DestroyTask(taskId);
-    EnableBothScriptContexts();
+    ScriptContext_Enable();
 }
 
 static u8 CreateAndShowWindow(u8 left, u8 top, u8 width, u8 height)
@@ -691,7 +692,7 @@ static u8 CreateAndShowWindow(u8 left, u8 top, u8 width, u8 height)
 
     windowId = AddWindow(&winTemplate);
     PutWindowTilemap(windowId);
-    CopyWindowToVram(windowId, 3);
+    CopyWindowToVram(windowId, COPYWIN_FULL);
     return windowId;
 }
 
@@ -788,7 +789,7 @@ static void GetNumApprenticePartyMonsAssigned(void)
 static void IsFinalQuestion(void)
 {
     s32 questionNum = CURRENT_QUESTION_NUM;
-    
+
     if (questionNum < 0)
     {
         // Not finished asking initial questions
@@ -817,9 +818,9 @@ static void Task_WaitForPrintingMessage(u8 taskId)
     {
         DestroyTask(taskId);
         if (gSpecialVar_0x8005)
-            ExecuteFuncAfterButtonPress(EnableBothScriptContexts);
+            ExecuteFuncAfterButtonPress(ScriptContext_Enable);
         else
-            EnableBothScriptContexts();
+            ScriptContext_Enable();
     }
 }
 
@@ -897,7 +898,7 @@ static void PrintApprenticeMessage(void)
     }
     else
     {
-        EnableBothScriptContexts();
+        ScriptContext_Enable();
         return;
     }
 
@@ -908,11 +909,11 @@ static void PrintApprenticeMessage(void)
 
 static void Script_PrintApprenticeMessage(void)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     PlayerFreeze();
-    sub_808BCF4();
-    DrawDialogueFrame(0, 1);
+    StopPlayerAvatar();
+    DrawDialogueFrame(0, TRUE);
     PrintApprenticeMessage();
 }
 
@@ -941,7 +942,7 @@ static void ApprenticeGetQuestion(void)
             gSpecialVar_Result = APPRENTICE_QUESTION_WHICH_FIRST;
             break;
         default:
-      //case QUESTION_ID_WIN_SPEECH:  
+      //case QUESTION_ID_WIN_SPEECH:
             gSpecialVar_Result = APPRENTICE_QUESTION_WIN_SPEECH;
             break;
         }
@@ -1107,7 +1108,7 @@ static void TrySetApprenticeHeldItem(void)
 
     if (PLAYER_APPRENTICE.questionsAnswered < NUM_WHICH_MON_QUESTIONS)
         return;
-    
+
     count = 0;
     for (j = 0; j < APPRENTICE_MAX_QUESTIONS; j++)
     {
@@ -1280,8 +1281,7 @@ const u8 *GetApprenticeNameInLanguage(u32 apprenticeId, s32 language)
     }
 }
 
-// Functionally unused
-static void Task_SwitchToFollowupFuncAfterButtonPress(u8 taskId)
+static void UNUSED Task_SwitchToFollowupFuncAfterButtonPress(u8 taskId)
 {
     if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
         SwitchTaskToFollowupFunc(taskId);
@@ -1291,7 +1291,7 @@ static void Task_ExecuteFuncAfterButtonPress(u8 taskId)
 {
     if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
     {
-        gApprenticeFunc = (void*)(u32)(((u16)gTasks[taskId].data[0] | (gTasks[taskId].data[1] << 16)));
+        gApprenticeFunc = (void *)(u32)(((u16)gTasks[taskId].data[0] | (gTasks[taskId].data[1] << 16)));
         gApprenticeFunc();
         DestroyTask(taskId);
     }
@@ -1304,8 +1304,7 @@ static void ExecuteFuncAfterButtonPress(void (*func)(void))
     gTasks[taskId].data[1] = (u32)(func) >> 16;
 }
 
-// Unused
-static void ExecuteFollowupFuncAfterButtonPress(TaskFunc task)
+static void UNUSED ExecuteFollowupFuncAfterButtonPress(TaskFunc task)
 {
     u8 taskId = CreateTask(Task_SwitchToFollowupFuncAfterButtonPress, 1);
     SetTaskFuncWithFollowupFunc(taskId, Task_SwitchToFollowupFuncAfterButtonPress, task);

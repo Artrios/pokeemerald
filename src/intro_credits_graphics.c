@@ -13,7 +13,7 @@
     and the credit sequence, where the player bikes along a grassy path.
 
     These graphics are placed in graphics/intro/scene_2 to keep
-    all of the intro graphics files together, though it includes 
+    all of the intro graphics files together, though it includes
     the related graphics that are used only by the credits.
 */
 
@@ -79,7 +79,7 @@ static void SpriteCB_FlygonLeftHalf(struct Sprite *sprite);
 static const struct SpriteTemplate sSpriteTemplate_MovingScenery =
 {
     .tileTag = TAG_MOVING_SCENERY,
-    .paletteTag = 0xFFFF,
+    .paletteTag = TAG_NONE,
     .oam = &gDummyOamData,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
@@ -730,7 +730,7 @@ void LoadIntroPart2Graphics(u8 scenery)
 {
     LZ77UnCompVram(sGrass_Gfx, (void *)(BG_CHAR_ADDR(1)));
     LZ77UnCompVram(sGrass_Tilemap, (void *)(BG_SCREEN_ADDR(15)));
-    LoadPalette(&sGrass_Pal, 240, sizeof(sGrass_Pal));
+    LoadPalette(&sGrass_Pal, BG_PLTT_ID(15), sizeof(sGrass_Pal));
     switch (scenery)
     {
     case 0:
@@ -739,17 +739,17 @@ void LoadIntroPart2Graphics(u8 scenery)
         // Clouds are never used in this part of the intro
         LZ77UnCompVram(sCloudsBg_Gfx, (void *)(VRAM));
         LZ77UnCompVram(sCloudsBg_Tilemap, (void *)(BG_SCREEN_ADDR(6)));
-        LoadPalette(&sCloudsBg_Pal, 0, sizeof(sCloudsBg_Pal));
+        LoadPalette(&sCloudsBg_Pal, BG_PLTT_ID(0), sizeof(sCloudsBg_Pal));
         LoadCompressedSpriteSheet(sSpriteSheet_Clouds);
-        LoadPalette(&sClouds_Pal, 256, sizeof(sClouds_Pal));
+        LoadPalette(&sClouds_Pal, OBJ_PLTT_ID(0), sizeof(sClouds_Pal));
         CreateCloudSprites();
         break;
     case 1:
         LZ77UnCompVram(sTrees_Gfx, (void *)(VRAM));
         LZ77UnCompVram(sTrees_Tilemap, (void *)(BG_SCREEN_ADDR(6)));
-        LoadPalette(&sTrees_Pal, 0, sizeof(sTrees_Pal));
+        LoadPalette(&sTrees_Pal, BG_PLTT_ID(0), sizeof(sTrees_Pal));
         LoadCompressedSpriteSheet(sSpriteSheet_TreesSmall);
-        LoadPalette(&sTreesSmall_Pal, 256, sizeof(sTreesSmall_Pal));
+        LoadPalette(&sTreesSmall_Pal, OBJ_PLTT_ID(0), sizeof(sTreesSmall_Pal));
         CreateTreeSprites();
         break;
     }
@@ -757,10 +757,9 @@ void LoadIntroPart2Graphics(u8 scenery)
     gReservedSpritePaletteCount = 8;
 }
 
-// Note: This is only called with a=1.
+// Note: This is only called with scenery=1.
 void SetIntroPart2BgCnt(u8 scenery)
 {
-    // Only called with scenery = 1
     switch (scenery)
     {
     default:
@@ -844,42 +843,42 @@ void LoadCreditsSceneGraphics(u8 scene)
     {
     case SCENE_OCEAN_MORNING:
     default:
-        LoadPalette(&sGrass_Pal, 240, sizeof(sGrass_Pal));
+        LoadPalette(&sGrass_Pal, BG_PLTT_ID(15), sizeof(sGrass_Pal));
         LZ77UnCompVram(sCloudsBg_Gfx, (void *)(VRAM));
         LZ77UnCompVram(sCloudsBg_Tilemap, (void *)(BG_SCREEN_ADDR(6)));
-        LoadPalette(&sCloudsBg_Pal, 0, sizeof(sCloudsBg_Pal));
+        LoadPalette(&sCloudsBg_Pal, BG_PLTT_ID(0), sizeof(sCloudsBg_Pal));
         LoadCompressedSpriteSheet(sSpriteSheet_Clouds);
         LZ77UnCompVram(sClouds_Gfx, (void *)(OBJ_VRAM0));
-        LoadPalette(&sClouds_Pal, 256, sizeof(sClouds_Pal));
+        LoadPalette(&sClouds_Pal, OBJ_PLTT_ID(0), sizeof(sClouds_Pal));
         CreateCloudSprites();
         break;
     case SCENE_OCEAN_SUNSET:
-        LoadPalette(&sGrassSunset_Pal, 240, sizeof(sGrassSunset_Pal));
+        LoadPalette(&sGrassSunset_Pal, BG_PLTT_ID(15), sizeof(sGrassSunset_Pal));
         LZ77UnCompVram(sCloudsBg_Gfx, (void *)(VRAM));
         LZ77UnCompVram(sCloudsBg_Tilemap, (void *)(BG_SCREEN_ADDR(6)));
-        LoadPalette(&sCloudsBgSunset_Pal, 0, sizeof(sCloudsBgSunset_Pal));
+        LoadPalette(&sCloudsBgSunset_Pal, BG_PLTT_ID(0), sizeof(sCloudsBgSunset_Pal));
         LoadCompressedSpriteSheet(sSpriteSheet_Clouds);
         LZ77UnCompVram(sClouds_Gfx, (void *)(OBJ_VRAM0));
-        LoadPalette(&sCloudsSunset_Pal, 256, sizeof(sCloudsSunset_Pal));
+        LoadPalette(&sCloudsSunset_Pal, OBJ_PLTT_ID(0), sizeof(sCloudsSunset_Pal));
         CreateCloudSprites();
         break;
     case SCENE_FOREST_RIVAL_ARRIVE:
     case SCENE_FOREST_CATCH_RIVAL:
-        LoadPalette(&sGrassSunset_Pal, 240, sizeof(sGrassSunset_Pal));
+        LoadPalette(&sGrassSunset_Pal, BG_PLTT_ID(15), sizeof(sGrassSunset_Pal));
         LZ77UnCompVram(sTrees_Gfx, (void *)(VRAM));
         LZ77UnCompVram(sTrees_Tilemap, (void *)(BG_SCREEN_ADDR(6)));
-        LoadPalette(&sTreesSunset_Pal, 0, sizeof(sTreesSunset_Pal));
+        LoadPalette(&sTreesSunset_Pal, BG_PLTT_ID(0), sizeof(sTreesSunset_Pal));
         LoadCompressedSpriteSheet(sSpriteSheet_TreesSmall);
-        LoadPalette(&sTreesSunset_Pal, 256, sizeof(sTreesSunset_Pal));
+        LoadPalette(&sTreesSunset_Pal, OBJ_PLTT_ID(0), sizeof(sTreesSunset_Pal));
         CreateTreeSprites();
         break;
     case SCENE_CITY_NIGHT:
-        LoadPalette(&sGrassNight_Pal, 240, sizeof(sGrassNight_Pal));
+        LoadPalette(&sGrassNight_Pal, BG_PLTT_ID(15), sizeof(sGrassNight_Pal));
         LZ77UnCompVram(sHouses_Gfx, (void *)(VRAM));
         LZ77UnCompVram(sHouses_Tilemap, (void *)(BG_SCREEN_ADDR(6)));
-        LoadPalette(&sHouses_Pal, 0, sizeof(sHouses_Pal));
+        LoadPalette(&sHouses_Pal, BG_PLTT_ID(0), sizeof(sHouses_Pal));
         LoadCompressedSpriteSheet(sSpriteSheet_HouseSilhouette);
-        LoadPalette(&sHouseSilhouette_Pal, 256, sizeof(sHouseSilhouette_Pal));
+        LoadPalette(&sHouseSilhouette_Pal, OBJ_PLTT_ID(0), sizeof(sHouseSilhouette_Pal));
         CreateHouseSprites();
         break;
     }
@@ -999,16 +998,16 @@ void CycleSceneryPalette(u8 mode)
                 break;
             if (gMain.vblankCounter1 & 4)
             {
-                x = gPlttBufferUnfaded[9];
-                y = gPlttBufferUnfaded[10];
+                x = gPlttBufferUnfaded[BG_PLTT_ID(0) + 9];
+                y = gPlttBufferUnfaded[BG_PLTT_ID(0) + 10];
             }
             else
             {
-                x = gPlttBufferUnfaded[10];
-                y = gPlttBufferUnfaded[9];
+                x = gPlttBufferUnfaded[BG_PLTT_ID(0) + 10];
+                y = gPlttBufferUnfaded[BG_PLTT_ID(0) + 9];
             }
-            LoadPalette(&x, 9, sizeof(x));
-            LoadPalette(&y, 10, sizeof(y));
+            LoadPalette(&x, BG_PLTT_ID(0) + 9, sizeof(x));
+            LoadPalette(&y, BG_PLTT_ID(0) + 10, sizeof(y));
             break;
         case 2:
             if (gMain.vblankCounter1 & 3 || gPaletteFade.active)
@@ -1023,8 +1022,8 @@ void CycleSceneryPalette(u8 mode)
                 x = RGB(28, 24, 0);
                 y = RGB(7, 9, 15);
             }
-            LoadPalette(&x, 12, sizeof(x));
-            LoadPalette(&y, 13, sizeof(y));
+            LoadPalette(&x, BG_PLTT_ID(0) + 12, sizeof(x));
+            LoadPalette(&y, BG_PLTT_ID(0) + 13, sizeof(y));
             break;
         case 1:
             break;
@@ -1039,7 +1038,7 @@ static void SpriteCB_MovingScenery(struct Sprite *sprite)
 {
     s32 x;
     s16 state = gIntroCredits_MovingSceneryState;
-    
+
     if (state != INTROCRED_SCENERY_FROZEN)
     {
         switch (state)
@@ -1048,15 +1047,15 @@ static void SpriteCB_MovingScenery(struct Sprite *sprite)
             DestroySprite(sprite);
             break;
         case INTROCRED_SCENERY_NORMAL:
-            x = ((sprite->pos1.x << 16) | (u16)sprite->tXPos) + (u16)sprite->tXOffset;
-            sprite->pos1.x = x >> 16;
+            x = ((sprite->x << 16) | (u16)sprite->tXPos) + (u16)sprite->tXOffset;
+            sprite->x = x >> 16;
             sprite->tXPos = x;
-            if (sprite->pos1.x > 255)
-                sprite->pos1.x = -32;
+            if (sprite->x > 255)
+                sprite->x = -32;
             if (sprite->tHasVerticalMove)
-                sprite->pos2.y = -(gIntroCredits_MovingSceneryVBase + gIntroCredits_MovingSceneryVOffset);
+                sprite->y2 = -(gIntroCredits_MovingSceneryVBase + gIntroCredits_MovingSceneryVOffset);
             else
-                sprite->pos2.y = -gIntroCredits_MovingSceneryVBase;
+                sprite->y2 = -gIntroCredits_MovingSceneryVBase;
             break;
         }
     }
@@ -1107,13 +1106,13 @@ static void SpriteCB_Player(struct Sprite *sprite)
 
 #define sPlayerSpriteId data[0]
 
-static void SpriteCB_Bicycle(struct Sprite* sprite)
+static void SpriteCB_Bicycle(struct Sprite *sprite)
 {
     sprite->invisible = gSprites[sprite->sPlayerSpriteId].invisible;
-    sprite->pos1.x = gSprites[sprite->sPlayerSpriteId].pos1.x;
-    sprite->pos1.y = gSprites[sprite->sPlayerSpriteId].pos1.y + 8;
-    sprite->pos2.x = gSprites[sprite->sPlayerSpriteId].pos2.x;
-    sprite->pos2.y = gSprites[sprite->sPlayerSpriteId].pos2.y;
+    sprite->x = gSprites[sprite->sPlayerSpriteId].x;
+    sprite->y = gSprites[sprite->sPlayerSpriteId].y + 8;
+    sprite->x2 = gSprites[sprite->sPlayerSpriteId].x2;
+    sprite->y2 = gSprites[sprite->sPlayerSpriteId].y2;
 }
 
 u8 CreateIntroBrendanSprite(s16 x, s16 y)
@@ -1140,16 +1139,16 @@ static void SpriteCB_FlygonLeftHalf(struct Sprite *sprite)
 
 #define sLeftSpriteId data[0]
 
-static void SpriteCB_FlygonRightHalf(struct Sprite* sprite)
+static void SpriteCB_FlygonRightHalf(struct Sprite *sprite)
 {
     sprite->invisible = gSprites[sprite->sLeftSpriteId].invisible;
-    sprite->pos1.y = gSprites[sprite->sLeftSpriteId].pos1.y;
-    sprite->pos2.x = gSprites[sprite->sLeftSpriteId].pos2.x;
-    sprite->pos2.y = gSprites[sprite->sLeftSpriteId].pos2.y;
+    sprite->y = gSprites[sprite->sLeftSpriteId].y;
+    sprite->x2 = gSprites[sprite->sLeftSpriteId].x2;
+    sprite->y2 = gSprites[sprite->sLeftSpriteId].y2;
 }
 
 // In RS these were for Latios/Latias. In Emerald both are replaced with Flygon and now only 1 is used
-static u8 CreateIntroFlygonSprite_Unused(s16 x, s16 y)
+static u8 UNUSED CreateIntroFlygonSprite_Unused(s16 x, s16 y)
 {
     u8 leftSpriteId = CreateSprite(&sSpriteTemplate_FlygonLatios, x - 32, y, 5);
     u8 rightSpriteId = CreateSprite(&sSpriteTemplate_FlygonLatios, x + 32, y, 6);

@@ -182,7 +182,7 @@ static void BattleIntroSlide1(u8 taskId)
         if ((gBattle_WIN0V & 0xFF00) == 0x3000)
         {
             gTasks[taskId].tState++;
-            gTasks[taskId].data[2] = 240;
+            gTasks[taskId].data[2] = DISPLAY_WIDTH;
             gTasks[taskId].data[3] = 32;
             gIntroSlideFlags &= ~1;
         }
@@ -196,12 +196,12 @@ static void BattleIntroSlide1(u8 taskId)
         {
             if (gTasks[taskId].tTerrain == BATTLE_TERRAIN_LONG_GRASS)
             {
-                if (gBattle_BG1_Y != 0xFFB0)
+                if (gBattle_BG1_Y != (u16)(-80))
                     gBattle_BG1_Y -= 2;
             }
             else
             {
-                if (gBattle_BG1_Y != 0xFFC8)
+                if (gBattle_BG1_Y != (u16)(-56))
                     gBattle_BG1_Y -= 1;
             }
         }
@@ -213,13 +213,13 @@ static void BattleIntroSlide1(u8 taskId)
             gTasks[taskId].data[2] -= 2;
 
         // Scanline settings have already been set in CB2_InitBattleInternal()
-        for (i = 0; i < 80; i++)
+        for (i = 0; i < DISPLAY_HEIGHT / 2; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = gTasks[taskId].data[2];
 
-        for (; i < 160; i++)
+        for (; i < DISPLAY_HEIGHT; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = -gTasks[taskId].data[2];
 
-        if (!gTasks[taskId].data[2])
+        if (gTasks[taskId].data[2] == 0)
         {
             gScanlineEffect.state = 3;
             gTasks[taskId].tState++;
@@ -290,7 +290,7 @@ static void BattleIntroSlide2(u8 taskId)
         if ((gBattle_WIN0V & 0xFF00) == 0x3000)
         {
             gTasks[taskId].tState++;
-            gTasks[taskId].data[2] = 240;
+            gTasks[taskId].data[2] = DISPLAY_WIDTH;
             gTasks[taskId].data[3] = 32;
             gTasks[taskId].data[5] = 1;
             gIntroSlideFlags &= ~1;
@@ -322,13 +322,13 @@ static void BattleIntroSlide2(u8 taskId)
             gTasks[taskId].data[2] -= 2;
 
         // Scanline settings have already been set in CB2_InitBattleInternal()
-        for (i = 0; i < 80; i++)
+        for (i = 0; i < DISPLAY_HEIGHT / 2; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = gTasks[taskId].data[2];
 
-        for (; i < 160; i++)
+        for (; i < DISPLAY_HEIGHT; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = -gTasks[taskId].data[2];
 
-        if (!gTasks[taskId].data[2])
+        if (gTasks[taskId].data[2] == 0)
         {
             gScanlineEffect.state = 3;
             gTasks[taskId].tState++;
@@ -383,7 +383,7 @@ static void BattleIntroSlide3(u8 taskId)
         if ((gBattle_WIN0V & 0xFF00) == 0x3000)
         {
             gTasks[taskId].tState++;
-            gTasks[taskId].data[2] = 240;
+            gTasks[taskId].data[2] = DISPLAY_WIDTH;
             gTasks[taskId].data[3] = 32;
             gTasks[taskId].data[5] = 1;
             gIntroSlideFlags &= ~1;
@@ -410,13 +410,13 @@ static void BattleIntroSlide3(u8 taskId)
             gTasks[taskId].data[2] -= 2;
 
         // Scanline settings have already been set in CB2_InitBattleInternal()
-        for (i = 0; i < 80; i++)
+        for (i = 0; i < DISPLAY_HEIGHT / 2; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = gTasks[taskId].data[2];
 
-        for (; i < 160; i++)
+        for (; i < DISPLAY_HEIGHT; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = -gTasks[taskId].data[2];
 
-        if (!gTasks[taskId].data[2])
+        if (gTasks[taskId].data[2] == 0)
         {
             gScanlineEffect.state = 3;
             gTasks[taskId].tState++;
@@ -479,7 +479,7 @@ static void BattleIntroSlideLink(u8 taskId)
         if ((gBattle_WIN0V & 0xFF00) == 0x3000)
         {
             gTasks[taskId].tState++;
-            gTasks[taskId].data[2] = 240;
+            gTasks[taskId].data[2] = DISPLAY_WIDTH;
             gTasks[taskId].data[3] = 32;
             gIntroSlideFlags &= ~1;
         }
@@ -492,13 +492,13 @@ static void BattleIntroSlideLink(u8 taskId)
             gTasks[taskId].data[2] -= 2;
 
         // Scanline settings have already been set in CB2_InitBattleInternal()
-        for (i = 0; i < 80; i++)
+        for (i = 0; i < DISPLAY_HEIGHT / 2; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = gTasks[taskId].data[2];
 
-        for (; i < 160; i++)
+        for (; i < DISPLAY_HEIGHT; i++)
             gScanlineEffectRegBuffers[gScanlineEffect.srcBuffer][i] = -gTasks[taskId].data[2];
 
-        if (!gTasks[taskId].data[2])
+        if (gTasks[taskId].data[2] == 0)
         {
             gScanlineEffect.state = 3;
             gTasks[taskId].tState++;
@@ -544,7 +544,7 @@ static void BattleIntroSlidePartner(u8 taskId)
         if ((gBattle_WIN0V & 0xFF00) == 0x2000)
         {
             gTasks[taskId].tState++;
-            gTasks[taskId].data[2] = 240;
+            gTasks[taskId].data[2] = DISPLAY_WIDTH;
             gIntroSlideFlags &= ~1;
         }
         break;
@@ -557,7 +557,7 @@ static void BattleIntroSlidePartner(u8 taskId)
 
         gBattle_BG1_X = gTasks[taskId].data[2];
         gBattle_BG2_X = -gTasks[taskId].data[2];
-        if (!gTasks[taskId].data[2])
+        if (gTasks[taskId].data[2] == 0)
             gTasks[taskId].tState++;
         break;
     case 4:
@@ -584,36 +584,35 @@ static void BattleIntroSlidePartner(u8 taskId)
     }
 }
 
-void sub_8118FBC(int bgId, u8 arg1, u8 arg2, u8 battlerPosition, u8 arg4, u8 *arg5, u16 *arg6, u16 tilesOffset)
+void DrawBattlerOnBg(int bgId, u8 x, u8 y, u8 battlerPosition, u8 paletteId, u8 *tiles, u16 *tilemap, u16 tilesOffset)
 {
     int i, j;
     u8 battler = GetBattlerAtPosition(battlerPosition);
     int offset = tilesOffset;
-    CpuCopy16(gMonSpritesGfxPtr->sprites.ptr[battlerPosition] + BG_SCREEN_SIZE * gBattleMonForms[battler], arg5, BG_SCREEN_SIZE);
-    LoadBgTiles(bgId, arg5, 0x1000, tilesOffset);
-    for (i = arg2; i < arg2 + 8; i++)
+    CpuCopy16(gMonSpritesGfxPtr->sprites.ptr[battlerPosition] + BG_SCREEN_SIZE * gBattleMonForms[battler], tiles, BG_SCREEN_SIZE);
+    LoadBgTiles(bgId, tiles, 0x1000, tilesOffset);
+    for (i = y; i < y + 8; i++)
     {
-        for (j = arg1; j < arg1 + 8; j++)
+        for (j = x; j < x + 8; j++)
         {
-            arg6[i * 32 + j] = offset | (arg4 << 12);
+            tilemap[i * 32 + j] = offset | (paletteId << 12);
             offset++;
         }
     }
-
-    LoadBgTilemap(bgId, arg6, BG_SCREEN_SIZE, 0);
+    LoadBgTilemap(bgId, tilemap, BG_SCREEN_SIZE, 0);
 }
 
-void unref_sub_8119094(u8 arg0, u8 arg1, u8 battlerPosition, u8 arg3, u8 arg4, u16 arg5, u8 arg6, u8 arg7)
+static void UNUSED DrawBattlerOnBgDMA(u8 x, u8 y, u8 battlerPosition, u8 arg3, u8 paletteId, u16 arg5, u8 arg6, u8 arg7)
 {
     int i, j, offset;
 
     DmaCopy16(3, gMonSpritesGfxPtr->sprites.ptr[battlerPosition] + BG_SCREEN_SIZE * arg3, (void *)BG_SCREEN_ADDR(0) + arg5, BG_SCREEN_SIZE);
     offset = (arg5 >> 5) - (arg7 << 9);
-    for (i = arg1; i < arg1 + 8; i++)
+    for (i = y; i < y + 8; i++)
     {
-        for (j = arg0; j < arg0 + 8; j++)
+        for (j = x; j < x + 8; j++)
         {
-            *((u16 *)(BG_VRAM) + (i * 32) + (j + (arg6 << 10))) = offset | (arg4 << 12);
+            *((u16 *)(BG_VRAM) + (i * 32) + (j + (arg6 << 10))) = offset | (paletteId << 12);
             offset++;
         }
     }
