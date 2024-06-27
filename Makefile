@@ -73,7 +73,7 @@ MODERN_ELF_NAME := $(MODERN_ROM_NAME:.gba=.elf)
 MODERN_MAP_NAME := $(MODERN_ROM_NAME:.gba=.map)
 MODERN_OBJ_DIR_NAME := build/modern
 
-SHELL := bash -o pipefail
+SHELL := /bin/bash -o pipefail
 
 ELF = $(ROM:.gba=.elf)
 MAP = $(ROM:.gba=.map)
@@ -104,14 +104,14 @@ override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -fhex-
 ROM := $(ROM_NAME)
 OBJ_DIR := $(OBJ_DIR_NAME)
 LIBPATH := -L ../../tools/agbcc/lib
-LIB := $(LIBPATH) -lgcc -lc -L../../libagbsyscall -lagbsyscall
+LIB := $(LIBPATH) -lgcc -lc -L../../libagbsyscall -lagbsyscall -L../../libma -lma
 else
 CC1              = $(shell $(PATH_MODERNCC) --print-prog-name=cc1) -quiet
 override CFLAGS += -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fno-toplevel-reorder -Wno-pointer-to-int-cast
 ROM := $(MODERN_ROM_NAME)
 OBJ_DIR := $(MODERN_OBJ_DIR_NAME)
 LIBPATH := -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libgcc.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libnosys.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libc.a))"
-LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall
+LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall -L../../libma -lma
 endif
 
 CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
@@ -149,7 +149,7 @@ MAKEFLAGS += --no-print-directory
 # Secondary expansion is required for dependency variables in object rules.
 .SECONDEXPANSION:
 
-.PHONY: all rom clean compare tidy tools mostlyclean clean-tools $(TOOLDIRS) libagbsyscall modern tidymodern tidynonmodern
+.PHONY: all rom clean compare tidy tools mostlyclean clean-tools $(TOOLDIRS) libagbsyscall libma modern tidymodern tidynonmodern
 
 infoshell = $(foreach line, $(shell $1 | sed "s/ /__SPACE__/g"), $(info $(subst __SPACE__, ,$(line))))
 
@@ -157,7 +157,7 @@ infoshell = $(foreach line, $(shell $1 | sed "s/ /__SPACE__/g"), $(info $(subst 
 # Disable dependency scanning for clean/tidy/tools
 # Use a separate minimal makefile for speed
 # Since we don't need to reload most of this makefile
-ifeq (,$(filter-out all rom compare modern libagbsyscall syms,$(MAKECMDGOALS)))
+ifeq (,$(filter-out all rom compare modern libagbsyscall libma syms,$(MAKECMDGOALS)))
 $(call infoshell, $(MAKE) -f make_tools.mk)
 else
 NODEP ?= 1
@@ -169,7 +169,7 @@ ifeq (,$(MAKECMDGOALS))
 else
   # clean, tidy, tools, mostlyclean, clean-tools, $(TOOLDIRS), tidymodern, tidynonmodern don't even build the ROM
   # libagbsyscall does its own thing
-  ifeq (,$(filter-out clean tidy tools mostlyclean clean-tools $(TOOLDIRS) tidymodern tidynonmodern libagbsyscall,$(MAKECMDGOALS)))
+  ifeq (,$(filter-out clean tidy tools mostlyclean clean-tools $(TOOLDIRS) tidymodern tidynonmodern libagbsyscall libma,$(MAKECMDGOALS)))
     SCAN_DEPS ?= 0
   else
     SCAN_DEPS ?= 1
@@ -242,6 +242,7 @@ mostlyclean: tidynonmodern tidymodern
 	find $(DATA_ASM_SUBDIR)/maps \( -iname 'connections.inc' -o -iname 'events.inc' -o -iname 'header.inc' \) -exec rm {} +
 	rm -f $(AUTO_GEN_TARGETS)
 	@$(MAKE) clean -C libagbsyscall
+	@$(MAKE) clean -C libma
 
 tidy: tidynonmodern tidymodern
 
@@ -415,7 +416,7 @@ $(OBJ_DIR)/ld_script.ld: $(LD_SCRIPT) $(LD_SCRIPT_DEPS)
 	cd $(OBJ_DIR) && sed "s#tools/#../../tools/#g" ../../$(LD_SCRIPT) > ld_script.ld
 
 LDFLAGS = -Map ../../$(MAP)
-$(ELF): $(OBJ_DIR)/ld_script.ld $(OBJS) libagbsyscall
+$(ELF): $(OBJ_DIR)/ld_script.ld $(OBJS) libagbsyscall libma
 	@echo "cd $(OBJ_DIR) && $(LD) $(LDFLAGS) -T ld_script.ld -o ../../$@ <objects> <lib>"
 	@cd $(OBJ_DIR) && $(LD) $(LDFLAGS) -T ld_script.ld --print-memory-usage -o ../../$@ $(OBJS_REL) $(LIB) | cat
 	$(FIX) $@ -t"$(TITLE)" -c$(GAME_CODE) -m$(MAKER_CODE) -r$(REVISION) --silent
@@ -428,6 +429,9 @@ modern: all
 
 libagbsyscall:
 	@$(MAKE) -C libagbsyscall TOOLCHAIN=$(TOOLCHAIN) MODERN=$(MODERN)
+
+libma:
+	@$(MAKE) -C libma TOOLCHAIN=$(TOOLCHAIN) MODERN=$(MODERN)
 
 ###################
 ### Symbol file ###
