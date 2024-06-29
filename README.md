@@ -11,7 +11,7 @@ This branch is only for the library integration and helper functions to act as a
 This branch **needs** to be compiled with `make modern` to work and so will require devkitARM (check [INSTALL.md](INSTALL.md) for how to install that). I don't know how to make it work with `agbcc`, if you do please make a pull request.
 
 To test this you will need a DNS server that resolves domain queries and a HTTP server that recieves and responds to the HTTP requests.
-You will also need to use [this fork](https://github.com/Wit-MKW/mgba) of mGBA which has Mobile Adapter functionality.
+You will also need to use [this fork](https://github.com/Wit-MKW/mgba) of mGBA which has Mobile Adapter functionality. The Mobile Adapter settings would need to have the IP address of your DNS server added as the primary and secondary DNS. The adapter is normally setup with the [Mobile Trainer](https://bulbapedia.bulbagarden.net/wiki/Mobile_Game_Boy_Adapter#Mobile_Trainer), but haven't tested yet if that's strictly necessary.
 
 ### Credits
 pfero - Decompiling libma and helping with troubleshooting
