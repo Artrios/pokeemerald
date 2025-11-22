@@ -2398,6 +2398,9 @@ static void Task_GlobalTradeStation(u8 taskId)
             data->state = GTS_RECEIVE_POKEMON;
             break;
         }
+        else{
+            data->state = GTS_STATE_CLIENT_ERROR;
+        }
         data->state = data->nextState;
         DebugPrintf("%u",(u32)pRecvData[1]);
         break;
@@ -3202,8 +3205,8 @@ static void Task_GlobalTradeStation(u8 taskId)
     case GTS_STATE_WAIT:
         break;
     case GTS_STATE_WITHDRAW_POKEMON:  //Done
-        // Choose where to access the Wonder Card/News from
-        recvBufSize=0x92;
+        DebugPrintf("GTS_STATE_WITHDRAW_POKEMON");
+        recvBufSize=32;
         concat_str(pURL,"http://www.PutYourDomainHere.com/pokemonrse/worldexchange/get?pid=\0");
 
         //Turn hex to str
@@ -3215,6 +3218,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         //Get hash
         data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
         if(data->errorNum !=0){
+            DebugPrintf("Fail 1");
             maKill();
             data->state = GTS_STATE_CLIENT_ERROR;
             break;
@@ -3223,24 +3227,43 @@ static void Task_GlobalTradeStation(u8 taskId)
         memcpy(halftoken, "sAdeqWo3voLeC5r16DYv\0", 21);
         concat_str(halftoken,(char *)pRecvData);
 
+        //Cleaning up pRecvData
+        for(i=0;i<32;i++){
+            pRecvData[i]='\0';
+        }
+
         sha1digest((u8 *)hash,NULL,(u8 *)halftoken,52);
 
         //Add hash to URL
         concat_str(pURL,"&hash=");
-        concat_str(pURL,hash);
-
-        data->errorNum = maDownload(pURL, NULL, 0, (u8 *)sGTSPokedexView->searchResult[0].checksum, 0x96, &pRecvSize, "", "");
+        for(i = 0; i < 20; i++){
+            ConvertIntToHexStringN_v2(pidhex, hash[i],STR_CONV_MODE_LEFT_ALIGN,2);
+            pidhex[2]='\0';
+            concat_str(pURL,(char *)pidhex);
+        }
+        DebugPrintf(pURL);
+        DebugPrintf("Send hash");
+        recvBufSize=80;
+        data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
         if(data->errorNum !=0){
+            DebugPrintf("Fail 2");
             maKill();
             data->state = GTS_STATE_CLIENT_ERROR;
             break;
         }
 
-        if(pRecvSize!=0x96){
+        if(pRecvSize!=80){
+            DebugPrintf("Fail 3");
+            DebugPrintf("%u\n", pRecvSize);
             data->state = GTS_STATE_SERVER_ERROR;
             break;
         }
 
+        memcpy(&sGTSPokedexView->searchResult[0].boxmon.personality,&pRecvData,80);
+
+        DebugPrintf("Get summary");
+        //VarSet(VAR_UNUSED_0x40FF,GTS_STATE_RETRIEVE_POKEMON_YES_NO);
+        data->state = GTS_STATE_RETRIEVE_POKEMON_YES_NO;
         ShowPokemonSummaryScreen(SUMMARY_MODE_BOX, &sGTSPokedexView->searchResult[0].boxmon, 0, 0, CB2_InitGlobalTradeStation);
 
         break;

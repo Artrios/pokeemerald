@@ -1097,11 +1097,15 @@ int encrypt_data(u32 pid, char *data, int datasize){
     int checksum = 0;
     int i = 0;
     checksum = checksum + (pid >> 24 & 0xFF);
+    DebugPrintf("%u",checksum);
     checksum = checksum + (pid >> 16 & 0xFF);
+    DebugPrintf("%u",checksum);
     checksum = checksum + (pid >> 8 & 0xFF);
+    DebugPrintf("%u",checksum);
     checksum = checksum + (pid & 0xFF);
 
     for(i=4; i<datasize; i++){
+        DebugPrintf("%u",data[i]);
         checksum = checksum + data[i];
     }
     checksum = 0x4a3b2c1d ^ checksum;
@@ -1110,11 +1114,9 @@ int encrypt_data(u32 pid, char *data, int datasize){
     u8 keystream = (GRNG >> 16) & 0xFF;
     i=0;
     
+    DebugPrintf("%u",datasize);
     while(i<datasize){
-        DebugPrintf("key %u",(u32)keystream);
-        DebugPrintf("%u",(u32)data[i]);
         data[i]=data[i] ^ keystream;
-        DebugPrintf("%u",(u32)data[i]);
         GRNG = (GRNG * 0x45 + 0x1111) & 0x7FFFFFFF;
         keystream = (GRNG >> 16) & 0xFF;
         i++;
