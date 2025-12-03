@@ -2519,6 +2519,8 @@ extern const u8 gText_ByeByeVar1[];
 extern const u8 gText_XSentOverY[];
 extern const u8 gText_TakeGoodCareOfX[];
 extern const u8 gText_CommunicationStandby5[];
+extern const u8 gText_XReturned[];
+extern const u8 gText_WelcomeBackX[];
 
 // match call
 extern const u8 MatchCall_WildBattleText1[];
@@ -3397,6 +3399,7 @@ extern const u8 gText_Level91to100[];
 extern const u8 gText_ConfirmOffer[];
 extern const u8 gText_OfferPokemon[];
 extern const u8 gText_ByeByeVar2[];
+extern const u8 gText_WithdrawPokemon[];
 
 // Naming Screen
 extern const u8 gText_MoveOkBack[];

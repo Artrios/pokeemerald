@@ -2144,7 +2144,8 @@ static void CreateGlobalTradeStationTask(void)
     data->errorNum = 0;
     data->msgId = 0;
     data->clientMsg = AllocZeroed(CLIENT_MAX_MSG_SIZE);
-    sGTSPokedexView = AllocZeroed(sizeof(struct GTSPokedexView));
+    if(data->state==GTS_STATE_TO_MAIN_MENU)
+        sGTSPokedexView = AllocZeroed(sizeof(struct GTSPokedexView));
     ResetPokedexViewGTS(sGTSPokedexView);
     if(data->state==GTS_STATE_PICK_WANTED_POKEMON){
         sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect); //Add Pokemon list box (empty for now)
@@ -2402,6 +2403,8 @@ static void Task_GlobalTradeStation(u8 taskId)
             data->state = GTS_STATE_CLIENT_ERROR;
         }
         data->state = data->nextState;
+        if(data->state==0)
+            data->state=GTS_STATE_MAIN_MENU;
         DebugPrintf("%u",(u32)pRecvData[1]);
         break;
     case GTS_RECEIVE_POKEMON: //Done
@@ -3200,6 +3203,14 @@ static void Task_GlobalTradeStation(u8 taskId)
     case GTS_STATE_TRADE_ANIMATION:
         data->state = GTS_STATE_WAIT;
         sGTSPokedexView->currentPage=2;
+        //sGTSPokedexView->dexOrder=taskId;
+        VarSet(VAR_UNUSED_0x40FF,GTS_CHECK_RESULT);
+        DestroyTask(taskId);
+        FreeAllWindowBuffers();
+        //Free(GetBgTilemapBuffer(0));
+        //Free(GetBgTilemapBuffer(1));
+        //Free(GetBgTilemapBuffer(2));
+        //Free(GetBgTilemapBuffer(3));
         DoGTSExchangeScene();
         break;
     case GTS_STATE_WAIT:
@@ -3262,21 +3273,30 @@ static void Task_GlobalTradeStation(u8 taskId)
         memcpy(&sGTSPokedexView->searchResult[0].boxmon.personality,&pRecvData,80);
 
         DebugPrintf("Get summary");
-        //VarSet(VAR_UNUSED_0x40FF,GTS_STATE_RETRIEVE_POKEMON_YES_NO);
-        data->state = GTS_STATE_RETRIEVE_POKEMON_YES_NO;
+        //data->state = GTS_STATE_RETRIEVE_POKEMON_YES_NO;
+        DestroyTask(taskId);
+        VarSet(VAR_UNUSED_0x40FF,GTS_STATE_RETRIEVE_POKEMON_YES_NO);
+        memcpy(&gEnemyParty[0].box,&sGTSPokedexView->searchResult[0].boxmon,80);
+        //FreeAllWindowBuffers();
+        //Free(GetBgTilemapBuffer(0));
+        //Free(GetBgTilemapBuffer(1));
+        //Free(GetBgTilemapBuffer(2));
+        //Free(GetBgTilemapBuffer(3));
         ShowPokemonSummaryScreen(SUMMARY_MODE_BOX, &sGTSPokedexView->searchResult[0].boxmon, 0, 0, CB2_InitGlobalTradeStation);
+        FreeAllWindowBuffers();
 
         break;
     case GTS_STATE_RETRIEVE_POKEMON_YES_NO: //Done
-        input = DoGTSYesNo(&data->textState, &data->var, FALSE, gText_ConfirmOffer);
+        input = DoGTSYesNo(&data->textState, &data->var, FALSE, gText_WithdrawPokemon);
         switch (input)
         {
-        case 0: // Yes, Retrieve Pokemon
+        case 0: // Yes, Retrieve Pokemon, since we stopepd and started the task we must fetch pokemon again
             //Check PC isn't full
-            if(GiveBoxMonToPlayer(&sGTSPokedexView->searchResult[0].boxmon)==2){
+            if(GiveBoxMonToPlayer(&sGTSPokedexView->searchResult[1].boxmon)==2){
                 data->state = GTS_STATE_CLIENT_ERROR;
                 break;
             }
+            data->state = GTS_STATE_SAVE_RETRIEVED_POKEMON;
             break;
         case 1: // Go to Main Menu
         case MENU_B_PRESSED:
@@ -3306,25 +3326,45 @@ static void Task_GlobalTradeStation(u8 taskId)
             memcpy(halftoken, "sAdeqWo3voLeC5r16DYv\0", 21);
             concat_str(halftoken,(char *)pRecvData);
 
+            //Cleaning up pRecvData
+            for(i=0;i<32;i++){
+                pRecvData[i]='\0';
+            }
+
             sha1digest((u8 *)hash,NULL,(u8 *)halftoken,52);
 
             //Add hash to URL
             concat_str(pURL,"&hash=");
-            concat_str(pURL,hash);
+            for(i = 0; i < 20; i++){
+                ConvertIntToHexStringN_v2(pidhex, hash[i],STR_CONV_MODE_LEFT_ALIGN,2);
+                pidhex[2]='\0';
+                concat_str(pURL,(char *)pidhex);
+            }
 
-            data->errorNum = maDownload(pURL, NULL, 0, pRecvData, 0x4, &pRecvSize, "", "");
+            recvBufSize=2;
+            DebugPrintf(pURL);
+            data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
             if(data->errorNum !=0){
                 maKill();
                 data->state = GTS_STATE_CLIENT_ERROR;
                 break;
             }
 
-            if(*pRecvData==0x0001){
+            if(pRecvData[1]==0x01){
+                if(GiveBoxMonToPlayer(&gEnemyParty[0].box)==2){
+                    data->state = GTS_STATE_CLIENT_ERROR;
+                    break;
+                }
+                DebugPrintf("Successfully retreived");
                 sGTSPokedexView->currentPage=1;
+                VarSet(VAR_UNUSED_0x40FF,GTS_STATE_MAIN_MENU);
+                DestroyTask(taskId);
+                FreeAllWindowBuffers();
                 DoGTSExchangeScene();
-                data->state = GTS_STATE_MAIN_MENU;
+                // /data->state = GTS_STATE_MAIN_MENU;
             }
             else{
+                DebugPrintf("Lol fail");
                 data->state = GTS_STATE_SERVER_ERROR;
             }
         break;

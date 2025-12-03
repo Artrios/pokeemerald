@@ -2805,6 +2805,8 @@ static void LoadTradeMonPic(u8 whichParty, u8 state)
         LoadCompressedSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality(species, 0, personality), species);
         sTradeAnim->monSpecies[whichParty] = species;
         sTradeAnim->monPersonalities[whichParty] = personality;
+        personality = GetMonData(mon, MON_DATA_MET_GAME);
+        sTradeAnim->monMetGame[whichParty] = personality;
         break;
     case 1:
         SetMultiuseSpriteTemplateToPokemon(species, pos);
@@ -3329,6 +3331,15 @@ static void BufferTradeSceneStrings(void)
     {
         mpId = GetMultiplayerId();
         StringCopy(gStringVar1, gLinkPlayers[mpId ^ 1].name);
+        GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_NICKNAME, name);
+        StringCopy_Nickname(gStringVar3, name);
+        GetMonData(&gPlayerParty[gSelectedTradeMonPositions[TRADE_PLAYER]], MON_DATA_NICKNAME, name);
+        StringCopy_Nickname(gStringVar2, name);
+    }
+    else if(sTradeAnim->isGTS)
+    {
+        GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_OT_NAME, name);
+        StringCopy(gStringVar1, name);
         GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_NICKNAME, name);
         StringCopy_Nickname(gStringVar3, name);
         GetMonData(&gPlayerParty[gSelectedTradeMonPositions[TRADE_PLAYER]], MON_DATA_NICKNAME, name);
@@ -4835,7 +4846,12 @@ static bool8 AnimateExchangeSequenceWireless(void)
                                       DISPCNT_BG0_ON |
                                       DISPCNT_BG2_ON |
                                       DISPCNT_OBJ_ON);
-        StringExpandPlaceholders(gStringVar4, gText_XSentOverY);
+        if(sTradeAnim->isInGameTrade==0 && sGTSPokedexView->currentPage==1){
+            StringExpandPlaceholders(gStringVar4, gText_XReturned);
+        }
+        else{
+            StringExpandPlaceholders(gStringVar4, gText_XSentOverY);
+        }
         DrawTextOnTradeWindow(0, gStringVar4, 0);
         sTradeAnim->state = STATE_DELAY_FOR_MON_ANIM;
         sTradeAnim->timer = 0;
@@ -4858,7 +4874,12 @@ static bool8 AnimateExchangeSequenceWireless(void)
         if (sTradeAnim->timer == 250)
         {
             sTradeAnim->state++;
-            StringExpandPlaceholders(gStringVar4, gText_TakeGoodCareOfX);
+            if(sTradeAnim->isInGameTrade==0 && sGTSPokedexView->currentPage==1){
+                StringExpandPlaceholders(gStringVar4, gText_WelcomeBackX);
+            }
+            else{
+                StringExpandPlaceholders(gStringVar4, gText_TakeGoodCareOfX);
+            }
             DrawTextOnTradeWindow(0, gStringVar4, 0);
             sTradeAnim->timer = 0;
         }
@@ -4922,7 +4943,7 @@ static void CB2_GTSExchange(void)
         //gSelectedTradeMonPositions[TRADE_PLAYER] = sGTSPokedexView->offerPokemon;
         gSelectedTradeMonPositions[TRADE_PARTNER] = 1;
         StringCopy(gLinkPlayers[0].name, gSaveBlock2Ptr->playerName);
-        //BoxMonToMon(&sGTSPokedexView->searchResult[1].boxmon, &gEnemyParty[0]);
+        BoxMonToMon(&gEnemyParty[0].box, &gEnemyParty[1]);
         GetMonData(&gEnemyParty[1], MON_DATA_OT_NAME, otName);
         StringCopy(gLinkPlayers[1].name, otName);
         gLinkPlayers[0].language = GAME_LANGUAGE;

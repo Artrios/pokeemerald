@@ -1971,6 +1971,7 @@ const u8 gText_Level91to100[] = _("Lv. 91 to 100");
 const u8 gText_ConfirmOffer[] = _("Offer {STR_VAR_1} for {STR_VAR_2}?");
 const u8 gText_OfferPokemon[] = _("{STR_VAR_1} will be put on offer.");
 const u8 gText_ByeByeVar2[] = _("Bye-bye, {STR_VAR_1}!");
+const u8 gText_WithdrawPokemon[] = _("Withdraw Pokémon?");
 
 
 //Days of Week
