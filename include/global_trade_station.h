@@ -4,7 +4,7 @@
 
 u16 GetGTSBaseBlock(void);
 void CB2_MysteryGiftEReader(void);
-void PrintGTSTopMenu(bool8 isJapanese, bool32 usePickOkCancel);
+void PrintGTSTopMenu(u8 menuScreen, bool32 usePickOkCancel);
 void GTS_DrawCheckerboardPattern(u32 bg);
 void MainCB_GTSFreeAllBuffersAndReturnToInitTitleScreen(void);
 bool32 PrintGTSMenuMessage(u8 *textState, const u8 *str);
@@ -72,6 +72,15 @@ struct GTSPokedexView
     u8 currentPage; //keep
     u8 token[32];
     struct GTSResult searchResult[7];
+};
+
+struct GTSSearch
+{
+    u32 checksum;               //0-3
+    u16 dexNum;                 //4-5
+    u8 gender;                  //6
+    u8 minLevel;                //7
+    u8 maxLevel;                //8
 };
 
 //extern EWRAM_DATA struct GTSPokedexView *sGTSPokedexView;

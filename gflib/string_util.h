@@ -45,5 +45,8 @@ void ConvertInternationalString(u8 *s, u8 language);
 void StripExtCtrlCodes(u8 *str);
 u8 *StringCopyUppercase(u8 *dest, const u8 *src);
 void ASCIIToPkmnStr(u8 *pkmnStr, const u8 *asciiStr);
+void ASCIIToPkmnStrLength(u8 *pkmnStr, const u8 *asciiStr, u8 strLength);
+void PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr);
+void PkmnStrToASCIILength(u8 *asciiStr, const u8 *pkmnStr, u8 strLength);
 
 #endif // GUARD_STRING_UTIL_H

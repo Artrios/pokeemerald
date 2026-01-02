@@ -3399,7 +3399,12 @@ extern const u8 gText_Level91to100[];
 extern const u8 gText_ConfirmOffer[];
 extern const u8 gText_OfferPokemon[];
 extern const u8 gText_ByeByeVar2[];
-extern const u8 gText_WithdrawPokemon[];
+extern const u8 gText_WithdrawPokemon2[];
+extern const u8 gText_PickPokemonOKCancel[];
+extern const u8 gText_ItemCaps[];
+extern const u8 gText_Offerer[];
+extern const u8 gText_Wanted[];
+extern const u8 gText_GTSPokeDetails[];
 
 // Naming Screen
 extern const u8 gText_MoveOkBack[];

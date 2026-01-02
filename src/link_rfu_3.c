@@ -609,11 +609,20 @@ static void UNUSED PopulateArrayWithSequence(u8 *arr, u8 mode)
 
 // File boundary here maybe?
 
-static void UNUSED PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr)
+void PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr)
 {
     s32 i;
 
     for (i = 0; pkmnStr[i] != EOS; i++)
+        asciiStr[i] = gWireless_RSEtoASCIITable[pkmnStr[i]];
+    asciiStr[i] = 0;
+}
+
+void PkmnStrToASCIILength(u8 *asciiStr, const u8 *pkmnStr, u8 strLength)
+{
+    s32 i;
+
+    for (i = 0; i < strLength; i++)
         asciiStr[i] = gWireless_RSEtoASCIITable[pkmnStr[i]];
     asciiStr[i] = 0;
 }
@@ -623,6 +632,15 @@ void ASCIIToPkmnStr(u8 *pkmnStr, const u8 *asciiStr)
     s32 i;
 
     for (i = 0; asciiStr[i] != 0; i++)
+        pkmnStr[i] = sWireless_ASCIItoRSETable[asciiStr[i]];
+    pkmnStr[i] = EOS;
+}
+
+void ASCIIToPkmnStrLength(u8 *pkmnStr, const u8 *asciiStr, u8 strLength)
+{
+    s32 i;
+
+    for (i = 0; i < strLength; i++)
         pkmnStr[i] = sWireless_ASCIItoRSETable[asciiStr[i]];
     pkmnStr[i] = EOS;
 }
