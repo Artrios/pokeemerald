@@ -3456,7 +3456,7 @@ u8 CopyBoxMonToPC(struct BoxPokemon *mon)
             struct BoxPokemon* checkingMon = GetBoxedMonPtr(boxNo, boxPos);
             if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
             {
-                CopyMon(checkingMon, &mon, sizeof(mon));
+                CopyMon(checkingMon, mon, sizeof(*mon));
                 gSpecialVar_MonBoxId = boxNo;
                 gSpecialVar_MonBoxPos = boxPos;
                 if (GetPCBoxToSendMon() != boxNo)

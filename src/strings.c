@@ -1977,6 +1977,8 @@ const u8 gText_ItemCaps[] = _("ITEM");
 const u8 gText_Offerer[] = _("OFFERER");
 const u8 gText_Wanted[] = _("WANTED");
 const u8 gText_GTSPokeDetails[] = _("{LV}{STR_VAR_2}");
+const u8 gText_ConfirmTrade[] = _("Trade {STR_VAR_1} for {STR_VAR_2}?");
+const u8 gText_TradeQuestion[] = _("Trade?");
 
 //Days of Week
 const u8 gText_Monday[] = _("Monday");

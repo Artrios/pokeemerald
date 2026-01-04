@@ -4421,7 +4421,7 @@ static bool8 AnimateExchangeSequenceWireless(void)
         gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].x2 = -180;
         gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]].y2 = gSpeciesInfo[sTradeAnim->monSpecies[TRADE_PLAYER]].frontPicYOffset;
         VarSet(VAR_DEPOSIT_SPECIES,sTradeAnim->monSpecies[TRADE_PLAYER]);
-        if(sTradeAnim->isInGameTrade==0 && sGTSPokedexView->currentPage==1){
+        if(sTradeAnim->isInGameTrade==0 && (sGTSPokedexView->currentPage==1 || sGTSPokedexView->currentPage==3)){
             sTradeAnim->state=STATE_CREATE_LINK_MON_ARRIVING;
         }
         else
@@ -4447,9 +4447,21 @@ static bool8 AnimateExchangeSequenceWireless(void)
             StringCopy_Nickname(gStringVar1, gPlayerParty[sGTSPokedexView->offerPokemon].box.nickname);
         }
         else{
-            StringCopy_Nickname(gStringVar1, gEnemyParty[0].box.nickname);
+            if(sGTSPokedexView->currentPage==0){
+                StringCopy_Nickname(gStringVar2, gEnemyParty[0].box.nickname);
+                StringCopy_PlayerName(gStringVar1, gLinkPlayers[1].name);
+            }
+            else
+                StringCopy_Nickname(gStringVar1, gEnemyParty[0].box.nickname);
         }
-        StringExpandPlaceholders(gStringVar4, gText_OfferPokemon);
+
+        if(sGTSPokedexView->currentPage==0){
+            StringExpandPlaceholders(gStringVar4, gText_XWillBeSentToY);
+        }
+        else{
+            StringExpandPlaceholders(gStringVar4, gText_OfferPokemon);
+        }
+
         DrawTextOnTradeWindow(0, gStringVar4, 0);
 
         if (sTradeAnim->monSpecies[TRADE_PLAYER] != SPECIES_EGG)
@@ -4464,7 +4476,12 @@ static bool8 AnimateExchangeSequenceWireless(void)
             sTradeAnim->releasePokeballSpriteId = CreateTradePokeballSprite(sTradeAnim->monSpriteIds[0], gSprites[sTradeAnim->monSpriteIds[0]].oam.paletteNum, 120, 32, 2, 1, 0x14, 0xfffff);
             sTradeAnim->state++;
             //StringCopy_Nickname(gStringVar1, gPlayerParty[sGTSPokedexView->offerPokemon].box.nickname);
-            StringExpandPlaceholders(gStringVar4, gText_ByeByeVar2);
+            if(sGTSPokedexView->currentPage==0){
+                StringExpandPlaceholders(gStringVar4, gText_ByeByeVar1);
+            }
+            else{
+                StringExpandPlaceholders(gStringVar4, gText_ByeByeVar2);
+            }
             DrawTextOnTradeWindow(0, gStringVar4, 0);
         }
         break;
@@ -4571,7 +4588,7 @@ static bool8 AnimateExchangeSequenceWireless(void)
                 sTradeAnim->state=STATE_FADE_OUT_END;
             }
             else
-                sTradeAnim->state++;
+                sTradeAnim->state=STATE_FADE_OUT_TO_CROSSING;
         }
         break;
     case STATE_FADE_OUT_TO_CROSSING:
@@ -4943,9 +4960,14 @@ static void CB2_GTSExchange(void)
         //gSelectedTradeMonPositions[TRADE_PLAYER] = sGTSPokedexView->offerPokemon;
         gSelectedTradeMonPositions[TRADE_PARTNER] = 1;
         StringCopy(gLinkPlayers[0].name, gSaveBlock2Ptr->playerName);
-        BoxMonToMon(&gEnemyParty[0].box, &gEnemyParty[1]);
-        GetMonData(&gEnemyParty[1], MON_DATA_OT_NAME, otName);
-        StringCopy(gLinkPlayers[1].name, otName);
+        //BoxMonToMon(&gEnemyParty[0].box, &gEnemyParty[1]); 
+        if(sGTSPokedexView->currentPage==3){
+            ASCIIToPkmnStrLength(gLinkPlayers[1].name,(u8 *)sGTSPokedexView->searchResult[0].OTName,7);
+        }
+        else{
+            GetMonData(&gEnemyParty[1], MON_DATA_OT_NAME, otName);
+            StringCopy(gLinkPlayers[1].name, otName);
+        }
         gLinkPlayers[0].language = GAME_LANGUAGE;
         gLinkPlayers[1].language = GetMonData(&gEnemyParty[1], MON_DATA_LANGUAGE);
         sTradeAnim = AllocZeroed(sizeof(*sTradeAnim));
