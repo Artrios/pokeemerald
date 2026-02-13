@@ -208,6 +208,8 @@ static const struct TrainerHillChallenge *const sChallengeData[NUM_TRAINER_HILL_
     [HILL_MODE_EXPERT]  = &sChallenge_Expert,
 };
 
+static const struct TrainerHillChallenge *const sChallengeDataJP = &sChallenge_JPDefault;
+
 // Unused.
 static const u8 *const sFloorStrings[] =
 {
@@ -359,7 +361,7 @@ static void SetUpDataStruct(void)
         if(ReadTrainerHillAndValidate())
             TryReadTrainerHill(&sHillData->TrainerHill);
         else
-            CpuCopy32(sChallengeData[gSaveBlock1Ptr->trainerHill.mode], &sHillData->TrainerHill, sizeof(sHillData->TrainerHill));
+            CpuCopy32(sChallengeDataJP, &sHillData->TrainerHill, sizeof(sHillData->TrainerHill));
         
         TrainerHillDummy();
     }
