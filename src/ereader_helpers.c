@@ -378,7 +378,7 @@ static u8 GetTrainerHillUnkVal(void)
     return (gSaveBlock1Ptr->trainerHill.unused + 1) % 256;
 }
 
-static bool32 ValidateTrainerChecksum(struct EReaderTrainerHillTrainer *hillTrainer)
+static bool32 ValidateTrainerChecksum(struct TrainerTowerFloor * hillTrainer)
 {
     int checksum = CalcByteArraySum((u8 *)hillTrainer, offsetof(typeof(*hillTrainer), checksum));
     if (checksum != hillTrainer->checksum)
@@ -387,7 +387,7 @@ static bool32 ValidateTrainerChecksum(struct EReaderTrainerHillTrainer *hillTrai
     return TRUE;
 }
 
-bool8 ValidateTrainerHillData(struct EReaderTrainerHillSet *hillSet)
+bool8 ValidateTrainerHillData(struct EReaderTrainerTowerSet * hillSet)
 {
     u32 i;
     u32 checksum;
@@ -405,7 +405,7 @@ bool8 ValidateTrainerHillData(struct EReaderTrainerHillSet *hillSet)
     }
 
     // Validate checksum
-    checksum = CalcByteArraySum((u8 *)hillSet->trainers, numTrainers * sizeof(struct EReaderTrainerHillTrainer));
+    checksum = CalcByteArraySum((u8 *)hillSet->trainers, numTrainers * sizeof(struct EReaderTrainerTowerSet));
     if (checksum != hillSet->checksum)
         return FALSE;
 
@@ -418,15 +418,15 @@ static bool32 ValidateTrainerHillChecksum(struct EReaderTrainerHillSet *hillSet)
     int numTrainers = hillSet->numTrainers;
     if (numTrainers < 1 || numTrainers > NUM_TRAINER_HILL_TRAINERS)
         return FALSE;
-
-    checksum = CalcByteArraySum((u8 *)hillSet->trainers, sizeof(struct EReaderTrainerHillSet) - offsetof(struct EReaderTrainerHillSet, trainers));
+    
+    checksum = CalcByteArraySum((u8 *)hillSet->trainers, sizeof(struct TrainerHillFloor) * 4);
     if (checksum != hillSet->checksum)
         return FALSE;
 
     return TRUE;
 }
 
-static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerHillSet *hillSet, struct TrainerHillChallenge *challenge)
+static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerTowerSet * hillSet, struct TrainerHillChallenge * challenge)
 {
     int i;
 
@@ -465,7 +465,7 @@ static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerHillSet *hillSet
     return TRUE;
 }
 
-bool32 TryWriteTrainerHill(struct EReaderTrainerHillSet *hillSet)
+bool32 TryWriteTrainerHill(struct EReaderTrainerTowerSet * hillSet)
 {
     void *buffer = AllocZeroed(SECTOR_SIZE);
     bool32 result = TryWriteTrainerHill_Internal(hillSet, buffer);
@@ -485,7 +485,7 @@ static bool32 TryReadTrainerHill_Internal(struct EReaderTrainerHillSet *dest, u8
     return TRUE;
 }
 
-static bool32 TryReadTrainerHill(struct EReaderTrainerHillSet *hillSet)
+bool32 TryReadTrainerHill(struct EReaderTrainerHillSet * hillSet)
 {
     u8 *buffer = AllocZeroed(SECTOR_SIZE);
     bool32 result = TryReadTrainerHill_Internal(hillSet, buffer);
