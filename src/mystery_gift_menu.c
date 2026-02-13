@@ -495,8 +495,8 @@ void PrintMysteryGiftOrEReaderHeader(bool8 isEReader, bool32 useCancel)
     }
     else
     {
-        title = gJPText_MysteryGift;
-        options = gJPText_DecideStop;
+        title = gText_MysteryGift;
+        options = gText_DecideStop;
     }
 
     AddTextPrinterParameterized4(WIN_HEADER, FONT_NORMAL, 4, 1, 0, 0, sTextColors_Header, TEXT_SKIP_DRAW, title);
