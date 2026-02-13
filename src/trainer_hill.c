@@ -5,6 +5,7 @@
 #include "battle_setup.h"
 #include "ereader_helpers.h"
 #include "event_data.h"
+#include "event_object_movement.h"
 #include "event_scripts.h"
 #include "fieldmap.h"
 #include "field_message_box.h"
@@ -547,7 +548,31 @@ static void GetAllFloorsUsed(void)
 static void GetInEReaderMode(void)
 {
     SetUpDataStruct();
-    gSpecialVar_Result = FALSE;
+    
+    if (gMapHeader.mapLayoutId == LAYOUT_TRAINER_HILL_ENTRANCE && VarGet(VAR_TRAINER_HILL_IS_ACTIVE) == 0)
+    {
+        gSpecialVar_Result = 0;
+    }
+    else if (gSaveBlock1Ptr->trainerHill.unused == sHillData->challenge.unused1)
+    {
+        if (gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0 && !ReadTrainerHillAndValidate())
+        {
+            gSaveBlock1Ptr->trainerHill.maybeECardScanDuringChallenge = 1;
+            gSpecialVar_Result = 1;
+            
+            if (gMapHeader.mapLayoutId == LAYOUT_TRAINER_HILL_ENTRANCE)
+            {
+                gSaveBlock1Ptr->pos.x = 9;
+                gSaveBlock1Ptr->pos.y = 6;
+            }
+            
+        }
+    }
+    else
+    {
+        gSpecialVar_Result = 0;
+    }
+    
     FreeDataStruct();
 }
 
@@ -578,7 +603,13 @@ static void UNUSED TrainerHillDummy_Unused(void)
 
 static void TrainerHillDummy(void)
 {
-
+    if (gSaveBlock1Ptr->trainerHill.unused != sHillData->challenge.unused1)
+    {
+        gSaveBlock1Ptr->trainerHill.unused = sHillData->challenge.unused1;
+        SetTimerValue(&gSaveBlock1Ptr->trainerHill.bestTime, HILL_MAX_TIME);
+        gSaveBlock1Ptr->trainerHill.receivedPrize = 0;
+        gSaveBlock2Ptr->frontier.unk_EF9 = 0;
+    }
 }
 
 void PrintOnTrainerHillRecordsWindow(void)
@@ -663,10 +694,22 @@ void LoadTrainerHillObjectEventTemplates(void)
 
 bool32 LoadTrainerHillFloorObjectEventScripts(void)
 {
+    int result = 1;
+    
     SetUpDataStruct();
-    // Something may have been dummied here
+    
+    if (gSaveBlock1Ptr->trainerHill.unused == sHillData->challenge.unused1) {
+        if (gSaveBlock1Ptr->trainerHill.receivedPrize == 0) {
+            if (!ReadTrainerHillAndValidate()) {
+                CpuSet(0, gSaveBlock1Ptr->objectEventTemplates, 32); // Clear data
+                ClearAllObjectEvents();
+                result = FALSE;
+            }
+        }
+    }
+    
     FreeDataStruct();
-    return TRUE;
+    return result;
 }
 
 static u16 GetMapDataForFloor(u8 floorId, u32 x, u32 y, u32 floorWidth) // floorWidth is always 16
@@ -696,6 +739,15 @@ void GenerateTrainerHillFloorLayout(u16 *mapArg)
     }
 
     SetUpDataStruct();
+    
+        if (gSaveBlock1Ptr->trainerHill.unused == sHillData->challenge.unused1) {
+        if (gSaveBlock1Ptr->trainerHill.receivedPrize == 0 && !ReadTrainerHillAndValidate()) {
+            RunOnLoadMapScript();
+            FreeDataStruct();
+            return;
+        }
+    }
+    
     if (mapId == TRAINER_HILL_ROOF)
     {
         InitMapFromSavedGame();
