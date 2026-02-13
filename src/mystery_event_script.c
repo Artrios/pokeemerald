@@ -29,18 +29,18 @@ extern ScrCmdFunc gMysteryEventScriptCmdTableEnd[];
 
 EWRAM_DATA static struct ScriptContext sMysteryEventScriptContext = {0};
 
-static bool32 CheckCompatibility(u16 unk0, u32 unk1, u16 unk2, u32 version)
+static bool32 CheckCompatibility(u16 language, u32 languageDuplicate, u16 unknown, u32 version)
 {
     // 0x1 in English FRLG, 0x2 in English RS, 0x4 in German RS
-    if (!(unk0 & 0x1))
+    if (!(language & GAME_LANGUAGE))
         return FALSE;
 
     // Same as above
-    if (!(unk1 & 0x1))
+   if (!(languageDuplicate & GAME_LANGUAGE))
         return FALSE;
 
     // 0x1 in FRLG, 0x4 in RS
-    if (!(unk2 & 0x4))
+    if (!(unknown & 0x4))
         return FALSE;
 
     if (!(version & VERSION_MASK))
@@ -177,18 +177,18 @@ bool8 MEScrCmd_end(struct ScriptContext *ctx)
 
 bool8 MEScrCmd_checkcompat(struct ScriptContext *ctx)
 {
-    u16 unk0;
-    u32 unk1;
-    u16 unk2;
+    u16 language;
+    u32 languageDuplicate;
+    u16 unknown;
     u32 version;
 
     ctx->mOffset = ScriptReadWord(ctx);
-    unk0 = ScriptReadHalfword(ctx);
-    unk1 = ScriptReadWord(ctx);
-    unk2 = ScriptReadHalfword(ctx);
+    language = ScriptReadHalfword(ctx);
+    languageDuplicate = ScriptReadWord(ctx);
+    unknown = ScriptReadHalfword(ctx);
     version = ScriptReadWord(ctx);
 
-    if (CheckCompatibility(unk0, unk1, unk2, version) == TRUE)
+    if (CheckCompatibility(language, languageDuplicate, unknown, version) == TRUE)
         ctx->mValid = TRUE;
     else
         SetIncompatible();
