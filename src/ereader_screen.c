@@ -474,7 +474,7 @@ static void Task_EReader(u8 taskId)
         }
         break;
     case ER_STATE_VALIDATE_CARD:
-        data->status = ValidateTrainerHillData((struct EReaderTrainerHillSet *)gDecompressionBuffer);
+        data->status = ValidateTrainerHillData((struct EReaderTrainerTowerSet *)gDecompressionBuffer);
         SetCloseLinkCallbackAndType(data->status);
         data->state = ER_STATE_WAIT_DISCONNECT;
         break;
@@ -488,7 +488,7 @@ static void Task_EReader(u8 taskId)
         }
         break;
     case ER_STATE_SAVE:
-        if (TryWriteTrainerHill((struct EReaderTrainerHillSet *)&gDecompressionBuffer))
+        if (TryWriteTrainerHill((struct EReaderTrainerTowerSet *)&gDecompressionBuffer))
         {
             MG_AddMessageTextPrinter(gJPText_ConnectionComplete);
             ResetTimer(&data->timer);
