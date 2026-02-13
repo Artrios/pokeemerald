@@ -120,7 +120,6 @@ TrainerHill_Entrance_EventScript_AttendantEnd::
 TrainerHill_Entrance_EventScript_EntryTrigger::
 	lockall
 	applymovement LOCALID_PLAYER, TrainerHill_Entrance_Movement_PlayerFaceAttendant
-	goto_if_unset FLAG_SYS_GAME_CLEAR, TrainerHill_Entrance_EventScript_Closed
 	msgbox TrainerHill_Entrance_Text_WelcomeToTrainerHill, MSGBOX_DEFAULT
 	trainerhill_getsaved
 	call_if_eq VAR_RESULT, FALSE, TrainerHill_Entrance_EventScript_SaveGame
