@@ -7,7 +7,8 @@ struct TrainerHillTrainer
 {
     u8 name[TRAINER_NAME_LENGTH + 1];
     u8 facilityClass;
-    bool32 unused; // Set to TRUE on JP trainers
+    u8 unknown;
+    u16 unused; // Set to TRUE on JP trainers
     u16 speechBefore[EASY_CHAT_BATTLE_WORDS_COUNT];
     u16 speechWin[EASY_CHAT_BATTLE_WORDS_COUNT];
     u16 speechLose[EASY_CHAT_BATTLE_WORDS_COUNT];
@@ -24,10 +25,21 @@ struct TrainerHillFloorMap
     u8 trainerRanges; // 4 bits per trainer
 };
 
+struct TrainerTowerFloor
+{
+    u8 trainerNum;
+    u8 dummy2;
+    u16 dummy;
+    struct TrainerHillTrainer trainer;
+    struct TrainerHillFloorMap map;
+    u32 checksum;
+};
+
 struct TrainerHillFloor
 {
     u8 trainerNum1;
     u8 trainerNum2;
+    u16 dummy;
     struct TrainerHillTrainer trainers[HILL_TRAINERS_PER_FLOOR];
     struct TrainerHillFloorMap map;
 };
