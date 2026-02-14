@@ -578,7 +578,7 @@ static bool32 ValidateTrainerHillChecksum(struct EReaderTrainerHillSet *hillSet)
     return TRUE;
 }
 
-static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerTowerSet * hillSet, struct TrainerHillChallenge * challenge)
+static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerTowerSet * hillSet, struct EReaderTrainerHillSet * challenge)
 {
     int i;
 
@@ -587,30 +587,30 @@ static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerTowerSet * hillS
 
     memset(challenge, 0, SECTOR_SIZE);
     challenge->numTrainers = hillSet->numTrainers;
-    challenge->unused1 = GetTrainerHillUnkVal();
-    challenge->numFloors = (hillSet->numTrainers + 1) / HILL_TRAINERS_PER_FLOOR;
+    challenge->id = GetTrainerHillUnkVal();
+    challenge->floors = (hillSet->numTrainers + 1) / HILL_TRAINERS_PER_FLOOR;
 
     for (i = 0; i < hillSet->numTrainers; i++)
     {
         if (!(i & 1))
         {
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainerNum1 = hillSet->trainers[i].trainerNum;
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].map = hillSet->trainers[i].map;
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainers[0] = hillSet->trainers[i].trainer;
+            challenge->trainers[i / HILL_TRAINERS_PER_FLOOR].trainerNum1 = hillSet->trainers[i].trainerNum;
+            challenge->trainers[i / HILL_TRAINERS_PER_FLOOR].map = hillSet->trainers[i].map;
+            challenge->trainers[i / HILL_TRAINERS_PER_FLOOR].trainers[0] = hillSet->trainers[i].trainer;
         }
         else
         {
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainerNum2 = hillSet->trainers[i].trainerNum;
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainers[1] = hillSet->trainers[i].trainer;
+            challenge->trainers[i / HILL_TRAINERS_PER_FLOOR].trainerNum2 = hillSet->trainers[i].trainerNum;
+            challenge->trainers[i / HILL_TRAINERS_PER_FLOOR].trainers[1] = hillSet->trainers[i].trainer;
         }
     }
 
     if (i & 1)
     {
-        challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainers[1] = sTrainerHillTrainerTemplates_JP[i / HILL_TRAINERS_PER_FLOOR];
+        challenge->trainers[i / HILL_TRAINERS_PER_FLOOR].trainers[1] = sTrainerHillTrainerTemplates_JP[i / HILL_TRAINERS_PER_FLOOR];
     }
 
-    challenge->checksum = CalcByteArraySum((u8 *)challenge->floors, NUM_TRAINER_HILL_FLOORS * sizeof(struct TrainerHillFloor));
+    challenge->checksum = CalcByteArraySum((u8 *)challenge->trainers, NUM_TRAINER_HILL_FLOORS * sizeof(struct TrainerHillFloor));
     if (TryWriteSpecialSaveSector(SECTOR_ID_TRAINER_HILL, (u8 *)challenge) != SAVE_STATUS_OK)
         return FALSE;
 
