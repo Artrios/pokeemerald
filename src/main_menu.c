@@ -1115,8 +1115,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                         action = ACTION_MYSTERY_GIFT;
                         if (!wirelessAdapterConnected)
                         {
-                            action = ACTION_INVALID;
-                            gTasks[taskId].tMenuType = HAS_NO_SAVED_GAME;
+                            action = ACTION_EREADER;
                         }
                         break;
                     case 3:
