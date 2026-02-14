@@ -23,13 +23,39 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
         .trainerNum2 = 0,
         .trainers = {
             [0] = {
-                .name = __("シゲノブ$$$$   "),
+            #if FRENCH
+                .name = _("LEANDRE"),
                 .facilityClass = FACILITY_CLASS_YOUNGSTER,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_TRAINER, EC_WORD_MRS, EC_WORD_EXCL, EC_WORD_THEY_WERE, EC_WORD_OPPONENT, EC_WORD_CAN },
-                .speechWin = { EC_WORD_TRAINER, EC_WORD_MRS, EC_WORD_WEAK, EC_WORD_OF, EC_WORD_WERE, EC_WORD_ELLIPSIS_ELLIPSIS_ELLIPSIS },
-                .speechLose = { EC_WORD_TRAINER, EC_WORD_MRS, EC_WORD_STRONG, EC_WORD_HEY_QUES, EC_WORD_EXCL, EC_WORD_EXCL },
-                .speechAfter = { EC_WORD_FABULOUS, EC_WORD_CAN_T, EC_WORD_TRAINER, EC_WORD_MRS, EC_WORD_ELLIPSIS_ELLIPSIS_ELLIPSIS, EC_WORD_EXCITING },
+                .speechBefore = { EC_WORD_HEY_THERE, EC_WORD_I_AM, EC_WORD_YOURS, EC_WORD_OPPONENT, EC_WORD_EXCL_EXCL, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_OPPONENT, EC_WORD_QUITE, EC_WORD_WEAK, EC_WORD_ELLIPSIS_ELLIPSIS_ELLIPSIS },
+                .speechLose = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_OPPONENT, EC_WORD_QUITE, EC_WORD_STRONG, EC_WORD_EXCL },
+                .speechAfter = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_GOOD, EC_WORD_TRAINER, EC_WORD_EXCL, EC_EMPTY_WORD },
+            #elif ITALIAN
+                .name = _("LOUIS"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_YOUNGSTER,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_HEY, EC_WORD_EXCL, EC_EMPTY_WORD, EC_WORD_I_AM, EC_WORD_YOUR, EC_WORD_OPPONENT },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_WEAK, EC_WORD_TRAINER, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_STRONG, EC_WORD_TRAINER, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_NICE, EC_WORD_TRAINER, EC_WORD_ELLIPSIS, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+            #elif SPANISH
+                .name = _("LOUIS"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_YOUNGSTER,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_HEY, EC_WORD_EXCL, EC_EMPTY_WORD, EC_WORD_I_AM, EC_WORD_YOUR, EC_WORD_OPPONENT },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_WEAK, EC_WORD_TRAINER, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_STRONG, EC_WORD_TRAINER, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_NICE, EC_WORD_TRAINER, EC_WORD_ELLIPSIS, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+            #else //ENGLISH
+                .name = _("LOUIS"),
+                .facilityClass = FACILITY_CLASS_YOUNGSTER,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_HEY, EC_WORD_EXCL, EC_EMPTY_WORD, EC_WORD_I_AM, EC_WORD_YOUR, EC_WORD_OPPONENT },
+                .speechWin = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_WEAK, EC_WORD_TRAINER, EC_WORD_ELLIPSIS },
+                .speechLose = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_STRONG, EC_WORD_TRAINER, EC_WORD_EXCL },
+                .speechAfter = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_NICE, EC_WORD_TRAINER, EC_WORD_ELLIPSIS, EC_EMPTY_WORD },
+            #endif
                 .mons = {
                     [0] = {
                         .species = SPECIES_ZIGZAGOON,
@@ -49,8 +75,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x80,
-                        .nickname = __("ジグザグマ$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("ZIGZAGOON"),
+                    #elif FRENCH
+                        .nickname = _("ZIGZATON"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [1] = {
                         .species = SPECIES_SHROOMISH,
@@ -69,8 +99,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x0,
-                        .nickname = __("キノココ$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("SHROOMISH"),
+                    #elif FRENCH
+                        .nickname = _("BALIGNON"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [2] = {
                         .species = SPECIES_SANDSHREW,
@@ -89,8 +123,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x80,
-                        .nickname = __("サンド$$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("SANDSHREW"),
+                    #elif FRENCH
+                        .nickname = _("SABELETTE"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [3] = DUMMY_HILL_MON,
                     [4] = DUMMY_HILL_MON,
@@ -98,13 +136,39 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                 }
             },
             [1] = {
-                .name = __("アカリ$$$$$   "),
+            #if FRENCH
+                .name = _("MAUDE"),
                 .facilityClass = FACILITY_CLASS_PARASOL_LADY,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_SHE, EC_WORD_EVERY, EC_WORD_TYPE, EC_WORD_ADORE, EC_WORD_FOR, EC_WORD_EXCL },
-                .speechWin = { EC_WORD_SURPRISE, EC_WORD_THESE, EC_WORD_WONDER, EC_WORD_GIGGLE, EC_WORD_ELLIPSIS, EC_WORD_EXCL },
-                .speechLose = { EC_WORD_OH_QUES, EC_MOVE(EARTHQUAKE), EC_WORD_EXISTS, EC_WORD_OF, EC_WORD_WITHOUT, EC_WORD_EXCL },
-                .speechAfter = { EC_WORD_YOU_RE, EC_WORD_PROBABLY, EC_WORD_END, EC_WORD_UNTIL, EC_WORD_GOING, EC_WORD_ANYWHERE },
+                .speechBefore = { EC_WORD_LIKE, EC_WORD_HERE, EC_WORD_POKEMON, EC_WORD_EXCL, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_WHOM, EC_WORD_SUMMER, EC_WORD_CARES, EC_WORD_EXCL, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_HUH_QUES, EC_WORD_DARN, EC_WORD_ELLIPSIS, EC_WORD_I_WAS, EC_WORD_READY, EC_WORD_ELLIPSIS },
+                .speechAfter = { EC_WORD_YOU, EC_WORD_COULD, EC_WORD_SHOW, EC_WORD_IN, EC_WORD_HIGH, EC_WORD_EXCL },
+            #elif ITALIAN
+                .name = _("MIKAELA"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_PARASOL_LADY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_I, EC_WORD_LIKE, EC_WORD_THESE, EC_WORD_POKEMON, EC_WORD_EXCL, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_DID, EC_WORD_I, EC_WORD_SURPRISE, EC_WORD_YOU, EC_WORD_QUES, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_BUT, EC_WORD_I, EC_WORD_BELIEVE, EC_WORD_I_WAS, EC_WORD_READY, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_YOU, EC_WORD_COULD, EC_WORD_GET, EC_WORD_TO, EC_WORD_THE, EC_WORD_TOP },//translation needed, atm this is an english place-holder
+            #elif SPANISH
+                .name = _("MIKAELA"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_PARASOL_LADY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_I, EC_WORD_LIKE, EC_WORD_THESE, EC_WORD_POKEMON, EC_WORD_EXCL, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_DID, EC_WORD_I, EC_WORD_SURPRISE, EC_WORD_YOU, EC_WORD_QUES, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_BUT, EC_WORD_I, EC_WORD_BELIEVE, EC_WORD_I_WAS, EC_WORD_READY, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_YOU, EC_WORD_COULD, EC_WORD_GET, EC_WORD_TO, EC_WORD_THE, EC_WORD_TOP },//translation needed, atm this is an english place-holder
+            #else //ENGLISH
+                .name = _("MIKAELA"),
+                .facilityClass = FACILITY_CLASS_PARASOL_LADY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_I, EC_WORD_LIKE, EC_WORD_THESE, EC_WORD_POKEMON, EC_WORD_EXCL, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_DID, EC_WORD_I, EC_WORD_SURPRISE, EC_WORD_YOU, EC_WORD_QUES, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_BUT, EC_WORD_I, EC_WORD_BELIEVE, EC_WORD_I_WAS, EC_WORD_READY, EC_WORD_EXCL },
+                .speechAfter = { EC_WORD_YOU, EC_WORD_COULD, EC_WORD_GET, EC_WORD_TO, EC_WORD_THE, EC_WORD_TOP },
+            #endif
                 .mons = {
                     [0] = DUMMY_HILL_MON,
                     [1] = DUMMY_HILL_MON,
@@ -127,8 +191,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x0,
-                        .nickname = __("キャモメ$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("WINGULL"),
+                    #elif FRENCH
+                        .nickname = _("GOELISE"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [4] = {
                         .species = SPECIES_NUMEL,
@@ -148,8 +216,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x96,
-                        .nickname = __("ドンメル$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("NUMEL"),
+                    #elif FRENCH
+                        .nickname = _("CHAMALLOT"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [5] = {
                         .species = SPECIES_SURSKIT,
@@ -169,8 +241,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x0,
-                        .nickname = __("アメタマ$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("SURSKIT"),
+                    #elif FRENCH
+                        .nickname = _("ARAKDO"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                 }
             },
@@ -188,13 +264,39 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
         .trainerNum2 = 0,
         .trainers = {
             [0] = {
-                .name = __("シゲゾウ$$$$   "),
+            #if FRENCH
+                .name = _("EITA"),
                 .facilityClass = FACILITY_CLASS_NINJA_BOY,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_WIN, EC_WORD_UNTIL, EC_WORD_DAUGHTER, EC_MOVE(CONSTRICT), EC_WORD_OF, EC_WORD_WERE },
-                .speechWin = { EC_MOVE(CONSTRICT), EC_WORD_UNTIL, EC_WORD_LESS, EC_WORD_NONE, EC_WORD_HEY_QUES, EC_WORD_EXCL },
-                .speechLose = { EC_WORD_YET, EC_WORD_ELLIPSIS_ELLIPSIS_ELLIPSIS, EC_WORD_URGH, EC_WORD_ALMOST, EC_WORD_POWER, EC_WORD_NONE },
-                .speechAfter = { EC_WORD_HUH_QUES, EC_WORD_TOMORROW, EC_WORD_SMELL, EC_WORD_ABSOLUTELY, EC_WORD_THOSE, EC_WORD_EXCL_EXCL },
+                .speechBefore = { EC_WORD_WILL, EC_WORD_MAKE, EC_MOVE(CONSTRICT), EC_WORD_FOR, EC_WORD_WIN, EC_WORD_EXCL },
+                .speechWin = { EC_WORD_THAT_WAS, EC_WORD_NOT, EC_WORD_VERY, EC_WORD_POWER, EC_WORD_EXCL, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_IF, EC_WORD_ENOUGH, EC_WORD_EXCL, EC_WORD_I_AM, EC_WORD_TIRED, EC_WORD_ELLIPSIS },
+                .speechAfter = { EC_WORD_OUR, EC_WORD_NEXT, EC_WORD_FIGHTING, EC_WORD_IS, EC_WORD_UNAVOIDABLE, EC_WORD_EXCL },
+            #elif ITALIAN
+                .name = _("EITA"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_NINJA_BOY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_I, EC_WORD_WILL, EC_MOVE(CONSTRICT), EC_WORD_UNTIL, EC_WORD_I, EC_WORD_WIN },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_I, EC_WORD_DIDN_T, EC_MOVE(CONSTRICT), EC_WORD_THAT, EC_WORD_HARD, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_THAT_S, EC_WORD_ENOUGH, EC_WORD_ELLIPSIS, EC_WORD_I_AM, EC_WORD_TIRED, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_SEE_YA, EC_WORD_TOMORROW, EC_WORD_EXCL, EC_WORD_IT_S, EC_WORD_UNAVOIDABLE, EC_WORD_EXCL_EXCL },//translation needed, atm this is an english place-holder
+            #elif SPANISH
+                .name = _("EITA"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_NINJA_BOY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_I, EC_WORD_WILL, EC_MOVE(CONSTRICT), EC_WORD_UNTIL, EC_WORD_I, EC_WORD_WIN },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_I, EC_WORD_DIDN_T, EC_MOVE(CONSTRICT), EC_WORD_THAT, EC_WORD_HARD, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_THAT_S, EC_WORD_ENOUGH, EC_WORD_ELLIPSIS, EC_WORD_I_AM, EC_WORD_TIRED, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_SEE_YA, EC_WORD_TOMORROW, EC_WORD_EXCL, EC_WORD_IT_S, EC_WORD_UNAVOIDABLE, EC_WORD_EXCL_EXCL },//translation needed, atm this is an english place-holder
+            #else //ENGLISH
+                .name = _("EITA"),
+                .facilityClass = FACILITY_CLASS_NINJA_BOY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_I, EC_WORD_WILL, EC_MOVE(CONSTRICT), EC_WORD_UNTIL, EC_WORD_I, EC_WORD_WIN },
+                .speechWin = { EC_WORD_I, EC_WORD_DIDN_T, EC_MOVE(CONSTRICT), EC_WORD_THAT, EC_WORD_HARD, EC_WORD_EXCL },
+                .speechLose = { EC_WORD_THAT_S, EC_WORD_ENOUGH, EC_WORD_ELLIPSIS, EC_WORD_I_AM, EC_WORD_TIRED, EC_WORD_ELLIPSIS },
+                .speechAfter = { EC_WORD_SEE_YA, EC_WORD_TOMORROW, EC_WORD_EXCL, EC_WORD_IT_S, EC_WORD_UNAVOIDABLE, EC_WORD_EXCL_EXCL },
+            #endif
                 .mons = {
                     [0] = {
                         .species = SPECIES_ELECTRIKE,
@@ -213,8 +315,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 1,
                         .personality = 0x0,
-                        .nickname = __("ラクライ$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("ELECTRIKE"),
+                    #elif FRENCH
+                        .nickname = _("DYNAVOLT"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [1] = {
                         .species = SPECIES_CORPHISH,
@@ -234,8 +340,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 1,
                         .personality = 0x96,
-                        .nickname = __("ヘイガニ$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("CORPHISH"),
+                    #elif FRENCH
+                        .nickname = _("ECRAPINCE"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [2] = {
                         .species = SPECIES_BALTOY,
@@ -255,22 +365,52 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x96,
-                        .nickname = __("ヤジロン$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("BALTOY"),
+                    #elif FRENCH
+                        .nickname = _("BALBUTO"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [3] = DUMMY_HILL_MON,
                     [4] = DUMMY_HILL_MON,
-                    [5] = DUMMY_HILL_MON,
+                    [5] = DUMMY_HILL_MON
                 }
             },
             [1] = {
-                .name = __("ナミコ$$$$$   "),
+            #if FRENCH
+                .name = _("URIELLE"),
                 .facilityClass = FACILITY_CLASS_BEAUTY,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_SISTER, EC_WORD_ALTHOUGH, EC_WORD_KIND, EC_WORD_MATCH, EC_WORD_PLEASE, EC_WORD_WITHOUT },
-                .speechWin = { EC_WORD_KIND, EC_WORD_ELLIPSIS, EC_WORD_INSTEAD, EC_WORD_DEEP, EC_WORD_WEAK, EC_WORD_QUES },
-                .speechLose = { EC_WORD_AWFUL, EC_WORD_GWAH, EC_WORD_HOPELESS, EC_WORD_CAN_T_WIN, EC_WORD_IS, EC_WORD_NONE },
-                .speechAfter = { EC_WORD_AWW, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_WORD_ALMOST, EC_WORD_GOOD, EC_WORD_ANYWHERE },
+                .speechBefore = { EC_WORD_A, EC_WORD_FIGHTING, EC_WORD_THAT_S, EC_WORD_REFRESHING, EC_WORD_EXCL, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_REFRESHING, EC_WORD_EXCL, EC_WORD_QUITE, EC_WORD_WEAK, EC_WORD_EXCL, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_I, EC_WORD_COULD, EC_WORD_PLUS, EC_WORD_WIN, EC_WORD_NOW, EC_WORD_ELLIPSIS },
+                .speechAfter = { EC_WORD_ARRGH, EC_WORD_ELLIPSIS, EC_WORD_DON_T, EC_WORD_GIVE_UP, EC_WORD_ELLIPSIS, EC_EMPTY_WORD },
+            #elif ITALIAN
+                .name = _("ZARA"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_BEAUTY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_LET_S, EC_WORD_HAVE, EC_WORD_A, EC_WORD_REFRESHING, EC_WORD_BATTLE, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_REFRESHING, EC_WORD_QUES, EC_EMPTY_WORD, EC_WORD_MORE, EC_WORD_LIKE, EC_WORD_WEAK },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_HOW, EC_WORD_AWFUL, EC_WORD_EXCL, EC_WORD_I, EC_WORD_COULDN_T, EC_WORD_WIN },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_ELLIPSIS, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_WORD_I, EC_WORD_GIVE_UP, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+            #elif SPANISH
+                .name = _("ZARA"),//translation needed, atm this is an english place-holder
+                .facilityClass = FACILITY_CLASS_BEAUTY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_LET_S, EC_WORD_HAVE, EC_WORD_A, EC_WORD_REFRESHING, EC_WORD_BATTLE, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechWin = { EC_WORD_REFRESHING, EC_WORD_QUES, EC_EMPTY_WORD, EC_WORD_MORE, EC_WORD_LIKE, EC_WORD_WEAK },//translation needed, atm this is an english place-holder
+                .speechLose = { EC_WORD_HOW, EC_WORD_AWFUL, EC_WORD_EXCL, EC_WORD_I, EC_WORD_COULDN_T, EC_WORD_WIN },//translation needed, atm this is an english place-holder
+                .speechAfter = { EC_WORD_ELLIPSIS, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_WORD_I, EC_WORD_GIVE_UP, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+            #else //ENGLISH
+                .name = _("ZARA"),
+                .facilityClass = FACILITY_CLASS_BEAUTY,
+                .unused = TRUE,
+                .speechBefore = { EC_WORD_LET_S, EC_WORD_HAVE, EC_WORD_A, EC_WORD_REFRESHING, EC_WORD_BATTLE, EC_WORD_EXCL },
+                .speechWin = { EC_WORD_REFRESHING, EC_WORD_QUES, EC_EMPTY_WORD, EC_WORD_MORE, EC_WORD_LIKE, EC_WORD_WEAK },
+                .speechLose = { EC_WORD_HOW, EC_WORD_AWFUL, EC_WORD_EXCL, EC_WORD_I, EC_WORD_COULDN_T, EC_WORD_WIN },
+                .speechAfter = { EC_WORD_ELLIPSIS, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_WORD_I, EC_WORD_GIVE_UP, EC_WORD_EXCL },
+            #endif
                 .mons = {
                     [0] = DUMMY_HILL_MON,
                     [1] = DUMMY_HILL_MON,
@@ -293,8 +433,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x80,
-                        .nickname = __("タマザラシ$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("SPHEAL"),
+                    #elif FRENCH
+                        .nickname = _("OBALIE"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [4] = {
                         .species = SPECIES_SPOINK,
@@ -314,8 +458,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 1,
                         .personality = 0xf,
-                        .nickname = __("バネブー$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("SPOINK"),
+                    #elif FRENCH
+                        .nickname = _("SPOINK"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                     [5] = {
                         .species = SPECIES_POOCHYENA,
@@ -336,8 +484,12 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                         .spDefenseIV = 5,
                         .abilityNum = 0,
                         .personality = 0x96,
-                        .nickname = __("ポチエナ$$$$$$$"),
-                        .friendship = MAX_FRIENDSHIP
+                    #if ENGLISH || ITALIAN || SPANISH
+                        .nickname = _("POOCHYENA"),
+                    #elif FRENCH
+                        .nickname = _("MEDHYENA"),
+                    #endif
+                        .friendship = MAX_FRIENDSHIP,
                     },
                 }
             },
