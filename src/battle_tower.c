@@ -2952,7 +2952,7 @@ void GetEreaderTrainerName(u8 *dst)
 {
     s32 i;
 
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < 8; i++)
         dst[i] = gSaveBlock2Ptr->frontier.ereaderTrainer.name[i];
 
     dst[i] = EOS;
