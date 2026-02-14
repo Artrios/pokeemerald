@@ -719,7 +719,7 @@ bool32 LoadTrainerHillFloorObjectEventScripts(void)
 static u16 GetMapDataForFloor(u8 floorId, u32 x, u32 y, u32 floorWidth) // floorWidth is always 16
 {
     bool8 impassable;
-    u16 metatileId;
+    u16 metatile;
     u16 elevation;
 
     impassable = (sHillData->TrainerHill.trainers[floorId].map.collisionData[y] >> (15 - x) & 1);
