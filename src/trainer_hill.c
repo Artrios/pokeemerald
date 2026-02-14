@@ -726,7 +726,7 @@ static u16 GetMapDataForFloor(u8 floorId, u32 x, u32 y, u32 floorWidth) // floor
     metatile = sHillData->TrainerHill.trainers[floorId].map.metatileData[floorWidth * y + x] + NUM_METATILES_IN_PRIMARY;
     elevation = 3 << MAPGRID_ELEVATION_SHIFT;
 
-    return PACK_COLLISION(impassable) | elevation | PACK_METATILE(metatileId);
+    return ((impassable << MAPGRID_COLLISION_SHIFT) & MAPGRID_COLLISION_MASK) | elevation | (metatile & MAPGRID_METATILE_ID_MASK);
 }
 
 void GenerateTrainerHillFloorLayout(u16 *mapArg)
