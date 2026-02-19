@@ -46,7 +46,7 @@ struct EReaderTrainerTowerSet
     u8 floors;
     u8 dummy; // Only read in an assert.
     u32 checksum;
-    struct TrainerTowerFloor trainers[4];
+    struct TrainerTowerFloor trainers[8];
     //u8 unk_ec0[40];
 }; // size = 0xf00
 
