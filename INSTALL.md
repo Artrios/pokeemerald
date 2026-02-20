@@ -395,7 +395,7 @@ If this works, then proceed to [Installation](#installation). Otherwise, ask for
 1. If pokeemerald is not already downloaded (some users may prefer to download pokeemerald via a git client like GitHub Desktop), run:
 
     ```bash
-    git clone https://github.com/pret/pokeemerald
+    git clone https://github.com/Youpileouf/pokeemerald/blob/pret_europe
     ```
 
     <details>
@@ -427,14 +427,14 @@ If this works, then proceed to [Installation](#installation). Otherwise, ask for
     cd agbcc
     git clean -fX
     ./build.sh
-    ./install.sh ../pokeemerald
+    ./install.sh ../../pokeemerald-pret_europe
     ```
 
 - **Otherwise**, if agbcc has been built before on the same terminal, run the following commands to install agbcc into pokeemerald:
 
     ```bash
     cd agbcc
-    ./install.sh ../pokeemerald
+    ./install.sh ../../pokeemerald-pret_europe
     ```
 
     <details>
@@ -453,7 +453,7 @@ Now you're ready to [build **pokeemerald**](#build-pokeemerald)
 ## Build pokeemerald
 If you aren't in the pokeemerald directory already, then **change directory** to the pokeemerald folder:
 ```bash
-cd pokeemerald
+cd pokeemerald-pret_europe
 ```
 To build **pokeemerald.gba** (Note: to speed up builds, see [Parallel builds](#parallel-builds)):
 ```bash
