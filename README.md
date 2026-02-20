@@ -1,6 +1,14 @@
 # Pokémon Emerald
 
-This is a decompilation of Pokémon Emerald.
+This is a decompilation of Pokémon Emerald that restores JAPANESE e-Reader functionnalities. This Multi-Language repo is based on two different projects :
+* AsparagusEduardo's pokeemerald-pret_europe for english, french, italian and spanish support. https://github.com/AsparagusEduardo/pokeemerald/tree/pret_europe
+* Paccy's pokeemerald multiboot-fix for japanese e-Reader restoration. https://github.com/Artrios/pokeemerald/tree/multiboot_fix
+
+By default this is building an english rom.
+To change language, edit the line 8 of the Makefile then save :
+* LANGUAGE    ?= FRENCH
+* LANGUAGE    ?= ITALIAN
+* LANGUAGE    ?= SPANISH
 
 It builds the following ROMs:
 
