@@ -557,7 +557,7 @@ bool8 ValidateTrainerHillData(struct EReaderTrainerTowerSet * hillSet)
     }
 
     // Validate checksum
-    checksum = CalcByteArraySum((u8 *)hillSet->trainers, numTrainers * sizeof(struct EReaderTrainerTowerSet));
+    checksum = CalcByteArraySum((u8 *)hillSet->trainers, numTrainers * sizeof(struct TrainerTowerFloor));
     if (checksum != hillSet->checksum)
         return FALSE;
 
