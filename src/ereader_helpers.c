@@ -193,7 +193,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speechBefore = { EC_WORD_ABSOLUTELY, EC_WORD_LIKE, EC_WORD_A_TINY_BIT, EC_MOVE2(BOUNCE), EC_WORD_EXCL_EXCL, EC_EMPTY_WORD },
                 .speechWin = { EC_WORD_WILL_BE_HERE, EC_WORD_NITWIT, EC_MOVE(FLY), EC_WORD_EXCL, EC_EMPTY_WORD, EC_EMPTY_WORD },
                 .speechLose = { EC_WORD_NITWIT, EC_MOVE2(FRUSTRATION), EC_WORD_CRIES, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
-                .speechAfter = { EC_WORD_NITWIT, EC_MOVE2(GRUDGE), EC_WORD_EXCL, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechAfter = { EC_WORD_NITWIT, EC_MOVE(GRUDGE), EC_WORD_EXCL, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
             #else //ENGLISH
                 .name = _("WILBUR"),
                 .facilityClass = FACILITY_CLASS_CAMPER,
