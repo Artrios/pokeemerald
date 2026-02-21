@@ -40,13 +40,13 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                 .speechLose = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_STRONG, EC_WORD_TRAINER, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
                 .speechAfter = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_NICE, EC_WORD_TRAINER, EC_WORD_ELLIPSIS, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
             #elif SPANISH
-                .name = _("LOUIS"),//translation needed, atm this is an english place-holder
+                .name = _("LUIS"),
                 .facilityClass = FACILITY_CLASS_YOUNGSTER,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_HEY, EC_WORD_EXCL, EC_EMPTY_WORD, EC_WORD_I_AM, EC_WORD_YOUR, EC_WORD_OPPONENT },//translation needed, atm this is an english place-holder
-                .speechWin = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_WEAK, EC_WORD_TRAINER, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
-                .speechLose = { EC_WORD_YOU_RE, EC_WORD_QUITE, EC_WORD_THE, EC_WORD_STRONG, EC_WORD_TRAINER, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
-                .speechAfter = { EC_WORD_YOU_RE, EC_WORD_A, EC_WORD_NICE, EC_WORD_TRAINER, EC_WORD_ELLIPSIS, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
+                .speechBefore = { EC_WORD_HEY_THERE, EC_WORD_AWFULLY, EC_WORD_ABSOLUTELY, EC_WORD_TOO_STRONG, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_EXCUSE, EC_WORD_WILL_BE_HERE, EC_WORD_DISAPPOINTED, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_EXCUSE_ME, EC_WORD_LET_S, EC_WORD_VERY, EC_WORD_APPROVED, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechAfter = { EC_WORD_DASH, EC_WORD_LET_S, EC_WORD_ANTICIPATION, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
             #else //ENGLISH
                 .name = _("LOUIS"),
                 .facilityClass = FACILITY_CLASS_YOUNGSTER,
@@ -153,13 +153,13 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                 .speechLose = { EC_WORD_BUT, EC_WORD_I, EC_WORD_BELIEVE, EC_WORD_I_WAS, EC_WORD_READY, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
                 .speechAfter = { EC_WORD_YOU, EC_WORD_COULD, EC_WORD_GET, EC_WORD_TO, EC_WORD_THE, EC_WORD_TOP },//translation needed, atm this is an english place-holder
             #elif SPANISH
-                .name = _("MIKAELA"),//translation needed, atm this is an english place-holder
+                .name = _("MICAELA"),
                 .facilityClass = FACILITY_CLASS_PARASOL_LADY,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_I, EC_WORD_LIKE, EC_WORD_THESE, EC_WORD_POKEMON, EC_WORD_EXCL, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
-                .speechWin = { EC_WORD_DID, EC_WORD_I, EC_WORD_SURPRISE, EC_WORD_YOU, EC_WORD_QUES, EC_EMPTY_WORD },//translation needed, atm this is an english place-holder
-                .speechLose = { EC_WORD_BUT, EC_WORD_I, EC_WORD_BELIEVE, EC_WORD_I_WAS, EC_WORD_READY, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
-                .speechAfter = { EC_WORD_YOU, EC_WORD_COULD, EC_WORD_GET, EC_WORD_TO, EC_WORD_THE, EC_WORD_TOP },//translation needed, atm this is an english place-holder
+                .speechBefore = { EC_WORD_ABSOLUTELY, EC_WORD_IT, EC_WORD_THESE, EC_WORD_POKEMON, EC_WORD_EXCL, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_HAVE, EC_WORD_HAS, EC_WORD_QUES, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_HEH, EC_WORD_BUT, EC_WORD_CAME, EC_WORD_DARN, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechAfter = { EC_WORD_TO_THEM, EC_WORD_FOR, EC_WORD_LISTEN, EC_WORD_AROUND, EC_WORD_SUPER, EC_WORD_EXCL },
             #else //ENGLISH
                 .name = _("MIKAELA"),
                 .facilityClass = FACILITY_CLASS_PARASOL_LADY,
@@ -281,13 +281,13 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                 .speechLose = { EC_WORD_THAT_S, EC_WORD_ENOUGH, EC_WORD_ELLIPSIS, EC_WORD_I_AM, EC_WORD_TIRED, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
                 .speechAfter = { EC_WORD_SEE_YA, EC_WORD_TOMORROW, EC_WORD_EXCL, EC_WORD_IT_S, EC_WORD_UNAVOIDABLE, EC_WORD_EXCL_EXCL },//translation needed, atm this is an english place-holder
             #elif SPANISH
-                .name = _("EITA"),//translation needed, atm this is an english place-holder
+                .name = _("EITA"),
                 .facilityClass = FACILITY_CLASS_NINJA_BOY,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_I, EC_WORD_WILL, EC_MOVE(CONSTRICT), EC_WORD_UNTIL, EC_WORD_I, EC_WORD_WIN },//translation needed, atm this is an english place-holder
-                .speechWin = { EC_WORD_I, EC_WORD_DIDN_T, EC_MOVE(CONSTRICT), EC_WORD_THAT, EC_WORD_HARD, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
-                .speechLose = { EC_WORD_THAT_S, EC_WORD_ENOUGH, EC_WORD_ELLIPSIS, EC_WORD_I_AM, EC_WORD_TIRED, EC_WORD_ELLIPSIS },//translation needed, atm this is an english place-holder
-                .speechAfter = { EC_WORD_SEE_YA, EC_WORD_TOMORROW, EC_WORD_EXCL, EC_WORD_IT_S, EC_WORD_UNAVOIDABLE, EC_WORD_EXCL_EXCL },//translation needed, atm this is an english place-holder
+                .speechBefore = { EC_WORD_WHERE, EC_WORD_OR, EC_WORD_LISTEN, EC_WORD_BE, EC_WORD_EVERY, EC_WORD_TOUGHNESS },
+                .speechWin = { EC_WORD_ARRGH, EC_WORD_VERY, EC_WORD_TOUGHNESS, EC_WORD_EXCL, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_UM, EC_WORD_EXCL, EC_WORD_WILL_BE_HERE, EC_WORD_DOWNCAST, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechAfter = { EC_WORD_TOMORROW, EC_WORD_ABSOLUTELY, EC_WORD_TOO_STRONG, EC_WORD_HERE_IT_IS, EC_EMPTY_WORD, EC_EMPTY_WORD },
             #else //ENGLISH
                 .name = _("EITA"),
                 .facilityClass = FACILITY_CLASS_NINJA_BOY,
@@ -395,13 +395,13 @@ static const struct TrainerHillFloor sFloors_JPDefault[] = {
                 .speechLose = { EC_WORD_HOW, EC_WORD_AWFUL, EC_WORD_EXCL, EC_WORD_I, EC_WORD_COULDN_T, EC_WORD_WIN },//translation needed, atm this is an english place-holder
                 .speechAfter = { EC_WORD_ELLIPSIS, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_WORD_I, EC_WORD_GIVE_UP, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
             #elif SPANISH
-                .name = _("ZARA"),//translation needed, atm this is an english place-holder
+                .name = _("SARA"),
                 .facilityClass = FACILITY_CLASS_BEAUTY,
                 .unused = TRUE,
-                .speechBefore = { EC_WORD_LET_S, EC_WORD_HAVE, EC_WORD_A, EC_WORD_REFRESHING, EC_WORD_BATTLE, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
-                .speechWin = { EC_WORD_REFRESHING, EC_WORD_QUES, EC_EMPTY_WORD, EC_WORD_MORE, EC_WORD_LIKE, EC_WORD_WEAK },//translation needed, atm this is an english place-holder
-                .speechLose = { EC_WORD_HOW, EC_WORD_AWFUL, EC_WORD_EXCL, EC_WORD_I, EC_WORD_COULDN_T, EC_WORD_WIN },//translation needed, atm this is an english place-holder
-                .speechAfter = { EC_WORD_ELLIPSIS, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_WORD_I, EC_WORD_GIVE_UP, EC_WORD_EXCL },//translation needed, atm this is an english place-holder
+                .speechBefore = { EC_WORD_SINCE, EC_WORD_FOR_NOW, EC_WORD_BATTLE, EC_WORD_BREAK, EC_WORD_EXCL, EC_EMPTY_WORD },
+                .speechWin = { EC_WORD_BREAK, EC_WORD_QUES, EC_WORD_LET_S, EC_WORD_SAD, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechLose = { EC_WORD_COUPLE , EC_WORD_WHERE, EC_WORD_WON, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
+                .speechAfter = { EC_WORD_APOLOGIZE, EC_WORD_SURRENDER, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD, EC_EMPTY_WORD },
             #else //ENGLISH
                 .name = _("ZARA"),
                 .facilityClass = FACILITY_CLASS_BEAUTY,
