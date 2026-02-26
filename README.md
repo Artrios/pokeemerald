@@ -10,6 +10,12 @@ To change language, edit the line 8 of the Makefile then save :
 * LANGUAGE    ?= ITALIAN
 * LANGUAGE    ?= SPANISH
 
+The e-cards can be found :
+* ENGLISH [here](https://github.com/Youpileouf/Pokemon-e-Cards-English)
+* FRENCH [here](https://github.com/Youpileouf/Pokemon-e-Cards-France)
+* ITALIAN work in progress
+* SPANISH work in progress
+
 It builds the following ROMs:
 
 * English: [**pokeemerald.gba**](https://datomatic.no-intro.org/index.php?page=show_record&s=23&n=1961) `sha1: f3ae088181bf583e55daf962a92bb46f4f1d07b7`
