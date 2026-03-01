@@ -1,6 +1,34 @@
-	.section .rodata
+    .section .rodata
 
-	.align 2
+    .align 2
 gMultiBootProgram_EReader_Start::
-	.incbin "data/mb_ereader.gba"
+    @ Select the e-Reader multiboot payload per LANGUAGE.
+    @ The Makefile passes one of these as a symbol via:
+    @   ASFLAGS += --defsym $(LANGUAGE)=1
+    @ where $(LANGUAGE) is ENGLISH / FRENCH / ITALIAN / SPANISH.
+    @
+    @ Expected files:
+    @   data/en/mb_ereader.gba
+    @   data/fr/mb_ereader.gba
+    @   data/it/mb_ereader.gba
+    @   data/es/mb_ereader.gba
+    @
+    .ifdef ENGLISH
+        .incbin "data/en/mb_ereader.gba"
+    .else
+        .ifdef FRENCH
+            .incbin "data/fr/mb_ereader.gba"
+        .else
+            .ifdef ITALIAN
+                .incbin "data/it/mb_ereader.gba"
+            .else
+                .ifdef SPANISH
+                    .incbin "data/es/mb_ereader.gba"
+                .else
+                    @ Fallback for unexpected configurations.
+                    .incbin "data/mb_ereader.gba"
+                .endif
+            .endif
+        .endif
+    .endif
 gMultiBootProgram_EReader_End::
