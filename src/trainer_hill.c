@@ -3,6 +3,7 @@
 #include "battle.h"
 #include "battle_tower.h"
 #include "battle_setup.h"
+#include "data.h"
 #include "ereader_helpers.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -362,12 +363,13 @@ static void SetUpDataStruct(void)
         // after the field 'challenge'.
         // e.g. for HILL_MODE_NORMAL, it will copy sChallenge_Normal to sHillData->challenge and
         // it will copy sFloors_Normal to sHillData->floors
-        if(ReadTrainerHillAndValidate())
+        if(ReadTrainerHillAndValidate()){
             TryReadTrainerHill(&sHillData->TrainerTowerSet);
-        else
+        }
+        else{
             CpuCopy32(sChallengeDataJP, &sHillData->TrainerTowerSet, sizeof(sHillData->TrainerTowerSet));
-        
-        TrainerHillDummy();
+            TrainerHillDummy();
+        }
     }
 }
 
@@ -562,18 +564,16 @@ static void GetInEReaderMode(void)
     {
         gSpecialVar_Result = 0;
     }
-    else if (gSaveBlock1Ptr->trainerHill.unused == sHillData->TrainerTowerSet.id)
+    else if ((gSaveBlock1Ptr->trainerHill.unused != sHillData->TrainerTowerSet.id) || ((gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0) && (!ReadTrainerHillAndValidate())))
     {
-        if (gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0 && !ReadTrainerHillAndValidate())
-        {
-            gSaveBlock1Ptr->trainerHill.maybeECardScanDuringChallenge = 1;
-            gSpecialVar_Result = 1;
+        gSaveBlock1Ptr->trainerHill.bestTime = 0;
+        gSaveBlock1Ptr->trainerHill.maybeECardScanDuringChallenge = 1;
+        gSpecialVar_Result = 1;
 
-            if (gMapHeader.mapLayoutId == LAYOUT_TRAINER_HILL_ENTRANCE)
-            {
-                gSaveBlock1Ptr->pos.x = 9;
-                gSaveBlock1Ptr->pos.y = 6;
-            }
+        if (gMapHeader.mapLayoutId == LAYOUT_TRAINER_HILL_ENTRANCE)
+        {
+            gSaveBlock1Ptr->pos.x = 9;
+            gSaveBlock1Ptr->pos.y = 6;
         }
     }
     else
@@ -622,34 +622,48 @@ static void TrainerHillDummy(void)
 
 void PrintOnTrainerHillRecordsWindow(void)
 {
-    s32 i, x, y;
+    s32 i, j, x, y;
     u32 total, minutes, secondsWhole, secondsFraction;
 
     SetUpDataStruct();
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
     x = GetStringCenterAlignXOffset(FONT_NORMAL, gText_TimeBoard, 0xD0);
-    AddTextPrinterParameterized3(0, FONT_NORMAL, x, 2, sRecordWinColors, TEXT_SKIP_DRAW, gText_TimeBoard);
+    AddTextPrinterParameterized3(0, FONT_NORMAL, x, 0, sRecordWinColors, TEXT_SKIP_DRAW, gText_TimeBoard);
 
-    y = 18;
-    for (i = 0; i < NUM_TRAINER_HILL_MODES; i++)
+    y = 13;
+    x = 16;
+    for (i = 0; i < sHillData->TrainerTowerSet.floors; i++)
     {
-        AddTextPrinterParameterized3(0, FONT_NORMAL, 0, y, sRecordWinColors, TEXT_SKIP_DRAW, sModeStrings[i]);
-        y += 15;
-        total = GetTimerValue(&gSaveBlock1Ptr->trainerHillTimes[i]);
-        minutes = total / (60 * 60);
-        total %= (60 * 60);
-        ConvertIntToDecimalStringN(gStringVar1, minutes, STR_CONV_MODE_RIGHT_ALIGN, 2);
-        secondsWhole = total / 60;
-        total %= 60;
-        ConvertIntToDecimalStringN(gStringVar2, secondsWhole, STR_CONV_MODE_RIGHT_ALIGN, 2);
-        secondsFraction = (total * 168) / 100;
-        ConvertIntToDecimalStringN(gStringVar3, secondsFraction, STR_CONV_MODE_LEADING_ZEROS, 2);
-        StringExpandPlaceholders(StringCopy(gStringVar4, gText_TimeCleared), gText_XMinYDotZSec);
-        x = GetStringRightAlignXOffset(FONT_NORMAL, gStringVar4, 0xD0);
-        AddTextPrinterParameterized3(0, FONT_NORMAL, x, y, sRecordWinColors, TEXT_SKIP_DRAW, gStringVar4);
-        y += 17;
+        AddTextPrinterParameterized3(0, FONT_NORMAL, x, y, sRecordWinColors, TEXT_SKIP_DRAW, sFloorStrings[i]);
+
+        for(j=0; j<2; j++)
+        {
+            if(gSaveBlock1Ptr->trainerHill.bestTime == 0){
+                AddTextPrinterParameterized3(0, FONT_NORMAL, x+20, y, sRecordWinColors, TEXT_SKIP_DRAW, gText_LeaderBoardTrainerClass);
+                AddTextPrinterParameterized3(0, FONT_NORMAL, x+112, y, sRecordWinColors, TEXT_SKIP_DRAW, gText_LeaderBoardTrainerName);
+            }
+            else{
+                AddTextPrinterParameterized3(0, FONT_NORMAL, x+20, y, sRecordWinColors, TEXT_SKIP_DRAW, gTrainerClassNames[gFacilityClassToTrainerClass[sHillData->TrainerTowerSet.trainers[i].trainers[j].facilityClass]]);
+                AddTextPrinterParameterized3(0, FONT_NORMAL, x+112, y, sRecordWinColors, TEXT_SKIP_DRAW, sHillData->TrainerTowerSet.trainers[i].trainers[j].name);
+            }
+            y += 13;
+        }
     }
 
+    AddTextPrinterParameterized3(0, FONT_NORMAL, 0, 119, sRecordWinColors, TEXT_SKIP_DRAW, gText_TimeCleared);
+    total = GetTimerValue(&gSaveBlock1Ptr->trainerHillTimes[sHillData->TrainerTowerSet.floors - 1]);
+    minutes = total / (60 * 60);
+    total %= (60 * 60);
+    ConvertIntToDecimalStringN(gStringVar1, minutes, STR_CONV_MODE_RIGHT_ALIGN, 2);
+    secondsWhole = total / 60;
+    total %= 60;
+    ConvertIntToDecimalStringN(gStringVar2, secondsWhole, STR_CONV_MODE_RIGHT_ALIGN, 2);
+    secondsFraction = (total * 168) / 100;
+    ConvertIntToDecimalStringN(gStringVar3, secondsFraction, STR_CONV_MODE_LEADING_ZEROS, 2);
+    StringExpandPlaceholders(gStringVar4, gText_XMinYDotZSec);
+    x = GetStringCenterAlignXOffset(FONT_NORMAL, gStringVar4, 0xD0);
+    AddTextPrinterParameterized3(0, FONT_NORMAL, x, 131, sRecordWinColors, TEXT_SKIP_DRAW, gStringVar4);
+    
     PutWindowTilemap(0);
     CopyWindowToVram(0, COPYWIN_FULL);
     FreeDataStruct();
@@ -706,14 +720,11 @@ bool32 LoadTrainerHillFloorObjectEventScripts(void)
 
     SetUpDataStruct();
 
-    if (gSaveBlock1Ptr->trainerHill.unused == sHillData->TrainerTowerSet.id)
+    if ((gSaveBlock1Ptr->trainerHill.unused != sHillData->TrainerTowerSet.id) || ((gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0) && (!ReadTrainerHillAndValidate())))
     {
-        if (gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0 && !ReadTrainerHillAndValidate())
-        {
-            CpuSet(0, gSaveBlock1Ptr->objectEventTemplates, 32); // Clear data
-            ClearAllObjectEvents();
-            result = FALSE;
-        }
+        CpuSet(0, gSaveBlock1Ptr->objectEventTemplates, 32); // Clear data
+        ClearAllObjectEvents();
+        result = FALSE;
     }
 
     FreeDataStruct();
@@ -748,13 +759,11 @@ void GenerateTrainerHillFloorLayout(u16 *mapArg)
 
     SetUpDataStruct();
 
-    if (gSaveBlock1Ptr->trainerHill.unused == sHillData->TrainerTowerSet.id)
+    if ((gSaveBlock1Ptr->trainerHill.unused != sHillData->TrainerTowerSet.id) || ((gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0) && (!ReadTrainerHillAndValidate())))
     {
-        if (gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0 && !ReadTrainerHillAndValidate()) {
-            RunOnLoadMapScript();
-            FreeDataStruct();
-            return;
-        }
+        RunOnLoadMapScript();
+        FreeDataStruct();
+        return;
     }
 
     if (mapId == TRAINER_HILL_ROOF)
