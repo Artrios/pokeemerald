@@ -338,8 +338,8 @@ TrainerHill_Entrance_Text_HopeYouGiveItYourBest:
 TrainerHill_Entrance_Text_MovedReceptionHereForSwitch:
 	.string "When the TRAINERS switch places,\n"
 	.string "the movement can be hectic.\p"
-	.string "To avoid the stampede, we moved\n"
-	.string "the reception counter here.\p"
+	.string "To avoid the stampede, we moved you\n"
+	.string "to the reception counter here.\p"
 	.string "I'm sorry for the inconvenience.$"
 
 TrainerHill_Entrance_Text_ThankYouForPlaying:
