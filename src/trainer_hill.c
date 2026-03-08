@@ -558,6 +558,8 @@ static void GetAllFloorsUsed(void)
 // Relation to E-Reader is an assumption, most dummied Trainer Hill code seems to be JP E-Reader mode related
 static void GetInEReaderMode(void)
 {
+    u8 i;
+
     SetUpDataStruct();
 
     if (gMapHeader.mapLayoutId == LAYOUT_TRAINER_HILL_ENTRANCE && VarGet(VAR_TRAINER_HILL_IS_ACTIVE) == 0)
@@ -567,6 +569,9 @@ static void GetInEReaderMode(void)
     else if ((gSaveBlock1Ptr->trainerHill.unused != sHillData->TrainerTowerSet.id) || ((gSaveBlock1Ptr->trainerHill.field_3D6E_0f == 0) && (!ReadTrainerHillAndValidate())))
     {
         gSaveBlock1Ptr->trainerHill.bestTime = 0;
+        for (i = 0; i < NUM_TRAINER_HILL_MODES; i++)
+            SetTimerValue(&gSaveBlock1Ptr->trainerHillTimes[i], HILL_MAX_TIME);
+            
         gSaveBlock1Ptr->trainerHill.maybeECardScanDuringChallenge = 1;
         gSpecialVar_Result = 1;
 
