@@ -56,9 +56,9 @@ TrainerHill_Entrance_Text_HopeYouGiveItYourBest:
 TrainerHill_Entrance_Text_MovedReceptionHereForSwitch:
 	.string "Ça peut être assez mouvementé\n"
 	.string "quand les DRESSEURS changent\p"
-	.string "de place. C’est pour ça qu’on est\n"
-	.string "installés ici.\p"
-	.string "Désolé pour ça.$"
+	.string "de place. C’est pour ça qu’on vous\n"
+	.string "a raccompagné à la réception.\p"
+	.string "Toutes nos excuses.$"
 
 TrainerHill_Entrance_Text_ThankYouForPlaying:
 	.string "Merci d’avoir participé!$"
