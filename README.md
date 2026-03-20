@@ -14,7 +14,7 @@ The e-cards can be found :
 * ENGLISH [here](https://github.com/Youpileouf/Pokemon-e-Cards-English)
 * FRENCH [here](https://github.com/Youpileouf/Pokemon-e-Cards-France)
 * ITALIAN work in progress
-* SPANISH work in progress
+* SPANISH [here](https://github.com/Youpileouf/Pokemon-e-Cards-Spanish)
 
 It builds the following ROMs:
 
