@@ -468,7 +468,7 @@ static void CheckFinalTime(void)
     else if (GetTimerValue(&gSaveBlock1Ptr->trainerHill.bestTime) > gSaveBlock1Ptr->trainerHill.timer)
     {
         SetTimerValue(&gSaveBlock1Ptr->trainerHill.bestTime, gSaveBlock1Ptr->trainerHill.timer);
-        gSaveBlock1Ptr->trainerHillTimes[gSaveBlock1Ptr->trainerHill.mode] = gSaveBlock1Ptr->trainerHill.bestTime;
+        gSaveBlock1Ptr->trainerHillTimes[sHillData->TrainerTowerSet.floors - 1] = gSaveBlock1Ptr->trainerHill.bestTime;
         gSpecialVar_Result = 0;
     }
     else
