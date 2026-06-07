@@ -33,6 +33,7 @@
 #include "overworld.h"
 #include "party_menu.h"
 #include "pokedex.h"
+#include "pokemon.h"
 #include "pokemon_storage_system.h"
 #include "pokemon_summary_screen.h"
 #include "wonder_news.h"
@@ -51,6 +52,7 @@
 
 #define LIST_MENU_TILE_NUM 10
 #define LIST_MENU_PAL_NUM 224
+#define TAG_SCROLL_ARROW 5112
 
 #define LETTER_IN_RANGE_UPPER(letter, range) \
     ((letter) >= sLetterSearchRanges[range][0]                                  \
@@ -344,6 +346,12 @@ static const struct ListMenuItem sListMenuItems_LevelsWanted[] = {
     { gText_Exit3,                LIST_CANCEL }
 };
 
+static const struct ListMenuItem sListMenuItems_GenderSelect[] = {
+    { gText_AnyLevel,     0 },
+    { gText_MaleSymbol,   1 },
+    { gText_FemaleSymbol, 2 }
+};
+
 static const struct ListMenuTemplate sListMenuTemplate_ThreeOptions = {
     .items = NULL,
     .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
@@ -494,6 +502,27 @@ static const struct ListMenuTemplate sListMenu_Levels = {
     .cursorKind = 0
 };
 
+static const struct ListMenuTemplate sListMenuTemplate_Genders = {
+    .items = sListMenuItems_GenderSelect,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+    .itemPrintFunc = NULL,
+    .totalItems = 3,
+    .maxShowed = 3,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = FONT_NORMAL,
+    .cursorKind = 0
+};
+
 static const struct ListMenuTemplate sListMenu_ReceiveSend = {
     .items = sListMenuItems_ReceiveSend,
     .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
@@ -546,8 +575,8 @@ static const u8 *const sUnusedMenuTexts[] = {
 ALIGNED(2) static const u8 sTextColors_TopMenu[]      = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,     TEXT_COLOR_DARK_GRAY };
 ALIGNED(2) static const u8 sTextColors_TopMenu_Copy[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,     TEXT_COLOR_DARK_GRAY };
 ALIGNED(2) static const u8 sGTS_Ereader_TextColor_2[]  = { TEXT_COLOR_WHITE,       TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY };
-ALIGNED(2) static const u8 sGTS_Ereader_Male[]  = { TEXT_COLOR_WHITE,       TEXT_COLOR_LIGHT_BLUE, TEXT_COLOR_BLUE };
-ALIGNED(2) static const u8 sGTS_Ereader_Female[]  = { TEXT_COLOR_WHITE,       TEXT_COLOR_LIGHT_RED, TEXT_COLOR_RED };
+ALIGNED(2) static const u8 sGTS_Ereader_Male[]  = { TEXT_COLOR_WHITE,       TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE };
+ALIGNED(2) static const u8 sGTS_Ereader_Female[]  = { TEXT_COLOR_WHITE,       TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED };
 
 // For scrolling search parameter
 #define MAX_SEARCH_PARAM_ON_SCREEN   6
@@ -1074,16 +1103,21 @@ static u16 UNUSED GetPokemonSpriteToDisplay(u16 species)
         return 0;
 }
 
-static u32 CreatePokedexMonSprite(u16 num, s16 x, s16 y)
+static u32 CreatePokedexMonSprite(u16 num, s16 x, s16 y, struct BoxPokemon *boxmon)
 {
     u8 i;
+    u8 spriteId;
 
     for (i = 0; i < MAX_MONS_ON_SCREEN; i++)
     {
         if (sGTSPokedexView->monSpriteIds[i] == 0xFFFF)
         {
-            u8 spriteId = CreateMonSpriteFromNationalDexNumber(num, x, y, i);
-
+            bool8 isShiny = GetBoxMonData(boxmon, MON_DATA_IS_SHINY, NULL);
+            if(isShiny)
+                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 1, TAG_NONE); //CreateMonSpriteFromNationalDexNumber(num, x, y, i);
+            else
+                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 2, TAG_NONE);
+            
             gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
             gSprites[spriteId].oam.priority = 3;
             gSprites[spriteId].data[0] = 0;
@@ -1174,7 +1208,7 @@ static void CreateMonSpritesAtPos(u16 selectedMon, u16 ignored)
         dexNum = sGTSPokedexView->searchResult[selectedMon-1].dexNum;//pokedexList[selectedMon - 1].dexNum;
     if (dexNum > SPECIES_NONE && dexNum < SPECIES_EGG)
     {
-        spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40);
+        spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40, &sGTSPokedexView->searchResult[selectedMon-1].boxmon);
         gSprites[spriteId].callback = SpriteCB_PokedexListMonSprite;
         gSprites[spriteId].data[5] = -32;
     }
@@ -1183,7 +1217,7 @@ static void CreateMonSpritesAtPos(u16 selectedMon, u16 ignored)
     dexNum = sGTSPokedexView->searchResult[selectedMon].dexNum;
     if (dexNum > SPECIES_NONE && dexNum < SPECIES_EGG)
     {
-        spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40);
+        spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40, &sGTSPokedexView->searchResult[selectedMon].boxmon);
         gSprites[spriteId].callback = SpriteCB_PokedexListMonSprite;
         gSprites[spriteId].data[5] = 0;
     }
@@ -1192,7 +1226,7 @@ static void CreateMonSpritesAtPos(u16 selectedMon, u16 ignored)
     dexNum = sGTSPokedexView->searchResult[selectedMon+1].dexNum;
     if (dexNum > SPECIES_NONE && dexNum < SPECIES_EGG)
     {
-        spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40);
+        spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40, &sGTSPokedexView->searchResult[selectedMon+1].boxmon);
         gSprites[spriteId].callback = SpriteCB_PokedexListMonSprite;
         gSprites[spriteId].data[5] = 32;
     }
@@ -1218,7 +1252,7 @@ static void CreateScrollingPokemonSprite(u8 direction, u16 selectedMon)
         dexNum = sGTSPokedexView->searchResult[selectedMon - 1].dexNum;
         if (dexNum > SPECIES_NONE && dexNum < SPECIES_EGG)
         {
-            spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40);
+            spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40, &sGTSPokedexView->searchResult[selectedMon-1].boxmon);
             gSprites[spriteId].callback = SpriteCB_PokedexListMonSprite;
             gSprites[spriteId].data[5] = -64;
         }
@@ -1231,7 +1265,7 @@ static void CreateScrollingPokemonSprite(u8 direction, u16 selectedMon)
         dexNum = sGTSPokedexView->searchResult[selectedMon + 1].dexNum;
         if (dexNum > SPECIES_NONE && dexNum < SPECIES_EGG)
         {
-            spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40);
+            spriteId = CreatePokedexMonSprite(dexNum, 0xB4, 0x40, &sGTSPokedexView->searchResult[selectedMon+1].boxmon);
             gSprites[spriteId].callback = SpriteCB_PokedexListMonSprite;
             gSprites[spriteId].data[5] = 64;
             DebugPrintf("%u", dexNum);
@@ -2471,7 +2505,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         DebugPrintf(pURL);
         //concat_str(pURL,"\0");
         recvBufSize=0x7C;
-        data->errorNum = maDownload(pURL, NULL, 0, (u8 *)sGTSPokedexView->searchResult, recvBufSize, &pRecvSize, "", "");
+        data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
         //(u8 *)sGTSPokedexView->searchResult[0].checksum=pRecvData
         DebugPrintf("a");
         if(data->errorNum !=0){
@@ -2500,7 +2534,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         }
         else if(pRecvSize==0x7C){
             DebugPrintf("d");
-            //memcpy(&sGTSPokedexView->searchResult[0].boxmon.personality,&pRecvData,80);
+            memcpy(&sGTSPokedexView->searchResult[0].boxmon.personality,&pRecvData,80);
             memcpy(&gEnemyParty[1].box,&sGTSPokedexView->searchResult[0].boxmon,80);
             data->state = GTS_RECEIVE_POKEMON;
             break;
@@ -2920,6 +2954,8 @@ static void Task_GlobalTradeStation(u8 taskId)
         CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
 
         GTSAddWantedToWindow1(0);
+        sGTSPokedexView->scrollDirection = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_LEFT, 72, 152, 208, sGTSPokedexView->pokemonListCount - 1,
+                                                                               TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sGTSPokedexView->selectedPokemon);
         data->state = GTS_STATE_SELECT_FETCHED_POKEMON;
         break;
     case GTS_STATE_SELECT_FETCHED_POKEMON: //sGTSPokedexView->pokedexList[0] TODO
@@ -3027,6 +3063,7 @@ static void Task_GlobalTradeStation(u8 taskId)
                 memcpy(&sGTSPokedexView->searchResult[1].boxmon,&sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].boxmon,80);
                 BoxMonToMon(&sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].boxmon, &gEnemyParty[1]);
                 sGTSPokedexView->searchResult[1].pid=sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].pid;
+                sGTSPokedexView->searchResult[1].checksum=sGTSPokedexView->searchResult[1].pid;
                 DebugPrintf("%u\n",sGTSPokedexView->selectedPokemon);
                 DebugPrintf("%u\n",sGTSPokedexView->searchResult[1].pid);
                 DebugPrintf("%u\n",sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].pid);

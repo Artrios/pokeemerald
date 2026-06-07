@@ -85,7 +85,7 @@ static void LoadPicPaletteByTagOrSlot(u16 species, bool8 isShiny, u32 personalit
         else
         {
             sCreatingSpriteTemplate.paletteTag = paletteTag;
-            LoadCompressedSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality), species);
+            LoadCompressedSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality), paletteTag);
         }
     }
     else
