@@ -3019,6 +3019,7 @@ static void Task_GlobalTradeStation(u8 taskId)
             sGTSPokedexView->selectedPokemon = TryDoGTSSpriteScroll(sGTSPokedexView->selectedPokemon, 0xE);
             if(sGTSPokedexView->selectedPokemon>=1000){
                 sGTSPokedexView->selectedPokemon=sGTSPokedexView->selectedPokemon-1000;
+                RemoveScrollIndicatorArrowPair(sGTSPokedexView->atTop);
                 data->state = GTS_STATE_TRADE_WITH_THIS_PERSON;
                 break;
             }
@@ -3069,6 +3070,8 @@ static void Task_GlobalTradeStation(u8 taskId)
             break;
         case 1: // No
         case MENU_B_PRESSED:
+            sGTSPokedexView->atTop = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_LEFT, 72, 152, 208, sGTSPokedexView->pokemonListCount,
+                                                                               TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sGTSPokedexView->selectedPokemon);
             data->state = GTS_STATE_SELECT_FETCHED_POKEMON;
             break;
         }
