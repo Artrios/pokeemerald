@@ -3374,6 +3374,7 @@ extern const u8 gText_GlobalTradeStation[];
 extern const u8 gText_SearchPokemon[];
 extern const u8 gText_PokemonWillBeSent[];
 extern const u8 gText_ChooseGTSPokemon[];
+extern const u8 gText_ChooseGTSPokemonGender[];
 extern const u8 gText_ChooseGTSPokemonLevel[];
 extern const u8 gText_AnyLevel[];
 extern const u8 gText_UnderLevel10[];

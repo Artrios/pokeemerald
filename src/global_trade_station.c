@@ -2231,6 +2231,7 @@ enum {
     GTS_STATE_SEEKING,
     GTS_STATE_SEARCH_POKEMON,
     GTS_STATE_SEARCH_POKEMON_LIST,
+    GTS_STATE_SEARCH_POKEMON_GENDER,
     GTS_STATE_SEARCH_POKEMON_LEVEL_LIST,
     GTS_STATE_FETCHING_POKEMON,
     GTS_STATE_FETCHED_POKEMON_SETUP,
@@ -2720,7 +2721,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         sGTSPokedexView->selectedPokemon = TryDoPokedexScrollGTS(sGTSPokedexView->selectedPokemon);
         if (JOY_NEW(A_BUTTON))
         {
-            data->state = GTS_STATE_SEARCH_POKEMON_LEVEL_LIST;
+            data->state = GTS_STATE_SEARCH_POKEMON_GENDER;
             FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 80, 80);
             CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
             //ClearStdWindowAndFrame(3, FALSE);
@@ -2734,6 +2735,45 @@ static void Task_GlobalTradeStation(u8 taskId)
             //RemoveWindow(0);
         }
         break;
+    case GTS_STATE_SEARCH_POKEMON_GENDER:
+        sGTSPokedexView->dexOrder = DoGTSListMenu(&sWindowTemplate_ThreeOptions, &sListMenuTemplate_Genders, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+        if (sGTSPokedexView->dexOrder == LIST_CANCEL) {
+            DebugPrintf("Go back to GTS_STATE_SEEKING");
+            PlaySE(SE_SELECT);
+            ResetPokedexViewGTS(sGTSPokedexView);
+            sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect); //Add Pokemon list box (empty for now)
+            FillWindowPixelBuffer(sGTSPokedexView->windowid, 0x11);
+            sGTSPokedexView->dexOrder = 0;
+            data->textState = 0;
+            data->state = GTS_STATE_SEEKING;
+        }
+        else if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemonGender))
+        {
+            if(sGTSPokedexView->dexOrder==1){
+                sGTSPokedexView->dexOrder=0;
+            }
+            else if(sGTSPokedexView->dexOrder==2){
+                sGTSPokedexView->dexOrder=0xFE;
+            }
+            else{
+                sGTSPokedexView->dexOrder=0xFF;
+            }
+            //GetMonData(mon, MON_DATA_NICKNAME, name);
+            StringCopy_Nickname(gStringVar1, gPlayerParty[sGTSPokedexView->offerPokemon].box.nickname);
+            StringCopy(gStringVar2, GetSpeciesName(sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum));
+            sGTSPokedexView->cursorRelPos = 0;
+            sGTSPokedexView->atTop = 1;
+            sGTSPokedexView->atBottom = 0;
+            //sGTSPokedexView->selectedPokemon = 0;
+            sGTSPokedexView->pokemonListCount = 0;
+            sGTSPokedexView->scrollTimer = 0;
+            sGTSPokedexView->maxScrollTimer = 0;
+            sGTSPokedexView->scrollMonIncrement = 0;
+            sGTSPokedexView->scrollDirection = 0;
+            data->state = GTS_STATE_SEARCH_POKEMON_LEVEL_LIST;
+            //RemoveWindow(sGTSPokedexView->windowid);
+        }
+        break;
     case GTS_STATE_SEARCH_POKEMON_LEVEL_LIST:
        sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_LevelSelect, &sListMenu_Levels, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
        if (sGTSPokedexView->dexMode == LIST_CANCEL) {
@@ -2744,7 +2784,7 @@ static void Task_GlobalTradeStation(u8 taskId)
             FillWindowPixelBuffer(sGTSPokedexView->windowid, 0x11);
             sGTSPokedexView->dexMode = 0;
             data->textState = 0;
-            data->state = GTS_STATE_SEEK_SETUP;
+            data->state = GTS_STATE_SEARCH_POKEMON_GENDER;
         }
         else if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemonLevel))
         {
@@ -2814,7 +2854,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         DebugPrintf("%u",sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum);
         searchpoke->dexNum=GET_BASE_SPECIES_ID(sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum);
         DebugPrintf("2639");
-        searchpoke->gender=0;
+        searchpoke->gender=sGTSPokedexView->dexOrder;
         DebugPrintf("2628");
         switch(sGTSPokedexView->dexMode)
         {

@@ -1827,6 +1827,7 @@ ALIGNED(4) const u8 gText_PickPokemonOKCancel[] = _("{DPAD_LEFTRIGHT}Pick {A_BUT
 ALIGNED(4) const u8 gText_GlobalTradeStation[] = _("Global Trade Station");
 ALIGNED(4) const u8 gText_PokemonWillBeSent[] = _("{STR_VAR_1} will be deposited.");
 ALIGNED(4) const u8 gText_ChooseGTSPokemon[] = _("Please choose the Pokémon you want.");
+ALIGNED(4) const u8 gText_ChooseGTSPokemonGender[] = _("Please choose the gender.");
 ALIGNED(4) const u8 gText_ChooseGTSPokemonLevel[] = _("Please choose the level.");
 const u8 gText_PlayersBattleResults[] = _("{PLAYER}'s battle results");
 const u8 gText_TotalRecordWLD[] = _("Total record W:{STR_VAR_1} L:{STR_VAR_2} D:{STR_VAR_3}");

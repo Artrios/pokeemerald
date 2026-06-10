@@ -55,7 +55,7 @@ struct GTSPokedexView
     u16 offerPokemon;
     s16 dexMode;
     u16 windowid;
-    u16 dexOrder;
+    s16 dexOrder;
     u16 monSpriteIds[MAX_MONS_ON_SCREEN];
     u16 cursorRelPos;
     u8 atTop;
