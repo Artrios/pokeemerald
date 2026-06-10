@@ -635,6 +635,20 @@ static const struct SearchOptionText sDexSearchNameOptions[] =
     {},
 };
 
+struct ScrollIndicatorPair
+{
+    u8 field_0;
+    u16 *scrollOffset;
+    u16 fullyUpThreshold;
+    u16 fullyDownThreshold;
+    u8 topSpriteId;
+    u8 bottomSpriteId;
+    u16 tileTag;
+    u16 palTag;
+};
+
+static const u16 sBlueInterface_Pal[]    = INCBIN_U16("graphics/interface/blue.gbapal"); 
+
 static void UNUSED PrintSearchText(const u8 *str, u32 x, u32 y)
 {
     u8 color[3];
@@ -1114,9 +1128,9 @@ static u32 CreatePokedexMonSprite(u16 num, s16 x, s16 y, struct BoxPokemon *boxm
         {
             bool8 isShiny = GetBoxMonData(boxmon, MON_DATA_IS_SHINY, NULL);
             if(isShiny)
-                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 1, TAG_NONE); //CreateMonSpriteFromNationalDexNumber(num, x, y, i);
+                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 2, TAG_NONE); //CreateMonSpriteFromNationalDexNumber(num, x, y, i);
             else
-                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 2, TAG_NONE);
+                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 3, TAG_NONE);
             
             gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
             gSprites[spriteId].oam.priority = 3;
@@ -1297,7 +1311,7 @@ static u16 TryDoGTSSpriteScroll(u16 selectedMon, u16 ignored)
         return (selectedMon+500);
     }
 
-    if (JOY_NEW(DPAD_LEFT) && (selectedMon > 0))
+    if (JOY_HELD(DPAD_LEFT) && (selectedMon > 0) && sGTSPokedexView->scrollTimer == 0)
     {
         scrollDir = 1;
         selectedMon = GetNextPosition(1, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
@@ -1305,7 +1319,7 @@ static u16 TryDoGTSSpriteScroll(u16 selectedMon, u16 ignored)
         //CreateMonListEntry(1, selectedMon, ignored);
         PlaySE(SE_DEX_SCROLL);
     }
-    else if (JOY_NEW(DPAD_RIGHT) && (selectedMon < sGTSPokedexView->pokemonListCount - 1))
+    else if (JOY_HELD(DPAD_RIGHT) && (selectedMon < sGTSPokedexView->pokemonListCount - 1) && sGTSPokedexView->scrollTimer == 0)
     {
         scrollDir = 2;
         selectedMon = GetNextPosition(0, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
@@ -2954,8 +2968,10 @@ static void Task_GlobalTradeStation(u8 taskId)
         CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
 
         GTSAddWantedToWindow1(0);
-        sGTSPokedexView->scrollDirection = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_LEFT, 72, 152, 208, sGTSPokedexView->pokemonListCount - 1,
+        sGTSPokedexView->atTop = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_LEFT, 72, 152, 208, sGTSPokedexView->pokemonListCount,
                                                                                TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sGTSPokedexView->selectedPokemon);
+
+        LoadPalette(sBlueInterface_Pal, OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
         data->state = GTS_STATE_SELECT_FETCHED_POKEMON;
         break;
     case GTS_STATE_SELECT_FETCHED_POKEMON: //sGTSPokedexView->pokedexList[0] TODO
@@ -2971,6 +2987,28 @@ static void Task_GlobalTradeStation(u8 taskId)
                 sGTSPokedexView->selectedPokemon=sGTSPokedexView->selectedPokemon-500;
                 data->state = GTS_STATE_CANCEL_SEARCH;
                 break;
+            }
+
+            struct ScrollIndicatorPair *arrowdata = (void *) gTasks[sGTSPokedexView->atTop].data;
+            if(sGTSPokedexView->currentPage == 0){
+                if (sGTSPokedexView->selectedPokemon == 6)
+                    gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 1;
+                else if(sGTSPokedexView->selectedPokemon == 0)
+                    gSprites[arrowdata->topSpriteId].invisible = TRUE;
+                else{
+                    gSprites[arrowdata->topSpriteId].oam.paletteNum = 0;
+                    gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 0;
+                }
+            }
+            else{
+                if (sGTSPokedexView->selectedPokemon == 6)
+                    gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 1;
+                else if(sGTSPokedexView->selectedPokemon == 0)
+                    gSprites[arrowdata->topSpriteId].oam.paletteNum = 1;
+                else{
+                    gSprites[arrowdata->topSpriteId].oam.paletteNum = 0;
+                    gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 0;
+                }
             }
             
             j=FALSE;
