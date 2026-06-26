@@ -1311,7 +1311,15 @@ static u16 TryDoGTSSpriteScroll(u16 selectedMon, u16 ignored)
         return (selectedMon+500);
     }
 
-    if (JOY_HELD(DPAD_LEFT) && (selectedMon > 0) && sGTSPokedexView->scrollTimer == 0)
+    if (JOY_NEW(DPAD_RIGHT) && (selectedMon == 6) && sGTSPokedexView->scrollTimer == 0){
+        PlaySE(SE_DEX_SCROLL);
+        return 7;
+    }
+    else if (JOY_NEW(DPAD_LEFT) && (selectedMon == 0) && sGTSPokedexView->scrollTimer == 0 && sGTSPokedexView->currentPage != 0){
+        PlaySE(SE_DEX_SCROLL);
+        return 8;
+    }
+    else if (JOY_HELD(DPAD_LEFT) && (selectedMon > 0) && sGTSPokedexView->scrollTimer == 0)
     {
         scrollDir = 1;
         selectedMon = GetNextPosition(1, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
@@ -1432,6 +1440,14 @@ static bool8 UpdateDexListScrollSprites(u8 direction, u8 monMoveIncrement, u8 sc
         SetGpuReg(REG_OFFSET_BG2VOFS, sGTSPokedexView->initialVOffset + sGTSPokedexView->listVOffset * LIST_SCROLL_STEP);
         return TRUE;
     }
+}
+
+void ZeroSearchResults(struct GTSResult *searchResults)
+{
+    u8 *raw = (u8 *)searchResults;
+    u32 i;
+    for (i = 0; i < sizeof(struct GTSResult); i++)
+        raw[i] = 0;
 }
 
 static void VBlankCB_MysteryGiftEReader(void)
@@ -1711,7 +1727,7 @@ bool32 PrintGTSMenuMessage(u8 *textState, const u8 *str)
             (*textState)++;
         if (({JOY_NEW(B_BUTTON);}))
             //(*textState)==3;
-            return TRUE;
+            return FALSE;
         break;
     case 2:
         DrawDownArrow(1, DOWN_ARROW_X, DOWN_ARROW_Y, 1, TRUE, &sDownArrowCounterAndYCoordIdx[0], &sDownArrowCounterAndYCoordIdx[1]);
@@ -2721,6 +2737,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         sGTSPokedexView->selectedPokemon = TryDoPokedexScrollGTS(sGTSPokedexView->selectedPokemon);
         if (JOY_NEW(A_BUTTON))
         {
+            sGTSPokedexView->selectedPokemon=GET_BASE_SPECIES_ID(sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum);
             data->state = GTS_STATE_SEARCH_POKEMON_GENDER;
             FillWindowPixelRect(sGTSPokedexView->windowid, PIXEL_FILL(1), 0, 0, 80, 80);
             CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
@@ -2736,23 +2753,24 @@ static void Task_GlobalTradeStation(u8 taskId)
         }
         break;
     case GTS_STATE_SEARCH_POKEMON_GENDER:
-        sGTSPokedexView->dexOrder = DoGTSListMenu(&sWindowTemplate_ThreeOptions, &sListMenuTemplate_Genders, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
-        if (sGTSPokedexView->dexOrder == LIST_CANCEL) {
-            DebugPrintf("Go back to GTS_STATE_SEEKING");
+        //sGTSPokedexView->dexOrder;
+        s32 result = DoGTSListMenu(&sWindowTemplate_ThreeOptions, &sListMenuTemplate_Genders, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+        if (result == LIST_CANCEL) {
+            DebugPrintf("Go back to GTS_STATE_SEEK_SETUP");
             PlaySE(SE_SELECT);
             ResetPokedexViewGTS(sGTSPokedexView);
             sGTSPokedexView->windowid = AddWindow(&sWindowTemplate_PokemonSelect); //Add Pokemon list box (empty for now)
             FillWindowPixelBuffer(sGTSPokedexView->windowid, 0x11);
             sGTSPokedexView->dexOrder = 0;
             data->textState = 0;
-            data->state = GTS_STATE_SEEKING;
+            data->state = GTS_STATE_SEEK_SETUP;
         }
         else if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemonGender))
         {
-            if(sGTSPokedexView->dexOrder==1){
+            if(result==1){
                 sGTSPokedexView->dexOrder=0;
             }
-            else if(sGTSPokedexView->dexOrder==2){
+            else if(result==2){
                 sGTSPokedexView->dexOrder=0xFE;
             }
             else{
@@ -2776,6 +2794,8 @@ static void Task_GlobalTradeStation(u8 taskId)
         break;
     case GTS_STATE_SEARCH_POKEMON_LEVEL_LIST:
        sGTSPokedexView->dexMode = DoGTSListMenu(&sWindowTemplate_LevelSelect, &sListMenu_Levels, 1, LIST_MENU_TILE_NUM, LIST_MENU_PAL_NUM);
+       DebugPrintf("Hola");
+       DebugPrintf("%d",sGTSPokedexView->dexMode);
        if (sGTSPokedexView->dexMode == LIST_CANCEL) {
             PlaySE(SE_SELECT);
             //BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
@@ -2788,6 +2808,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         }
         else if (PrintGTSMenuMessage(&data->textState, gText_ChooseGTSPokemonLevel))
         {
+            DebugPrintf("%d",sGTSPokedexView->dexMode);
             //GetMonData(mon, MON_DATA_NICKNAME, name);
             StringCopy_Nickname(gStringVar1, gPlayerParty[sGTSPokedexView->offerPokemon].box.nickname);
             StringCopy(gStringVar2, GetSpeciesName(sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum));
@@ -2800,16 +2821,18 @@ static void Task_GlobalTradeStation(u8 taskId)
             sGTSPokedexView->maxScrollTimer = 0;
             sGTSPokedexView->scrollMonIncrement = 0;
             sGTSPokedexView->scrollDirection = 0;
+            sGTSPokedexView->currentPage = 0;
             data->state = GTS_STATE_FETCHING_POKEMON;
             //RemoveWindow(sGTSPokedexView->windowid);
         }
         break;
     case GTS_STATE_FETCHING_POKEMON: //Done
         GTSAddTextPrinterToWindow1(gText_Communicating);
-
+        DebugPrintf("GTS_STATE_FETCHING_POKEMON");
         struct GTSSearch *searchpoke = NULL;
         searchpoke = AllocZeroed(sizeof(struct GTSSearch));
 
+        
         recvBufSize=32;
         concat_str(pURL,"http://www.PutYourDomainHere.com/pokemonrse/worldexchange/search?pid=\0");
 
@@ -2819,7 +2842,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         //Add PID to URL
         concat_str(pURL,(char *)pidhex);
         DebugPrintf("Buffed");
-
+        DebugPrintf(pURL);
         //Initial Profile Setup
         data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
         if(data->errorNum !=0){
@@ -2846,16 +2869,11 @@ static void Task_GlobalTradeStation(u8 taskId)
             pidhex[2]='\0';
             concat_str(pURL,(char *)pidhex);
         }
-        DebugPrintf("2634");
-        recvBufSize=0x78*7;
-        DebugPrintf("2636");
+        recvBufSize=0x7C*7;
+        
         //concat_str(pURL,hash);
-        DebugPrintf("%u",sGTSPokedexView->selectedPokemon);
-        DebugPrintf("%u",sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum);
-        searchpoke->dexNum=GET_BASE_SPECIES_ID(sGTSPokedexView->pokedexList[sGTSPokedexView->selectedPokemon].dexNum);
-        DebugPrintf("2639");
+        searchpoke->dexNum=sGTSPokedexView->selectedPokemon;
         searchpoke->gender=sGTSPokedexView->dexOrder;
-        DebugPrintf("2628");
         switch(sGTSPokedexView->dexMode)
         {
             case 0:
@@ -2905,7 +2923,8 @@ static void Task_GlobalTradeStation(u8 taskId)
         }
 
         concat_str(pURL,"&data=");
-
+        searchpoke->country=0;
+        searchpoke->pageNum=sGTSPokedexView->currentPage;
         searchpoke->checksum=0;
         searchpoke->checksum=encrypt_data(gSaveBlock2Ptr->PID, (char *)searchpoke, sizeof(struct GTSSearch));
         DebugPrintf("%u",searchpoke->checksum);
@@ -2932,23 +2951,8 @@ static void Task_GlobalTradeStation(u8 taskId)
             break;
         }
         DebugPrintf("Buffed3");
-        sGTSPokedexView->pokemonListCount=pRecvSize/0x78;
+        sGTSPokedexView->pokemonListCount=pRecvSize/0x7C;
         DebugPrintf("%u",sGTSPokedexView->pokemonListCount);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].country);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].region);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].trainerClass);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].isExchanged);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].gameVersion);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].romHackID);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].romHackVersion);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[0].language);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].checksum);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].pid);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].dexNum);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].gender);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].level);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].natDexRequest);
-        DebugPrintf("%u",sGTSPokedexView->searchResult[1].genderRequest);
         Free(searchpoke);
         data->state = GTS_STATE_FETCHED_POKEMON_SETUP;
         break;
@@ -3017,7 +3021,60 @@ static void Task_GlobalTradeStation(u8 taskId)
     case GTS_STATE_SELECT_FETCHED_POKEMON: //sGTSPokedexView->pokedexList[0] TODO
         if (j) {
             sGTSPokedexView->selectedPokemon = TryDoGTSSpriteScroll(sGTSPokedexView->selectedPokemon, 0xE);
-            if(sGTSPokedexView->selectedPokemon>=1000){
+            if(sGTSPokedexView->selectedPokemon==7){
+                u8 monId;
+                sGTSPokedexView->currentPage=sGTSPokedexView->currentPage+1;
+                RemoveScrollIndicatorArrowPair(sGTSPokedexView->atTop);
+                sGTSPokedexView->cursorRelPos = 0;
+                sGTSPokedexView->atTop = 1;
+                sGTSPokedexView->atBottom = 0;
+                //sGTSPokedexView->selectedPokemon = 0;
+                sGTSPokedexView->pokemonListCount = 0;
+                sGTSPokedexView->scrollTimer = 0;
+                sGTSPokedexView->maxScrollTimer = 0;
+                sGTSPokedexView->scrollMonIncrement = 0;
+                sGTSPokedexView->scrollDirection = 0;
+                sGTSPokedexView->selectedPokemon = sGTSPokedexView->searchResult[0].dexNum;
+                DebugPrintf("here");
+                DebugPrintf("%u",sGTSPokedexView->selectedPokemon);
+                DebugPrintf("%u",sGTSPokedexView->selectedPokemon);
+                for(monId=0; monId < MAX_MONS_ON_SCREEN;monId++){
+                    FreeAndDestroyMonPicSprite(sGTSPokedexView->monSpriteIds[monId]);
+                    sGTSPokedexView->monSpriteIds[monId] = 0xFFFF;
+                }
+                for(monId=0; monId < 7;monId++){
+                    ZeroSearchResults(&sGTSPokedexView->searchResult[monId]);
+                }
+                ClearStdWindowAndFrame(sGTSPokedexView->windowid, FALSE);
+                data->state = GTS_STATE_FETCHING_POKEMON;
+                break;
+            }
+            else if (sGTSPokedexView->selectedPokemon==8){
+                u8 monId;
+                sGTSPokedexView->currentPage=sGTSPokedexView->currentPage-1;
+                RemoveScrollIndicatorArrowPair(sGTSPokedexView->atTop);
+                sGTSPokedexView->cursorRelPos = 0;
+                sGTSPokedexView->atTop = 1;
+                sGTSPokedexView->atBottom = 0;
+                //sGTSPokedexView->selectedPokemon = 0;
+                sGTSPokedexView->pokemonListCount = 0;
+                sGTSPokedexView->scrollTimer = 0;
+                sGTSPokedexView->maxScrollTimer = 0;
+                sGTSPokedexView->scrollMonIncrement = 0;
+                sGTSPokedexView->scrollDirection = 0;
+                sGTSPokedexView->selectedPokemon = sGTSPokedexView->searchResult[0].dexNum;
+                for(monId=0; monId < MAX_MONS_ON_SCREEN;monId++){
+                    FreeAndDestroyMonPicSprite(sGTSPokedexView->monSpriteIds[monId]);
+                    sGTSPokedexView->monSpriteIds[monId] = 0xFFFF;
+                }
+                for(monId=0; monId < 7;monId++){
+                    ZeroSearchResults(&sGTSPokedexView->searchResult[monId]);
+                }
+                ClearStdWindowAndFrame(sGTSPokedexView->windowid, FALSE);
+                data->state = GTS_STATE_FETCHING_POKEMON;
+                break;
+            }
+            else if(sGTSPokedexView->selectedPokemon>=1000){
                 sGTSPokedexView->selectedPokemon=sGTSPokedexView->selectedPokemon-1000;
                 RemoveScrollIndicatorArrowPair(sGTSPokedexView->atTop);
                 data->state = GTS_STATE_TRADE_WITH_THIS_PERSON;
@@ -3030,10 +3087,13 @@ static void Task_GlobalTradeStation(u8 taskId)
                 break;
             }
 
+            /*
             struct ScrollIndicatorPair *arrowdata = (void *) gTasks[sGTSPokedexView->atTop].data;
             if(sGTSPokedexView->currentPage == 0){
                 if (sGTSPokedexView->selectedPokemon == 6)
                     gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 1;
+                else if(sGTSPokedexView->selectedPokemon == sGTSPokedexView->pokemonListCount-1)
+                    gSprites[arrowdata->bottomSpriteId].invisible = TRUE;
                 else if(sGTSPokedexView->selectedPokemon == 0)
                     gSprites[arrowdata->topSpriteId].invisible = TRUE;
                 else{
@@ -3042,15 +3102,18 @@ static void Task_GlobalTradeStation(u8 taskId)
                 }
             }
             else{
+                gSprites[arrowdata->topSpriteId].invisible = FALSE;
                 if (sGTSPokedexView->selectedPokemon == 6)
                     gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 1;
+                else if(sGTSPokedexView->selectedPokemon == sGTSPokedexView->pokemonListCount-1)
+                    gSprites[arrowdata->bottomSpriteId].invisible = TRUE;
                 else if(sGTSPokedexView->selectedPokemon == 0)
                     gSprites[arrowdata->topSpriteId].oam.paletteNum = 1;
                 else{
                     gSprites[arrowdata->topSpriteId].oam.paletteNum = 0;
                     gSprites[arrowdata->bottomSpriteId].oam.paletteNum = 0;
                 }
-            }
+            }*/
             
             j=FALSE;
         }

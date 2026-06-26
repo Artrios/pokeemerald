@@ -81,6 +81,8 @@ struct GTSSearch
     u8 gender;                  //6
     u8 minLevel;                //7
     u8 maxLevel;                //8
+    u8 country;                //9
+    u8 pageNum;                //10
 };
 
 //extern EWRAM_DATA struct GTSPokedexView *sGTSPokedexView;

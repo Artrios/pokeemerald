@@ -12,6 +12,7 @@
 #include "strings.h"
 #include "sound.h"
 #include "constants/songs.h"
+#include "global_trade_station.h"
 
 // Cursors after this point are created using a sprite with their own task.
 // This allows them to have idle animations. Cursors prior to this are simply printed text.
@@ -75,6 +76,7 @@ static void ListMenuDrawCursor(struct ListMenu *list);
 static void ListMenuCallSelectionChangedCallback(struct ListMenu *list, u8 onInit);
 static u8 ListMenuAddCursorObject(struct ListMenu *list, u32 cursorObjId);
 static void Task_ScrollIndicatorArrowPair(u8 taskId);
+static void Task_ScrollIndicatorArrowPairGTS(u8 taskId);
 static u8 ListMenuAddRedOutlineCursorObject(struct CursorStruct *cursor);
 static u8 ListMenuAddRedArrowCursorObject(struct CursorStruct *cursor);
 static void ListMenuUpdateRedOutlineCursorObject(u8 taskId, u16 x, u16 y);
@@ -96,6 +98,7 @@ static EWRAM_DATA struct {
 } sMysteryGiftLinkMenu = {0};
 
 EWRAM_DATA struct ScrollArrowsTemplate gTempScrollArrowTemplate = {0};
+extern EWRAM_DATA struct GTSPokedexView *sGTSPokedexView;
 
 // IWRAM common
 struct {
@@ -1175,7 +1178,11 @@ u8 AddScrollIndicatorArrowPair(const struct ScrollArrowsTemplate *arrowInfo, u16
         LoadSpritePalette(&spritePal);
     }
 
-    taskId = CreateTask(Task_ScrollIndicatorArrowPair, 0);
+    if(arrowInfo->firstX==152 && arrowInfo->secondX==208)
+        taskId = CreateTask(Task_ScrollIndicatorArrowPairGTS, 0);
+    else
+        taskId = CreateTask(Task_ScrollIndicatorArrowPair, 0);
+
     data = (void *) gTasks[taskId].data;
 
     data->field_0 = 0;
@@ -1224,6 +1231,45 @@ u8 AddScrollIndicatorArrowPairParameterized(u32 arrowType, s32 commonPos, s32 fi
     gTempScrollArrowTemplate.palNum = 0;
 
     return AddScrollIndicatorArrowPair(&gTempScrollArrowTemplate, scrollOffset);
+}
+
+static void Task_ScrollIndicatorArrowPairGTS(u8 taskId)
+{
+    struct ScrollIndicatorPair *data = (void *) gTasks[taskId].data;
+    u16 currItem = (*data->scrollOffset);
+
+    if(sGTSPokedexView->currentPage == 0){
+        if (sGTSPokedexView->selectedPokemon == 6)
+            gSprites[data->bottomSpriteId].oam.paletteNum = 1;
+        else if(sGTSPokedexView->selectedPokemon == sGTSPokedexView->pokemonListCount-1)
+            gSprites[data->bottomSpriteId].invisible = TRUE;
+        else{
+            gSprites[data->topSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+            gSprites[data->topSpriteId].invisible = FALSE;
+        }
+        if (sGTSPokedexView->selectedPokemon == 0)
+            gSprites[data->topSpriteId].invisible = TRUE;
+    }
+    else{
+        gSprites[data->topSpriteId].invisible = FALSE;
+        if (sGTSPokedexView->selectedPokemon == 6){
+            gSprites[data->bottomSpriteId].oam.paletteNum = 1;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+        }
+        else if(sGTSPokedexView->selectedPokemon == sGTSPokedexView->pokemonListCount-1)
+            gSprites[data->bottomSpriteId].invisible = TRUE;
+        else if(sGTSPokedexView->selectedPokemon == 0){
+            gSprites[data->topSpriteId].oam.paletteNum = 1;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+        }
+        else{
+            gSprites[data->topSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+        }
+    }
 }
 
 static void Task_ScrollIndicatorArrowPair(u8 taskId)
