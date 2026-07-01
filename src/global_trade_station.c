@@ -853,7 +853,7 @@ static u8 CreateMonNameGTS(u16 num, u8 left, u8 top)
 static void CreateMonListEntryGTS(u8 position, u16 b)
 {
     s16 entryNum;
-    u16 i;
+    s16 i=0;
     //u16 vOffset;
 
 
@@ -918,6 +918,26 @@ static void CreateMonListEntryGTS(u8 position, u16 b)
                 }
                 entryNum++;
             }
+            sGTSPokedexView->atBottom = 0;
+        }
+        else if(sGTSPokedexView->cursorRelPos == 0 && sGTSPokedexView->atTop !=1){
+            entryNum = b; 
+            for (i = 0; i <= 4; i++)
+            {
+                if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                }
+                else
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    //if(sGTSPokedexView->pokedexList[0].dexNum==0)
+                    //    PlayFanfare(MUS_OBTAIN_ITEM);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, i * 2);
+                }
+                entryNum++;
+            }
+            sGTSPokedexView->atBottom = 0;
         }
         else{
             ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
@@ -927,29 +947,7 @@ static void CreateMonListEntryGTS(u8 position, u16 b)
         break;
     case 2: // Down
         entryNum = b - 3;
-        /*entryNum = b + 5;
-        vOffset = sGTSPokedexView->listVOffset + 5;
-        if (vOffset >= LIST_SCROLL_STEP)
-            vOffset -= LIST_SCROLL_STEP;
-        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
-            ClearMonListEntryGTS(1, vOffset * 2);
-        else
-        {
-            ClearMonListEntryGTS(1, 8);
-            if (sGTSPokedexView->pokedexList[entryNum].seen)
-            {
-                CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, 8);
-            }
-            else
-            {
-                CreateMonNameGTS(0, 1, 8);
-            }
-        }
-        if (sGTSPokedexView->listVOffset < LIST_SCROLL_STEP - 1)
-            sGTSPokedexView->listVOffset++;
-        else
-            sGTSPokedexView->listVOffset = 0;
-        break;*/
+
         if(sGTSPokedexView->cursorRelPos == 3 && sGTSPokedexView->atBottom !=1){
             for (i = 0; i <= 4; i++)
             {
@@ -973,6 +971,124 @@ static void CreateMonListEntryGTS(u8 position, u16 b)
             PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
 
         }
+        break;
+    case 3: // Skip Up
+        entryNum = b;
+        
+        if(sGTSPokedexView->atTop ==1){
+            if(sGTSPokedexView->atBottom ==1){
+                for (i = 0; i <= 4; i++){ 
+                    if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF){
+                        b=i-1;
+                    }
+                }
+                ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+                sGTSPokedexView->cursorRelPos=b-1;
+                PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+            }
+            else{
+                ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+                sGTSPokedexView->cursorRelPos=0;
+                PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+            }
+        
+        }
+        else{
+            sGTSPokedexView->atBottom = 0;
+            for (i = 4; i >= 0; i++)
+            {
+                if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+                    break;
+                entryNum++;
+            }
+            entryNum=b;
+            b=i;
+            if(i >= 0){
+                for (i = 0; i <= 4; i++)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[i].dexNum, 1, i * 2);
+                    if(entryNum==i){
+                        ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+                        sGTSPokedexView->cursorRelPos=i;
+                        PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+                    }
+                }
+                sGTSPokedexView->atTop =1;
+            }
+            else{
+                entryNum=entryNum-sGTSPokedexView->cursorRelPos;
+                if(entryNum==0)
+                    sGTSPokedexView->atTop =1;
+                for (i = 0; i <= 4; i++)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, i * 2);
+                    entryNum++;
+                }
+            }
+        }
+
+
+        break;
+    case 4: // Skip Down
+        entryNum = b;
+        
+        if(sGTSPokedexView->atBottom ==1){
+            if(sGTSPokedexView->atTop ==1){
+                for (i = 0; i <= 4; i++){
+                    if (entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF){
+                        b=i-1;
+                    }
+                }
+                ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+                sGTSPokedexView->cursorRelPos=b+1;
+                PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+            }
+            else{
+                ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+                sGTSPokedexView->cursorRelPos=4;
+                PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+            }
+        
+        }
+        else{
+            sGTSPokedexView->atTop = 0;
+            for (i = 0; i <= 4; i++)
+            {
+                if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sGTSPokedexView->pokedexList[entryNum].dexNum == 0xFFFF)
+                    break;
+                entryNum++;
+            }
+            entryNum=b;
+            b=i;
+            if(i < 5){
+                for (i = 0; i <= 4; i++)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[sGTSPokedexView->pokemonListCount - 1 - 4 + i].dexNum, 1, i * 2);
+                    if(entryNum==sGTSPokedexView->pokemonListCount - 1 - 4 + i){
+                        ClearMonListArrowGTS(0,sGTSPokedexView->cursorRelPos*2);
+                        sGTSPokedexView->cursorRelPos=i;
+                        PrintMonDexArrowGTS(sGTSPokedexView->windowid, FONT_NORMAL, 0, sGTSPokedexView->cursorRelPos*2);
+                    }
+                }
+                sGTSPokedexView->atBottom =1;
+            }
+            else{
+                entryNum=entryNum-sGTSPokedexView->cursorRelPos;
+                for (i = 0; i <= 4; i++)
+                {
+                    ClearMonListEntryGTS(1, i * 2);
+                    CreateMonNameGTS(sGTSPokedexView->pokedexList[entryNum].dexNum, 1, i * 2);
+                    entryNum++;
+                }
+                if(entryNum==sGTSPokedexView->pokemonListCount)
+                    sGTSPokedexView->atBottom =1;
+            }
+        }
+
+
         break;
     }
     CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_GFX);
@@ -1015,12 +1131,12 @@ static u16 TryDoPokedexScrollGTS(u16 selectedMon)
     //u16 startingPos;
     u8 scrollDir = 0;
 
-    if (JOY_NEW(DPAD_UP) && (sGTSPokedexView->cursorRelPos != 0))
+    if (JOY_NEW(DPAD_UP) && selectedMon != 0)
     {
         scrollDir = 1;
         selectedMon = GetNextPositionGTS(1, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
         CreateMonListEntryGTS(1, selectedMon);
-        if(selectedMon == 1)
+        if(selectedMon == 0 || (selectedMon == 1 && sGTSPokedexView->cursorRelPos == 1))
             sGTSPokedexView->atTop=1;
         if(sGTSPokedexView->atBottom == 1 && sGTSPokedexView->cursorRelPos == 1)
             sGTSPokedexView->atBottom = 0;
@@ -1042,15 +1158,29 @@ static u16 TryDoPokedexScrollGTS(u16 selectedMon)
     {
         //startingPos = selectedMon;
 
-        for (i = 0; i < 7; i++)
+        for (i = 0; i < 5; i++){
             selectedMon = GetNextPositionGTS(1, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
+            if(selectedMon == sGTSPokedexView->pokemonListCount - 1)
+                break;
+        }
+        CreateMonListEntryGTS(3, selectedMon);
         PlaySE(SE_DEX_PAGE);
     }
     else if (JOY_NEW(DPAD_RIGHT) && (selectedMon < sGTSPokedexView->pokemonListCount - 1))
     {
         //startingPos = selectedMon;
-        for (i = 0; i < 7; i++)
+        for (i = 0; i < 5; i++){
             selectedMon = GetNextPositionGTS(0, selectedMon, 0, sGTSPokedexView->pokemonListCount - 1);
+            if(selectedMon == sGTSPokedexView->pokemonListCount - 1){
+                //sGTSPokedexView->atBottom=1;
+                //if(i==4)
+                //    sGTSPokedexView->cursorRelPos = 4;
+                break;
+            }
+            //if(i==4)
+            //    sGTSPokedexView->atTop = 0;
+        }
+        CreateMonListEntryGTS(4, selectedMon);
         PlaySE(SE_DEX_PAGE);
     }
 
