@@ -11,6 +11,7 @@ EWRAM_DATA u8 gStringVar4[0x3E8] = {0};
 EWRAM_DATA static u8 sUnknownStringVar[16] = {0};
 
 static const u8 sDigits[] = __("0123456789ABCDEF");
+static const char sDigits2[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
 static const s32 sPowersOfTen[] =
 {
@@ -25,6 +26,27 @@ static const s32 sPowersOfTen[] =
      100000000,
     1000000000,
 };
+
+static const u64 sPowersOfTen64[] =
+{
+               1,
+              10,
+             100,
+            1000,
+           10000,
+          100000,
+         1000000,
+        10000000,
+       100000000,
+      1000000000,
+     10000000000,
+    100000000000,
+   1000000000000,
+  10000000000000,
+ 100000000000000,
+1000000000000000,
+};
+
 
 u8 *StringCopy_Nickname(u8 *dest, const u8 *src)
 {
@@ -239,11 +261,11 @@ u8 *ConvertIntToDecimalStringN(u8 *dest, s32 value, enum StringConvertMode mode,
     return dest;
 }
 
-u8 *ConvertUIntToDecimalStringN(u8 *dest, u32 value, enum StringConvertMode mode, u8 n)
+u8 *ConvertUIntToDecimalStringN(u8 *dest, u64 value, enum StringConvertMode mode, u8 n)
 {
     enum { WAITING_FOR_NONZERO_DIGIT, WRITING_DIGITS, WRITING_SPACES } state;
-    s32 powerOfTen;
-    s32 largestPowerOfTen = sPowersOfTen[n - 1];
+    s64 powerOfTen;
+    s64 largestPowerOfTen = sPowersOfTen64[n - 1];
 
     state = WAITING_FOR_NONZERO_DIGIT;
 
@@ -257,14 +279,14 @@ u8 *ConvertUIntToDecimalStringN(u8 *dest, u32 value, enum StringConvertMode mode
     {
         u8 c;
         u16 digit = value / powerOfTen;
-        u32 temp = value - (powerOfTen * digit);
+        u64 temp = value - (powerOfTen * digit);
 
         if (state == WRITING_DIGITS)
         {
             u8 *out = dest++;
 
             if (digit <= 9)
-                c = sDigits[digit];
+                c = sDigits2[digit];
             else
                 c = CHAR_QUESTION_MARK;
 
@@ -277,7 +299,7 @@ u8 *ConvertUIntToDecimalStringN(u8 *dest, u32 value, enum StringConvertMode mode
             out = dest++;
 
             if (digit <= 9)
-                c = sDigits[digit];
+                c = sDigits2[digit];
             else
                 c = CHAR_QUESTION_MARK;
 
@@ -353,6 +375,40 @@ u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 
 
     *dest = EOS;
     return dest;
+}
+
+void ConvertIntToHexStringN_v2(u8 *dest, u32 value, enum StringConvertMode mode, u8 n)
+{
+    //enum { WAITING_FOR_NONZERO_DIGIT, WRITING_DIGITS, WRITING_SPACES } state;
+    u8 i;
+    u32 powerOfSixteen;
+    u32 largestPowerOfSixteen = 1;
+
+    for (i = 1; i < n; i++)
+        largestPowerOfSixteen *= 16;
+/*
+    state = WAITING_FOR_NONZERO_DIGIT;
+
+    if (mode == STR_CONV_MODE_RIGHT_ALIGN)
+        state = WRITING_SPACES;
+
+    if (mode == STR_CONV_MODE_LEADING_ZEROS)
+        state = WRITING_DIGITS;*/
+
+    for (powerOfSixteen = largestPowerOfSixteen; powerOfSixteen > 0; powerOfSixteen /= 16)
+    {
+        char c;
+        u32 digit = value / powerOfSixteen;
+        s32 temp = value % powerOfSixteen;
+
+        u8 *out = dest++;
+
+        c = sDigits2[digit];
+
+        *out = c;
+
+        value = temp;
+    }
 }
 
 u8 *StringExpandPlaceholders(u8 *dest, const u8 *src)

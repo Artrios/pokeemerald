@@ -749,6 +749,7 @@ extern const u8 gText_TrainerHill4F[];
 // Cable Club multichoice text
 extern const u8 CableClub_Text_TradeUsingLinkCable[];
 extern const u8 CableClub_Text_BattleUsingLinkCable[];
+extern const u8 CableClub_Text_UseGTS[];
 extern const u8 CableClub_Text_RecordCornerUsingLinkCable[];
 extern const u8 CableClub_Text_CancelSelectedItem[];
 extern const u8 CableClub_Text_YouMayTradeHere[];
@@ -2155,5 +2156,67 @@ extern const u8 gText_OakThisIsListOfPokemon[];
 extern const u8 gText_Boy[];
 extern const u8 gText_Girl[];
 
+//Internet
+extern const u8 gText_GiftDownload[];
+extern const u8 gText_ViaInternet[];
+extern const u8 gText_ViaCode[];
+extern const u8 gText_Bank[];
+extern const u8 gText_Friends[];
+extern const u8 gText_AddFriends[];
+extern const u8 gText_ViewFriends[];
+extern const u8 gText_Sync[];
+extern const u8 gText_GameSync[];
+extern const u8 gText_UploadSecretBase[];
+extern const u8 gText_UploadRecordedBattle[];
+extern const u8 gText_GTS[];
+extern const u8 gText_CheckingGTSStatus[];
+extern const u8 gText_InternetOptions[];
+extern const u8 gText_CreateFriendCode[];
+extern const u8 gText_FC[];
+
+//Global Trade Station
+extern const u8 gText_GlobalTradeStation[];
+extern const u8 gText_SearchPokemon[];
+extern const u8 gText_PokemonWillBeSent[];
+extern const u8 gText_ChooseGTSPokemon[];
+extern const u8 gText_ChooseGTSPokemonGender[];
+extern const u8 gText_ChooseGTSPokemonLevel[];
+extern const u8 gText_AnyLevel[];
+extern const u8 gText_UnderLevel10[];
+extern const u8 gText_AboveLevel10[];
+extern const u8 gText_AboveLevel20[];
+extern const u8 gText_AboveLevel30[];
+extern const u8 gText_AboveLevel40[];
+extern const u8 gText_AboveLevel50[];
+extern const u8 gText_AboveLevel60[];
+extern const u8 gText_AboveLevel70[];
+extern const u8 gText_AboveLevel80[];
+extern const u8 gText_AboveLevel90[];
+extern const u8 gText_Level1to10[];
+extern const u8 gText_Level11to20[];
+extern const u8 gText_Level21to30[];
+extern const u8 gText_Level31to40[];
+extern const u8 gText_Level41to50[];
+extern const u8 gText_Level51to60[];
+extern const u8 gText_Level61to70[];
+extern const u8 gText_Level71to80[];
+extern const u8 gText_Level81to90[];
+extern const u8 gText_Level91to100[];
+extern const u8 gText_ConfirmOffer[];
+extern const u8 gText_OfferPokemon[];
+extern const u8 gText_ByeByeVar2[];
+extern const u8 gText_WithdrawPokemon2[];
+extern const u8 gText_PickPokemonOKCancel[];
+extern const u8 gText_ItemCaps[];
+extern const u8 gText_Offerer[];
+extern const u8 gText_Wanted[];
+extern const u8 gText_GTSPokeDetails[];
+extern const u8 gText_ConfirmTrade[];
+extern const u8 gText_TradeQuestion[];
+extern const u8 gText_WithdrawPokemon[];
+extern const u8 gText_DepositPokemon[];
+extern const u8 gText_LvVar1[];
+extern const u8 gText_XReturned[];
+extern const u8 gText_WelcomeBackX[];
 
 #endif // GUARD_STRINGS_H

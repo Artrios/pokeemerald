@@ -23,5 +23,6 @@ void CB2_OpenPokedex(void);
 void PrintMonMeasurements(enum Species species, u32 owned);
 u8* ConvertMonHeightToString(u32 height);
 u8* ConvertMonWeightToString(u32 weight);
+u32 GetPokedexMonPersonality(enum Species species);
 
 #endif // GUARD_POKEDEX_H

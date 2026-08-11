@@ -37,8 +37,9 @@ s32 StringCompare(const u8 *str1, const u8 *str2);
 s32 StringCompareN(const u8 *str1, const u8 *str2, u32 n);
 bool8 IsStringLengthAtLeast(const u8 *str, s32 n);
 u8 *ConvertIntToDecimalStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 n);
-u8 *ConvertUIntToDecimalStringN(u8 *dest, u32 value, enum StringConvertMode mode, u8 n);
+u8 *ConvertUIntToDecimalStringN(u8 *dest, u64 value, enum StringConvertMode mode, u8 n);
 u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 n);
+void ConvertIntToHexStringN_v2(u8 *dest, u32 value, enum StringConvertMode mode, u8 n);
 u8 *StringExpandPlaceholders(u8 *dest, const u8 *src);
 u8 *StringBraille(u8 *dest, const u8 *src);
 const u8 *GetExpandedPlaceholder(u32 id);
@@ -56,5 +57,9 @@ void ConvertInternationalString(u8 *s, enum Language language);
 void StripExtCtrlCodes(u8 *str);
 u8 *StringCopyUppercase(u8 *dest, const u8 *src);
 bool32 DoesStringProperlyTerminate(const u8 *str, u32 last);
+void ASCIIToPkmnStr(u8 *pkmnStr, const u8 *asciiStr);
+void ASCIIToPkmnStrLength(u8 *pkmnStr, const u8 *asciiStr, u8 strLength);
+void PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr);
+void PkmnStrToASCIILength(u8 *asciiStr, const u8 *pkmnStr, u8 strLength);
 
 #endif // GUARD_STRING_UTIL_H

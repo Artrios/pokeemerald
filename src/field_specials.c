@@ -215,6 +215,13 @@ void Special_BeginCyclingRoadChallenge(void)
     sBikeCyclingTimer = gMain.vblankCounter1;
 }
 
+void Special_InitGTS(void)
+{
+    gMain.savedCallback = CB2_ReturnToField;
+    SetMainCallback2(CB2_InitGlobalTradeStation);
+    LockPlayerFieldControls();
+}
+
 u16 GetPlayerAvatarBike(void)
 {
     if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_ACRO_BIKE))

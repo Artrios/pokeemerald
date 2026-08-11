@@ -4511,7 +4511,7 @@ static u8 PrintCryScreenSpeciesName(u8 windowId, u16 num, u8 left, u8 top)
 
 // Unown and Spinda use the personality of the first seen individual of that species
 // All others use personality 0
-static u32 GetPokedexMonPersonality(enum Species species)
+u32 GetPokedexMonPersonality2(enum Species species)
 {
     if (species == SPECIES_UNOWN || species == SPECIES_SPINDA)
     {
@@ -4529,7 +4529,7 @@ static u32 GetPokedexMonPersonality(enum Species species)
 static u16 CreateMonSpriteFromNationalDexNumberHGSS(u16 nationalNum, s16 x, s16 y, u16 paletteSlot)
 {
     enum Species species = NationalPokedexNumToSpeciesHGSS(nationalNum);
-    return CreateMonPicSprite(species, FALSE, GetPokedexMonPersonality(species), TRUE, x, y, paletteSlot, TAG_NONE);
+    return CreateMonPicSprite(species, FALSE, GetPokedexMonPersonality2(species), TRUE, x, y, paletteSlot, TAG_NONE);
 }
 
 static u16 GetPokemonScaleFromNationalDexNumber(u16 nationalNum)
@@ -4869,7 +4869,7 @@ static void Task_LoadStatsScreen(u8 taskId)
         {
             //Icon
             enum Species species = NationalPokedexNumToSpeciesHGSS(sPokedexListItem->dexNum);
-            u32 personality = GetPokedexMonPersonality(species);
+            u32 personality = GetPokedexMonPersonality2(species);
             FreeMonIconPalettes(); //Free space for new pallete
             LoadMonIconPalettePersonality(species, personality); //Loads pallete for current mon
             gTasks[taskId].data[6] = CreateMonIcon(species, SpriteCB_MonIcon, 18, 31, 4, personality); //Create Pokémon sprite
@@ -5998,7 +5998,7 @@ static void Task_LoadEvolutionScreen(u8 taskId)
         if (gTasks[taskId].data[1] == 0)
         {
             enum Species species = NationalPokedexNumToSpeciesHGSS(sPokedexListItem->dexNum);
-            u32 personality = GetPokedexMonPersonality(species);
+            u32 personality = GetPokedexMonPersonality2(species);
             sPokedexView->selectedScreen = EVO_SCREEN;
             ResetEvoScreenDataStruct();
             //Icon
@@ -6191,7 +6191,7 @@ static void HandleTargetSpeciesPrintText(enum Species targetSpecies, u32 base_x,
 
 static void HandleTargetSpeciesPrintIcon(u8 taskId, enum Species targetSpecies, u8 base_i, u8 iterations)
 {
-    u32 personality = GetPokedexMonPersonality(targetSpecies);
+    u32 personality = GetPokedexMonPersonality2(targetSpecies);
     LoadMonIconPalettePersonality(targetSpecies, personality); //Loads pallete for current mon
     if (iterations > 6) // Print icons closer to each other if there are many evolutions
         gTasks[taskId].data[4+base_i] = CreateMonIcon(targetSpecies, SpriteCB_MonIcon, 45 + 26*base_i, 31, 4, personality);
@@ -6236,7 +6236,7 @@ static void HandlePreEvolutionSpeciesPrint(u8 taskId, enum Species preSpecies, e
 
     if (base_i < 3)
     {
-        u32 personality = GetPokedexMonPersonality(preSpecies);
+        u32 personality = GetPokedexMonPersonality2(preSpecies);
         LoadMonIconPalettePersonality(preSpecies, personality); //Loads pallete for current mon
         gTasks[taskId].data[4+base_i] = CreateMonIcon(preSpecies, SpriteCB_MonIcon, 18 + 32*base_i, 31, 4, personality); //Create Pokémon sprite
         gSprites[gTasks[taskId].data[4+base_i]].oam.priority = 0;
@@ -6922,7 +6922,7 @@ static void Task_LoadFormsScreen(u8 taskId)
         {
             //Icon
             enum Species species = NationalPokedexNumToSpeciesHGSS(sPokedexListItem->dexNum);
-            u32 personality = GetPokedexMonPersonality(species);
+            u32 personality = GetPokedexMonPersonality2(species);
             FreeMonIconPalettes(); //Free space for new pallete
             LoadMonIconPalettePersonality(species, personality); //Loads pallete for current mon
             gTasks[taskId].data[4] = CreateMonIcon(species, SpriteCB_MonIcon, 18, 31, 4, personality); //Create Pokémon sprite
@@ -7108,7 +7108,7 @@ static void PrintForms(u8 taskId, enum Species species)
             continue;
         else
         {
-            u32 personality = GetPokedexMonPersonality(speciesForm);
+            u32 personality = GetPokedexMonPersonality2(speciesForm);
             sPokedexView->sFormScreenData.formIds[j++] = i;
             times += 1;
             LoadMonIconPalettePersonality(speciesForm, personality); //Loads pallete for current mon

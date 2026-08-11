@@ -956,6 +956,8 @@ struct BoxPokemon *GetSelectedBoxMonFromPcOrParty(void);
 u32 GiveScriptedMonToPlayer(struct Pokemon *mon, u8 slot);
 void ChangePokemonNicknameWithCallback(void (*callback)(void));
 bool32 HasShedinjaHPHandling(enum Species species);
+u8 CopyBoxMonToPC(struct BoxPokemon *mon);
+u8 GiveBoxMonToPlayer(struct BoxPokemon *mon);
 
 static inline u32 OWE_GetMovementTypeFromSpecies(enum Species speciesId)
 {

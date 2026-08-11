@@ -3037,6 +3037,61 @@ u8 CopyMonToPC(struct Pokemon *mon)
     return MON_CANT_GIVE;
 }
 
+u8 GiveBoxMonToPlayer(struct BoxPokemon *mon)
+{
+    s32 i;
+
+    //SetMonData(mon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
+    //SetMonData(mon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
+    //SetMonData(mon, MON_DATA_OT_ID, gSaveBlock2Ptr->playerTrainerId);
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            break;
+    }
+
+    if (i >= PARTY_SIZE)
+        return CopyBoxMonToPC(mon);
+
+    BoxMonToMon(mon,&gParties[B_TRAINER_PLAYER][i]);
+    gPartiesCount[B_TRAINER_PLAYER] = i + 1;
+    return MON_GIVEN_TO_PARTY;
+}
+
+u8 CopyBoxMonToPC(struct BoxPokemon *mon)
+{
+    s32 boxNo, boxPos;
+
+    SetPCBoxToSendMon(VarGet(VAR_PC_BOX_TO_SEND_MON));
+
+    boxNo = StorageGetCurrentBox();
+
+    do
+    {
+        for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
+        {
+            struct BoxPokemon* checkingMon = GetBoxedMonPtr(boxNo, boxPos);
+            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            {
+                CopyMon(checkingMon, mon, sizeof(*mon));
+                gSpecialVar_MonBoxId = boxNo;
+                gSpecialVar_MonBoxPos = boxPos;
+                if (GetPCBoxToSendMon() != boxNo)
+                    FlagClear(FLAG_SHOWN_BOX_WAS_FULL_MESSAGE);
+                VarSet(VAR_PC_BOX_TO_SEND_MON, boxNo);
+                return MON_GIVEN_TO_PC;
+            }
+        }
+
+        boxNo++;
+        if (boxNo == TOTAL_BOXES_COUNT)
+            boxNo = 0;
+    } while (boxNo != StorageGetCurrentBox());
+
+    return MON_CANT_GIVE;
+}
+
 u8 CalculatePartyCount(enum BattleTrainer trainer)
 {
     u32 partyCount = 0;

@@ -98,6 +98,7 @@ enum PcMonSelectionType
     SELECT_PC_MON_MOVE_DELETER,
     SELECT_PC_MON_MOVE_RELEARNER,
     SELECT_PC_MON_EVOLUTION,
+    SELECT_PC_MON_GTS_TRADE,
 };
 
 enum CanMoveBeLearned

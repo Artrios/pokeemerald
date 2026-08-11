@@ -61,7 +61,8 @@ static const u8 sWireless_ASCIItoRSETable[256] = {
     ['7'] = CHAR_7,
     ['8'] = CHAR_8,
     ['9'] = CHAR_9,
-    0x00, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f, 0x00,
+    [':'] = CHAR_COLON,
+     0x9b, 0x9c, 0x9d, 0x9e, 0x9f, 0x00,
     ['A'] = CHAR_A,
     ['B'] = CHAR_B,
     ['C'] = CHAR_C,
@@ -603,7 +604,7 @@ static void UNUSED PopulateArrayWithSequence(u8 *arr, u8 mode)
 
 // File boundary here maybe?
 
-static void UNUSED PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr)
+void PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr)
 {
     s32 i;
 
@@ -612,11 +613,29 @@ static void UNUSED PkmnStrToASCII(u8 *asciiStr, const u8 *pkmnStr)
     asciiStr[i] = 0;
 }
 
-static void UNUSED ASCIIToPkmnStr(u8 *pkmnStr, const u8 *asciiStr)
+void PkmnStrToASCIILength(u8 *asciiStr, const u8 *pkmnStr, u8 strLength)
+{
+    s32 i;
+
+    for (i = 0; i < strLength; i++)
+        asciiStr[i] = gWireless_RSEtoASCIITable[pkmnStr[i]];
+    asciiStr[i] = 0;
+}
+
+void ASCIIToPkmnStr(u8 *pkmnStr, const u8 *asciiStr)
 {
     s32 i;
 
     for (i = 0; asciiStr[i] != 0; i++)
+        pkmnStr[i] = sWireless_ASCIItoRSETable[asciiStr[i]];
+    pkmnStr[i] = EOS;
+}
+
+void ASCIIToPkmnStrLength(u8 *pkmnStr, const u8 *asciiStr, u8 strLength)
+{
+    s32 i;
+
+    for (i = 0; i < strLength; i++)
         pkmnStr[i] = sWireless_ASCIItoRSETable[asciiStr[i]];
     pkmnStr[i] = EOS;
 }

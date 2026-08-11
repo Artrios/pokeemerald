@@ -12,6 +12,7 @@
 #include "strings.h"
 #include "sound.h"
 #include "constants/songs.h"
+#include "global_trade_station.h"
 
 // GF cast Task data to ListMenu in many places, which effectively puts
 // an upper bound on sizeof(struct ListMenu).
@@ -56,6 +57,7 @@ static void ListMenuDrawCursor(struct ListMenu *list);
 static void ListMenuCallSelectionChangedCallback(struct ListMenu *list, u8 onInit);
 static u8 ListMenuAddCursorObject(struct ListMenu *list, u32 cursorObjId);
 static void Task_ScrollIndicatorArrowPair(u8 taskId);
+static void Task_ScrollIndicatorArrowPairGTS(u8 taskId);
 static u8 ListMenuAddRedOutlineCursorObject(struct CursorStruct *cursor);
 static u8 ListMenuAddRedArrowCursorObject(struct CursorStruct *cursor);
 static void ListMenuUpdateRedOutlineCursorObject(u8 taskId, u16 x, u16 y);
@@ -77,6 +79,7 @@ static EWRAM_DATA struct {
 } sMysteryGiftLinkMenu = {0};
 
 EWRAM_DATA struct ScrollArrowsTemplate gTempScrollArrowTemplate = {0};
+extern EWRAM_DATA struct GTSPokedexView *sGTSPokedexView;
 
 // IWRAM common
 COMMON_DATA struct {
@@ -322,6 +325,76 @@ s32 DoMysteryGiftListMenu(const struct WindowTemplate *windowTemplate, const str
         if (JOY_NEW(B_BUTTON))
         {
             sMysteryGiftLinkMenu.currItemId = LIST_CANCEL;
+            sMysteryGiftLinkMenu.state = 2;
+        }
+        if (sMysteryGiftLinkMenu.state == 2)
+        {
+            if (drawMode == 0)
+            {
+                ClearWindowTilemap(sMysteryGiftLinkMenu.windowId);
+            }
+            else
+            {
+                switch (drawMode)
+                {
+                case 0: // can never be reached, because of the if statement above
+                    ClearStdWindowAndFrame(sMysteryGiftLinkMenu.windowId, FALSE);
+                    break;
+                case 2:
+                case 1:
+                    ClearStdWindowAndFrame(sMysteryGiftLinkMenu.windowId, FALSE);
+                    break;
+                }
+            }
+
+            CopyWindowToVram(sMysteryGiftLinkMenu.windowId, COPYWIN_MAP);
+        }
+        break;
+    case 2:
+        DestroyListMenuTask(sMysteryGiftLinkMenu.listTaskId, NULL, NULL);
+        RemoveWindow(sMysteryGiftLinkMenu.windowId);
+        sMysteryGiftLinkMenu.state = 0;
+        return sMysteryGiftLinkMenu.currItemId;
+    }
+
+    return LIST_NOTHING_CHOSEN;
+}
+
+s32 DoGTSListMenu(const struct WindowTemplate *windowTemplate, const struct ListMenuTemplate *listMenuTemplate, u8 drawMode, u16 tileNum, u16 palNum)
+{
+    switch (sMysteryGiftLinkMenu.state)
+    {
+    case 0:
+    default:
+        sMysteryGiftLinkMenu.windowId = AddWindow(windowTemplate);
+        switch (drawMode)
+        {
+        case 2:
+            LoadUserWindowBorderGfx(sMysteryGiftLinkMenu.windowId, tileNum, palNum);
+        case 1:
+            DrawTextBorderOuter(sMysteryGiftLinkMenu.windowId, tileNum, palNum / 16);
+            break;
+        }
+        gMultiuseListMenuTemplate = *listMenuTemplate;
+        gMultiuseListMenuTemplate.windowId = sMysteryGiftLinkMenu.windowId;
+        sMysteryGiftLinkMenu.listTaskId = ListMenuInit(&gMultiuseListMenuTemplate, 0, 0);
+        CopyWindowToVram(sMysteryGiftLinkMenu.windowId, COPYWIN_MAP);
+        sMysteryGiftLinkMenu.state = 1;
+        break;
+    case 1:
+        sMysteryGiftLinkMenu.currItemId = ListMenu_ProcessInput(sMysteryGiftLinkMenu.listTaskId);
+        if (JOY_NEW(A_BUTTON))
+        {
+            sMysteryGiftLinkMenu.state = 2;
+        }
+        if (JOY_NEW(B_BUTTON))
+        {
+            sMysteryGiftLinkMenu.currItemId = LIST_CANCEL;
+            sMysteryGiftLinkMenu.state = 2;
+        }
+        if (JOY_NEW(START_BUTTON))
+        {
+            sMysteryGiftLinkMenu.currItemId = LIST_NOTHING_CHOSEN;
             sMysteryGiftLinkMenu.state = 2;
         }
         if (sMysteryGiftLinkMenu.state == 2)
@@ -1099,7 +1172,11 @@ u8 AddScrollIndicatorArrowPair(const struct ScrollArrowsTemplate *arrowInfo, u16
         LoadSpritePalette(&spritePal);
     }
 
-    taskId = CreateTask(Task_ScrollIndicatorArrowPair, 0);
+    if(arrowInfo->firstX==152 && arrowInfo->secondX==208)
+        taskId = CreateTask(Task_ScrollIndicatorArrowPairGTS, 0);
+    else
+        taskId = CreateTask(Task_ScrollIndicatorArrowPair, 0);
+    
     data = (void *) gTasks[taskId].data;
 
     data->field_0 = 0;
@@ -1166,6 +1243,45 @@ static void Task_ScrollIndicatorArrowPair(u8 taskId)
         gSprites[data->bottomSpriteId].invisible = FALSE;
 }
 
+static void Task_ScrollIndicatorArrowPairGTS(u8 taskId)
+{
+    struct ScrollIndicatorPair *data = (void *) gTasks[taskId].data;
+
+    if(sGTSPokedexView->currentPage == 0){
+        if (sGTSPokedexView->selectedPokemon == 6)
+            gSprites[data->bottomSpriteId].oam.paletteNum = 1;
+        else if(sGTSPokedexView->selectedPokemon == sGTSPokedexView->pokemonListCount-1)
+            gSprites[data->bottomSpriteId].invisible = TRUE;
+        else{
+            gSprites[data->topSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+            gSprites[data->topSpriteId].invisible = FALSE;
+        }
+        if (sGTSPokedexView->selectedPokemon == 0)
+            gSprites[data->topSpriteId].invisible = TRUE;
+    }
+    else{
+        gSprites[data->topSpriteId].invisible = FALSE;
+        if (sGTSPokedexView->selectedPokemon == 6){
+            gSprites[data->bottomSpriteId].oam.paletteNum = 1;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+        }
+        else if(sGTSPokedexView->selectedPokemon == sGTSPokedexView->pokemonListCount-1)
+            gSprites[data->bottomSpriteId].invisible = TRUE;
+        else if(sGTSPokedexView->selectedPokemon == 0){
+            gSprites[data->topSpriteId].oam.paletteNum = 1;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+        }
+        else{
+            gSprites[data->topSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].oam.paletteNum = 0;
+            gSprites[data->bottomSpriteId].invisible = FALSE;
+        }
+    }
+}
+
+#define tMenuType data[14]
 #define tIsScrolled data[15]
 
 void Task_ScrollIndicatorArrowPairOnMainMenu(u8 taskId)
@@ -1173,18 +1289,24 @@ void Task_ScrollIndicatorArrowPairOnMainMenu(u8 taskId)
     s16 *data = gTasks[taskId].data;
     struct ScrollIndicatorPair *scrollData = (void *) data;
 
-    if (tIsScrolled)
+    if (tIsScrolled == 2)
     {
         gSprites[scrollData->topSpriteId].invisible = FALSE;
         gSprites[scrollData->bottomSpriteId].invisible = TRUE;
     }
-    else
+    else if (tIsScrolled == 1 && tMenuType == 3)
+    {
+        gSprites[scrollData->topSpriteId].invisible = FALSE;
+        gSprites[scrollData->bottomSpriteId].invisible = FALSE;
+    }
+    else if (tIsScrolled == 1)
     {
         gSprites[scrollData->topSpriteId].invisible = TRUE;
         gSprites[scrollData->bottomSpriteId].invisible = FALSE;
     }
 }
 
+#undef tMenuType
 #undef tIsScrolled
 
 void RemoveScrollIndicatorArrowPair(u8 taskId)

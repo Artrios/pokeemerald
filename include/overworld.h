@@ -191,6 +191,7 @@ bool32 IsSendingKeysOverCable(void);
 void ClearLinkPlayerObjectEvents(void);
 bool16 SetTimeOfDay(u16 hours);
 bool8 MetatileBehavior_IsSurfableInSeafoamIslands(u16 metatileBehavior);
+void CB2_InitGlobalTradeStation(void);
 
 // Item Description Headers
 enum ItemObtainFlags

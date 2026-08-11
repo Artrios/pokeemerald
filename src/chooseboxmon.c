@@ -32,7 +32,7 @@ struct PcMonSelection
     u32       padding:31;
 };
 
-static EWRAM_DATA u8 sSelectionType = 0;
+EWRAM_DATA u8 sSelectionType = 0;
 
 // All these filter functions return 0 when a mon is a valid or a number corresponding to the type of error
 static u32 ChooseBoxMon_NoFilter(struct BoxPokemon *boxmon);
@@ -42,6 +42,7 @@ static u32 ChooseBoxMon_CanMonDeleteMove(struct BoxPokemon *boxmon);
 static u32 ChooseBoxMon_CanMonLearnSpecialVarMove(struct BoxPokemon *boxmon);
 static u32 ChooseBoxMon_CanRelearnMoves(struct BoxPokemon *boxmon);
 static u32 ChooseBoxMon_CanEvolve(struct BoxPokemon *boxmon);
+static u32 ChooseBoxMon_IsMatchingSpeciesAndLevel(struct BoxPokemon *boxmon);
 
 static const struct PcMonSelection sPcMonSelectionTypes[] =
 {
@@ -52,6 +53,7 @@ static const struct PcMonSelection sPcMonSelectionTypes[] =
     [SELECT_PC_MON_MOVE_DELETER] = {ChoosePartyMon, ChooseBoxMon_CanMonDeleteMove, NULL, FALSE},
     [SELECT_PC_MON_MOVE_RELEARNER] = {ChooseMonForMoveRelearner, ChooseBoxMon_CanRelearnMoves, NULL, FALSE},
     [SELECT_PC_MON_EVOLUTION] = {ChoosePartyMon, ChooseBoxMon_CanEvolve, NULL, FALSE},
+    [SELECT_PC_MON_GTS_TRADE] = {ChoosePartyMon, ChooseBoxMon_IsMatchingSpeciesAndLevel, NULL, TRUE},
 };
 
 static u32 ChooseBoxMon_NoFilter(struct BoxPokemon *boxmon)
@@ -79,6 +81,14 @@ static u32 ChooseBoxMon_CanRelearnMoves(struct BoxPokemon *boxmon)
 static u32 ChooseBoxMon_IsMatchingSpecies(struct BoxPokemon *boxmon)
 {
     if (GetBoxMonData(boxmon, MON_DATA_SPECIES_OR_EGG) == gSpecialVar_0x8009)
+        return VALID_MON;
+    return INVALID_MON;
+}
+
+static u32 ChooseBoxMon_IsMatchingSpeciesAndLevel(struct BoxPokemon *boxmon)
+{
+    u8 level = GetLevelFromBoxMonExp(boxmon);
+    if (GetBoxMonData(boxmon, MON_DATA_SPECIES_OR_EGG) == gSpecialVar_0x8009 && (level >= gSpecialVar_0x800A && level <= gSpecialVar_0x800B))
         return VALID_MON;
     return INVALID_MON;
 }
@@ -170,6 +180,12 @@ void ChooseBoxMon(struct ScriptContext *ctx)
         ctx->scriptPtr++;
         ScriptCall(ctx, sPcMonSelectionTypes[sSelectionType].postSelectionScript);
     }
+}
+
+UNUSED void ChooseBoxMon2(u8 sSelectionMode)
+{
+    sSelectionType = sSelectionMode;
+    CreateTask(Task_ChooseBoxMon, 10);
 }
 
 void PickPartyMon(struct ScriptContext *ctx)

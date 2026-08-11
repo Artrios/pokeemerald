@@ -16,6 +16,10 @@ CableClub_Text_BattleUsingLinkCable::
 	.string "You may battle another TRAINER\n"
 	.string "using a GBA Game Link cable.$"
 
+CableClub_Text_UseGTS::
+	.string "Trade Pokémon with players around\n"
+	.string "the world with the Mobile Adapter.$"
+
 CableClub_Text_RecordCornerUsingLinkCable::
 	.string "You can use the RECORD CORNER with\n"
 	.string "others using a GBA Game Link cable.$"
@@ -80,6 +84,10 @@ Text_PlayersMadeDifferentSelections:
 
 CableClub_Text_PleaseVisitAgain:
 	.string "Please do visit again.$"
+
+CableClub_Text_MobileAdapterNotConnected:
+	.string "The Mobile Adapter is not\n"
+	.string "connected properly.$"
 
 CableClub_Text_IncorrectNumberOfParticipants:
 	.string "The number of participants is\n"

@@ -53,6 +53,7 @@ CableClub_OnWarp:
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_DOUBLE_BATTLE, CableClub_EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_MULTI_BATTLE, CableClub_EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_TRADE_CENTER, CableClub_EventScript_CheckTurnAttendant
+	map_script_2 VAR_CABLE_CLUB_STATE, USING_GTS, CableClub_EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_RECORD_CORNER, CableClub_EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_UNION_ROOM, CableClub_EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_BERRY_CRUSH, CableClub_EventScript_CheckTurnAttendant
@@ -70,6 +71,7 @@ CableClub_OnLoad:
 	goto_if_eq VAR_CABLE_CLUB_STATE, USING_DOUBLE_BATTLE, CableClub_EventScript_OnLoadFromColosseum
 	goto_if_eq VAR_CABLE_CLUB_STATE, USING_MULTI_BATTLE, CableClub_EventScript_OnLoadFromColosseum
 	goto_if_eq VAR_CABLE_CLUB_STATE, USING_TRADE_CENTER, CableClub_EventScript_OnLoadFromTradeCenter
+	goto_if_eq VAR_CABLE_CLUB_STATE, USING_GTS, CableClub_EventScript_OnLoadFromGTS
 	goto_if_eq VAR_CABLE_CLUB_STATE, USING_RECORD_CORNER, CableClub_EventScript_OnLoadFromRecordCorner
 	goto_if_eq VAR_CABLE_CLUB_STATE, USING_UNION_ROOM, CableClub_EventScript_OnLoadFromUnionRoom
 	goto_if_eq VAR_CABLE_CLUB_STATE, USING_BERRY_CRUSH, CableClub_EventScript_OnLoadFromBerryCrush
@@ -85,6 +87,10 @@ CableClub_EventScript_OnLoadFromTradeCenter::
 	end
 
 CableClub_EventScript_OnLoadFromRecordCorner::
+	call CableClub_EventScript_OpenDirectCornerBarrier
+	end
+
+CableClub_EventScript_OnLoadFromGTS::
 	call CableClub_EventScript_OpenDirectCornerBarrier
 	end
 
@@ -106,6 +112,7 @@ CableClub_OnFrame:
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_DOUBLE_BATTLE, CableClub_EventScript_ExitLinkRoom
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_MULTI_BATTLE, CableClub_EventScript_ExitLinkRoom
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_TRADE_CENTER, CableClub_EventScript_ExitTradeCenter
+	map_script_2 VAR_CABLE_CLUB_STATE, USING_GTS, CableClub_EventScript_ExitRecordCorner
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_RECORD_CORNER, CableClub_EventScript_ExitRecordCorner
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_UNION_ROOM, CableClub_EventScript_ExitUnionRoom
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_BERRY_CRUSH, CableClub_EventScript_ExitLinkRoom
@@ -262,7 +269,8 @@ CableClub_EventScript_SelectCableClubRoom::
 	switch VAR_RESULT
 	case 0, CableClub_EventScript_TradeCenter
 	case 1, CableClub_EventScript_Colosseum
-	case 2, CableClub_EventScript_AbortLink
+	case 2, CableClub_EventScript_GTS
+	case 3, CableClub_EventScript_AbortLink
 	case MULTI_B_PRESSED, CableClub_EventScript_AbortLink
 	end
 
@@ -271,8 +279,9 @@ CableClub_EventScript_CableClubUnlockedRecordCorner::
 	switch VAR_RESULT
 	case 0, CableClub_EventScript_TradeCenter
 	case 1, CableClub_EventScript_Colosseum
-	case 2, CableClub_EventScript_RecordCorner
-	case 3, CableClub_EventScript_AbortLink
+	case 2, CableClub_EventScript_GTS
+	case 3, CableClub_EventScript_RecordCorner
+	case 4, CableClub_EventScript_AbortLink
 	case MULTI_B_PRESSED, CableClub_EventScript_AbortLink
 	end
 
@@ -455,6 +464,63 @@ CableClub_EventScript_EnterTradeCenter::
 	special DoCableClubWarp
 	end
 
+CableClub_EventScript_GTS::
+	copyvar VAR_0x8007, VAR_LAST_TALKED
+	call CableClub_EventScript_CheckPartyTradeRequirements
+	goto_if_eq VAR_RESULT, 0, CableClub_EventScript_AbortLink
+	closemessage
+	special maConnected
+	goto_if_eq VAR_RESULT, FALSE, CableClub_EventScript_AbortGTS
+	call Common_EventScript_SaveGame
+	goto_if_eq VAR_RESULT, FALSE, CableClub_EventScript_AbortGTS
+	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_EnterGTS
+	end
+
+CableClub_EventScript_EnterGTS::
+	setvar VAR_0x8004, USING_GTS
+	copyvar VAR_CABLE_CLUB_STATE, VAR_0x8004
+	messageautoscroll CableClub_Text_PleaseEnter
+	waitmessage
+	call CableClub_EventScript_OpenDirectCornerBarrier
+	special DrawWholeMapView
+	playse SE_CLICK
+	delay 60
+	applymovement VAR_LAST_TALKED, Movement_AttendantFaceLeft
+	waitmovement 0
+	closemessage
+	applymovement LOCALID_PLAYER, Movement_PlayerApproachLinkRoomLeft
+	waitmovement 0
+	opendoor 9, 1
+	waitdooranim
+	applymovement LOCALID_PLAYER, Movement_PlayerEnterLinkRoom
+	waitmovement 0
+	hideplayer
+	closedoor 9, 1
+	waitdooranim
+	release
+	fadescreen FADE_TO_BLACK
+	setvar VAR_UNUSED_0x40FF, 0
+	special Special_InitGTS
+	delay 60
+	applymovement LOCALID_PLAYER, Player_Down
+	opendoor 9, 1
+	waitdooranim
+	showplayer
+	call CableClub_EventScript_OpenDirectCornerBarrier
+	applymovement LOCALID_PLAYER, Player_Visible
+	call CableClub_EventScript_OpenDirectCornerBarrier
+	waitmovement 0
+	call CableClub_EventScript_CloseDirectCornerBarrier
+	end
+
+Player_Visible:
+	walk_down
+	step_end
+
+Player_Down:
+	face_down
+	step_end
+
 CableClub_EventScript_CheckPartyTradeRequirements::
 	specialvar VAR_RESULT, CalculatePlayerPartyCount
 	goto_if_lt VAR_RESULT, 2, CableClub_EventScript_NeedTwoMonsToTrade
@@ -550,6 +616,11 @@ CableClub_EventScript_AbortLinkDifferentSelections::
 CableClub_EventScript_AbortLink::
 	special CloseLink
 	msgbox CableClub_Text_PleaseVisitAgain, MSGBOX_DEFAULT
+	release
+	end
+
+CableClub_EventScript_AbortGTS::
+	msgbox CableClub_Text_MobileAdapterNotConnected, MSGBOX_DEFAULT
 	release
 	end
 
