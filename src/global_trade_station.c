@@ -3353,6 +3353,8 @@ static void Task_GlobalTradeStation(u8 taskId)
                 memcpy(&sGTSPokedexView->searchResult[1].boxmon,&sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].boxmon,80);
                 BoxMonToMon(&sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].boxmon, &gParties[B_TRAINER_OPPONENT_A][0]);
                 sGTSPokedexView->searchResult[1].pid=sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].pid;
+                //sGTSPokedexView->searchResult[1].OTName=sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].OTName;
+                StringCopy_PlayerName((u8 *)sGTSPokedexView->searchResult[1].OTName,(u8 *)sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].OTName);
                 sGTSPokedexView->searchResult[1].checksum=sGTSPokedexView->searchResult[1].pid;
 
                 sGTSPokedexView->searchResult[0].pid=gSaveBlock2Ptr->PID;

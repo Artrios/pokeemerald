@@ -4961,14 +4961,7 @@ static void CB2_GTSExchange(void)
         gSelectedTradeMonPositions[TRADE_PLAYER] = TRADEMON_FROM_PC;
         gSelectedTradeMonPositions[TRADE_PARTNER] = PARTY_SIZE;
         StringCopy(gLinkPlayers[0].name, gSaveBlock2Ptr->playerName);
-        
-        if(sGTSPokedexView->currentPage==3){
-            ASCIIToPkmnStrLength(gLinkPlayers[1].name,(u8 *)sGTSPokedexView->searchResult[0].OTName,7);
-        }
-        else{
-            GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_OT_NAME, otName);
-            StringCopy(gLinkPlayers[1].name, otName);
-        }
+        ASCIIToPkmnStr(gLinkPlayers[1].name,(u8 *)sGTSPokedexView->searchResult[1].OTName);
         gLinkPlayers[0].language = GAME_LANGUAGE;
         gLinkPlayers[1].language = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_LANGUAGE);
         sTradeAnim = AllocZeroed(sizeof(*sTradeAnim));

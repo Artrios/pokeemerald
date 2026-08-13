@@ -626,7 +626,7 @@ void ASCIIToPkmnStr(u8 *pkmnStr, const u8 *asciiStr)
 {
     s32 i;
 
-    for (i = 0; asciiStr[i] != 0; i++)
+    for (i = 0; asciiStr[i] != 0 && asciiStr[i] != 255; i++)
         pkmnStr[i] = sWireless_ASCIItoRSETable[asciiStr[i]];
     pkmnStr[i] = EOS;
 }
