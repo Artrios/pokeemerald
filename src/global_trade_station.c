@@ -3291,17 +3291,17 @@ static void Task_GlobalTradeStation(u8 taskId)
     case GTS_STATE_CONFIRM_EXCHANGE:
         if (!gPaletteFade.active)
         {
-            u16 spriteId;
+            //u16 spriteId;
             if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
                 StringCopy_Nickname(gStringVar1, gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos].nickname);
-                spriteId = CreateMonPicSprite(GetBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], MON_DATA_SPECIES, NULL), GetBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], MON_DATA_IS_SHINY, NULL), GetBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], MON_DATA_PERSONALITY, NULL), TRUE, 120, 64, 2, TAG_NONE);
+                //spriteId = CreateMonPicSprite(GetBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], MON_DATA_SPECIES, NULL), GetBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], MON_DATA_IS_SHINY, NULL), GetBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], MON_DATA_PERSONALITY, NULL), TRUE, 120, 64, 2, TAG_NONE);
             }
             else{
                 StringCopy_Nickname(gStringVar1, gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004].box.nickname);
-                spriteId = CreateMonPicSprite(GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_SPECIES, NULL), GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_IS_SHINY, NULL), GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_PERSONALITY, NULL), TRUE, 120, 64, 2, TAG_NONE);
+                //spriteId = CreateMonPicSprite(GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_SPECIES, NULL), GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_IS_SHINY, NULL), GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_PERSONALITY, NULL), TRUE, 120, 64, 2, TAG_NONE);
             }
-            gSprites[spriteId].oam.priority = 3;
-            DebugPrintf("%u",spriteId);
+            //gSprites[spriteId].oam.priority = 3;
+            //DebugPrintf("%u",spriteId);
 
             StringCopy_Nickname(gStringVar2, sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].boxmon.nickname);
 
@@ -3309,9 +3309,9 @@ static void Task_GlobalTradeStation(u8 taskId)
             switch (input)
             {
             case 0: // Yes, Select from Box
-                DebugPrintf("%u",spriteId);
-                FreeAndDestroyMonPicSprite(spriteId);
-                ClearStdWindowAndFrame(spriteId, FALSE);
+                //DebugPrintf("%u",spriteId);
+                //FreeAndDestroyMonPicSprite(spriteId);
+                //ClearStdWindowAndFrame(spriteId, FALSE);
                 recvBufSize=0x92;
                 concat_str(pURL,"http://gts.paccypad.com/pokemonrse/worldexchange/exchange?pid=\0");
                 //Turn hex to str
@@ -3357,15 +3357,22 @@ static void Task_GlobalTradeStation(u8 taskId)
 
                 sGTSPokedexView->searchResult[0].pid=gSaveBlock2Ptr->PID;
 
-                //Get mon and delete from party/box
+                //Get mon and replace with new
                 if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
+                    DebugPrintf("BOX TRADED!");
                     CopyBoxMonAt(gSpecialVar_MonBoxId,gSpecialVar_MonBoxPos,&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box);
+                    CopyMon(&sGTSPokedexView->searchResult[0].boxmon,&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos],80);
+                    CopyMon(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], &gParties[B_TRAINER_OPPONENT_A][0].box,80);
                     //memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], &gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box,80);
-                    ZeroBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos]);
+                    //ZeroBoxMonData(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos]);
                 }
                 else{
+                    DebugPrintf("TRADED!");
                     CopyMon(&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC], &gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004],100);
-                    ZeroMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004]);
+                    CopyMon(&sGTSPokedexView->searchResult[0].boxmon,&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004].box,80);
+                    CopyMon(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], &gParties[B_TRAINER_OPPONENT_A][0],100);
+                    //BoxMonToMon(&sGTSPokedexView->searchResult[sGTSPokedexView->selectedPokemon].boxmon, &gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004]);
+                    //ZeroMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004]);
                 }
                 
                 sGTSPokedexView->searchResult[0].dexNum=GET_BASE_SPECIES_ID(GetBoxMonData(&sGTSPokedexView->searchResult[0].boxmon,MON_DATA_SPECIES,NULL));
@@ -3404,10 +3411,12 @@ static void Task_GlobalTradeStation(u8 taskId)
                 if(data->errorNum !=0){
                     maKill();
                     //Restore mon
-                    if(gSpecialVar_0x8004 == PC_MON_CHOSEN)
-                        memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos],&sGTSPokedexView->searchResult[0].boxmon,80);
-                    else
-                        GiveBoxMonToPlayer(&sGTSPokedexView->searchResult[0].boxmon);
+                    if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
+                        memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], &gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box,80);
+                    }
+                    else{
+                        CopyMon(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004],&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC],100);
+                    }
                     
                     data->state = GTS_STATE_CLIENT_ERROR;
                     break;
@@ -3432,7 +3441,7 @@ static void Task_GlobalTradeStation(u8 taskId)
                 break;
             case 1: // No
             case MENU_B_PRESSED:
-                FreeAndDestroyMonPicSprite(spriteId);
+                //FreeAndDestroyMonPicSprite(spriteId);
                 data->state = GTS_STATE_FETCHED_POKEMON_SETUP;
                 break;
             }
@@ -3485,6 +3494,12 @@ static void Task_GlobalTradeStation(u8 taskId)
                 data->state = GTS_STATE_MAIN_MENU;
             }
             else{
+                if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
+                    memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], &gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box,80);
+                }
+                else{
+                    CopyMon(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004],&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC],100);
+                }
                 data->state = GTS_STATE_SERVER_ERROR;
             }
         break;
@@ -3917,10 +3932,12 @@ static void Task_GlobalTradeStation(u8 taskId)
         if(data->errorNum !=0){
             maKill();
             //Restore mon
-            if(gSpecialVar_0x8004 == PC_MON_CHOSEN)
-                memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos],&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box,80);
-            else
-                GiveBoxMonToPlayer(&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box);
+            if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
+                memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], &gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box,80);
+            }
+            else{
+                CopyMon(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004],&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC],100);
+            }
             
             data->state = GTS_STATE_CLIENT_ERROR;
             break;
@@ -3971,6 +3988,12 @@ static void Task_GlobalTradeStation(u8 taskId)
             data->state = GTS_STATE_TRADE_ANIMATION;
         }
         else{
+            if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
+                memcpy(&gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos], &gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC].box,80);
+            }
+            else{
+                CopyMon(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004],&gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC],100);
+            }
             data->state = GTS_STATE_SERVER_ERROR;
         }
 
