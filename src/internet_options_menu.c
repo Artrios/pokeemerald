@@ -709,6 +709,7 @@ void PrintInternetOptionsTopMenu(bool32 connecting)
     title = gText_InternetOptions;
     
     FillWindowPixelBuffer(0, 0);
+    AddTextPrinterParameterized4(0, FONT_NORMAL, 4, 1, 0, 0, sTextColors_TopMenu, TEXT_SKIP_DRAW, title);
     if (gSaveBlock2Ptr->PID==0xFFFFFFFF)
     {
         //header = gText_InternetOptions;
@@ -723,12 +724,9 @@ void PrintInternetOptionsTopMenu(bool32 connecting)
         concat_str(header,hash);
         DebugPrintf(header);
         ASCIIToPkmnStr((u8 *)header,(u8 *)header);
+        AddTextPrinterParameterized4(0, FONT_NORMAL, GetStringRightAlignXOffset(FONT_NORMAL, (u8 *)header, 0xEC), 1, 0, 0, sTextColors_TopMenu, TEXT_SKIP_DRAW, (u8 *)header);
     }
 
-    //options = !connecting ? gJPText_Connecting : gText_PickOKCancel;
-
-    AddTextPrinterParameterized4(0, FONT_NORMAL, 4, 1, 0, 0, sTextColors_TopMenu, TEXT_SKIP_DRAW, title);
-    AddTextPrinterParameterized4(0, FONT_NORMAL, GetStringRightAlignXOffset(FONT_NORMAL, (u8 *)header, 0xEC), 1, 0, 0, sTextColors_TopMenu, TEXT_SKIP_DRAW, (u8 *)header);
     CopyWindowToVram(0, COPYWIN_GFX);
     PutWindowTilemap(0);
 }
@@ -1700,10 +1698,8 @@ static void Task_InternetOptions(u8 taskId)
         break;
     case INTERNET_CONNECTING:
         DebugPrintf("INTERNET_CONNECTING");
-        if (PrintInternetOptionsMenuMessage(&data->textState, gJPText_Connecting))
-        {
-            data->state = data->nextstate;
-        }
+        InternetOptionsAddTextPrinterToWindow1(gJPText_Connecting);
+        data->state = data->nextstate;
         break;
     case INTERNET_GET_PID:
         DebugPrintf("INTERNET_GET_PID");
