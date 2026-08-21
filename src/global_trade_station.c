@@ -1261,9 +1261,9 @@ static u32 CreatePokedexMonSprite(u16 num, s16 x, s16 y, struct BoxPokemon *boxm
         {
             bool8 isShiny = GetBoxMonData(boxmon, MON_DATA_IS_SHINY, NULL);
             if(isShiny)
-                spriteId = CreateMonPicSprite(num, FALSE, GetPokedexMonPersonality(num), TRUE, x, y, 2, TAG_NONE); //CreateMonSpriteFromNationalDexNumber(num, x, y, i);
+                spriteId = CreateMonPicSprite(num, TRUE, GetPokedexMonPersonality(num), TRUE, x, y, 2, TAG_NONE); //CreateMonSpriteFromNationalDexNumber(num, x, y, i);
             else
-                spriteId = CreateMonPicSprite(num, isShiny, GetPokedexMonPersonality(num), TRUE, x, y, 3, TAG_NONE);
+                spriteId = CreateMonPicSprite(num, FALSE, GetPokedexMonPersonality(num), TRUE, x, y, 3, TAG_NONE);
             //spriteId = CreateMonSpriteFromNationalDexNumber(num,  x, y, 3);
             gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
             gSprites[spriteId].oam.priority = 3;
@@ -3277,6 +3277,19 @@ static void Task_GlobalTradeStation(u8 taskId)
                 j = TRUE;
             }
         }
+        break;
+    case GTS_STATE_CANCEL_SEARCH:
+        u8 monId;
+        for(monId=0; monId < MAX_MONS_ON_SCREEN;monId++){
+            FreeAndDestroyMonPicSprite(sGTSPokedexView->monSpriteIds[monId]);
+            sGTSPokedexView->monSpriteIds[monId] = 0xFFFF;
+        }
+        ClearTextWindow();
+        rbox_fill_rectangle(sGTSPokedexView->windowid);
+        ClearWindowTilemap(sGTSPokedexView->windowid);
+        CopyWindowToVram(sGTSPokedexView->windowid, COPYWIN_MAP);
+        RemoveScrollIndicatorArrowPair(sGTSPokedexView->atTop);
+        data->state = GTS_CHECK_RESULT;
         break;
     case GTS_STATE_TRADE_WITH_THIS_PERSON:
         input = DoGTSYesNo(&data->textState, &data->var, FALSE, gText_TradeQuestion);
