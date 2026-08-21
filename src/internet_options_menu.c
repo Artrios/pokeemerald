@@ -712,9 +712,6 @@ void PrintInternetOptionsTopMenu(bool32 connecting)
     AddTextPrinterParameterized4(0, FONT_NORMAL, 4, 1, 0, 0, sTextColors_TopMenu, TEXT_SKIP_DRAW, title);
     if (gSaveBlock2Ptr->PID==0xFFFFFFFF)
     {
-        //header = gText_InternetOptions;
-        //concat_str(header,(char *)gText_InternetOptions);
-        //header[0]="\0";
         memcpy(header,"\0",1);
     }
     else
@@ -722,7 +719,6 @@ void PrintInternetOptionsTopMenu(bool32 connecting)
         concat_str(header,"FC: ");
         pid_to_fc(gSaveBlock2Ptr->PID,(u8 *)hash);
         concat_str(header,hash);
-        DebugPrintf(header);
         ASCIIToPkmnStr((u8 *)header,(u8 *)header);
         AddTextPrinterParameterized4(0, FONT_NORMAL, GetStringRightAlignXOffset(FONT_NORMAL, (u8 *)header, 0xEC), 1, 0, 0, sTextColors_TopMenu, TEXT_SKIP_DRAW, (u8 *)header);
     }
@@ -1069,12 +1065,6 @@ void base64_encode(u32 checksum, char *data, size_t input_length, char *encoded_
     for (int i = 4; i < input_length; i++) {
         input_data[i] = data[i-4];
     }
-
-    //char encoded_data[output_length+1];
-    //if (encoded_data == NULL) return NULL;
-    DebugPrintf("Yello");
-    DebugPrintf(input_data);
-    DebugPrintf(encoded_data);
  
     for (int i = 0, j = 0; i < input_length;) {
  
@@ -1089,30 +1079,20 @@ void base64_encode(u32 checksum, char *data, size_t input_length, char *encoded_
         encoded_data[j++] = encoding_table[(triple >> 1 * 6) & 0x3F];
         encoded_data[j++] = encoding_table[(triple >> 0 * 6) & 0x3F];
     }
-    DebugPrintf("Uploading 3.3111");
     for (int i = 0; i < mod_table[input_length % 3]; i++)
         encoded_data[output_length - 1 - i] = '=';
-    DebugPrintf("Uploading 3.3111111");
     encoded_data[output_length]='\0';
-    DebugPrintf("Uploading 3.311111111111");
-    DebugPrintf(encoded_data);
-    DebugPrintf("Uploading 3.yyyyy");
-    //return *encoded_data;
 }
 
 int encrypt_data(u32 pid, char *data, int datasize){
     int checksum = 0;
     int i = 0;
     checksum = checksum + (pid >> 24 & 0xFF);
-    DebugPrintf("%u",checksum);
     checksum = checksum + (pid >> 16 & 0xFF);
-    DebugPrintf("%u",checksum);
     checksum = checksum + (pid >> 8 & 0xFF);
-    DebugPrintf("%u",checksum);
     checksum = checksum + (pid & 0xFF);
 
     for(i=4; i<datasize; i++){
-        DebugPrintf("%u",data[i]);
         checksum = checksum + data[i];
     }
     checksum = 0x4a3b2c1d ^ checksum;
@@ -1121,7 +1101,6 @@ int encrypt_data(u32 pid, char *data, int datasize){
     u8 keystream = (GRNG >> 16) & 0xFF;
     i=0;
     
-    DebugPrintf("%u",datasize);
     while(i<datasize){
         data[i]=data[i] ^ keystream;
         GRNG = (GRNG * 0x45 + 0x1111) & 0x7FFFFFFF;
@@ -1517,7 +1496,6 @@ static void Task_InternetOptions(u8 taskId)
         }
         break;
     case INTERNET_CONNECT_TO_SERVER:
-        DebugPrintf("INTERNET_CONNECT_TO_SERVER");
         //Initialise MA Library
         data->errorNum = maInitLibrary();
 
@@ -1573,7 +1551,6 @@ static void Task_InternetOptions(u8 taskId)
         }
         break;
     case INTERNET_SET_PROFILE:
-        DebugPrintf("INTERNET_SET_PROFILE");
         concat_str(pURL,"http://gts.paccypad.com/pokemonrse/common/setprofile?pid=\0");
         //Turn hex to str
         ConvertIntToHexStringN_v2(pidhex, gSaveBlock2Ptr->PID,STR_CONV_MODE_RIGHT_ALIGN,8);
@@ -1599,20 +1576,13 @@ static void Task_InternetOptions(u8 taskId)
         for(tracker=0;tracker<100;tracker++){
             pRecvData[tracker]='\0';
         }
-        DebugPrintf(hash);
         //Create a hash using SHA-1
         sha1digest(NULL, (u8 *)hash,(u8 *)halftoken,52);
         
         hash[40]='\0';
-        DebugPrintf(hash);
         //Add hash to URL
         concat_str(pURL,"&hash=");
         concat_str(pURL,hash);
-
-
-
-
-
 
         //Add data= to URL
         concat_str(pURL,"&data=\0");
@@ -1627,22 +1597,18 @@ static void Task_InternetOptions(u8 taskId)
         userprofile->trainerID[1]=gSaveBlock2Ptr->playerTrainerId[1];
         userprofile->trainerID[2]=gSaveBlock2Ptr->playerTrainerId[2];
         userprofile->trainerID[3]=gSaveBlock2Ptr->playerTrainerId[3];
-        DebugPrintf("INTERNET_SET_PROFILE 1");
         for (int i = 0; i < PLAYER_NAME_LENGTH && gSaveBlock2Ptr->playerName[i] != EOS; i++)
         {
             userprofile->trainerName[i]=gSaveBlock2Ptr->playerName[i];
         }
-        DebugPrintf("INTERNET_SET_PROFILE 2");
         for (int i = 0; i < 6; i++)
         {
             userprofile->MAC[i]=0;
         }
-        DebugPrintf("INTERNET_SET_PROFILE 3");
         for (int i = 0; i < 56; i++)
         {
             userprofile->email[i]=0;
         }
-        DebugPrintf("INTERNET_SET_PROFILE 4");
         userprofile->notify=0;
         userprofile->clientSecret=0;
         userprofile->mailSecret=0;
@@ -1652,22 +1618,17 @@ static void Task_InternetOptions(u8 taskId)
 
         //*encoded_data=base64_encode(checksum, (char *)userprofile, sizeof(userprofile)+4);
         checksum=encrypt_data(gSaveBlock2Ptr->PID, (char *)userprofile, sizeof(struct profile));
-        DebugPrintf("INTERNET_SET_PROFILE 5");
         base64_encode(checksum, (char *)userprofile, sizeof(struct profile)+4,encoded_data);
-        DebugPrintf("INTERNET_SET_PROFILE 6");
         concat_str(pURL,encoded_data);
-        DebugPrintf("INTERNET_SET_PROFILE 7");
 
         recvBufSize=8;
 
         //Request a PID
         data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
-        DebugPrintf("INTERNET_SET_PROFILE 8");
         if(data->errorNum !=0){
             maKill();
             data->state = INTERNET_STATE_EXIT;
         }
-        DebugPrintf("INTERNET_SET_PROFILE 9");
         int i = (pRecvData[0] << 24) + (pRecvData[1] << 16) + (pRecvData[3] << 8) + pRecvData[4];
 
         if(i==0){
@@ -1682,7 +1643,6 @@ static void Task_InternetOptions(u8 taskId)
         
         break;
     case INTERNET_ASK_PID:
-        DebugPrintf("INTERNET_ASK_PID");
         input = DoGTSYesNo(&data->textState, &data->var, FALSE, gText_CreateFriendCode);
         switch (input)
         {
@@ -1697,12 +1657,10 @@ static void Task_InternetOptions(u8 taskId)
         }
         break;
     case INTERNET_CONNECTING:
-        DebugPrintf("INTERNET_CONNECTING");
         InternetOptionsAddTextPrinterToWindow1(gJPText_Connecting);
         data->state = data->nextstate;
         break;
     case INTERNET_GET_PID:
-        DebugPrintf("INTERNET_GET_PID");
         concat_str(pURL,"http://gts.paccypad.com/pokemonrse/common/createprofile?pid=\0");
 
         //Will be receiving a 32-byte long token
@@ -1733,12 +1691,10 @@ static void Task_InternetOptions(u8 taskId)
         for(tracker=0;tracker<100;tracker++){
             pRecvData[tracker]='\0';
         }
-        DebugPrintf(hash);
         //Create a hash using SHA-1
         sha1digest(NULL, (u8 *)hash,(u8 *)halftoken,52);
         
         hash[40]='\0';
-        DebugPrintf(hash);
         //Add hash to URL
         concat_str(pURL,"&hash=");
         concat_str(pURL,hash);
@@ -1746,12 +1702,9 @@ static void Task_InternetOptions(u8 taskId)
         //Now we'll be receiving a u32 to use as the PID
         recvBufSize=4;
 
-        DebugPrintf(pURL);
-
         //Request a PID
         data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
         if(data->errorNum !=0){
-            DebugPrintf("ERROR");
             maKill();
             data->state = INTERNET_STATE_EXIT;
             break;
@@ -1774,7 +1727,6 @@ static void Task_InternetOptions(u8 taskId)
         data->nextstate = INTERNET_SET_PROFILE;
         break;
     case INTERNET_SHOW_FRIENDCODE:
-        DebugPrintf("INTERNET_SHOW_FRIENDCODE");
         //Convert PID to FC and display it
         concat_str(pURL,"Your Friend Code is:\n");
         pid_to_fc(gSaveBlock2Ptr->PID,(u8 *)hash);
@@ -1792,7 +1744,6 @@ static void Task_InternetOptions(u8 taskId)
         data->state = INTERNET_INITIAL_SETUP;
         break;
     case INTERNET_INITIAL_SETUP:
-        DebugPrintf("INTERNET_INITIAL_SETUP");
         concat_str(pURL,"http://gts.paccypad.com/pokemonrse/common/setprofile?pid=\0");
         pid = gSaveBlock2Ptr->PID;
         concat_str(pURL,(char *)pid);
@@ -1896,7 +1847,6 @@ static void Task_InternetOptions(u8 taskId)
         }
         break;
     case INTERNET_STATE_MAIN_MENU:
-        DebugPrintf("INTERNET_STATE_MAIN_MENU");
         // Main Mystery Gift menu, player can select Wonder Cards or News (or exit)
         switch (InternetOptions_HandleThreeOptionMenu(&data->textState, &data->var, 0))
         {
@@ -1925,12 +1875,10 @@ static void Task_InternetOptions(u8 taskId)
         }
         break;
     case INTERNET_SAVE_GAME:
-        DebugPrintf("INTERNET_SAVE_GAME");
         if (SaveOnInternetOptionMenu(&data->textState))
             data->state = data->nextstate;
         break;
     case INTERNET_STATE_EXIT:
-        DebugPrintf("INTERNET_STATE_EXIT");
         CloseLink();
         Free(data->clientMsg);
         DestroyTask(taskId);
