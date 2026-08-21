@@ -1263,3 +1263,5 @@ ALIGNED(4) const u8 gText_PokemonWillBeSent[] = _("{STR_VAR_1} will be deposited
 ALIGNED(4) const u8 gText_ChooseGTSPokemon[] = _("Please choose the Pokémon you want.");
 ALIGNED(4) const u8 gText_ChooseGTSPokemonGender[] = _("Please choose the gender.");
 ALIGNED(4) const u8 gText_ChooseGTSPokemonLevel[] = _("Please choose the level.");
+ALIGNED(4) const u8 gText_SearchingForPokemon[] = _("Searching for the Pokémon you want...");
+ALIGNED(4) const u8 gText_PokemonNotFound[] = _("None were found!");

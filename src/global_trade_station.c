@@ -2292,6 +2292,29 @@ static bool32 PrintSuccessMessage(u8 * state, const u8 * msg, u16 * timer)
     return FALSE;
 }
 
+static bool32 PrintFailureMessage(u8 * state, const u8 * msg, u16 * timer)
+{
+    switch (*state)
+    {
+    case 0:
+        if (msg != NULL)
+            GTSAddTextPrinterToWindow1(msg);
+        PlaySE(SE_FAILURE);
+        *timer = 0;
+        (*state)++;
+        break;
+    case 1:
+        if (++(*timer) > 120)
+            (*state)++;
+        break;
+    case 2:
+        *state = 0;
+        ClearTextWindow();
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static const u8 * GetServerResultMessage(bool32 * wonderSuccess, bool8 sourceIsFriend, u32 msgId)
 {
     const u8 * result = gText_CommunicationError;
@@ -2395,6 +2418,7 @@ enum {
     GTS_STATE_SEARCH_POKEMON_LEVEL_LIST,
     GTS_STATE_FETCHING_POKEMON,
     GTS_STATE_FETCHED_POKEMON_SETUP,
+    GTS_POKEMON_NOT_FOUND,
     GTS_STATE_SELECT_FETCHED_POKEMON,
     GTS_STATE_START_SEARCH,
     GTS_STATE_SUCCESSFUL_SEARCH,
@@ -2637,6 +2661,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         break;
     case GTS_CHECK_RESULT: //Done
         DebugPrintf("GTS_CHECK_RESULT");
+        ResetPokedexViewGTS(sGTSPokedexView);
         recvBufSize=32;
         concat_str(pURL,"http://gts.paccypad.com/pokemonrse/worldexchange/result?pid=\0");
         DebugPrintf("Test 1");
@@ -2975,7 +3000,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         }
         break;
     case GTS_STATE_FETCHING_POKEMON: //Done
-        GTSAddTextPrinterToWindow1(gText_Communicating);
+        GTSAddTextPrinterToWindow1(gText_SearchingForPokemon);
         DebugPrintf("GTS_STATE_FETCHING_POKEMON");
         struct GTSSearch *searchpoke = NULL;
         searchpoke = AllocZeroed(sizeof(struct GTSSearch));
@@ -3094,8 +3119,9 @@ static void Task_GlobalTradeStation(u8 taskId)
         DebugPrintf("%u",pRecvSize);
         DebugPrintf("%u",sizeof(struct GTSResult));
 
-        if(pRecvSize==0){
-            data->state = GTS_STATE_MAIN_MENU;
+        if(pRecvSize<0x7C){
+            data->state = GTS_POKEMON_NOT_FOUND;
+            data->textState=0;
             break;
         }
         DebugPrintf("Buffed3");
@@ -3103,6 +3129,12 @@ static void Task_GlobalTradeStation(u8 taskId)
         DebugPrintf("%u",sGTSPokedexView->pokemonListCount);
         Free(searchpoke);
         data->state = GTS_STATE_FETCHED_POKEMON_SETUP;
+        break;
+    case GTS_POKEMON_NOT_FOUND:
+        input = PrintFailureMessage(&data->textState, gText_PokemonNotFound, &data->var);
+        if (input){
+            data->state = GTS_CHECK_RESULT;
+        }
         break;
     case GTS_STATE_FETCHED_POKEMON_SETUP:
         

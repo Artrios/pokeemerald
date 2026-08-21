@@ -2218,5 +2218,7 @@ extern const u8 gText_DepositPokemon[];
 extern const u8 gText_LvVar1[];
 extern const u8 gText_XReturned[];
 extern const u8 gText_WelcomeBackX[];
+extern const u8 gText_SearchingForPokemon[];
+extern const u8 gText_PokemonNotFound[];
 
 #endif // GUARD_STRINGS_H
