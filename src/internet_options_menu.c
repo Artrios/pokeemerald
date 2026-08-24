@@ -1570,22 +1570,27 @@ static void Task_InternetOptions(u8 taskId)
         //Add salt prefix to token (using Gen 4 salt)
         memcpy(halftoken, "sAdeqWo3voLeC5r16DYv\0", 21);
         concat_str(halftoken,(char *)pRecvData);
-        halftoken[52]='\0';
+        //halftoken[52]='\0';
         
         //Cleaning up pRecvData
-        for(tracker=0;tracker<100;tracker++){
+        for(tracker=0;tracker<32;tracker++){
             pRecvData[tracker]='\0';
         }
         //Create a hash using SHA-1
-        sha1digest(NULL, (u8 *)hash,(u8 *)halftoken,52);
+        sha1digest((u8 *)hash,NULL,(u8 *)halftoken,52);
         
-        hash[40]='\0';
+        //hash[40]='\0';
         //Add hash to URL
         concat_str(pURL,"&hash=");
-        concat_str(pURL,hash);
+        for(tracker = 0; tracker < 20; tracker++){
+            ConvertIntToHexStringN_v2(pidhex, hash[tracker],STR_CONV_MODE_LEFT_ALIGN,2);
+            pidhex[2]='\0';
+            concat_str(pURL,(char *)pidhex);
+        }
+        //concat_str(pURL,hash);
 
         //Add data= to URL
-        concat_str(pURL,"&data=\0");
+        concat_str(pURL,"&data=");
 
         userprofile->version=VERSION_EMERALD;
         userprofile->romhackID=EXPANSION_VERSION_MAJOR;
@@ -1756,28 +1761,25 @@ static void Task_InternetOptions(u8 taskId)
             data->state = INTERNET_STATE_EXIT;
         }
 
-        //If pRecvSize<recvBufSize then not all the data that was expected was copied into pRecvData
-        if(pRecvSize<recvBufSize){
-            tracker=pRecvSize;  //Keep track of the number of bytes copied
-            while(tracker<recvBufSize){ //While that is less than the Buffer size
-                //Keep calling maUpload until
-                data->errorNum = maDownload(pURL, NULL, 0, &pRecvData[tracker], recvBufSize-tracker, &pRecvSize, "", "");
-                if(data->errorNum !=0){
-                    maKill();
-                    data->state = INTERNET_STATE_EXIT;
-                }
-                tracker=tracker+pRecvSize;
-            }
-        }
+        recvBufSize=8;
 
         memcpy(halftoken, "sAdeqWo3voLeC5r16DYv\0", 21);
         concat_str(halftoken,(char *)pRecvData);
+
+        //Cleaning up pRecvData
+        for(tracker=0;tracker<32;tracker++){
+            pRecvData[tracker]='\0';
+        }
 
         sha1digest((u8 *)hash,NULL,(u8 *)halftoken,52);
 
         //Add hash to URL
         concat_str(pURL,"&hash=");
-        concat_str(pURL,hash);
+        for(tracker = 0; tracker < 20; tracker++){
+            ConvertIntToHexStringN_v2(pidhex, hash[tracker],STR_CONV_MODE_LEFT_ALIGN,2);
+            pidhex[2]='\0';
+            concat_str(pURL,(char *)pidhex);
+        }
 
         userprofile->version=VERSION_EMERALD;
         userprofile->romhackID=EXPANSION_VERSION_MAJOR;
