@@ -2649,7 +2649,7 @@ static void Task_GlobalTradeStation(u8 taskId)
             break;
         }
 
-        recvBufSize=0x92;
+        //recvBufSize=0x92;
         memcpy(halftoken, "sAdeqWo3voLeC5r16DYv\0", 21);
         concat_str(halftoken,(char *)pRecvData);
 
@@ -2668,7 +2668,7 @@ static void Task_GlobalTradeStation(u8 taskId)
             concat_str(pURL,(char *)pidhex);
         }
         
-        recvBufSize=0x7C;
+        recvBufSize=80;
         data->errorNum = maDownload(pURL, NULL, 0, pRecvData, recvBufSize, &pRecvSize, "", "");
         if(data->errorNum !=0){
             maKill();
@@ -2686,7 +2686,7 @@ static void Task_GlobalTradeStation(u8 taskId)
             }
 
         }
-        else if(pRecvSize==0x7C){
+        else if(pRecvSize==80){
             memcpy(&sGTSPokedexView->searchResult[0].boxmon.personality,&pRecvData,80);
             memcpy(&gParties[B_TRAINER_OPPONENT_A][0].box,&sGTSPokedexView->searchResult[0].boxmon,80);
             data->state = GTS_RECEIVE_POKEMON;
