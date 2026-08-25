@@ -3234,6 +3234,21 @@ static void Task_GlobalTradeStation(u8 taskId)
     case GTS_STATE_CONFIRM_EXCHANGE:
         if (!gPaletteFade.active)
         {
+            if(gSpecialVar_0x8004 == PARTY_NOTHING_CHOSEN){
+                input = DoGTSYesNo(&data->textState, &data->var, FALSE, gText_CancelTrade);
+                if(input==0){
+                    gSpecialVar_0x8004=0;
+                    data->state = GTS_STATE_FETCHED_POKEMON_SETUP;
+                    break;
+                } else if(input==1 || input==MENU_B_PRESSED){
+                    gSpecialVar_0x8004=0;
+                    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+                    data->state = GTS_STATE_CHOOSE_EXCHANGE;
+                    break;
+                }
+                break;
+            }
+
             //u16 spriteId;
             if(gSpecialVar_0x8004 == PC_MON_CHOSEN){
                 StringCopy_Nickname(gStringVar1, gPokemonStoragePtr->boxes[gSpecialVar_MonBoxId][gSpecialVar_MonBoxPos].nickname);
@@ -3443,7 +3458,7 @@ static void Task_GlobalTradeStation(u8 taskId)
         }
         break;
     case GTS_STATE_PICK_WANTED_POKEMON: //Done
-        if(gSpecialVar_0x8004 == 0xFF){
+        if(gSpecialVar_0x8004 == PARTY_NOTHING_CHOSEN){
             gSpecialVar_0x8004=0;
             data->state = GTS_STATE_MAIN_MENU;
         }

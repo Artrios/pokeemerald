@@ -2211,6 +2211,7 @@ extern const u8 gText_ItemCaps[];
 extern const u8 gText_Offerer[];
 extern const u8 gText_Wanted[];
 extern const u8 gText_GTSPokeDetails[];
+extern const u8 gText_CancelTrade[];
 extern const u8 gText_ConfirmTrade[];
 extern const u8 gText_TradeQuestion[];
 extern const u8 gText_WithdrawPokemon[];
