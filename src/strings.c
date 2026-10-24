@@ -1259,6 +1259,7 @@ const u8 gText_DepositPokemon[] = _("Deposit Pokémon");
 const u8 gText_LvVar1[] = _("{LV}{STR_VAR_1}");
 const u8 gText_XReturned[] = _("{STR_VAR_3} was returned!");
 const u8 gText_WelcomeBackX[] = _("Welcome back {STR_VAR_3}!");
+const u8 gText_TakenOut[] = _("{STR_VAR_3} was taken out.");
 ALIGNED(4) const u8 gText_GlobalTradeStation[] = _("Global Trade Station");
 ALIGNED(4) const u8 gText_PokemonWillBeSent[] = _("{STR_VAR_1} will be deposited.");
 ALIGNED(4) const u8 gText_ChooseGTSPokemon[] = _("Please choose the Pokémon you want.");

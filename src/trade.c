@@ -4863,6 +4863,9 @@ static bool8 AnimateGTSExchangeSequenceWireless(void)
         if(sGTSPokedexView->currentPage==1){
             StringExpandPlaceholders(gStringVar4, gText_XReturned);
         }
+        else if(sGTSPokedexView->currentPage==3){
+            StringExpandPlaceholders(gStringVar4, gText_TakenOut);
+        }
         else{
             StringCopy_PlayerName(gStringVar1, gLinkPlayers[1].name);
             StringExpandPlaceholders(gStringVar4, gText_XSentOverY);
